@@ -16,7 +16,7 @@ class CreateGoalsCollection extends Migration
         Schema::create('goals', function (Blueprint $table) {
             $table->increments('_id');
             $table->string('title');
-            $table->string('score')->unique();
+            $table->string('score');
             $table->json('tags');
             $table->timestamps();
             $table->bigInteger('accomplished_by');
@@ -33,6 +33,6 @@ class CreateGoalsCollection extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('goals');
+        Schema::drop('goals');
     }
 }
