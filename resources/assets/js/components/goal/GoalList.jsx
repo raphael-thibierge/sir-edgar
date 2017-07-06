@@ -41,7 +41,7 @@ const GoalList = React.createClass({
 
     render() {
 
-        const list = this.state.goals.length > 0 ? map((goal) => (
+        const list = this.state.goals.length > 0 ? this.state.goals.map((goal) => (
             <ListGroupItem>{goal.title}</ListGroupItem>
         )) : (
             <ListGroupItem>No goal</ListGroupItem>

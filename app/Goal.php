@@ -19,6 +19,7 @@ class Goal extends Model
      */
     protected $primaryKey = '_id';
 
+
     /**
      * Mongo document fields
      * @var array
@@ -46,18 +47,11 @@ class Goal extends Model
         return $this->belongsTo('App\User', 'accomplished_by_id', '_id');
     }
 
-
-    public function routes(): array {
+    public function getRoutesAttribute(): array {
         return [
             'store'     => route('goals.store'),
             'update'    => route('goals.update', ['goal', $this->id]),
         ];
     }
-
-
-
-
-
-
 
 }
