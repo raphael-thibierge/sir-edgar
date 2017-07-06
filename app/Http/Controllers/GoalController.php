@@ -15,7 +15,12 @@ class GoalController extends Controller
     public function index()
     {
         $goals = Goal::all();
-        return view('Goal.index',compact("goals"));
+        return response()->json([
+            'status'    => 'success',
+            'data'      => [
+                'goals' => $goals,
+            ]
+        ]);
     }
 
     /**
@@ -36,7 +41,21 @@ class GoalController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required',
+            'score' => 'required|integer|max:5',
+        ]);
+
+        $user = Auth::user();
+
+        $user->goals()->create([
+            "title" => $request->get('title'),
+            "score" => $request->get('score'),
+        ]);
+
+        return response()->json([
+            'status'    => 'success'
+        ]);
     }
 
     /**
