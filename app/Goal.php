@@ -27,9 +27,4 @@ class Goal extends Model
         return $this->belongsTo('App\User', 'accomplished_by_id', '_id');
     }
 
-
-
-
-
-
 }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Goal;
+use App\User;
 use Illuminate\Http\Request;
 
-class GoalController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class GoalController extends Controller
      */
     public function index()
     {
-        $goals = Goal::all();
-        return view('Goal.index',compact("goals"));
+        $users = User::all();
+        return view('auth.index',compact("users"));
     }
 
     /**
@@ -79,8 +79,9 @@ class GoalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect()->route('users.index');
     }
 }
