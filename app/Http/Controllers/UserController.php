@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Goal;
+use App\User;
 use Illuminate\Http\Request;
 
-class GoalController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,13 +14,8 @@ class GoalController extends Controller
      */
     public function index()
     {
-        $goals = Goal::all();
-        return response()->json([
-            'status'    => 'success',
-            'data'      => [
-                'goals' => $goals,
-            ]
-        ]);
+        $users = User::all();
+        return view('auth.index',compact("users"));
     }
 
     /**
@@ -41,21 +36,7 @@ class GoalController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'title' => 'required',
-            'score' => 'required|integer|max:5',
-        ]);
-
-        $user = Auth::user();
-
-        $user->goals()->create([
-            "title" => $request->get('title'),
-            "score" => $request->get('score'),
-        ]);
-
-        return response()->json([
-            'status'    => 'success'
-        ]);
+        //
     }
 
     /**
@@ -98,8 +79,9 @@ class GoalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect()->route('users.index');
     }
 }
