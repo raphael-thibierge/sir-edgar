@@ -4,20 +4,28 @@ const GoalList = require('./GoalList.jsx');
 
 const GoalRoot = React.createClass({
 
+
+    addToList: function (goal) {
+        this.refs.goalList.addToList(goal)
+    },
+
     render: function () {
-        console.log('ok');
         return (
             <div className="row col-xs-12">
 
                 <div className="row">
                     <div className="col-xs-12">
-                        <GoalInput/>
+                        <GoalInput
+                            onStoreSuccess={this.addToList}
+                        />
                     </div>
                 </div>
 
                 <div className="row">
                     <div className="col-xs-12">
-                        <GoalList/>
+                        <GoalList
+                            ref="goalList"
+                        />
                     </div>
                 </div>
 

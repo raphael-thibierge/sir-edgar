@@ -6,9 +6,14 @@ const HelpBlock = require('react-bootstrap').HelpBlock;
 
 const GoalInput = React.createClass({
 
+    propTypes: {
+        onStoreSuccess: React.PropTypes.func.isRequired,
+    },
+
     getInitialState() {
         return {
-            value: ''
+            value: '',
+            validation: ''
         };
     },
 
@@ -38,11 +43,9 @@ const GoalInput = React.createClass({
         const request = $.ajax({
             url: 'http://localhost:8000/goals',
             dataType: 'json',
-            cache: false,
             method: 'POST',
             success: this.onSuccess,
             error: this.onError,
-            dataType: 'json',
             data: {
                 title: this.getValue(),
                 score: 1,
@@ -53,12 +56,27 @@ const GoalInput = React.createClass({
     },
 
     onSuccess: function (response) {
-        alert('success');
+
+        if (response.status && response.status == 'success'){
+
+            const goal = response.data.goal;
+            console.log(goal);
+
+            if (typeof this.props.onStoreSuccess == 'function'){
+                this.props.onStoreSuccess(goal);
+            }
+
+            this.setState({
+                value: ''
+            })
+
+        }
     },
 
     onError: function (response) {
         alert('error');
         console.log(response);
+        console.log(response.error);
     },
 
     render() {

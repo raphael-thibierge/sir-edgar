@@ -15,6 +15,15 @@ const GoalList = React.createClass({
         this.request();
     },
 
+    addToList: function (goal) {
+
+        let goals = this.state.goals;
+        goals.push(goal);
+        this.setState({
+            goals: goals
+        });
+    },
+
     request: function(){
         const request = $.ajax({
             url: 'http://localhost:8000/goals',
@@ -47,10 +56,18 @@ const GoalList = React.createClass({
             <ListGroupItem>No goal</ListGroupItem>
         );
 
+        let score = 0;
+        for (let i = 0 ; i < this.state.goals.length; i++)
+            score += parseInt(this.state.goals[i].score);
+
+
         return (
-            <ListGroup>
-                {list}
-            </ListGroup>
+            <div>
+                <h2>{score}</h2>
+                <ListGroup>
+                    {list}
+                </ListGroup>
+            </div>
         );
     }
 });

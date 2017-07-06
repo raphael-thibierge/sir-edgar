@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Goal;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GoalController extends Controller
 {
@@ -46,15 +48,18 @@ class GoalController extends Controller
             'score' => 'required|integer|max:5',
         ]);
 
-        $user = Auth::user();
+        $user = User::first();
 
-        $user->goals()->create([
+        $goal = $user->goals()->create([
             "title" => $request->get('title'),
             "score" => $request->get('score'),
         ]);
 
         return response()->json([
-            'status'    => 'success'
+            'status'    => 'success',
+            'data'      => [
+                'goal'  => $goal
+            ]
         ]);
     }
 

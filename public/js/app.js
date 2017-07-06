@@ -17902,8 +17902,6 @@ ReactDOM.render(React.createElement(reactComponent, props), document.getElementB
 /* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 var React = __webpack_require__(0);
 var FormGroup = __webpack_require__(46).FormGroup;
 var FormControl = __webpack_require__(46).FormControl;
@@ -17912,9 +17910,16 @@ var HelpBlock = __webpack_require__(46).HelpBlock;
 
 var GoalInput = React.createClass({
     displayName: 'GoalInput',
+
+
+    propTypes: {
+        onStoreSuccess: React.PropTypes.func.isRequired
+    },
+
     getInitialState: function getInitialState() {
         return {
-            value: ''
+            value: '',
+            validation: ''
         };
     },
 
@@ -17939,31 +17944,43 @@ var GoalInput = React.createClass({
     },
 
     onEnterPress: function onEnterPress() {
-        var _$$ajax;
-
-        var request = $.ajax((_$$ajax = {
+        var request = $.ajax({
             url: 'http://localhost:8000/goals',
             dataType: 'json',
-            cache: false,
             method: 'POST',
             success: this.onSuccess,
-            error: this.onError
-        }, _defineProperty(_$$ajax, 'dataType', 'json'), _defineProperty(_$$ajax, 'data', {
-            title: this.getValue(),
-            score: 1,
-            _token: window.token
+            error: this.onError,
+            data: {
+                title: this.getValue(),
+                score: 1,
+                _token: window.token
 
-        }), _$$ajax));
+            }
+        });
     },
 
 
     onSuccess: function onSuccess(response) {
-        alert('success');
+
+        if (response.status && response.status == 'success') {
+
+            var goal = response.data.goal;
+            console.log(goal);
+
+            if (typeof this.props.onStoreSuccess == 'function') {
+                this.props.onStoreSuccess(goal);
+            }
+
+            this.setState({
+                value: ''
+            });
+        }
     },
 
     onError: function onError(response) {
         alert('error');
         console.log(response);
+        console.log(response.error);
     },
 
     render: function render() {
@@ -18023,6 +18040,15 @@ var GoalList = React.createClass({
         this.request();
     },
 
+    addToList: function addToList(goal) {
+
+        var goals = this.state.goals;
+        goals.push(goal);
+        this.setState({
+            goals: goals
+        });
+    },
+
     request: function request() {
         var request = $.ajax({
             url: 'http://localhost:8000/goals',
@@ -18061,10 +18087,22 @@ var GoalList = React.createClass({
             'No goal'
         );
 
-        return React.createElement(
-            ListGroup,
+        var score = 0;
+        for (var i = 0; i < this.state.goals.length; i++) {
+            score += parseInt(this.state.goals[i].score);
+        }return React.createElement(
+            'div',
             null,
-            list
+            React.createElement(
+                'h2',
+                null,
+                score
+            ),
+            React.createElement(
+                ListGroup,
+                null,
+                list
+            )
         );
     }
 });
@@ -18083,8 +18121,11 @@ var GoalRoot = React.createClass({
     displayName: 'GoalRoot',
 
 
+    addToList: function addToList(goal) {
+        this.refs.goalList.addToList(goal);
+    },
+
     render: function render() {
-        console.log('ok');
         return React.createElement(
             'div',
             { className: 'row col-xs-12' },
@@ -18094,7 +18135,9 @@ var GoalRoot = React.createClass({
                 React.createElement(
                     'div',
                     { className: 'col-xs-12' },
-                    React.createElement(GoalInput, null)
+                    React.createElement(GoalInput, {
+                        onStoreSuccess: this.addToList
+                    })
                 )
             ),
             React.createElement(
@@ -18103,7 +18146,9 @@ var GoalRoot = React.createClass({
                 React.createElement(
                     'div',
                     { className: 'col-xs-12' },
-                    React.createElement(GoalList, null)
+                    React.createElement(GoalList, {
+                        ref: 'goalList'
+                    })
                 )
             )
         );
