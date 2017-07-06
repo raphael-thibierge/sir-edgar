@@ -3,10 +3,14 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
+use Jenssegers\Mongodb\Relations\HasMany;
 
 class User extends \Jenssegers\Mongodb\Auth\User
 {
     use Notifiable;
+
+
+
 
     /**
      * The attributes that are mass assignable.
@@ -25,4 +29,8 @@ class User extends \Jenssegers\Mongodb\Auth\User
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function goals() : HasMany{
+        return $this->hasMany('App\Goal', 'accomplished_by_id', '_id');
+    }
 }
