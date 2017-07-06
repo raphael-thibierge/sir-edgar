@@ -2,11 +2,11 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 
 
-const Test = require('./Test.jsx');
+const GoalRoot = require('./components/goal/GoalRoot.jsx');
 
-var reactComponent = Test;
+var reactComponent = GoalRoot;
 var props = {};
-var container = 'test';
+var container = 'goal-root';
 
 ReactDOM.render(
     React.createElement(reactComponent, props),
