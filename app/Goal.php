@@ -50,7 +50,8 @@ class Goal extends Model
     public function getRoutesAttribute(): array {
         return [
             'store'     => route('goals.store'),
-            'update'    => route('goals.update', ['goal', $this->id]),
+            'update'    => route('goals.update', ['goal' => $this]),
+            'destroy'    => route('goals.destroy', ['goal' => $this]),
         ];
     }
 

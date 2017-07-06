@@ -1,6 +1,8 @@
 const React = require('react');
 const ListGroup = require('react-bootstrap').ListGroup;
 const ListGroupItem = require('react-bootstrap').ListGroupItem;
+const Button = require('react-bootstrap').Button;
+const Glyphicon = require('react-bootstrap').Glyphicon;
 
 const GoalList = React.createClass({
 
@@ -48,10 +50,50 @@ const GoalList = React.createClass({
         console.log(response);
     },
 
+    onDeleteClick: function (goal) {
+        const self = this;
+        $.ajax({
+            url: goal.routes.destroy,
+            cache: false,
+            method: 'POST',
+            datatype: 'json',
+            data: {
+                method: 'DELETE',
+                _method: 'DELETE'
+            },
+            success: function (oldGoal) {
+                let goals = this.state.goals;
+                let newGoals = [];
+                for(let i = 0; i < goals.length; i++){
+                    const goal = goals[i];
+                    if (goal._id != oldGoal._id){
+                        newGoals.push(goal);
+                    }
+                }
+                this.setState({
+                    goals: newGoals
+                })
+            }.bind(self, goal),
+            error: this.onError,
+        });
+    },
+
     render() {
 
         const list = this.state.goals.length > 0 ? this.state.goals.map((goal) => (
-            <ListGroupItem>{goal.title}</ListGroupItem>
+            <ListGroupItem key={goal._id}>
+                <span className="text-left">{goal.title}</span>
+                <span className="text-left" style={{'margin-left' : '20px'}}>
+                    <Button
+                        onClick={this.onDeleteClick.bind(null, goal)}
+                        bsSize="xs"
+                        bsStyle="danger"
+                    >
+                        Delete
+                    </Button>
+
+                </span>
+            </ListGroupItem>
         )) : (
             <ListGroupItem>No goal</ListGroupItem>
         );
@@ -63,7 +105,7 @@ const GoalList = React.createClass({
 
         return (
             <div>
-                <h2>{score}</h2>
+                <h2>Score : {score}</h2>
                 <ListGroup>
                     {list}
                 </ListGroup>

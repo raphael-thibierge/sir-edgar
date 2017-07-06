@@ -18025,6 +18025,8 @@ module.exports = GoalInput;
 var React = __webpack_require__(0);
 var ListGroup = __webpack_require__(46).ListGroup;
 var ListGroupItem = __webpack_require__(46).ListGroupItem;
+var Button = __webpack_require__(46).Button;
+var Glyphicon = __webpack_require__(46).Glyphicon;
 
 var GoalList = React.createClass({
     displayName: 'GoalList',
@@ -18073,13 +18075,59 @@ var GoalList = React.createClass({
         console.log(response);
     },
 
+    onDeleteClick: function onDeleteClick(goal) {
+        var self = this;
+        $.ajax({
+            url: goal.routes.destroy,
+            cache: false,
+            method: 'POST',
+            datatype: 'json',
+            data: {
+                method: 'DELETE',
+                _method: 'DELETE'
+            },
+            success: function (oldGoal) {
+                var goals = this.state.goals;
+                var newGoals = [];
+                for (var i = 0; i < goals.length; i++) {
+                    var _goal = goals[i];
+                    if (_goal._id != oldGoal._id) {
+                        newGoals.push(_goal);
+                    }
+                }
+                this.setState({
+                    goals: newGoals
+                });
+            }.bind(self, goal),
+            error: this.onError
+        });
+    },
+
     render: function render() {
+        var _this = this;
 
         var list = this.state.goals.length > 0 ? this.state.goals.map(function (goal) {
             return React.createElement(
                 ListGroupItem,
-                null,
-                goal.title
+                { key: goal._id },
+                React.createElement(
+                    'span',
+                    { className: 'text-left' },
+                    goal.title
+                ),
+                React.createElement(
+                    'span',
+                    { className: 'text-left', style: { 'margin-left': '20px' } },
+                    React.createElement(
+                        Button,
+                        {
+                            onClick: _this.onDeleteClick.bind(null, goal),
+                            bsSize: 'xs',
+                            bsStyle: 'danger'
+                        },
+                        'Delete'
+                    )
+                )
             );
         }) : React.createElement(
             ListGroupItem,
@@ -18096,6 +18144,7 @@ var GoalList = React.createClass({
             React.createElement(
                 'h2',
                 null,
+                'Score : ',
                 score
             ),
             React.createElement(
