@@ -16,7 +16,7 @@ const GoalInput = React.createClass({
             score: 1,
         };
     },
-    
+
     getValue: function (){
         return {
             title: this.state.title,
@@ -83,7 +83,7 @@ const GoalInput = React.createClass({
                 <FormGroup
                     controlId="formBasicText"
                 >
-                    <div className="col-xs-10">
+                    <div className="col-xs-9">
                         <FormControl
                             type="text"
                             value={this.state.title}
@@ -92,7 +92,7 @@ const GoalInput = React.createClass({
                             onKeyPress={this.handleKeyPress}
                         />
                     </div>
-                    <div className="col-xs-2">
+                    <div className="col-xs-3">
 
                     <FormControl
                         type="number"

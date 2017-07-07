@@ -17995,7 +17995,7 @@ var GoalInput = React.createClass({
                 },
                 React.createElement(
                     'div',
-                    { className: 'col-xs-10' },
+                    { className: 'col-xs-9' },
                     React.createElement(FormControl, {
                         type: 'text',
                         value: this.state.title,
@@ -18006,7 +18006,7 @@ var GoalInput = React.createClass({
                 ),
                 React.createElement(
                     'div',
-                    { className: 'col-xs-2' },
+                    { className: 'col-xs-3' },
                     React.createElement(FormControl, {
                         type: 'number',
                         value: this.state.score,
