@@ -17918,21 +17918,24 @@ var GoalInput = React.createClass({
 
     getInitialState: function getInitialState() {
         return {
-            value: ''
+            title: '',
+            score: 1
         };
     },
 
 
     getValue: function getValue() {
-        return this.state.value;
+        return {
+            title: this.state.title,
+            score: this.state.score
+        };
     },
 
-    getValidationState: function getValidationState() {
-        return 'success';
-        var length = this.state.value.length;
+    onTitleChange: function onTitleChange(e) {
+        this.setState({ title: e.target.value });
     },
-    handleChange: function handleChange(e) {
-        this.setState({ value: e.target.value });
+    onScoreChange: function onScoreChange(e) {
+        this.setState({ score: e.target.value });
     },
 
 
@@ -17944,18 +17947,18 @@ var GoalInput = React.createClass({
     },
 
     onEnterPress: function onEnterPress() {
+
+        var data = this.getValue();
+        data._token = window.token;
+
         var request = $.ajax({
             url: 'http://localhost:8000/goals',
             dataType: 'json',
             method: 'POST',
+            data: data,
             success: this.onSuccess,
-            error: this.onError,
-            data: {
-                title: this.getValue(),
-                score: 1,
-                _token: window.token
+            error: this.onError
 
-            }
         });
     },
 
@@ -17971,7 +17974,7 @@ var GoalInput = React.createClass({
             }
 
             this.setState({
-                value: ''
+                title: ''
             });
         }
     },
@@ -17984,20 +17987,35 @@ var GoalInput = React.createClass({
     render: function render() {
         return React.createElement(
             'div',
-            null,
+            { className: '' },
             React.createElement(
                 FormGroup,
                 {
                     controlId: 'formBasicText'
                 },
-                React.createElement(FormControl, {
-                    type: 'text',
-                    value: this.state.value,
-                    placeholder: 'New goal',
-                    onChange: this.handleChange,
-                    onKeyPress: this.handleKeyPress
-                }),
-                React.createElement(FormControl.Feedback, null)
+                React.createElement(
+                    'div',
+                    { className: 'col-xs-10' },
+                    React.createElement(FormControl, {
+                        type: 'text',
+                        value: this.state.title,
+                        placeholder: 'New goal',
+                        onChange: this.onTitleChange,
+                        onKeyPress: this.handleKeyPress
+                    })
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'col-xs-2' },
+                    React.createElement(FormControl, {
+                        type: 'number',
+                        value: this.state.score,
+                        min: 1,
+                        max: 5,
+                        onChange: this.onScoreChange,
+                        onKeyPress: this.handleKeyPress
+                    })
+                )
             )
         );
     }
@@ -18013,7 +18031,7 @@ var React = __webpack_require__(0);
 var ListGroup = __webpack_require__(34).ListGroup;
 var ListGroupItem = __webpack_require__(34).ListGroupItem;
 var Button = __webpack_require__(34).Button;
-var Glyphicon = __webpack_require__(34).Glyphicon;
+var Badge = __webpack_require__(34).Badge;
 
 var GoalList = React.createClass({
     displayName: 'GoalList',
@@ -18120,67 +18138,95 @@ var GoalList = React.createClass({
     render: function render() {
         var _this = this;
 
-        var list = this.state.goals.length > 0 ? this.state.goals.map(function (goal) {
+        var goals = this.state.goals;
+
+        var doneGoals = [];
+        var todoGoals = [];
+
+        for (var iterator = 0; iterator < goals.length; iterator++) {
+            var goal = goals[iterator];
             if (goal.is_completed) {
-                return React.createElement(
-                    ListGroupItem,
-                    { key: goal._id, bsStyle: 'success' },
-                    React.createElement(
-                        'span',
-                        { className: 'text-left' },
-                        goal.title
-                    ),
-                    React.createElement(
-                        'span',
-                        { className: 'text-left', style: { marginLeft: '20px' } },
-                        React.createElement(
-                            Button,
-                            {
-                                onClick: _this.onDeleteClick.bind(null, goal),
-                                bsSize: 'xs',
-                                bsStyle: 'danger'
-                            },
-                            'Delete'
-                        )
-                    )
-                );
+                doneGoals.push(goal);
             } else {
-                return React.createElement(
-                    ListGroupItem,
-                    { key: goal._id },
-                    React.createElement(
-                        'span',
-                        { className: 'text-left' },
-                        goal.title
-                    ),
-                    React.createElement(
-                        'span',
-                        { className: 'text-left', style: { marginLeft: '20px' } },
-                        React.createElement(
-                            Button,
-                            {
-                                onClick: _this.onDeleteClick.bind(null, goal),
-                                bsSize: 'xs',
-                                bsStyle: 'danger'
-                            },
-                            'Delete'
-                        )
-                    ),
-                    React.createElement(
-                        'span',
-                        { className: 'text-left', style: { marginLeft: '20px' } },
-                        React.createElement(
-                            Button,
-                            {
-                                onClick: _this.onCompleteGoalClick.bind(null, goal),
-                                bsSize: 'xs',
-                                bsStyle: 'success'
-                            },
-                            'Complete'
-                        )
-                    )
-                );
+                todoGoals.push(goal);
             }
+        }
+
+        var todoList = todoGoals.length > 0 ? todoGoals.map(function (goal) {
+            return React.createElement(
+                ListGroupItem,
+                { key: goal._id },
+                React.createElement(
+                    'span',
+                    { className: 'text-left' },
+                    goal.title
+                ),
+                React.createElement(
+                    'span',
+                    { className: 'text-left', style: { marginLeft: '20px' } },
+                    React.createElement(
+                        Button,
+                        {
+                            onClick: _this.onDeleteClick.bind(null, goal),
+                            bsSize: 'xs',
+                            bsStyle: 'danger'
+                        },
+                        'Delete'
+                    )
+                ),
+                React.createElement(
+                    'span',
+                    { className: 'text-left', style: { marginLeft: '20px' } },
+                    React.createElement(
+                        Button,
+                        {
+                            onClick: _this.onCompleteGoalClick.bind(null, goal),
+                            bsSize: 'xs',
+                            bsStyle: 'success'
+                        },
+                        'Complete'
+                    )
+                ),
+                React.createElement(
+                    Badge,
+                    null,
+                    goal.score
+                )
+            );
+        }) : React.createElement(
+            ListGroupItem,
+            null,
+            'No goal'
+        );
+
+        var doneList = doneGoals.length > 0 ? doneGoals.map(function (goal) {
+            return React.createElement(
+                ListGroupItem,
+                { key: goal._id, bsStyle: 'success' },
+                React.createElement(
+                    'span',
+                    { className: 'text-left' },
+                    goal.title
+                ),
+                React.createElement(
+                    'span',
+                    { className: 'text-left', style: { marginLeft: '20px' } },
+                    React.createElement(
+                        Button,
+                        {
+                            onClick: _this.onDeleteClick.bind(null, goal),
+                            bsSize: 'xs',
+                            bsStyle: 'danger'
+                        },
+                        'Delete'
+                    )
+                ),
+                React.createElement(
+                    Badge,
+                    null,
+                    goal.score
+                )
+            );
         }) : React.createElement(
             ListGroupItem,
             null,
@@ -18190,11 +18236,11 @@ var GoalList = React.createClass({
         var score = 0;
         var total = 0;
         for (var i = 0; i < this.state.goals.length; i++) {
-            var goal = this.state.goals[i];
-            if (goal.is_completed == true) {
-                score += parseInt(goal.score);
+            var _goal3 = this.state.goals[i];
+            if (_goal3.is_completed == true) {
+                score += parseInt(_goal3.score);
             }
-            total += parseInt(goal.score);
+            total += parseInt(_goal3.score);
         }
 
         return React.createElement(
@@ -18204,14 +18250,29 @@ var GoalList = React.createClass({
                 'h2',
                 null,
                 'Score : ',
-                score,
-                ' / ',
-                total
+                score
+            ),
+            React.createElement(
+                'h3',
+                null,
+                'Todo : ',
+                total - score
             ),
             React.createElement(
                 ListGroup,
                 null,
-                list
+                todoList
+            ),
+            React.createElement(
+                'h3',
+                null,
+                'Done : ',
+                score
+            ),
+            React.createElement(
+                ListGroup,
+                null,
+                doneList
             )
         );
     }

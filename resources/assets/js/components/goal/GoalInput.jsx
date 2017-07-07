@@ -12,21 +12,24 @@ const GoalInput = React.createClass({
 
     getInitialState() {
         return {
-            value: '',
+            title: '',
+            score: 1,
         };
     },
-
-    getValue: function () {
-        return this.state.value;
+    
+    getValue: function (){
+        return {
+            title: this.state.title,
+            score: this.state.score,
+        }
     },
 
-    getValidationState() {
-        return 'success';
-        const length = this.state.value.length;
+    onTitleChange(e) {
+        this.setState({ title: e.target.value });
     },
 
-    handleChange(e) {
-        this.setState({ value: e.target.value });
+    onScoreChange(e){
+        this.setState({ score: e.target.value });
     },
 
     handleKeyPress: function(target) {
@@ -34,22 +37,21 @@ const GoalInput = React.createClass({
         if(target.charCode==13){
             this.onEnterPress();
         }
-
     },
 
     onEnterPress(){
+
+        let data = this.getValue();
+        data._token = window.token;
+
         const request = $.ajax({
             url: 'http://localhost:8000/goals',
             dataType: 'json',
             method: 'POST',
+            data: data,
             success: this.onSuccess,
             error: this.onError,
-            data: {
-                title: this.getValue(),
-                score: 1,
-                _token: window.token,
 
-            }
         });
     },
 
@@ -64,7 +66,7 @@ const GoalInput = React.createClass({
             }
 
             this.setState({
-                value: ''
+                title: ''
             })
 
         }
@@ -77,18 +79,30 @@ const GoalInput = React.createClass({
 
     render() {
         return (
-            <div>
+            <div className="">
                 <FormGroup
                     controlId="formBasicText"
                 >
+                    <div className="col-xs-10">
+                        <FormControl
+                            type="text"
+                            value={this.state.title}
+                            placeholder="New goal"
+                            onChange={this.onTitleChange}
+                            onKeyPress={this.handleKeyPress}
+                        />
+                    </div>
+                    <div className="col-xs-2">
+
                     <FormControl
-                        type="text"
-                        value={this.state.value}
-                        placeholder="New goal"
-                        onChange={this.handleChange}
+                        type="number"
+                        value={this.state.score}
+                        min={1}
+                        max={5}
+                        onChange={this.onScoreChange}
                         onKeyPress={this.handleKeyPress}
                     />
-                    <FormControl.Feedback />
+                    </div>
                 </FormGroup>
             </div>
         );
