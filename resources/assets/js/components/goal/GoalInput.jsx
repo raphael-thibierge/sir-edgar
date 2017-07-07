@@ -13,7 +13,6 @@ const GoalInput = React.createClass({
     getInitialState() {
         return {
             value: '',
-            validation: ''
         };
     },
 
@@ -22,10 +21,8 @@ const GoalInput = React.createClass({
     },
 
     getValidationState() {
+        return 'success';
         const length = this.state.value.length;
-        if (length > 10) return 'success';
-        else if (length > 5) return 'warning';
-        else if (length > 0) return 'error';
     },
 
     handleChange(e) {
@@ -33,6 +30,7 @@ const GoalInput = React.createClass({
     },
 
     handleKeyPress: function(target) {
+        // when pressing enter key
         if(target.charCode==13){
             this.onEnterPress();
         }
@@ -60,7 +58,6 @@ const GoalInput = React.createClass({
         if (response.status && response.status == 'success'){
 
             const goal = response.data.goal;
-            console.log(goal);
 
             if (typeof this.props.onStoreSuccess == 'function'){
                 this.props.onStoreSuccess(goal);
@@ -75,8 +72,7 @@ const GoalInput = React.createClass({
 
     onError: function (response) {
         alert('error');
-        console.log(response);
-        console.log(response.error);
+        console.error(response);
     },
 
     render() {
@@ -84,9 +80,7 @@ const GoalInput = React.createClass({
             <div>
                 <FormGroup
                     controlId="formBasicText"
-                    validationState={this.getValidationState()}
                 >
-                    <ControlLabel>Working example with validation</ControlLabel>
                     <FormControl
                         type="text"
                         value={this.state.value}
@@ -95,7 +89,6 @@ const GoalInput = React.createClass({
                         onKeyPress={this.handleKeyPress}
                     />
                     <FormControl.Feedback />
-                    <HelpBlock>Validation is based on string length.</HelpBlock>
                 </FormGroup>
             </div>
         );

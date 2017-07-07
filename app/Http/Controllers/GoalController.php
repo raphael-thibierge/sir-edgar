@@ -96,12 +96,26 @@ class GoalController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param Goal $goal
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
     public function destroy(Goal $goal)
     {
         $goal->delete();
+        return $this->successResponse();
+    }
+
+    /**
+     * Complete a goal
+     *
+     * @param Request $request
+     * @param Goal $goal
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function complete(Request $request, Goal $goal){
+        $goal->setCompleted();
+        $goal->update();
         return $this->successResponse();
     }
 }

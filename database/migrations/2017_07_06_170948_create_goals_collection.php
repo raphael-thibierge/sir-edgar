@@ -16,13 +16,14 @@ class CreateGoalsCollection extends Migration
         Schema::create('goals', function (Blueprint $table) {
             $table->increments('_id');
             $table->string('title');
-            $table->string('score');
-            $table->json('tags');
-            $table->timestamps();
-            $table->bigInteger('accomplished_by');
-            $table->foreign('accomplished_by')
+            $table->integer('score')->unsigned();
+            $table->json('tags')->nullable();
+            $table->dateTime('completed_at')->nullable();
+            $table->bigInteger('user_id');
+            $table->foreign('user_id')
                 ->references('_id')->on('users')
                 ->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

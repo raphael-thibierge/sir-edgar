@@ -9,9 +9,6 @@ class User extends \Jenssegers\Mongodb\Auth\User
 {
     use Notifiable;
 
-
-
-
     /**
      * The attributes that are mass assignable.
      *
@@ -30,7 +27,11 @@ class User extends \Jenssegers\Mongodb\Auth\User
         'password', 'remember_token',
     ];
 
+    /**
+     * User's goals
+     * @return HasMany
+     */
     public function goals() : HasMany{
-        return $this->hasMany('App\Goal', 'accomplished_by_id', '_id');
+        return $this->hasMany('App\Goal');
     }
 }

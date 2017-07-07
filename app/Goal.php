@@ -2,9 +2,13 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 
+/**
+ * @property mixed completed_at
+ */
 class Goal extends Model
 {
     /**
@@ -28,7 +32,8 @@ class Goal extends Model
         'title',
         'score',
         'tags',
-        'accomplished_by_id',
+        'user_id',
+        'completed_at'
     ];
 
     /**
@@ -38,13 +43,18 @@ class Goal extends Model
      */
     protected $appends = [
         'routes',
+        'is_completed'
+    ];
+
+    protected $dates = [
+        'completed_at'
     ];
 
     /**
      * @return BelongsTo
      */
-    public function accomplished_by(): BelongsTo {
-        return $this->belongsTo('App\User', 'accomplished_by_id', '_id');
+    public function user(): BelongsTo {
+        return $this->belongsTo('App\User');
     }
 
     public function getRoutesAttribute(): array {
@@ -52,7 +62,16 @@ class Goal extends Model
             'store'     => route('goals.store'),
             'update'    => route('goals.update', ['goal' => $this]),
             'destroy'    => route('goals.destroy', ['goal' => $this]),
+            'complete'    => route('goals.complete', ['goal' => $this]),
         ];
+    }
+
+    public function getIsCompletedAttribute(){
+        return $this->completed_at != null;
+    }
+
+    public function setCompleted(){
+        $this->completed_at = Carbon::now();
     }
 
 }

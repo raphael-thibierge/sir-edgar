@@ -18,5 +18,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
 Route::resource('goals', 'GoalController');
+Route::prefix('goals')->group(function (){
+    Route::post('{goal}/complete', 'GoalController@complete')->name('goals.complete');
+});
+
 Route::resource('users', 'UserController');
