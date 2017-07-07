@@ -17,11 +17,9 @@ class GoalController extends Controller
     public function index()
     {
         $goals = Goal::all();
-        return response()->json([
-            'status'    => 'success',
-            'data'      => [
-                'goals' => $goals,
-            ]
+
+        return $this->successResponse([
+            'goals' => $goals,
         ]);
     }
 
@@ -55,11 +53,9 @@ class GoalController extends Controller
             "score" => $request->get('score'),
         ]);
 
-        return response()->json([
-            'status'    => 'success',
-            'data'      => [
-                'goal'  => $goal
-            ]
+
+        return $this->successResponse([
+            'goal'  => $goal
         ]);
     }
 
