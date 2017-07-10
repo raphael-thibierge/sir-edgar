@@ -45,7 +45,7 @@ const GoalInput = React.createClass({
         data._token = window.token;
 
         const request = $.ajax({
-            url: 'http://localhost:8000/goals',
+            url: './goals',
             dataType: 'json',
             method: 'POST',
             data: data,

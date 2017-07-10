@@ -28,7 +28,7 @@ const GoalList = React.createClass({
 
     request: function(){
         const request = $.ajax({
-            url: 'http://localhost:8000/goals',
+            url: './goals',
             cache: false,
             method: 'GET',
             success: this.onSuccess,
