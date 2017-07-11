@@ -23,7 +23,6 @@ const GoalRoot = React.createClass({
     render: function () {
         return (
             <div className="row col-xs-12">
-                <!-- Goal input form to create a new goal -->
                 <div className="row">
                     <div className="col-xs-12">
                         <GoalInput
@@ -31,8 +30,6 @@ const GoalRoot = React.createClass({
                         />
                     </div>
                 </div>
-
-                <!-- User goal list -->
                 <div className="row">
                     <div className="col-xs-12">
                         <GoalList
