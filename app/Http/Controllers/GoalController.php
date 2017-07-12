@@ -16,7 +16,7 @@ class GoalController extends Controller
      */
     public function index()
     {
-        $goals = Auth::user()->goals()->all();
+        $goals = Auth::user()->goals()->get();
 
         return $this->successResponse([
             'goals' => $goals,
