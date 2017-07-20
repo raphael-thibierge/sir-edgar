@@ -136,15 +136,23 @@ const GoalsGraph = React.createClass({
 
     render(){
         return (
-            <Chart
-                chartType="ColumnChart"
-                data={this.state.data}
-                options={{}}
-                graph_id="ScatterChart"
-                width="100%"
-                height="400px"
-                legend_toggle
-            />
+            <div className="row">
+                <div className="col-xs-12">
+                    <h2>Completed goals stats</h2>
+                </div>
+                <div className="col-xs-12">
+                    <Chart
+                        chartType="ColumnChart"
+                        data={this.state.data}
+                        options={{}}
+                        graph_id="ScatterChart"
+                        width="100%"
+                        height="400px"
+                        legend_toggle
+                    />
+                </div>
+            </div>
+
         )
     }
 });

@@ -18798,15 +18798,32 @@ var GoalsGraph = React.createClass({
         }
     },
     render: function render() {
-        return React.createElement(Chart, {
-            chartType: 'ColumnChart',
-            data: this.state.data,
-            options: {},
-            graph_id: 'ScatterChart',
-            width: '100%',
-            height: '400px',
-            legend_toggle: true
-        });
+        return React.createElement(
+            'div',
+            { className: 'row' },
+            React.createElement(
+                'div',
+                { className: 'col-xs-12' },
+                React.createElement(
+                    'h2',
+                    null,
+                    'Completed goals stats'
+                )
+            ),
+            React.createElement(
+                'div',
+                { className: 'col-xs-12' },
+                React.createElement(Chart, {
+                    chartType: 'ColumnChart',
+                    data: this.state.data,
+                    options: {},
+                    graph_id: 'ScatterChart',
+                    width: '100%',
+                    height: '400px',
+                    legend_toggle: true
+                })
+            )
+        );
     }
 });
 
