@@ -48,7 +48,7 @@ class GoalController extends Controller
             'score' => 'required|integer|max:5',
         ]);
 
-        $user = User::first();
+        $user = Auth::user();
 
         $goal = $user->goals()->create([
             "title" => $request->get('title'),
@@ -124,15 +124,17 @@ class GoalController extends Controller
 
     public function goalScorePerDay(){
 
+        $user = Auth::user();
 
-        $data = Goal::whereNotNull('complete_at')->raw(function ($collecton){
+        $data = Goal::whereNotNull('complete_at')->raw(function ($collecton) use ($user){
             return $collecton->aggregate([
                 [
                     '$match' => [
                         'completed_at' => [
                             '$exists' => 'true',
                             '$ne' => 'null'
-                        ]
+                        ],
+                        'user_id' => $user->id
                     ]
                 ],
                 [
@@ -160,7 +162,7 @@ class GoalController extends Controller
 
         return $this->successResponse([
             'scores' => $json,
-            'firstDate' => Auth::user()->created_at->toDateString(),
+            'firstDate' => $user->created_at->toDateString(),
         ]);
     }
 
