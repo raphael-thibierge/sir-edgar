@@ -22,6 +22,7 @@
   "dependencies": {
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.0",
-    "react-dom": "^15.6.1"
+    "react-dom": "^15.6.1",
+    "react-google-charts": "^1.5.5"
   }
 }

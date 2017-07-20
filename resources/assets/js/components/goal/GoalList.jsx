@@ -9,6 +9,11 @@ const Badge = require('react-bootstrap').Badge;
  */
 const GoalList = React.createClass({
 
+    propTypes: {
+        onGoalCompleted: React.PropTypes.func.isRequired,
+        onGoalDeleted: React.PropTypes.func.isRequired,
+    },
+
     /**
      * Define component initial state
      *
@@ -88,13 +93,15 @@ const GoalList = React.createClass({
                         // update the completed goal
                         if (goal._id == oldGoal._id){
                             goal.is_completed = true;
+                            this.props.onGoalCompleted(goal);
                         }
                         newGoals.push(goal);
                     }
                     // update component's goal list
                     this.setState({
                         goals: newGoals
-                    })
+                    });
+
                 } else {
                     this.onError(response);
                 }
@@ -135,6 +142,8 @@ const GoalList = React.createClass({
                     const goal = goals[i];
                     if (goal._id != oldGoal._id){
                         newGoals.push(goal);
+                    } else {
+                        this.props.onGoalDeleted(oldGoal);
                     }
                 }
                 // update component's goal list

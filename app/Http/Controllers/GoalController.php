@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Goal;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class GoalController extends Controller
 {
@@ -50,7 +52,7 @@ class GoalController extends Controller
 
         $goal = $user->goals()->create([
             "title" => $request->get('title'),
-            "score" => $request->get('score'),
+            "score" => (int)$request->get('score'),
         ]);
 
 
@@ -118,4 +120,60 @@ class GoalController extends Controller
         $goal->update();
         return $this->successResponse();
     }
+
+
+    public function goalScorePerDay(){
+
+
+        $data = Goal::whereNotNull('complete_at')->raw(function ($collecton){
+            return $collecton->aggregate([
+                [
+                    '$match' => [
+                        'completed_at' => [
+                            '$exists' => 'true',
+                            '$ne' => 'null'
+                        ]
+                    ]
+                ],
+                [
+                    '$group'=> [
+                        '_id'=>  [
+                            'day' => [ '$dayOfMonth' => '$completed_at'],
+                            'month' => ['$month'=> '$completed_at'],
+                            'year' => [ '$year' => '$completed_at']
+                        ],
+                        'totalScore' => ['$sum'=> '$score']
+                    ]
+                ]
+            ]);
+        });
+
+
+        $json = [];
+        foreach ($data as $result){
+
+            $date = Carbon::create($result->_id->year, $result->_id->month, $result->_id->day)
+                ->toDateString();
+            $json [$date] = $result->totalScore;
+        }
+
+
+        return $this->successResponse([
+            'scores' => $json,
+            'firstDate' => Auth::user()->created_at->toDateString(),
+        ]);
+    }
+
+
+    public function todayScore(){
+        $score = Auth::user()->goals()
+            ->where('completed_at', '>', Carbon::yesterday())
+            ->select('score')->get()
+            ->sum('score');
+
+        return $this->successResponse([
+            'score' => $score
+        ]);
+    }
+
 }

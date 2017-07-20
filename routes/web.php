@@ -19,9 +19,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('goals', 'GoalController');
 Route::prefix('goals')->group(function (){
     Route::post('{goal}/complete', 'GoalController@complete')->name('goals.complete');
+    Route::get('score', 'GoalController@goalScorePerDay')->name('goals.score-per-day');
 });
+Route::resource('goals', 'GoalController');
 
 Route::resource('users', 'UserController');
