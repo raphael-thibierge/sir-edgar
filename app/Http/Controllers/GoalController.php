@@ -126,7 +126,7 @@ class GoalController extends Controller
 
         $user = Auth::user();
 
-        $data = Goal::whereNotNull('complete_at')->raw(function ($collecton) use ($user){
+        $data = Goal::raw(function ($collecton) use ($user){
             return $collecton->aggregate([
                 [
                     '$match' => [
