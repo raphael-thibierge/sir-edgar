@@ -3,6 +3,7 @@ const ListGroup = require('react-bootstrap').ListGroup;
 const ListGroupItem = require('react-bootstrap').ListGroupItem;
 const Button = require('react-bootstrap').Button;
 const Badge = require('react-bootstrap').Badge;
+const Glyphicon = require('react-bootstrap').Glyphicon;
 
 /**
  * React component managing goal lists
@@ -181,21 +182,21 @@ const GoalList = React.createClass({
         // render html foreach to-do goal
         const todoList = todoGoals.length > 0 ? todoGoals.map((goal) => (
             <ListGroupItem key={goal._id}>
-                <span className="text-left">{goal.title}</span>
-                <span className="text-left" style={{marginLeft : '20px'}}>
+                <span className="text-left">
                     <Button
                         onClick={this.onDeleteClick.bind(null, goal)}
                         bsSize="xs"
                         bsStyle="danger"
-                    >Delete</Button>
+                    ><Glyphicon glyph="trash"/></Button>
                 </span>
-                <span className="text-left" style={{marginLeft : '20px'}}>
+                <span className="text-left" style={{marginLeft : '10px'}}>
                     <Button
                         onClick={this.onCompleteGoalClick.bind(null, goal)}
                         bsSize="xs"
                         bsStyle="success"
-                    >Complete</Button>
+                    ><Glyphicon glyph="ok"/></Button>
                 </span>
+                <span style={{marginLeft : '10px'}}>{goal.title}</span>
                 <Badge>{goal.score}</Badge>
             </ListGroupItem>
         )) : (
@@ -205,15 +206,14 @@ const GoalList = React.createClass({
         // render html foreach done goal
         const doneList = doneGoals.length > 0 ? doneGoals.map((goal) => (
             <ListGroupItem key={goal._id} bsStyle="success">
-
-                <span className="text-left">{goal.title}</span>
-                <span className="text-left" style={{marginLeft : '20px'}}>
+                <span className="text-left">
                     <Button
                         onClick={this.onDeleteClick.bind(null, goal)}
                         bsSize="xs"
                         bsStyle="danger"
-                    >Delete</Button>
+                    ><Glyphicon glyph="trash"/></Button>
                 </span>
+                <span style={{marginLeft : '10px'}}>{goal.title}</span>
                 <Badge>{goal.score}</Badge>
             </ListGroupItem>
         )) : (
