@@ -71,7 +71,9 @@ class Goal extends Model
     }
 
     public function setCompleted(){
-        $this->completed_at = Carbon::now();
+        $this->completed_at = Carbon::now()
+            // todo -- change this shit ! used for timezone diff (Paris = UTC+2, mongodb always use UTC)
+            ->addHour(2);
     }
 
 }

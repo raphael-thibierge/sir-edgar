@@ -189,7 +189,7 @@ const GoalList = React.createClass({
         function daydiffString(first) {
             const second = new Date();
             let value = Math.round((second-first)/(1000*60*60*24));
-            
+
             if (value <= 0){
                 return null;
             }
