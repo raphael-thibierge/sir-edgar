@@ -168,12 +168,13 @@ const GoalList = React.createClass({
 
         let doneGoals = [];
         let todoGoals = [];
-
+        let score = 0;
         // separates done goals from todo goals
         for (let iterator=0; iterator<goals.length; iterator++){
             const goal = goals[iterator];
             if (goal.is_completed){
                 doneGoals.push(goal);
+                score += parseInt(goal.score);
             } else {
                 todoGoals.push(goal);
             }
@@ -220,27 +221,16 @@ const GoalList = React.createClass({
             <ListGroupItem>No goal</ListGroupItem>
         );
 
-        // compute user score and total goal scores
-        let score = 0;
-        let total = 0;
-        for (let i = 0 ; i < this.state.goals.length; i++){
-            const goal = this.state.goals[i];
-            if (goal.is_completed  == true){
-                score += parseInt(goal.score);
-            }
-            total += parseInt(goal.score);
-        }
-
 
         // return component's html
         return (
             <div>
-                <h2>Score : {score}</h2>
-                <h3>To do : {total-score}</h3>
+                <h2>Total Score : {score}</h2>
+                <h3>To do : {todoGoals.length}</h3>
                 <ListGroup>
                     {todoList}
                 </ListGroup>
-                <h3>Done : {score}</h3>
+                <h3>Done : {doneGoals.length}</h3>
                 <ListGroup>
                     {doneList}
                 </ListGroup>
