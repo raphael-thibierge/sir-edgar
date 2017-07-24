@@ -2,6 +2,17 @@
 
 @section('content')
 <div class="container">
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="alert alert-warning">
+                <strong>Warning!</strong>
+                Goal's datetime "completed at" is based on UTC.
+                It will be fixed as soon as possible.
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
 

@@ -1,6 +1,7 @@
 const React = require('react');
 const FormGroup = require('react-bootstrap').FormGroup;
 const FormControl = require('react-bootstrap').FormControl;
+const HelpBlock = require('react-bootstrap').HelpBlock;
 
 /**
  * React component managing goal input
@@ -142,6 +143,7 @@ const GoalInput = React.createClass({
                             onChange={this.onTitleChange}
                             onKeyPress={this.handleKeyPress}
                         />
+                        <HelpBlock>Hit enter key to insert a new goal.</HelpBlock>
                     </div>
                     <div className="col-xs-3">
 

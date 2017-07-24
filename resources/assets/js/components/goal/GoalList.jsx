@@ -180,6 +180,25 @@ const GoalList = React.createClass({
             }
         }
 
+        /**
+         * Compute number of days difference from today
+         *
+         * @param second
+         * @returns {*}
+         */
+        function daydiffString(second) {
+            const first = new Date();
+            const value = Math.round((second-first)/(1000*60*60*24));
+
+            if (value == 0){
+                return null;
+            } else if (value == 1){
+                return "...1 day ago"
+            } else {
+                return "..." + value + " days ago"
+            }
+        }
+
         // render html foreach to-do goal
         const todoList = todoGoals.length > 0 ? todoGoals.map((goal) => (
             <ListGroupItem key={goal._id}>
@@ -197,7 +216,8 @@ const GoalList = React.createClass({
                         bsStyle="success"
                     ><Glyphicon glyph="ok"/></Button>
                 </span>
-                <span style={{marginLeft : '10px'}}>{goal.title}</span>
+                <span style={{marginLeft : '10px', marginRight: '10px'}}>{goal.title}</span>
+                <small><em>{daydiffString(new Date(goal.created_at.slice(0,10)))}</em></small>
                 <Badge>{goal.score}</Badge>
             </ListGroupItem>
         )) : (
