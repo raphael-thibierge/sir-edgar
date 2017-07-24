@@ -186,17 +186,24 @@ const GoalList = React.createClass({
          * @param second
          * @returns {*}
          */
-        function daydiffString(second) {
-            const first = new Date();
-            const value = Math.round((second-first)/(1000*60*60*24));
-
-            if (value == 0){
+        function daydiffString(first) {
+            const second = new Date();
+            let value = Math.round((second-first)/(1000*60*60*24));
+            
+            if (value <= 0){
                 return null;
-            } else if (value == 1){
-                return "...1 day ago"
-            } else {
-                return "..." + value + " days ago"
             }
+
+            return (
+                <small>
+                    <strong>
+                        <em className={value >= 7 ? 'text-danger' : value >= 3 ? 'text-warning' : ''}>
+                            ...{value}{value > 1 ? ' days' : ' day'} ago
+                        </em>
+                    </strong>
+                </small>
+            );
+
         }
 
         // render html foreach to-do goal
@@ -217,7 +224,7 @@ const GoalList = React.createClass({
                     ><Glyphicon glyph="ok"/></Button>
                 </span>
                 <span style={{marginLeft : '10px', marginRight: '10px'}}>{goal.title}</span>
-                <small><em>{daydiffString(new Date(goal.created_at.slice(0,10)))}</em></small>
+                {daydiffString(new Date(goal.created_at.slice(0,10)))}
                 <Badge>{goal.score}</Badge>
             </ListGroupItem>
         )) : (
