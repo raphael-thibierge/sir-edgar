@@ -5,6 +5,11 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Relations\HasMany;
 
+/**
+ * @property string name
+ * @property string email
+ * @property bool admin
+ */
 class User extends \Jenssegers\Mongodb\Auth\User
 {
     use Notifiable;
@@ -15,7 +20,7 @@ class User extends \Jenssegers\Mongodb\Auth\User
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'admin'
     ];
 
     /**
@@ -34,4 +39,9 @@ class User extends \Jenssegers\Mongodb\Auth\User
     public function goals() : HasMany{
         return $this->hasMany('App\Goal');
     }
+
+    public function isAdmin(): bool {
+        return $this->admin != null ? $this->admin : false;
+    }
+
 }

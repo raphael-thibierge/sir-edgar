@@ -25,4 +25,4 @@ Route::prefix('goals')->group(function (){
 });
 Route::resource('goals', 'GoalController');
 
-Route::resource('users', 'UserController');
+Route::resource('users', 'UserController', ['only' => ['index', 'destroy']]);
