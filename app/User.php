@@ -40,6 +40,10 @@ class User extends \Jenssegers\Mongodb\Auth\User
         return $this->hasMany('App\Goal');
     }
 
+    public function projects() : HasMany{
+        return $this->hasMany('App\Project');
+    }
+
     public function isAdmin(): bool {
         return $this->admin != null ? $this->admin : false;
     }

@@ -33,6 +33,7 @@ class Goal extends Model
         'score',
         'tags',
         'user_id',
+        'project_id',
         'completed_at'
     ];
 
@@ -55,6 +56,10 @@ class Goal extends Model
      */
     public function user(): BelongsTo {
         return $this->belongsTo('App\User');
+    }
+
+    public function project(): BelongsTo {
+        return $this->belongsTo('App\Project');
     }
 
     public function getRoutesAttribute(): array {

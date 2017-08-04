@@ -18,6 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/test', 'HomeController@test')->name('test');
 
 Route::prefix('goals')->group(function (){
     Route::post('{goal}/complete', 'GoalController@complete')->name('goals.complete');
@@ -26,3 +27,7 @@ Route::prefix('goals')->group(function (){
 Route::resource('goals', 'GoalController');
 
 Route::resource('users', 'UserController', ['only' => ['index', 'destroy']]);
+
+Route::resource('projects', 'ProjectController', ['only' => ['index']]);
+
+
