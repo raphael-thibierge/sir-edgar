@@ -13,15 +13,27 @@ const GoalRoot = React.createClass({
      * @param goal
      */
     addToList: function (goal) {
-        this.refs.goalList.addToList(goal)
+        //this.refs.goalList.addToList(goal)
+
+        /*
+
+        addToList: function (goal) {
+
+            let goals = this.state.goals;
+            goals.push(goal);
+            this.setState({
+                goals: goals
+            });
+        },
+         */
     },
 
     onGoalCompleted: function (goal) {
-        this.refs.goalGraph.increaseTodayScore(goal.score);
+        //this.refs.goalGraph.increaseTodayScore(goal.score);
     },
 
     onGoalDeleted: function (goal) {
-        this.refs.goalGraph.deleteGoal(goal);
+        //this.refs.goalGraph.deleteGoal(goal);
     },
 
 

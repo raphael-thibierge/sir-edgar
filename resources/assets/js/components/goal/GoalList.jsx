@@ -4,15 +4,16 @@ const ListGroupItem = require('react-bootstrap').ListGroupItem;
 const Button = require('react-bootstrap').Button;
 const Badge = require('react-bootstrap').Badge;
 const Glyphicon = require('react-bootstrap').Glyphicon;
-
+const GoalInput = require('./GoalInput.jsx');
 /**
  * React component managing goal lists
  */
 const GoalList = React.createClass({
 
     propTypes: {
-        onGoalCompleted: React.PropTypes.func.isRequired,
-        onGoalDeleted: React.PropTypes.func.isRequired,
+        goals: React.PropTypes.array.isRequired,
+        createGoal: React.PropTypes.func.isRequired,
+        project_id: React.PropTypes.string.isRequired,
     },
 
     /**
@@ -21,140 +22,15 @@ const GoalList = React.createClass({
      * @returns {{goals: Array}}
      */
     getInitialState: function () {
-        return {
-            goals: []
-        };
+        return {};
     },
 
     /**
      * Method called when component is mounted in html
      * Loads goal list in AJAX
      */
-    componentDidMount: function () {
-        this.request();
-    },
+    componentDidMount: function () {},
 
-    /**
-     * add a goal in component's goal list
-     *
-     * @param goal
-     */
-    addToList: function (goal) {
-
-        let goals = this.state.goals;
-        goals.push(goal);
-        this.setState({
-            goals: goals
-        });
-    },
-
-    /**
-     * AJAX request to get goals from server
-     */
-    request: function(){
-        const request = $.ajax({
-            url: './goals',
-            cache: false,
-            method: 'GET',
-            success: this.onSuccess,
-            error: this.onError,
-        });
-    },
-
-    /**
-     * AJAX goal loading success method that store returned goals in component state
-     * @param response
-     */
-    onSuccess: function (response) {
-        if (response.status && response.status == 'success'){
-            this.setState({
-                goals: response.data.goals
-            });
-        }
-    },
-
-    /**
-     * AJAX request to notify server that user has complete a goal
-     * @param goal
-     */
-    onCompleteGoalClick: function(goal){
-        const request = $.ajax({
-            url: goal.routes.complete,
-            cache: false,
-            method: 'POST',
-            // when server return success
-            success: function (oldGoal, response) {
-                // check status
-                if (response.status && response.status == 'success'){
-                    // get component goal list
-                    let goals = this.state.goals;
-                    let newGoals = [];
-                    for(let i = 0; i < goals.length; i++){
-                        const goal = goals[i];
-                        // update the completed goal
-                        if (goal._id == oldGoal._id){
-                            goal.is_completed = true;
-                            this.props.onGoalCompleted(goal);
-                        }
-                        newGoals.push(goal);
-                    }
-                    // update component's goal list
-                    this.setState({
-                        goals: newGoals
-                    });
-
-                } else {
-                    this.onError(response);
-                }
-            }.bind(this, goal), // bind is used to call method in this component
-            error: this.onError,
-        });
-    },
-
-    /**
-     * alert user when an ajax request failed
-     * @param response
-     */
-    onError: function (response) {
-        alert('error');
-        console.error(response);
-    },
-
-    /**
-     * AJAX request to notify server that user has deleted a goal
-     *
-     * @param goal
-     */
-    onDeleteClick: function (goal) {
-        $.ajax({
-            url: goal.routes.destroy,
-            cache: false,
-            method: 'POST',
-            datatype: 'json',
-            data: {
-                method: 'DELETE',
-                _method: 'DELETE'
-            },
-            success: function (oldGoal) {
-                let goals = this.state.goals;
-                let newGoals = [];
-                // keep all goals except deleted one
-                for(let i = 0; i < goals.length; i++){
-                    const goal = goals[i];
-                    if (goal._id != oldGoal._id){
-                        newGoals.push(goal);
-                    } else {
-                        this.props.onGoalDeleted(oldGoal);
-                    }
-                }
-                // update component's goal list
-                this.setState({
-                    goals: newGoals
-                })
-            }.bind(this, goal),
-            error: this.onError,
-        });
-    },
 
     /**
      * Component's HTML render method
@@ -164,10 +40,13 @@ const GoalList = React.createClass({
     render() {
 
         // goal list
-        const goals = this.state.goals;
+        const goals = this.props.goals;
 
         let doneGoals = [];
-        let todoGoals = [];
+
+        // new to-do goal
+        let todoGoals = [{_id: null, title:'', score: 1, is_completed:false, create: this.props.createGoal, project_id: this.props.project_id}];
+
         let score = 0;
         // separates done goals from todo goals
         for (let iterator=0; iterator<goals.length; iterator++){
@@ -180,70 +59,17 @@ const GoalList = React.createClass({
             }
         }
 
-        /**
-         * Compute number of days difference from today
-         *
-         * @param second
-         * @returns {*}
-         */
-        function daydiffString(first) {
-            const second = new Date();
-            let value = Math.round((second-first)/(1000*60*60*24));
-
-            if (value <= 0){
-                return null;
-            }
-
-            return (
-                <small>
-                    <strong>
-                        <em className={value >= 7 ? 'text-danger' : value >= 3 ? 'text-warning' : ''}>
-                            ...{value}{value > 1 ? ' days' : ' day'} ago
-                        </em>
-                    </strong>
-                </small>
-            );
-
-        }
 
         // render html foreach to-do goal
         const todoList = todoGoals.length > 0 ? todoGoals.map((goal) => (
-            <ListGroupItem key={goal._id}>
-                <span className="text-left">
-                    <Button
-                        onClick={this.onDeleteClick.bind(null, goal)}
-                        bsSize="xs"
-                        bsStyle="danger"
-                    ><Glyphicon glyph="trash"/></Button>
-                </span>
-                <span className="text-left" style={{marginLeft : '10px'}}>
-                    <Button
-                        onClick={this.onCompleteGoalClick.bind(null, goal)}
-                        bsSize="xs"
-                        bsStyle="success"
-                    ><Glyphicon glyph="ok"/></Button>
-                </span>
-                <span style={{marginLeft : '10px', marginRight: '10px'}}>{goal.title}</span>
-                {daydiffString(new Date(goal.created_at.slice(0,10)))}
-                <Badge>{goal.score}</Badge>
-            </ListGroupItem>
+            <GoalInput goal={goal} key={goal._id}/>
         )) : (
             <ListGroupItem>No goal</ListGroupItem>
         );
 
         // render html foreach done goal
         const doneList = doneGoals.length > 0 ? doneGoals.map((goal) => (
-            <ListGroupItem key={goal._id} bsStyle="success">
-                <span className="text-left">
-                    <Button
-                        onClick={this.onDeleteClick.bind(null, goal)}
-                        bsSize="xs"
-                        bsStyle="danger"
-                    ><Glyphicon glyph="trash"/></Button>
-                </span>
-                <span style={{marginLeft : '10px'}}>{goal.title}</span>
-                <Badge>{goal.score}</Badge>
-            </ListGroupItem>
+            <GoalInput goal={goal} key={goal._id}/>
         )) : (
             <ListGroupItem>No goal</ListGroupItem>
         );
@@ -252,15 +78,30 @@ const GoalList = React.createClass({
         // return component's html
         return (
             <div>
-                <h2>Total Score : {score}</h2>
-                <h3>To do : {todoGoals.length}</h3>
-                <ListGroup>
-                    {todoList}
-                </ListGroup>
-                <h3>Done : {doneGoals.length}</h3>
-                <ListGroup>
-                    {doneList}
-                </ListGroup>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <h3>To do : {todoGoals.length}</h3>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <ListGroup>
+                            {todoList}
+                        </ListGroup>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <h3>Done : {doneGoals.length}</h3>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <ListGroup>
+                            {doneList}
+                        </ListGroup>
+                    </div>
+                </div>
             </div>
         );
     }

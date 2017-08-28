@@ -34,16 +34,6 @@ class GoalController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -54,41 +44,18 @@ class GoalController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'score' => 'required|integer|max:5',
+            'project_id' => 'required',
         ]);
 
-        $user = Auth::user();
-
-        $goal = $user->goals()->create([
+        $goal = Auth::user()->goals()->create([
+            "project_id" => $request->get('project_id'),
             "title" => $request->get('title'),
             "score" => (int)$request->get('score'),
         ]);
 
-
         return $this->successResponse([
             'goal'  => $goal
         ]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -100,7 +67,19 @@ class GoalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required',
+            'score' => 'required|integer|max:5',
+        ]);
+
+        $goal =  Auth::user()->goals()->find($id)->update([
+            "title" => $request->get('title'),
+            "score" => (int)$request->get('score'),
+        ]);
+
+        return $this->successResponse([
+            'goal'  => $goal
+        ]);
     }
 
     /**

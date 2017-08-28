@@ -10,58 +10,20 @@ const GoalInput = require('../goal/GoalInput.jsx');
 /**
  * Main component managing goals
  */
-const ProjectRoot = React.createClass({
+const ProjectRender = React.createClass({
+
+    propTypes:{
+        project: React.PropTypes.object.isRequired,
+    },
 
     /**
      * Define component initial state
      *
-     * @returns {{goals: Array}}
+     * @returns {{}}
      */
     getInitialState: function () {
-        return {
-            projects: []
-        };
+        return {};
     },
-
-    /**
-     * Method called when component is mounted in html
-     * Loads goal list in AJAX
-     */
-    componentDidMount: function () {
-        this.request();
-    },
-
-    /**
-     * AJAX request to get goals from server
-     */
-    request: function(){
-        console.log('yolo');
-        const request = $.ajax({
-            url: './projects',
-            cache: false,
-            method: 'GET',
-            success: this.onSuccess,
-            error: (error) => {console.error(error.message); alert(error)},
-        });
-    },
-
-    /**
-     * AJAX goal loading success method that store returned goals in component state
-     * @param response
-     */
-    onSuccess: function (response) {
-        if (response.status && response.status == 'success'){
-            console.log(response.data.projects);
-            this.setState({
-                projects: response.data.projects
-            });
-        }
-    },
-
-    addToList(goal){
-
-    },
-
 
     /**
      * Render method, returning HTML code for goal input and list
@@ -70,38 +32,19 @@ const ProjectRoot = React.createClass({
      */
     render: function () {
 
-        const projects = this.state.projects.map((project) => {
-
-            const addToList = function (goal) {
-                this.addToList(goal)
-            }
-
-            return(
-                <Panel header={project.title} eventKey={project.id} collapsible>
-                    <GoalInput
-                        onStoreSuccess={this.refs[project.id + '_goals'].addToList}
-                    />
-                    <GoalList
-                        ref={project.id + '_goals'}
-                        goals={project.goals}
-                        _addToList=""
-                    />
-                </Panel>
-            )
-        });
+        const project = this.props.project;
 
         return (
-            <div className="row col-xs-12">
-                <div className="row">
-                    <Accordion>
-                        {projects}
-                    </Accordion>
-                </div>
-
-            </div>
+            <Panel header={project.title} eventKey={project.id} collapsible>
+                <GoalList
+                    goals={project.goals}
+                    createGoal={this.props.createGoal}
+                    project_id={project._id}
+                />
+            </Panel>
         );
     }
 
 });
 
-module.exports = ProjectRoot;
+module.exports = ProjectRender;
