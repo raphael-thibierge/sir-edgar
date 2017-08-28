@@ -90,18 +90,7 @@ const GoalInput = React.createClass({
      */
     onEnterPress(){
 
-        let data = this.getFormValues();
-        data._token = window.token;
-
-        const request = $.ajax({
-            url: './goals',
-            dataType: 'json',
-            method: 'POST',
-            data: data,
-            success: this.onSuccess,
-            error: this.onError,
-
-        });
+        this.setDisplayMode();
     },
 
     /**
