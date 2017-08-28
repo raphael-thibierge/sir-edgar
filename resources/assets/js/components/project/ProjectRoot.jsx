@@ -66,6 +66,10 @@ const ProjectRoot = React.createClass({
         });
     },
 
+    formatGoal(goal){
+
+    },
+
     /**
      * AJAX goal loading success method that store returned goals in component state
      * @param response
@@ -165,6 +169,10 @@ const ProjectRoot = React.createClass({
 
                     const project_id = goal.project_id;
                     let project = projects[this.projectMap[project_id]];
+
+                    goal = new Goal(goals[goalIterator]);
+                    goal.forceUpdate = this.forceUpdate.bind(this);
+                    goal.remove = this.deleteGoal.bind(this, goal);
 
                     project.goals.push(goal);
                     projects[this.projectMap[project_id]] = project;

@@ -47,13 +47,19 @@ const GoalList = React.createClass({
         // new to-do goal
         let todoGoals = [{_id: null, title:'', score: 1, is_completed:false, create: this.props.createGoal, project_id: this.props.project_id}];
 
-        let score = 0;
         // separates done goals from todo goals
         for (let iterator=0; iterator<goals.length; iterator++){
             const goal = goals[iterator];
             if (goal.is_completed){
-                doneGoals.push(goal);
-                score += parseInt(goal.score);
+
+                const complete_at = new Date(goal.completed_at);
+                const diff = new Date()-complete_at;
+
+                // display only if completed today
+                if (diff/1000/3600 < 24){
+                    doneGoals.push(goal);
+                }
+                
             } else {
                 todoGoals.push(goal);
             }
