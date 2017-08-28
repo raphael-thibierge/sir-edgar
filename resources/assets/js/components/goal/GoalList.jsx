@@ -80,19 +80,9 @@ const GoalList = React.createClass({
             <div>
                 <div className="row">
                     <div className="col-xs-12">
-                        <h3>To do : {todoGoals.length}</h3>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-xs-12">
                         <ListGroup>
                             {todoList}
                         </ListGroup>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-xs-12">
-                        <h3>Done : {doneGoals.length}</h3>
                     </div>
                 </div>
                 <div className="row">
