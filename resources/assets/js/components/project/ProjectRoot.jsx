@@ -170,7 +170,7 @@ const ProjectRoot = React.createClass({
                     const project_id = goal.project_id;
                     let project = projects[this.projectMap[project_id]];
 
-                    goal = new Goal(goals[goalIterator]);
+                    goal = new Goal(goal);
                     goal.forceUpdate = this.forceUpdate.bind(this);
                     goal.remove = this.deleteGoal.bind(this, goal);
 

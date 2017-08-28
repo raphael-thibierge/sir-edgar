@@ -56,10 +56,10 @@ const GoalList = React.createClass({
                 const diff = new Date()-complete_at;
 
                 // display only if completed today
-                if (diff/1000/3600 < 24){
+                if (diff/1000/3600 < 24 || goal.completed_at === null){
                     doneGoals.push(goal);
                 }
-                
+
             } else {
                 todoGoals.push(goal);
             }
