@@ -69,16 +69,12 @@ const GoalList = React.createClass({
         // render html foreach to-do goal
         const todoList = todoGoals.length > 0 ? todoGoals.map((goal) => (
             <GoalInput goal={goal} key={goal._id}/>
-        )) : (
-            <ListGroupItem>No goal</ListGroupItem>
-        );
+        )) : null; // can't be null because there is the new Goals todoGoals
 
         // render html foreach done goal
         const doneList = doneGoals.length > 0 ? doneGoals.map((goal) => (
             <GoalInput goal={goal} key={goal._id}/>
-        )) : (
-            <ListGroupItem>No goal</ListGroupItem>
-        );
+        )) : null;
 
 
         // return component's html
@@ -91,13 +87,15 @@ const GoalList = React.createClass({
                         </ListGroup>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-xs-12">
-                        <ListGroup>
-                            {doneList}
-                        </ListGroup>
+                {doneList !== null ? (
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <ListGroup>
+                                {doneList}
+                            </ListGroup>
+                        </div>
                     </div>
-                </div>
+                ) : null}
             </div>
         );
     }

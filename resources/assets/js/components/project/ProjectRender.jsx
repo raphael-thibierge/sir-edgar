@@ -35,7 +35,7 @@ const ProjectRender = React.createClass({
         const project = this.props.project;
 
         return (
-            <Panel header={project.title} eventKey={project.id} collapsible>
+            <Panel header={project.title} eventKey={project.id} bsStyle="primary" collapsible>
                 <GoalList
                     goals={project.goals}
                     createGoal={this.props.createGoal}
