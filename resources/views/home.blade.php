@@ -2,16 +2,6 @@
 
 @section('content')
 <div class="container">
-
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="alert alert-info">
-                <strong>Info.</strong>
-                Datetimes are based on Europe/Paris timezone.
-            </div>
-        </div>
-    </div>
-
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div id="project-root">
