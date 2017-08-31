@@ -29,4 +29,4 @@ Route::resource('goals', 'GoalController', ['except' => ['create', 'edit']]);
 
 Route::resource('users', 'UserController', ['only' => ['index', 'destroy']]);
 
-Route::resource('projects', 'ProjectController', ['only' => ['index']]);
+Route::resource('projects', 'ProjectController', ['only' => ['index', 'store']]);

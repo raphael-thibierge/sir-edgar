@@ -171,8 +171,7 @@ class GoalController extends Controller
 
     public function reComplete(Goal $goal){
 
-        if ($goal->getIsCompletedAttribute()){
-
+        if ($goal->getIsCompletedAttribute() == true){
 
             $goal->project->goals()->create([
                 'title' => $goal->title,
@@ -180,7 +179,6 @@ class GoalController extends Controller
                 'user_id' => $goal->user_id,
                 'completed_at' => Carbon::now()
             ]);
-
 
         } else {
             $goal->setCompleted();

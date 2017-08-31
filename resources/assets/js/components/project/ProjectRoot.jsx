@@ -1,6 +1,10 @@
 const React = require('react');
 const Accordion = require('react-bootstrap').Accordion;
 const Button = require('react-bootstrap').Button;
+const Glyphicon = require('react-bootstrap').Glyphicon;
+const Collapse = require('react-bootstrap').Collapse;
+const FormGroup = require('react-bootstrap').FormGroup;
+const FormControl = require('react-bootstrap').FormControl;
 const ProjectRender = require('./ProjectRender.jsx');
 const Goal = require('../goal/Goal');
 const GoalsGraph = require('../goal/GoalsGraph.jsx');
@@ -20,7 +24,9 @@ const ProjectRoot = React.createClass({
      */
     getInitialState: function () {
         return {
-            projects: []
+            projects: [],
+            newProjectCollapseOpen: false,
+            newProjectTitle: '',
         };
     },
 
@@ -190,6 +196,43 @@ const ProjectRoot = React.createClass({
     },
 
 
+    onNewProjectClick: function () {
+        const title = this.state.newProjectTitle;
+        const url = 'projects';
+        $.ajax({
+            url: url,
+            cache: false,
+            method: 'POST',
+            datatype: 'json',
+            data: {
+                title: title,
+                _token: window.token
+            },
+            success: function (response) {
+                console.log(response);
+
+                if (response.status === 'success') {
+
+                    let project = response.data.project;
+
+                    let projects = this.state.projects;
+                    this.projectMap[project._id] = projects.length;
+                    projects.push(project);
+
+                    this.setState({
+                        projects: projects,
+                        newProjectCollapseOpen: false,
+                        newProjectTitle: '',
+                    });
+                }
+
+            }.bind(this),
+            error: this.onError,
+        });
+
+    },
+
+
     /**
      * Render method, returning HTML code for goal input and list
      *
@@ -199,6 +242,45 @@ const ProjectRoot = React.createClass({
 
         return (
             <div className="row col-xs-12">
+                <div className="row">
+                        <Button
+                            bsStyle="success"
+                            onClick={ ()=> this.setState({ newProjectCollapseOpen: !this.state.newProjectCollapseOpen })}
+                        >
+                            New project
+                        </Button>
+                        <Collapse in={this.state.newProjectCollapseOpen}>
+                            <div className="well">
+                                <div className="row">
+                                    <div className="col-xs-12">
+                                        <FormGroup
+                                            style={{marginDown: '10px'}}
+                                            controlId="formBasicText"
+                                        >
+                                            <div className="col-xs-11">
+                                                <FormControl
+                                                    type="text"
+                                                    value={this.state.newProjectTitle}
+                                                    placeholder="Project title"
+                                                    onChange={(e)=> this.setState({ newProjectTitle: e.target.value})}
+                                                />
+                                            </div>
+                                            <div className="col-xs-1">
+
+                                                <Button bsSize="sm" bsStyle="success"
+                                                        onClick={this.onNewProjectClick}
+                                                >
+                                                    <Glyphicon glyph="ok"/>
+                                                </Button>
+                                            </div>
+                                        </FormGroup>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </Collapse>
+                </div>
+                <br/>
                 <div className="row">
                     <Accordion>
                         {this.state.projects.map((project) => (
