@@ -22,6 +22,7 @@ Route::get('/test', 'HomeController@test')->name('test');
 
 Route::prefix('goals')->group(function (){
     Route::post('{goal}/complete', 'GoalController@complete')->name('goals.complete');
+    Route::post('{goal}/re-complete', 'GoalController@reComplete')->name('goals.re-complete');
     Route::get('score', 'GoalController@goalScorePerDay')->name('goals.score-per-day');
 });
 Route::resource('goals', 'GoalController', ['except' => ['create', 'edit']]);

@@ -200,13 +200,6 @@ const ProjectRoot = React.createClass({
         return (
             <div className="row col-xs-12">
                 <div className="row">
-                    <div className="col-xs-12">
-                        <div className="alert alert-danger">
-                            <strong>Datetimes are based on Europe/Paris timezone.</strong>
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
                     <Accordion>
                         {this.state.projects.map((project) => (
                             <ProjectRender

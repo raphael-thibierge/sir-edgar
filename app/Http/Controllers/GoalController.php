@@ -17,7 +17,7 @@ class GoalController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth', ['except' => 'reComplete']);
     }
 
     /**
@@ -168,5 +168,29 @@ class GoalController extends Controller
             'score' => $score
         ]);
     }
+
+    public function reComplete(Goal $goal){
+
+        if ($goal->getIsCompletedAttribute()){
+
+
+            $goal->project->goals()->create([
+                'title' => $goal->title,
+                'score' => $goal->score,
+                'user_id' => $goal->user_id,
+                'completed_at' => Carbon::now()
+            ]);
+
+
+        } else {
+            $goal->setCompleted();
+            $goal->save();
+        }
+
+        return $this->successResponse();
+
+    }
+
+
 
 }
