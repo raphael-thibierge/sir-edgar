@@ -6,6 +6,7 @@ use App\Goal;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -103,17 +104,20 @@ class GoalController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function complete(Request $request, Goal $goal){
+
         $goal->setCompleted();
         $goal->update();
         return $this->successResponse();
     }
 
 
-    public function goalScorePerDay(){
+    public function goalScorePerDay(Request $request){
 
         $user = Auth::user();
 
-        $data = Goal::raw(function ($collecton) use ($user){
+        $offset = intval($request->has('offset') ? $request->get('offset') : 0);
+
+        $data = Goal::raw(function ($collecton) use ($user, $offset){
             return $collecton->aggregate([
                 [
                     '$match' => [
@@ -127,9 +131,9 @@ class GoalController extends Controller
                 [
                     '$group'=> [
                         '_id'=>  [
-                            'day' => [ '$dayOfMonth' => '$completed_at'],
-                            'month' => ['$month'=> '$completed_at'],
-                            'year' => [ '$year' => '$completed_at']
+                            'day' => [ '$dayOfMonth' => [[ '$subtract' => [ '$completed_at', $offset ]]]],
+                            'month' => ['$month'=> [[ '$subtract' => [ '$completed_at', $offset ]]]],
+                            'year' => [ '$year' => [[ '$subtract' => [ '$completed_at', $offset ]]]]
                         ],
                         'totalScore' => ['$sum'=> '$score']
                     ]

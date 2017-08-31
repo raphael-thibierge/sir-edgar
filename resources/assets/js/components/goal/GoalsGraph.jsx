@@ -25,7 +25,7 @@ const GoalsGraph = React.createClass({
      */
     request: function(){
         const request = $.ajax({
-            url: './goals/score',
+            url: './goals/score?offset=' + new Date().getTimezoneOffset(),
             cache: false,
             method: 'GET',
             success: this.onSuccess,
