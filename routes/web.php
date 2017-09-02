@@ -20,6 +20,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/test', 'HomeController@test')->name('test');
 
+Route::match(['get', 'post'], '/botman', 'BotManController@handle');
+
 Route::prefix('goals')->group(function (){
     Route::post('{goal}/complete', 'GoalController@complete')->name('goals.complete');
     Route::post('{goal}/re-complete', 'GoalController@reComplete')->name('goals.re-complete');
