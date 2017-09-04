@@ -62,6 +62,7 @@ const GoalsGraph = React.createClass({
             // build header with the list of project name
             let header = ['Day'];
             header = header.concat(projects_names);
+            header.push({ role: 'annotation' });
 
             // start filling data, with header as first line
             let data = [header];
@@ -81,6 +82,8 @@ const GoalsGraph = React.createClass({
                 // first column is the date
                 let line = [dateAsString];
 
+
+                let total = 0;
                 // insert each projects score per day in a separate column
                 for (let i=0; i<projects_ids.length; i++){
 
@@ -88,11 +91,15 @@ const GoalsGraph = React.createClass({
                         typeof scores[dateAsString] !== 'undefined' &&
                         typeof scores[dateAsString][projects_ids[i]] !== 'undefined'
                     ){
-                        line.push(scores[dateAsString][projects_ids[i]]);
+                        const score = scores[dateAsString][projects_ids[i]];
+                        total+=score;
+                        line.push(score);
                     } else {
                         line.push(0);
                     }
                 }
+                line.push(total > 0? total : "");
+
 
                 // insert day line in chart data
                 data.push(line);
@@ -157,6 +164,25 @@ const GoalsGraph = React.createClass({
     },
 
     render(){
+
+        const options = {
+            isStacked: true,
+            annotations: {
+                textStyle: {
+                    //fontName: 'Times-Roman',
+                    //fontSize: 14,
+                    //bold: true,
+                    //italic: true,
+                    // The color of the text.
+                    color: '#000000',
+                    // The color of the text outline.
+                    //auraColor: '#d799ae',
+                    // The transparency of the text.
+                    //opacity: 0.8
+                }
+            },
+        };
+
         return (
             <div className="row">
                 <div className="col-xs-12">
@@ -166,10 +192,8 @@ const GoalsGraph = React.createClass({
                     <Chart
                         chartType="ColumnChart"
                         data={this.state.data}
-                        options={{
-                            isStacked: true,
-                        }}
-                        graph_id="ScatterChart"
+                        options={options}
+                        graph_id="ScatterChart_material"
                         width="100%"
                         height="400px"
                         legend_toggle
