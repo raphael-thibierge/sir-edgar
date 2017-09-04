@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\GoalCreated;
 use App\Goal;
 use App\User;
 use Carbon\Carbon;
@@ -53,6 +54,8 @@ class GoalController extends Controller
             "title" => $request->get('title'),
             "score" => (int)$request->get('score'),
         ]);
+
+        event(new GoalCreated($goal));
 
         return $this->successResponse([
             'goal'  => $goal

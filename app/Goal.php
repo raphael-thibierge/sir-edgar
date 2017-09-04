@@ -8,6 +8,7 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
 
 /**
  * @property mixed completed_at
+ * @property mixed id
  */
 class Goal extends Model
 {
