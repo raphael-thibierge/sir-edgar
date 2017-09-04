@@ -49,35 +49,57 @@ const GoalsGraph = React.createClass({
     onSuccess: function (response) {
         if (response.status && response.status == 'success'){
 
+            // list of scores per project per day
             const scores = response.data.scores;
+            // list of projects
+            const projects = response.data.projects;
 
-            let data = [['Day', 'Score']];
+            // get list of projects ids
+            const projects_ids = Object.keys(projects);
+            // get list of projects name
+            const projects_names = Object.values(projects);
 
+            // build header with the list of project name
+            let header = ['Day'];
+            header = header.concat(projects_names);
+
+            // start filling data, with header as first line
+            let data = [header];
+
+            // get first date of scores
             let date = new Date(response.data.firstDate);
+            // get last date (today)
             let lastDate = new Date;
             lastDate.setDate(lastDate.getDate() + 1);
 
+            // get score per project foreach day
             do  {
 
+                // convet date to format "dd-mm-yyyy"
                 const dateAsString = date.toISOString().slice(0,10);
 
-                data.push([
-                    dateAsString,
-                    (scores[dateAsString] ? scores[dateAsString] : 0)
-                ]);
+                // first column is the date
+                let line = [dateAsString];
 
+                // insert each projects score per day in a separate column
+                for (let i=0; i<projects_ids.length; i++){
+
+                    if (
+                        typeof scores[dateAsString] !== 'undefined' &&
+                        typeof scores[dateAsString][projects_ids[i]] !== 'undefined'
+                    ){
+                        line.push(scores[dateAsString][projects_ids[i]]);
+                    } else {
+                        line.push(0);
+                    }
+                }
+
+                // insert day line in chart data
+                data.push(line);
+
+                // increment date and stop if date is tomorrow
                 date.setDate(date.getDate() + 1);
-
             } while (this.sameDay(date, lastDate) == false);
-
-
-            for (let i=0; i<scores.length; i++){
-                const score = scores[i];
-                data.push([
-                    score.date,
-                    score.score,
-                ]);
-            }
 
 
             this.setState({
@@ -144,7 +166,9 @@ const GoalsGraph = React.createClass({
                     <Chart
                         chartType="ColumnChart"
                         data={this.state.data}
-                        options={{}}
+                        options={{
+                            isStacked: true,
+                        }}
                         graph_id="ScatterChart"
                         width="100%"
                         height="400px"

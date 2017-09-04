@@ -120,8 +120,8 @@ class GoalController extends Controller
 
         $offset = intval($request->has('offset') ? $request->get('offset') : 0);
 
-        $data = Goal::raw(function ($collecton) use ($user, $offset){
-            return $collecton->aggregate([
+        $data = Goal::raw(function ($collection) use ($user, $offset){
+            return $collection->aggregate([
                 [
                     '$match' => [
                         'completed_at' => [
@@ -136,7 +136,8 @@ class GoalController extends Controller
                         '_id'=>  [
                             'day' => [ '$dayOfMonth' => [[ '$subtract' => [ '$completed_at', $offset ]]]],
                             'month' => ['$month'=> [[ '$subtract' => [ '$completed_at', $offset ]]]],
-                            'year' => [ '$year' => [[ '$subtract' => [ '$completed_at', $offset ]]]]
+                            'year' => [ '$year' => [[ '$subtract' => [ '$completed_at', $offset ]]]],
+                            'project' => '$project_id'
                         ],
                         'totalScore' => ['$sum'=> '$score']
                     ]
@@ -145,17 +146,21 @@ class GoalController extends Controller
         });
 
 
+
         $json = [];
         foreach ($data as $result){
 
             $date = Carbon::create($result->_id->year, $result->_id->month, $result->_id->day)
                 ->toDateString();
-            $json [$date] = $result->totalScore;
+            $json[$date][$result->_id->project] = $result->totalScore;
         }
+
+        $projects = $user->projects()->select('_id', 'title')->pluck('title', '_id');
 
 
         return $this->successResponse([
             'scores' => $json,
+            'projects' => $projects,
             'firstDate' => $user->created_at->toDateString(),
         ]);
     }
