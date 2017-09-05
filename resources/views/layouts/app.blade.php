@@ -85,4 +85,15 @@
     <script src="{{ asset('js/app.js') }}"></script>
 
 </body>
+<footer>
+    <hr>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-2 col-xs-offset-10">
+                <a href="{{ route('about') }}" class="text-right">About page</a>
+            </div>
+        </div>
+    </div>
+    <br>
+</footer>
 </html>
