@@ -81,10 +81,11 @@ class Goal {
     }
 
     update(title, score){
-
-        console.log('update');
-        console.log(title);
-        console.log(score);
+        
+        if (title == ""){
+            alert("Goal's title can't be empty !");
+            return;
+        }
 
         const request = $.ajax({
             url: this.routes.update,
