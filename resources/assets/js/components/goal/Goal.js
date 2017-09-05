@@ -81,7 +81,7 @@ class Goal {
     }
 
     update(title, score){
-        
+
         if (title == ""){
             alert("Goal's title can't be empty !");
             return;

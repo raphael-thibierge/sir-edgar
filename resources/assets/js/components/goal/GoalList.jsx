@@ -44,8 +44,10 @@ const GoalList = React.createClass({
 
         let doneGoals = [];
 
+
+        const newGoal = {_id: null, title:'', score: 1, is_completed:false, create: this.props.createGoal, project_id: this.props.project_id};
         // new to-do goal
-        let todoGoals = [{_id: null, title:'', score: 1, is_completed:false, create: this.props.createGoal, project_id: this.props.project_id}];
+        let todoGoals = [];
 
         // separates done goals from todo goals
         for (let iterator=0; iterator<goals.length; iterator++){
@@ -65,9 +67,11 @@ const GoalList = React.createClass({
             }
         }
 
+        todoGoals.push(newGoal);
+
 
         // render html foreach to-do goal
-        const todoList = todoGoals.length > 0 ? todoGoals.map((goal) => (
+        const todoList = todoGoals.length > 0 ? todoGoals.reverse().map((goal) => (
             <GoalInput goal={goal} key={goal._id}/>
         )) : null; // can't be null because there is the new Goals todoGoals
 
