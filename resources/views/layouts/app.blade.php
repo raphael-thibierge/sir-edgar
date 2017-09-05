@@ -36,7 +36,7 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        <li class="change_log"></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -83,6 +83,17 @@
         window.token = "{{ csrf_token() }}"
     </script>
     <script src="{{ asset('js/app.js') }}"></script>
+
+
+    <script src="//cdn.headwayapp.co/widget.js"></script>
+    <script>
+        var config = {
+            selector: ".change_log", // CSS selector where to inject the badge
+            account: "xGMR2J", // your account ID,
+        };
+        Headway.init(config);
+        console.log('inited')
+    </script>
 
 </body>
 <footer>
