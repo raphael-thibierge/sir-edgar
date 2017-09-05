@@ -23,6 +23,7 @@ Route::get('/test', 'HomeController@test')->name('test');
 
 Route::prefix('goals')->group(function (){
     Route::post('{goal}/complete', 'GoalController@complete')->name('goals.complete');
+    Route::post('{goal}/set-today', 'GoalController@setToday')->name('goals.set_today');
     Route::post('{goal}/re-complete', 'GoalController@reComplete')->name('goals.re-complete');
     Route::get('score', 'GoalController@goalScorePerDay')->name('goals.score-per-day');
 });

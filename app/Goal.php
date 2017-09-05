@@ -35,7 +35,8 @@ class Goal extends Model
         'tags',
         'user_id',
         'project_id',
-        'completed_at'
+        'completed_at',
+        'today' // --> must be achieved today
     ];
 
     /**
@@ -69,6 +70,7 @@ class Goal extends Model
             'update'    => route('goals.update', ['goal' => $this]),
             'destroy'    => route('goals.destroy', ['goal' => $this]),
             'complete'    => route('goals.complete', ['goal' => $this]),
+            'set_today'    => route('goals.set_today', ['goal' => $this]),
         ];
     }
 

@@ -8,6 +8,7 @@ class Goal {
         this.completed_at=null;
         this.is_completed=false;
         this.routes=null;
+        this.today=false;
 
         if (goal !== null){
             this.fillData(goal);
@@ -37,10 +38,33 @@ class Goal {
             method: 'POST',
             // when server return success
             success: function (response) {
-                console.log('success');
                 // check status
                 if (response.status && response.status === 'success'){
                     this.is_completed = true;
+                    this.updateView();
+                } else {
+                    this.onError(response);
+                }
+            }.bind(this), // bind is used to call method in this component
+            error: this.onError,
+        });
+    }
+
+    setToday(){
+        const request = $.ajax({
+            url: this.routes.set_today,
+            cache: false,
+            method: 'POST',
+            data: {
+                today: !this.today
+            },
+            // when server return success
+            success: function (response) {
+                console.log('today success');
+                console.log(response);
+                // check status
+                if (response.status && response.status === 'success'){
+                    this.today = !this.today;
                     this.updateView();
                 } else {
                     this.onError(response);

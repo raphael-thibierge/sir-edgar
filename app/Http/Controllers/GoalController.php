@@ -200,6 +200,24 @@ class GoalController extends Controller
 
     }
 
+    public function setToday(Request $request, Goal $goal){
+
+        $this->validate($request, [
+            'today' => 'required|in:true,false'
+        ]);
+
+        // request's input today is a string
+        $today = $request->input('today') == "true" ? true : false;
+
+        $goal->update(['today' => $today]);
+
+        return $this->successResponse([
+            'goal' => $goal,
+            'today' => $today,
+        ]);
+
+    }
+
 
 
 }
