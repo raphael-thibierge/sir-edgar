@@ -118,7 +118,10 @@ class GoalController extends Controller
 
         $user = Auth::user();
 
+        // offset in minute
         $offset = intval($request->has('offset') ? $request->get('offset') : 0);
+        // put offset in milliseconds
+        $offset *= 60 * 1000;
 
         $data = Goal::raw(function ($collection) use ($user, $offset){
             return $collection->aggregate([
