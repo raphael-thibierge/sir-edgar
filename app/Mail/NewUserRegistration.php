@@ -14,7 +14,7 @@ class NewUserRegistration extends Mailable
     /**
      * @var User
      */
-    private $userRegistred;
+    private $userRegistered;
 
     /**
      * Create a new message instance.
@@ -22,7 +22,7 @@ class NewUserRegistration extends Mailable
      */
     public function __construct(User $userRegistered)
     {
-        $this->userRegistred = $userRegistered;
+        $this->userRegistered = $userRegistered;
     }
 
     /**
@@ -33,6 +33,6 @@ class NewUserRegistration extends Mailable
     public function build()
     {
         return $this->markdown('emails.admin.register')
-            ->with('user', $this->userRegistred);
+            ->with('user', $this->userRegistered);
     }
 }
