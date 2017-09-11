@@ -1,11 +1,13 @@
 @component('mail::message')
 # Goals report
 
+
+
+@if ($goals->count() > 0)
 This is the goal list you achieve {{ $period }} !
 
 
 <?php $total = 0; ?>
-
 @component('mail::table')
 | Goal          | Project | Score     |
 | ------------- | ------- | --------: |
@@ -20,6 +22,9 @@ This is the goal list you achieve {{ $period }} !
 
 ### Well done, your total score is {{ $total }} !
 
+@else
+    You didn't achieve any goals {{ $period }}..
+@endif
 
 Thanks,<br>
 {{ config('app.name') }}

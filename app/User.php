@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Relations\HasMany;
 
@@ -38,6 +39,12 @@ class User extends \Jenssegers\Mongodb\Auth\User
      */
     public function goals() : HasMany{
         return $this->hasMany('App\Goal');
+    }
+
+    public function yesterday_goals() : HasMany{
+        return $this->goals()
+            ->where('completed_at', '>=', Carbon::yesterday())
+            ->where('completed_at', '<', Carbon::today());
     }
 
     public function projects() : HasMany{

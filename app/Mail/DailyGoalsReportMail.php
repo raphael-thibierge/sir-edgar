@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class GoalsDailyReport extends Mailable
+class DailyGoalsReportMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -35,9 +35,8 @@ class GoalsDailyReport extends Mailable
      */
     public function build()
     {
-        $goals = $this->user->goals()
+        $goals = $this->user->yesterday_goals()
             ->select(['title', 'score', 'completed_at', 'project_id'])
-            ->where('completed_at', '>', Carbon::yesterday())
             ->orderBy('project_id')
             ->with('project')
             ->get();
@@ -45,7 +44,7 @@ class GoalsDailyReport extends Mailable
         return $this->markdown('emails.goals.report')
             ->with([
                 'goals' => $goals,
-                'period' => 'today'
+                'period' => 'yesterday'
             ]);
     }
 }
