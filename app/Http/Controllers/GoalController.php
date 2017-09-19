@@ -225,7 +225,7 @@ class GoalController extends Controller
         if ($user->name == 'alexandre'){
             $date = Carbon::today()->addHour(2);
         } else {
-            $date = Carbon::today();//->subHour(4);
+            $date = Carbon::today()->subHour(4);
         }
 
         $score = $user->goals()->where('completed_at', '>=', $date)->sum('score');
