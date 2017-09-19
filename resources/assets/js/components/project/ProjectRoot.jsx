@@ -8,6 +8,7 @@ const FormControl = require('react-bootstrap').FormControl;
 const ProjectRender = require('./ProjectRender.jsx');
 const Goal = require('../goal/Goal');
 const GoalsGraph = require('../goal/GoalsGraph.jsx');
+const ScoreGoal = require('../scoreGoal/scoreGoal.jsx');
 
 /**
  * Main component managing goals
@@ -242,6 +243,10 @@ const ProjectRoot = React.createClass({
 
         return (
             <div className="row col-xs-12">
+
+                <ScoreGoal />
+
+
                 <div className="row">
                         <Button
                             bsStyle="success"

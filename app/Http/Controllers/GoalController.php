@@ -218,6 +218,17 @@ class GoalController extends Controller
 
     }
 
+    public function currentScore(){
+        $user = Auth::user();
+
+        $score = $user->goals()->where('completed_at', '>=', Carbon::today())->sum('score');
+
+        return $this->successResponse([
+            'score' => $score,
+            'daily_score_goal' => $user->daily_score_goal,
+        ]);
+    }
+
 
 
 }
