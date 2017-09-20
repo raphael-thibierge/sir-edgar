@@ -50,8 +50,8 @@ class User extends \Jenssegers\Mongodb\Auth\User
 
     public function yesterday_goals() : HasMany{
         return $this->goals()
-            ->where('completed_at', '>=', Carbon::yesterday())
-            ->where('completed_at', '<', Carbon::today());
+            ->where('completed_at', '>=', Carbon::yesterday($this->timezone))
+            ->where('completed_at', '<', Carbon::today($this->timezone));
     }
 
     public function projects() : HasMany{
