@@ -13,6 +13,7 @@
                 <td>Email</td>
                 <td>Projects</td>
                 <td>Goals</td>
+                <td>Done goals</td>
                 <td>Delete</td>
             </thead>
             <tbody>
@@ -23,6 +24,7 @@
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->projects()->count() }}</td>
                     <td>{{ $user->goals()->count() }}</td>
+                    <td>{{ $user->goals()->whereNotNull('completed_at')->count() }}</td>
                     <td>
                         <form action="{{route("users.destroy", ["user" => $user->id])}}" method="POST">
                             {{ csrf_field() }}
