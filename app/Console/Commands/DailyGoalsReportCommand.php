@@ -14,7 +14,7 @@ class DailyGoalsReportCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'report:goals:daily {user_id}';
+    protected $signature = 'report:goals:daily';
 
     /**
      * The console command description.
@@ -40,7 +40,7 @@ class DailyGoalsReportCommand extends Command
     public function handle()
     {
 
-        User::all()->each(function($user){
+        User::where('email_daily_report', true)->get()->each(function($user){
             Mail::to($user)->send(new DailyGoalsReportMail($user));
         });
     }

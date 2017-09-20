@@ -170,8 +170,11 @@ class GoalController extends Controller
 
 
     public function todayScore(){
-        $score = Auth::user()->goals()
-            ->where('completed_at', '>', Carbon::yesterday())
+
+        $user = Auth::user();
+
+        $score = $user->goals()
+            ->where('completed_at', '>=', Carbon::yesterday()->timezone($user->timezone))
             ->select('score')->get()
             ->sum('score');
 
@@ -221,12 +224,7 @@ class GoalController extends Controller
     public function currentScore(){
         $user = Auth::user();
 
-
-        if ($user->name == 'alexandre'){
-            $date = Carbon::today()->subHours(2);
-        } else {
-            $date = Carbon::today()->addHours(4);
-        }
+        $date = Carbon::today()->timezone($user->timezone);
 
         $score = $user->goals()->where('completed_at', '>=', $date)->sum('score');
 

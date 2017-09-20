@@ -21,7 +21,14 @@ class User extends \Jenssegers\Mongodb\Auth\User
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'admin', 'daily_score_goal'
+        'name',
+        'email',
+        'password',
+        'admin',
+        'daily_score_goal',
+        'timezone',
+        'email_daily_report',
+        'email_weekly_report',
     ];
 
     /**
