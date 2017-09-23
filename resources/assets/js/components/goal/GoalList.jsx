@@ -12,7 +12,7 @@ const GoalList = React.createClass({
 
     propTypes: {
         goals: React.PropTypes.array.isRequired,
-        createGoal: React.PropTypes.func.isRequired,
+        createGoal: React.PropTypes.func,
         project_id: React.PropTypes.string.isRequired,
     },
 
@@ -67,7 +67,9 @@ const GoalList = React.createClass({
             }
         }
 
-        todoGoals.push(newGoal);
+        if (typeof this.props.createGoal === 'function'){
+            todoGoals.push(newGoal);
+        }
 
 
         // render html foreach to-do goal

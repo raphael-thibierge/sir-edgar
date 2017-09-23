@@ -241,53 +241,75 @@ const ProjectRoot = React.createClass({
      */
     render: function () {
 
+
+        let importantProject = {
+            _id: 'today',
+            title: 'Important Goals',
+            goals: []
+        };
+
+        this.state.projects.map((project) => {
+            importantProject.goals = importantProject.goals.concat(project.goals.filter((goal) => {
+                return goal.today === true && goal.is_completed === false;
+            }));
+        });
+
+
         return (
             <div className="row col-xs-12">
 
                 <ScoreGoal />
 
-
                 <div className="row">
-                        <Button
-                            bsStyle="success"
-                            onClick={ ()=> this.setState({ newProjectCollapseOpen: !this.state.newProjectCollapseOpen })}
-                        >
-                            New project
-                        </Button>
-                        <Collapse in={this.state.newProjectCollapseOpen}>
-                            <div className="well">
-                                <div className="row">
-                                    <div className="col-xs-12">
-                                        <FormGroup
-                                            style={{marginDown: '10px'}}
-                                            controlId="formBasicText"
-                                        >
-                                            <div className="col-xs-11">
-                                                <FormControl
-                                                    type="text"
-                                                    value={this.state.newProjectTitle}
-                                                    placeholder="Project title"
-                                                    onChange={(e)=> this.setState({ newProjectTitle: e.target.value})}
-                                                />
-                                            </div>
-                                            <div className="col-xs-1">
+                    <Button
+                        bsStyle="success"
+                        onClick={ ()=> this.setState({ newProjectCollapseOpen: !this.state.newProjectCollapseOpen })}
+                    >
+                        New project
+                    </Button>
+                    <Collapse in={this.state.newProjectCollapseOpen}>
+                        <div className="well">
+                            <div className="row">
+                                <div className="col-xs-12">
+                                    <FormGroup
+                                        style={{marginDown: '10px'}}
+                                        controlId="formBasicText"
+                                    >
+                                        <div className="col-xs-11">
+                                            <FormControl
+                                                type="text"
+                                                value={this.state.newProjectTitle}
+                                                placeholder="Project title"
+                                                onChange={(e)=> this.setState({ newProjectTitle: e.target.value})}
+                                            />
+                                        </div>
+                                        <div className="col-xs-1">
 
-                                                <Button bsSize="sm" bsStyle="success"
-                                                        onClick={this.onNewProjectClick}
-                                                >
-                                                    <Glyphicon glyph="ok"/>
-                                                </Button>
-                                            </div>
-                                        </FormGroup>
+                                            <Button bsSize="sm" bsStyle="success"
+                                                    onClick={this.onNewProjectClick}
+                                            >
+                                                <Glyphicon glyph="ok"/>
+                                            </Button>
+                                        </div>
+                                    </FormGroup>
 
-                                    </div>
                                 </div>
                             </div>
-                        </Collapse>
+                        </div>
+                    </Collapse>
                 </div>
+
                 <br/>
+
                 <div className="row">
                     <Accordion>
+                        {importantProject.goals.length > 0 ? (
+                            <ProjectRender
+                                project={importantProject}
+                                key={importantProject._id}
+                            />
+                        ): null}
+
                         {this.state.projects.map((project) => (
                             <ProjectRender
                                 project={project}
