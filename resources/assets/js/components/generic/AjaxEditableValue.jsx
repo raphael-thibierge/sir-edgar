@@ -7,7 +7,6 @@ const PropTypes = require('prop-types');
 
 const AjaxEditableValue = React.createClass({
 
-
     getInitialState(){
         return {
             value: '',
@@ -123,7 +122,6 @@ const AjaxEditableValue = React.createClass({
 
     },
 });
-
 
 AjaxEditableValue.propTypes = {
     onSuccess: PropTypes.func,

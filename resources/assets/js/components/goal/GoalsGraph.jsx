@@ -186,7 +186,7 @@ const GoalsGraph = React.createClass({
         return (
             <div className="row">
                 <div className="col-xs-12">
-                    <h2>Completed goals stats</h2>
+                    <h1>Completed goals stats</h1>
                 </div>
                 <div className="col-xs-12">
                     <Chart

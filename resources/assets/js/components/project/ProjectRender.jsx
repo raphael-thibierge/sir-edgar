@@ -35,13 +35,19 @@ const ProjectRender = React.createClass({
         const project = this.props.project;
 
         return (
-            <Panel header={project.title} eventKey={project.id} bsStyle="primary" collapsible>
-                <GoalList
-                    goals={project.goals}
-                    createGoal={this.props.createGoal}
-                    project_id={project._id}
-                />
-            </Panel>
+            <div className="row">
+                <div className="col-xs-12">
+                    <div className="page-heading">
+                        <div className="h1">{this.props.project.title}</div>
+                    </div>
+                    <GoalList
+                        goals={project.goals}
+                        createGoal={this.props.createGoal}
+                        project_id={project._id}
+                    />
+
+                </div>
+            </div>
         );
     }
 

@@ -1,3 +1,5 @@
+const GoalList = require("../goal/GoalList");
+
 const React = require('react');
 const Accordion = require('react-bootstrap').Accordion;
 const Button = require('react-bootstrap').Button;
@@ -9,6 +11,7 @@ const ProjectRender = require('./ProjectRender.jsx');
 const Goal = require('../goal/Goal');
 const GoalsGraph = require('../goal/GoalsGraph.jsx');
 const ScoreGoal = require('../scoreGoal/scoreGoal.jsx');
+const ResponsiveSideBar = require('../generic/ResponsiveSideBar.jsx');
 
 /**
  * Main component managing goals
@@ -28,6 +31,7 @@ const ProjectRoot = React.createClass({
             projects: [],
             newProjectCollapseOpen: false,
             newProjectTitle: '',
+            view: 'stats',
         };
     },
 
@@ -233,6 +237,85 @@ const ProjectRoot = React.createClass({
 
     },
 
+    viewRender(){
+        const view = this.state.view;
+
+        if (typeof view === 'undefined')
+            return null;
+
+        switch (view){
+            case 'stats':
+                return <GoalsGraph ref="goalGraph"/>;
+                break;
+
+            case 'new_project':
+                return <FormGroup
+                    style={{marginDown: '10px'}}
+                    controlId="formBasicText"
+                >
+                    <div className="col-xs-11">
+                        <FormControl
+                            type="text"
+                            value={this.state.newProjectTitle}
+                            placeholder="Project title"
+                            onChange={(e)=> this.setState({ newProjectTitle: e.target.value})}
+                        />
+                    </div>
+                    <div className="col-xs-1">
+
+                        <Button bsSize="sm" bsStyle="success"
+                                onClick={this.onNewProjectClick}
+                        >
+                            <Glyphicon glyph="ok"/>
+                        </Button>
+                    </div>
+                </FormGroup>;
+                break;
+
+            case 'important':
+                let importantProject = {
+                    _id: 'today',
+                    title: 'Important Goals',
+                    goals: []
+                };
+
+                this.state.projects.map((project) => {
+                    importantProject.goals = importantProject.goals.concat(project.goals.filter((goal) => {
+                        return goal.today === true && goal.is_completed === false;
+                    }));
+                });
+
+                return <ProjectRender
+                    project={importantProject}
+                    />;
+                break;
+
+            case 'all_goals':
+                let allGoalsProject = {
+                    _id: 'all_goals',
+                    title: 'All goals',
+                    goals: []
+                };
+
+                this.state.projects.map((project) => {project.goals.map(goal => {
+                    allGoalsProject.goals.push(goal);
+                })});
+
+                return <ProjectRender
+                    project={allGoalsProject}
+                    />;
+                break;
+
+            default:
+                const project = this.state.projects[this.projectMap[this.state.view]];
+                return <ProjectRender
+                        project={project}
+                        createGoal={this.addGoal}
+                    />;
+                return
+        }
+    },
+
 
     /**
      * Render method, returning HTML code for goal input and list
@@ -242,89 +325,27 @@ const ProjectRoot = React.createClass({
     render: function () {
 
 
-        let importantProject = {
-            _id: 'today',
-            title: 'Important Goals',
-            goals: []
-        };
 
-        this.state.projects.map((project) => {
-            importantProject.goals = importantProject.goals.concat(project.goals.filter((goal) => {
-                return goal.today === true && goal.is_completed === false;
-            }));
-        });
 
 
         return (
-            <div className="row col-xs-12">
+            <div className="row">
 
-                <ScoreGoal />
 
-                <div className="row">
-                    <Button
-                        bsStyle="success"
-                        onClick={ ()=> this.setState({ newProjectCollapseOpen: !this.state.newProjectCollapseOpen })}
-                    >
-                        New project
-                    </Button>
-                    <Collapse in={this.state.newProjectCollapseOpen}>
-                        <div className="well">
-                            <div className="row">
-                                <div className="col-xs-12">
-                                    <FormGroup
-                                        style={{marginDown: '10px'}}
-                                        controlId="formBasicText"
-                                    >
-                                        <div className="col-xs-11">
-                                            <FormControl
-                                                type="text"
-                                                value={this.state.newProjectTitle}
-                                                placeholder="Project title"
-                                                onChange={(e)=> this.setState({ newProjectTitle: e.target.value})}
-                                            />
-                                        </div>
-                                        <div className="col-xs-1">
-
-                                            <Button bsSize="sm" bsStyle="success"
-                                                    onClick={this.onNewProjectClick}
-                                            >
-                                                <Glyphicon glyph="ok"/>
-                                            </Button>
-                                        </div>
-                                    </FormGroup>
-
-                                </div>
-                            </div>
-                        </div>
-                    </Collapse>
+                <div className=" col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                    <ResponsiveSideBar
+                        projects={this.state.projects}
+                        onItemSelection={(selected) => {console.log(selected); this.setState({view: selected})}}
+                        selected={this.state.view}
+                    />
                 </div>
 
-                <br/>
+                <div className="col-xs-8">
 
-                <div className="row">
-                    <Accordion>
-                        {importantProject.goals.length > 0 ? (
-                            <ProjectRender
-                                project={importantProject}
-                                key={importantProject._id}
-                            />
-                        ): null}
+                    <ScoreGoal />
 
-                        {this.state.projects.map((project) => (
-                            <ProjectRender
-                                project={project}
-                                createGoal={this.addGoal}
-                                key={project._id}
-                            />
-                        ))}
-                    </Accordion>
-                </div>
-                <div className="row">
-                    <div className="col-xs-12">
-                        <GoalsGraph
-                            ref="goalGraph"
-                        />
-                    </div>
+                    {this.viewRender()}
+
                 </div>
             </div>
         );
