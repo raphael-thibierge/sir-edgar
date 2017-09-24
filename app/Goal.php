@@ -36,7 +36,15 @@ class Goal extends Model
         'user_id',
         'project_id',
         'completed_at',
-        'today' // --> must be achieved today
+        'today', // --> must be achieved today
+
+        'start_time_tracker',
+        'end_time_tracker',
+        'due_date',
+        'estimated_time',
+        'time_spent',
+        'priority',
+        'notes'
     ];
 
     /**
@@ -50,7 +58,10 @@ class Goal extends Model
     ];
 
     protected $dates = [
-        'completed_at'
+        'completed_at',
+        'start_time_tracker',
+        'end_time_tracker',
+        'due_date',
     ];
 
     /**
@@ -71,6 +82,7 @@ class Goal extends Model
             'destroy'    => route('goals.destroy', ['goal' => $this]),
             'complete'    => route('goals.complete', ['goal' => $this]),
             'set_today'    => route('goals.set_today', ['goal' => $this]),
+            'update_details'    => route('goals.details.update', ['goal' => $this]),
         ];
     }
 

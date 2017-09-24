@@ -18,7 +18,7 @@ class GoalController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth', ['except' => 'reComplete']);
+        //$this->middleware('auth', ['except' => 'reComplete']);
     }
 
     /**
@@ -72,8 +72,8 @@ class GoalController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'title' => 'required',
-            'score' => 'required|integer|max:5',
+            'title' => 'string',
+            'score' => 'integer|max:5',
         ]);
 
         $goal =  Auth::user()->goals()->find($id)->update([
@@ -83,6 +83,48 @@ class GoalController extends Controller
 
         return $this->successResponse([
             'goal'  => $goal
+        ]);
+    }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateDetails(Request $request, $id)
+    {
+
+
+        $updates = [];
+
+
+        if (($due_date = $request->get('due_date')) !== null){
+            $updates ['due_date'] = new Carbon($due_date);
+        }
+
+        if (($due_date = $request->get('estimated_time')) !== null){
+            $updates ['estimated_time'] = (int)$due_date;
+        }
+
+        if (($due_date = $request->get('time_spent')) !== null){
+            $updates ['time_spent'] = (int)$due_date;
+        }
+
+        if (($due_date = $request->get('priority')) !== null){
+            $updates ['priority'] = (int)$due_date;
+        }
+
+        if (($due_date = $request->get('notes')) !== null){
+            $updates ['notes'] = $due_date;
+        }
+
+
+        $goal =  Auth::user()->goals()->find($id)->update($updates);
+
+
+        return $this->successResponse([
+            'goal'  => $goal,
         ]);
     }
 

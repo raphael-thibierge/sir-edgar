@@ -12,6 +12,7 @@
     <form action="" method=""></form>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/react-day-picker.css') }}" rel="stylesheet">
 </head>
 <body style="background-color: #ffffff">
     <div id="app">
