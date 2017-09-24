@@ -67,6 +67,7 @@
                     Sir-Edgar aims to improve your personal productivity by adding all your goals with a score
                     and helps you to complete your daily score goal !
                 </h3>
+                    <a href="{{ route('home') }}" class="btn btn-success">Get Started</a>
                 </div>
             </div>
         </div>
