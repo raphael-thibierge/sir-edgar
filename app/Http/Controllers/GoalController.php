@@ -18,7 +18,7 @@ class GoalController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('auth', ['except' => 'reComplete']);
+        $this->middleware('auth', ['except' => 'reComplete']);
     }
 
     /**
