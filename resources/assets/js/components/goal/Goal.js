@@ -10,6 +10,12 @@ class Goal {
         this.routes=null;
         this.today=false;
 
+        this.due_date=null;
+        this.estimated_time=null;
+        this.time_spent=null;
+        this.priority=null;
+        this.notes=null;
+
         if (goal !== null){
             this.fillData(goal);
         }
@@ -114,6 +120,49 @@ class Goal {
         });
 
     }
+
+    updateDetails(due_date, estimated_time, time_spent, priority, notes){
+
+
+
+        const request = $.ajax({
+            url: this.routes.update_details,
+            cache: false,
+            method: 'POST',
+            data: {
+                token: window.token,
+                method: 'PATCH',
+                _method: 'PATCH',
+
+                due_date: due_date,
+                estimated_time: estimated_time,
+                time_spent: time_spent,
+                priority: priority,
+                notes: notes
+
+            },
+            // when server return success
+            success: function (response) {
+                console.log(response);
+                // check status
+                if (response.status && response.status === 'success'){
+                    this.due_date= due_date;
+                    this.estimated_time= estimated_time;
+                    this.time_spent= time_spent;
+                    this.priority= priority;
+                    this.notes= notes;
+
+                    this.updateView();
+                } else {
+                    this.onError(response);
+                }
+            }.bind(this), // bind is used to call method in this component
+            error: this.onError,
+        });
+
+    }
+
+
 
 
 };

@@ -12,6 +12,7 @@ const Goal = require('../goal/Goal');
 const GoalsGraph = require('../goal/GoalsGraph.jsx');
 const ScoreGoal = require('../scoreGoal/scoreGoal.jsx');
 const ResponsiveSideBar = require('../generic/ResponsiveSideBar.jsx');
+const NewProjectRoot = require('../project/NewProjectRoot.jsx');
 
 /**
  * Main component managing goals
@@ -89,6 +90,14 @@ const ProjectRoot = React.createClass({
         if (response.status && response.status === 'success'){
 
             let projects = response.data.projects;
+
+            if (projects.length === 0){
+                this.setState({
+                    view: 'new_project',
+                    projects: []
+                })
+            }
+
 
             for (let projectIterator=0; projectIterator < projects.length; projectIterator++ ){
 
@@ -174,8 +183,6 @@ const ProjectRoot = React.createClass({
 
                     let goal = response.data.goal;
 
-                    console.log(goal);
-
                     let projects = this.state.projects;
 
                     const project_id = goal.project_id;
@@ -201,8 +208,7 @@ const ProjectRoot = React.createClass({
     },
 
 
-    onNewProjectClick: function () {
-        const title = this.state.newProjectTitle;
+    onNewProjectClick: function (title) {
         const url = 'projects';
         $.ajax({
             url: url,
@@ -214,7 +220,6 @@ const ProjectRoot = React.createClass({
                 _token: window.token
             },
             success: function (response) {
-                console.log(response);
 
                 if (response.status === 'success') {
 
@@ -225,6 +230,7 @@ const ProjectRoot = React.createClass({
                     projects.push(project);
 
                     this.setState({
+                        view: project._id,
                         projects: projects,
                         newProjectCollapseOpen: false,
                         newProjectTitle: '',
@@ -232,7 +238,7 @@ const ProjectRoot = React.createClass({
                 }
 
             }.bind(this),
-            error: this.onError,
+            error: (error)=> {alert('Creating project failed'); console.error(error)},
         });
 
     },
@@ -245,31 +251,16 @@ const ProjectRoot = React.createClass({
 
         switch (view){
             case 'stats':
-                return <GoalsGraph ref="goalGraph"/>;
+                return <GoalsGraph
+                    projectCurrentNumber={this.state.projects.length}
+                    ref="goalGraph"/>;
                 break;
 
             case 'new_project':
-                return <FormGroup
-                    style={{marginDown: '10px'}}
-                    controlId="formBasicText"
-                >
-                    <div className="col-xs-11">
-                        <FormControl
-                            type="text"
-                            value={this.state.newProjectTitle}
-                            placeholder="Project title"
-                            onChange={(e)=> this.setState({ newProjectTitle: e.target.value})}
-                        />
-                    </div>
-                    <div className="col-xs-1">
-
-                        <Button bsSize="sm" bsStyle="success"
-                                onClick={this.onNewProjectClick}
-                        >
-                            <Glyphicon glyph="ok"/>
-                        </Button>
-                    </div>
-                </FormGroup>;
+                return <NewProjectRoot
+                    onNewProjectClick={this.onNewProjectClick}
+                    projectCurrentNumber={this.state.projects.length}
+                />;
                 break;
 
             case 'important':
@@ -325,9 +316,6 @@ const ProjectRoot = React.createClass({
     render: function () {
 
 
-
-
-
         return (
             <div className="row">
 
@@ -335,14 +323,14 @@ const ProjectRoot = React.createClass({
                 <div className=" col-xs-12 col-sm-3 col-md-3 col-lg-3">
                     <ResponsiveSideBar
                         projects={this.state.projects}
-                        onItemSelection={(selected) => {console.log(selected); this.setState({view: selected})}}
+                        onItemSelection={(selected) => {this.setState({view: selected})}}
                         selected={this.state.view}
                     />
                 </div>
 
                 <div className="col-xs-8">
 
-                    <ScoreGoal />
+                    <ScoreGoal/>
 
                     {this.viewRender()}
 

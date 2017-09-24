@@ -1,6 +1,7 @@
 const React = require('react');
 const Chart = require('react-google-charts').Chart;
-
+const PropTypes = require('prop-types').PropTypes;
+const Glyphicon = require('react-bootstrap').Glyphicon;
 const GoalsGraph = React.createClass({
 
 
@@ -106,7 +107,7 @@ const GoalsGraph = React.createClass({
 
                 // increment date and stop if date is tomorrow
                 date.setDate(date.getDate() + 1);
-            } while (this.sameDay(date, lastDate) == false);
+            } while (date <= new Date());
 
 
             this.setState({
@@ -165,8 +166,29 @@ const GoalsGraph = React.createClass({
 
     render(){
 
+
+        if (this.props.projectCurrentNumber === 0 ){
+            return (
+                <div className="row">
+                    <div className="col-xs-12">
+                        <div className="alert alert-info">
+                            <Glyphicon glyph="info-sign "/>
+                            <strong> Statistics ! </strong>
+                            <span>
+                                After creating your first project and compete your first goal,
+                                your statistics will be displayed here !
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+
         const options = {
             isStacked: true,
+            vAxis: {
+                minValue: 5,
+            },
             annotations: {
                 textStyle: {
                     //fontName: 'Times-Roman',
@@ -204,5 +226,9 @@ const GoalsGraph = React.createClass({
         )
     }
 });
+
+GoalsGraph.propTypes = {
+    projectCurrentNumber: PropTypes.number.isRequired
+};
 
 module.exports = GoalsGraph;

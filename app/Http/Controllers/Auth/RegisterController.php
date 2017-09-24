@@ -67,6 +67,11 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'admin' => false,
+            'daily_score_goal' => 5,
+            'timezone' => 'Europe/Paris',
+            'email_daily_report' => true,
+            'email_weekly_report' => true,
         ]);
 
         Mail::to(User::where('admin', true)->first())
