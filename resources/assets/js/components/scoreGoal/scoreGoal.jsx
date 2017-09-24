@@ -43,10 +43,15 @@ const ScoreGoal = React.createClass({
 
         const progressValue = Math.floor((this.state.score / this.state.scoreGoal) * 100 );
 
+        const barValue = progressValue < 3 ?  3 : progressValue;
+
         return (
             <div>
                 <div className="row">
-                    <div className="col-xs-6 col-xs-offset-6">
+                    <div className="col-xs-6 col-xs-offset-6 text-right">
+                        <small style={{marginRight: 5}}>Score goal : </small>
+                        <span>
+
                         <AjaxEditableValue
                             value={this.state.scoreGoal.toString()}
                             ajaxURI="./user/update-daily-score-goal"
@@ -55,12 +60,13 @@ const ScoreGoal = React.createClass({
                             type="number"
                             classNameLink="text-right"
                         ></AjaxEditableValue>
+                        </span>
                     </div>
                 </div>
 
                 <div className="row">
                     <div className="col-xs-12">
-                        <ProgressBar now={progressValue} bsStyle="primary" label={`${progressValue}%`}/>
+                        <ProgressBar now={barValue} bsStyle="primary" label={`${progressValue}%`}/>
                     </div>
                 </div>
             </div>

@@ -70,7 +70,7 @@ const AjaxEditableValue = React.createClass({
 
     editModeRender: function () {
         return (
-            <div className="row" style={{marginBottom: '10px'}}>
+            <div style={{marginBottom: '10px'}}>
 
                 <div className="col-xs-10">
                     <FormControl
@@ -103,10 +103,12 @@ const AjaxEditableValue = React.createClass({
     displayModeRender: function () {
 
         return (
-            <a onClick={this.setEditMode}>
-                <p className={this.props.classNameLink} style={this.props.style}>
-                    {this.props.value}
-                </p>
+            <a onClick={this.setEditMode} style={{cursor: 'pointer'}}>
+                <span className={this.props.classNameLink} style={this.props.style}>
+                    <strong>
+                        {this.props.value}
+                    </strong>
+                </span>
             </a>
         );
     },
