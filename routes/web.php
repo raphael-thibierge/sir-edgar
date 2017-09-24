@@ -39,3 +39,5 @@ Route::prefix('user')->group(function (){
 Route::resource('users', 'UserController', ['only' => ['index', 'destroy']]);
 
 Route::resource('projects', 'ProjectController', ['only' => ['index', 'store']]);
+
+Route::match(['get', 'post'], '/botman', 'BotManController@handle')->middleware('botman');

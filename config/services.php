@@ -40,6 +40,7 @@ return [
             'YOUR-INTEGRATION-URL-1',
             'YOUR-INTEGRATION-URL-2',
         ],
+
         'nexmo_key' => 'YOUR-NEXMO-APP-KEY',
         'nexmo_secret' => 'YOUR-NEXMO-APP-SECRET',
         'microsoft_bot_handle' => 'YOUR-MICROSOFT-BOT-HANDLE',
@@ -49,8 +50,9 @@ return [
 
         'telegram_token' => env('TELEGRAM_TOKEN'),
 
-        'facebook_token' => '',
-        'facebook_app_secret' => '', // Optional - this is used to verify incoming API calls,
+        'facebook_token' => env('FACEBOOK_TOKEN'),
+        'facebook_app_secret' => env('FACEBOOK_APP_SECRET'), // Optional - this is used to verify incoming API calls,
+
         'wechat_app_id' => 'YOUR-WECHAT-APP-ID',
         'wechat_app_key' => 'YOUR-WECHAT-APP-KEY',
     ],
