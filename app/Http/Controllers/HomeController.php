@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DailyGoalsReportMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -12,7 +15,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth', ['only' => 'home']);
+        $this->middleware('auth', ['only' => ['index']]);
     }
 
     /**
@@ -25,7 +28,16 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function test(Request $request){
-        return $request->input('hub_challenge');
+
+    public function about(){
+        return view('about');
+    }
+
+    public function test(){
+
+        $user = Auth::user();
+
+        Mail::to($user)->send(new DailyGoalsReportMail($user, 7));
+        return 'ok';
     }
 }

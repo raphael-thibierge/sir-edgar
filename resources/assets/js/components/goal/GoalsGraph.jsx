@@ -1,6 +1,7 @@
 const React = require('react');
 const Chart = require('react-google-charts').Chart;
-
+const PropTypes = require('prop-types').PropTypes;
+const Glyphicon = require('react-bootstrap').Glyphicon;
 const GoalsGraph = React.createClass({
 
 
@@ -49,35 +50,64 @@ const GoalsGraph = React.createClass({
     onSuccess: function (response) {
         if (response.status && response.status == 'success'){
 
+            // list of scores per project per day
             const scores = response.data.scores;
+            // list of projects
+            const projects = response.data.projects;
 
-            let data = [['Day', 'Score']];
+            // get list of projects ids
+            const projects_ids = Object.keys(projects);
+            // get list of projects name
+            const projects_names = Object.values(projects);
 
+            // build header with the list of project name
+            let header = ['Day'];
+            header = header.concat(projects_names);
+            header.push({ role: 'annotation' });
+
+            // start filling data, with header as first line
+            let data = [header];
+
+            // get first date of scores
             let date = new Date(response.data.firstDate);
+            // get last date (today)
             let lastDate = new Date;
             lastDate.setDate(lastDate.getDate() + 1);
 
+            // get score per project foreach day
             do  {
 
+                // convet date to format "dd-mm-yyyy"
                 const dateAsString = date.toISOString().slice(0,10);
 
-                data.push([
-                    dateAsString,
-                    (scores[dateAsString] ? scores[dateAsString] : 0)
-                ]);
+                // first column is the date
+                let line = [dateAsString];
 
+
+                let total = 0;
+                // insert each projects score per day in a separate column
+                for (let i=0; i<projects_ids.length; i++){
+
+                    if (
+                        typeof scores[dateAsString] !== 'undefined' &&
+                        typeof scores[dateAsString][projects_ids[i]] !== 'undefined'
+                    ){
+                        const score = scores[dateAsString][projects_ids[i]];
+                        total+=score;
+                        line.push(score);
+                    } else {
+                        line.push(0);
+                    }
+                }
+                line.push(total > 0? total : "");
+
+
+                // insert day line in chart data
+                data.push(line);
+
+                // increment date and stop if date is tomorrow
                 date.setDate(date.getDate() + 1);
-
-            } while (this.sameDay(date, lastDate) == false);
-
-
-            for (let i=0; i<scores.length; i++){
-                const score = scores[i];
-                data.push([
-                    score.date,
-                    score.score,
-                ]);
-            }
+            } while (date <= new Date());
 
 
             this.setState({
@@ -135,17 +165,57 @@ const GoalsGraph = React.createClass({
     },
 
     render(){
+
+
+        if (this.props.projectCurrentNumber === 0 ){
+            return (
+                <div className="row">
+                    <div className="col-xs-12">
+                        <div className="alert alert-info">
+                            <Glyphicon glyph="info-sign "/>
+                            <strong> Statistics ! </strong>
+                            <span>
+                                After creating your first project and compete your first goal,
+                                your statistics will be displayed here !
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+
+        const options = {
+            isStacked: true,
+            vAxis: {
+                minValue: 5,
+            },
+            annotations: {
+                textStyle: {
+                    //fontName: 'Times-Roman',
+                    //fontSize: 14,
+                    //bold: true,
+                    //italic: true,
+                    // The color of the text.
+                    color: '#000000',
+                    // The color of the text outline.
+                    //auraColor: '#d799ae',
+                    // The transparency of the text.
+                    //opacity: 0.8
+                }
+            },
+        };
+
         return (
             <div className="row">
                 <div className="col-xs-12">
-                    <h2>Completed goals stats</h2>
+                    <h1>Completed goals stats</h1>
                 </div>
                 <div className="col-xs-12">
                     <Chart
                         chartType="ColumnChart"
                         data={this.state.data}
-                        options={{}}
-                        graph_id="ScatterChart"
+                        options={options}
+                        graph_id="ScatterChart_material"
                         width="100%"
                         height="400px"
                         legend_toggle
@@ -156,5 +226,9 @@ const GoalsGraph = React.createClass({
         )
     }
 });
+
+GoalsGraph.propTypes = {
+    projectCurrentNumber: PropTypes.number.isRequired
+};
 
 module.exports = GoalsGraph;

@@ -8,6 +8,7 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
 
 /**
  * @property mixed completed_at
+ * @property mixed id
  */
 class Goal extends Model
 {
@@ -34,7 +35,16 @@ class Goal extends Model
         'tags',
         'user_id',
         'project_id',
-        'completed_at'
+        'completed_at',
+        'today', // --> must be achieved today
+
+        'start_time_tracker',
+        'end_time_tracker',
+        'due_date',
+        'estimated_time',
+        'time_spent',
+        'priority',
+        'notes'
     ];
 
     /**
@@ -48,7 +58,10 @@ class Goal extends Model
     ];
 
     protected $dates = [
-        'completed_at'
+        'completed_at',
+        'start_time_tracker',
+        'end_time_tracker',
+        'due_date',
     ];
 
     /**
@@ -68,6 +81,8 @@ class Goal extends Model
             'update'    => route('goals.update', ['goal' => $this]),
             'destroy'    => route('goals.destroy', ['goal' => $this]),
             'complete'    => route('goals.complete', ['goal' => $this]),
+            'set_today'    => route('goals.set_today', ['goal' => $this]),
+            'update_details'    => route('goals.details.update', ['goal' => $this]),
         ];
     }
 

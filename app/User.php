@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Relations\HasMany;
 
@@ -20,7 +21,14 @@ class User extends \Jenssegers\Mongodb\Auth\User
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'admin'
+        'name',
+        'email',
+        'password',
+        'admin',
+        'daily_score_goal',
+        'timezone',
+        'email_daily_report',
+        'email_weekly_report',
     ];
 
     /**
@@ -38,6 +46,12 @@ class User extends \Jenssegers\Mongodb\Auth\User
      */
     public function goals() : HasMany{
         return $this->hasMany('App\Goal');
+    }
+
+    public function yesterday_goals() : HasMany{
+        return $this->goals()
+            ->where('completed_at', '>=', Carbon::yesterday($this->timezone))
+            ->where('completed_at', '<', Carbon::today($this->timezone));
     }
 
     public function projects() : HasMany{

@@ -6,8 +6,10 @@ const ListGroupItem = require('react-bootstrap').ListGroupItem;
 const Button = require('react-bootstrap').Button;
 const Badge = require('react-bootstrap').Badge;
 const Glyphicon = require('react-bootstrap').Glyphicon;
+const GoalDetailsModal = require('./GoalDetailsModal.jsx');
 
 /**
+ *
  * React component managing goal input
  */
 const GoalInput = React.createClass({
@@ -235,7 +237,8 @@ const GoalInput = React.createClass({
         const goal = this.props.goal;
 
         return (goal.is_completed === false) ? (
-            <ListGroupItem key={goal._id}>
+            <ListGroupItem key={goal._id} bsStyle={goal.today === true ? 'warning' : 'default'}>
+
                 <span className="text-left">
                     <Button
                         onClick={typeof goal.remove === 'function' ? goal.remove: null}
@@ -243,18 +246,33 @@ const GoalInput = React.createClass({
                         bsStyle="danger"
                     ><Glyphicon glyph="trash"/></Button>
                 </span>
-                <span className="text-left" style={{marginLeft : '10px'}}>
+
+                <span className="text-left" style={{marginLeft : '5px'}}>
                     <Button
                         onClick={typeof goal.setCompleted === 'function' ? goal.setCompleted.bind(goal): null}
                         bsSize="xs"
                         bsStyle="success"
                     ><Glyphicon glyph="ok"/></Button>
                 </span>
-                <a style={{marginLeft : '10px', marginRight: '10px'}} onClick={this.setEditMode}>
+
+                <span className="text-left" style={{marginLeft : '5px'}}>
+                    <Button
+                        onClick={typeof goal.setToday === 'function' ? goal.setToday.bind(goal): null}
+                        bsSize="xs"
+                        bsStyle="warning"
+                    ><Glyphicon glyph="warning-sign"/></Button>
+                </span>
+
+                <GoalDetailsModal goal={goal}/>
+
+                <a style={{marginLeft : '5px'}} onClick={this.setEditMode}>
                     {goal.title}
                 </a>
+
                 {daydiffString(goal)}
+
                 <Badge>{goal.score}</Badge>
+
             </ListGroupItem>
         ) : (
             <ListGroupItem key={goal._id} bsStyle="success">
