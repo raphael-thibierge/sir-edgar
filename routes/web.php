@@ -21,6 +21,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/about', 'HomeController@about')->name('about');
 Route::get('/test', 'HomeController@test')->name('test');
 
+Route::match(['get', 'post'], '/botman', 'BotManController@handle');
+
 Route::prefix('goals')->group(function (){
     Route::post('{goal}/complete', 'GoalController@complete')->name('goals.complete');
     Route::patch('{goal}/update-details', 'GoalController@updateDetails')->name('goals.details.update');
@@ -37,3 +39,5 @@ Route::prefix('user')->group(function (){
 Route::resource('users', 'UserController', ['only' => ['index', 'destroy']]);
 
 Route::resource('projects', 'ProjectController', ['only' => ['index', 'store']]);
+
+Route::match(['get', 'post'], '/botman', 'BotManController@handle')->middleware('botman');
