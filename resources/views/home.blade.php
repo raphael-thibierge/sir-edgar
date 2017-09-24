@@ -3,15 +3,13 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Dashboard</div>
-
-                <div class="panel-body">
-                    You are logged in!
-                </div>
+            <div id="project-root">
+                <!-- React component will be inserted here by app.js script, included in app.layout -->
             </div>
-        </div>
+            <div id="goal-root">
+                <!-- React component will be inserted here by app.js script, included in app.layout -->
+            </div>
+
     </div>
 </div>
 @endsection

@@ -2,10 +2,16 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Jenssegers\Mongodb\Relations\HasMany;
 
-class User extends Authenticatable
+/**
+ * @property string name
+ * @property string email
+ * @property bool admin
+ */
+class User extends \Jenssegers\Mongodb\Auth\User
 {
     use Notifiable;
 
@@ -15,7 +21,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
+        'admin',
+        'daily_score_goal',
+        'timezone',
+        'email_daily_report',
+        'email_weekly_report',
     ];
 
     /**
@@ -26,4 +39,27 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * User's goals
+     * @return HasMany
+     */
+    public function goals() : HasMany{
+        return $this->hasMany('App\Goal');
+    }
+
+    public function yesterday_goals() : HasMany{
+        return $this->goals()
+            ->where('completed_at', '>=', Carbon::yesterday($this->timezone))
+            ->where('completed_at', '<', Carbon::today($this->timezone));
+    }
+
+    public function projects() : HasMany{
+        return $this->hasMany('App\Project');
+    }
+
+    public function isAdmin(): bool {
+        return $this->admin != null ? $this->admin : false;
+    }
+
 }

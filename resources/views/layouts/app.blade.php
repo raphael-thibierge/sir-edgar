@@ -9,11 +9,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-
+    <form action="" method=""></form>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body>
+<body style="background-color: #ffffff">
     <div id="app">
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
@@ -36,7 +36,7 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        <li class="change_log"></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -75,6 +75,36 @@
     </div>
 
     <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        window.token = "{{ csrf_token() }}"
+    </script>
     <script src="{{ asset('js/app.js') }}"></script>
+
+
+    <script src="//cdn.headwayapp.co/widget.js"></script>
+    <script>
+        var config = {
+            selector: ".change_log", // CSS selector where to inject the badge
+            account: "xGMR2J", // your account ID,
+        };
+        Headway.init(config);
+        console.log('inited')
+    </script>
+
 </body>
+<footer>
+    <hr>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-2 col-xs-offset-10">
+                <a href="{{ route('about') }}" class="text-right">About page</a>
+            </div>
+        </div>
+    </div>
+    <br>
+</footer>
 </html>
