@@ -58,7 +58,6 @@ const GoalsDetailsModal = React.createClass({
     },
 
     onSave(){
-        console.log(this.state);
         this.props.goal.updateDetails(
             this.state.due_date,
             this.state.estimated_time,
@@ -66,41 +65,12 @@ const GoalsDetailsModal = React.createClass({
             this.state.priority,
             this.state.notes
         );
+
+        this.setState({
+            display: false
+        });
     },
 
-
-
-    /**
-     * Calls onStoreSuccess function when data has been send to server success successfully.
-     *
-     * @param response
-     */
-    onSuccess: function (response) {
-
-        // check response status
-        if (response.status && response.status == 'success'){
-
-            // get goal data from ajax respone
-            const goal = response.data.goal;
-
-            // call onStoreSuccess if is defined
-            if (typeof this.props.onStoreSuccess == 'function'){
-                this.props.onStoreSuccess(goal);
-            }
-
-            // reset component state
-            this.setState(this.getInitialState());
-        }
-    },
-
-    /**
-     * Called when server return error while trying to send form's data
-     * @param response
-     */
-    onError: function (response) {
-        alert('error');
-        console.error(response);
-    },
 
     handleDayClick(day) {
         const range = DateUtils.addDayToRange(day, this.state);
