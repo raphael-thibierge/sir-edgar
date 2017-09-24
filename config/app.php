@@ -181,7 +181,7 @@ return [
          */
         Jenssegers\Mongodb\MongodbServiceProvider::class,
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
-        Mpociot\BotMan\BotManServiceProvider::class,
+        \BotMan\BotMan\BotManServiceProvider::class,
 
     ],
 
@@ -235,7 +235,7 @@ return [
          * Manually added
          */
         'Sentry' => Sentry\SentryLaravel\SentryFacade::class,
-        'BotMan' => Mpociot\BotMan\Facades\BotMan::class
+        'BotMan' => \BotMan\BotMan\BotMan::class,
 
     ],
 

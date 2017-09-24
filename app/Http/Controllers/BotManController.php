@@ -2,17 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Conversations\MorningConversation;
-use App\Goal;
-use App\User;
 
-use BotMan\BotMan\Messages\Outgoing\Actions\Button;
-use BotMan\Drivers\Facebook\Extensions\Element;
-use BotMan\Drivers\Facebook\Extensions\ElementButton;
-use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
-use Illuminate\Http\Request;
-use Mockery\Exception;
-use Mpociot\BotMan\BotMan;
+use BotMan\BotMan\BotMan;
+use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\Drivers\Facebook\FacebookDriver;
 
 class BotManController extends Controller
 {
@@ -21,14 +15,29 @@ class BotManController extends Controller
 
     public function handle()
     {
+        
+        DriverManager::loadDriver(FacebookDriver::class);
 
-        $botman = app('botman');
-        $botman->verifyServices(env('FACEBOOK_VERIFICATION'));
+        // Create BotMan instance
+        $config = [
+            'facebook' => [
+                'token' => env('FACEBOOK_TOKEN'),
+                'app_secret' => env('FACEBOOK_APP_SECRET'),
+                'verification' => env('FACEBOOK_VERIFICATION'),
+            ]
+        ];
+
+        $botman = BotManFactory::create($config);
+
+
+        //$botman = app('botman');
+        //$botman->verifyServices(env('FACEBOOK_VERIFICATION'));
 
         // give the bot something to listen for.
         $botman->hears('Hi', function (BotMan $bot) {
-            $bot->reply('Hello ! A lot of new features are coming ! See you soon ;)');
+            $bot->reply('Hello ! A lot of new features are coming, see you soon ;) I hope will like it !');
         });
+
 
         // start listening
         $botman->listen();
