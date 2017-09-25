@@ -115,7 +115,7 @@ class BotManController extends Controller
             if ($user !== null){
                 $project = $user->projects()->find($projectId);
                 if ($project !== null) {
-                    $goals = $project->goals()->whereNull('complete_at')->chunk(4 , function ($goals) use ($bot){
+                    $goals = $project->goals()->whereNull('completed_at')->chunk(4 , function ($goals) use ($bot){
                         $bot->reply($this->goalListRender($goals));
                     });
                 } else {
