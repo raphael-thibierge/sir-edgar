@@ -44,9 +44,7 @@ const GoalsDetailsModal = React.createClass({
     },
 
     componentDidMount(){
-
-        console.log(this.props.goal);
-
+        
         this.setState({
             due_date: new Date(this.props.goal.due_date),
             estimated_time: this.props.goal.estimated_time,
