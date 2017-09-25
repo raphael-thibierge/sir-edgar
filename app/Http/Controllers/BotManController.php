@@ -87,7 +87,11 @@ class BotManController extends Controller
 
             if ($user !== null){
 
-                $goals = $user->goals()->select(['title', 'today'])->where('today', true)->get()->implode('title', "\r\n");
+                $goals = $user->goals()
+                    ->select(['title', 'today'])
+                    ->where('today', true)
+                    ->whereNull('completed_at')
+                    ->get()->implode('title', "\r\n");
 
                 $bot->reply($goals);
 
