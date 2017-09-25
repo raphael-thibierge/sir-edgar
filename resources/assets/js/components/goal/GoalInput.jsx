@@ -223,7 +223,7 @@ const GoalInput = React.createClass({
             }
 
             return (
-                <small>
+                <small style={{marginLeft: 10}}>
                     <strong>
                         <em className={value >= 7 ? 'text-danger' : value >= 3 ? 'text-warning' : ''}>
                             ...{value}{value > 1 ? ' days' : ' day'} ago
@@ -308,6 +308,8 @@ const GoalInput = React.createClass({
                     </strong>
                 ) : null}
 
+                {daydiffString(goal)}
+
                 {goal.estimated_time !== null && goal.estimated_time > 0 ? (
                 <strong style={{marginLeft: 10}} className="text-right">
                     <em className="text text-right" >
@@ -316,7 +318,6 @@ const GoalInput = React.createClass({
                 </strong>
                 ) : null}
 
-                {daydiffString(goal)}
 
                 <Badge>{goal.score}</Badge>
 
