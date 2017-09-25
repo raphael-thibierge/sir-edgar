@@ -313,7 +313,7 @@ const GoalInput = React.createClass({
                 {typeof goal.estimated_time !== 'undefined' && goal.estimated_time !== null && goal.estimated_time > 0 ? (
                 <strong style={{marginLeft: 10}} className="text-right">
                     <em className="text text-right" >
-                        ... {toHuman(goal.estimated_time)}
+                        ~ {toHuman(goal.estimated_time)}
                     </em>
                 </strong>
                 ) : null}
