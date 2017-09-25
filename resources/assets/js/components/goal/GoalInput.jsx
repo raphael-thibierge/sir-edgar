@@ -300,14 +300,15 @@ const GoalInput = React.createClass({
                 </a>
 
 
+
                 {goal.due_date !== null && goal.due_date !== "1970-01-01 00:00:00" ? (
                     <strong style={{marginLeft: 10}} className="text-right">
-                        <em className="text text-right" >
+                        <em className={(new Date(goal.due_date)).toISOString().slice(0,10)
+                        === (new Date()).toISOString().slice(0,10) ? "text-danger" : ""} >
                             {(new Date(goal.due_date)).toISOString().slice(0,10)}
                         </em>
                     </strong>
                 ) : null}
-
 
                 {goal.estimated_time !== null && goal.estimated_time > 0 ? (
                 <strong style={{marginLeft: 10}} className="text-right">
