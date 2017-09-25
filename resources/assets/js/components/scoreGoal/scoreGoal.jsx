@@ -43,7 +43,9 @@ const ScoreGoal = React.createClass({
 
         const progressValue = Math.floor((this.state.score / this.state.scoreGoal) * 100 );
 
-        const barValue = progressValue < 3 ?  3 : progressValue;
+        const barValue = progressValue < 3 ?  3 : progressValue > 100 ? 100 : progressValue;
+
+        const color = progressValue >= 100 ? "success" : "primary";
 
         return (
             <div>
@@ -66,7 +68,7 @@ const ScoreGoal = React.createClass({
 
                 <div className="row">
                     <div className="col-xs-12">
-                        <ProgressBar now={barValue} bsStyle="primary" label={`${progressValue}%`}/>
+                        <ProgressBar now={barValue} bsStyle={color} label={`${progressValue}%`}/>
                     </div>
                 </div>
             </div>
