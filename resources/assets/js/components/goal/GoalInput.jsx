@@ -156,7 +156,7 @@ const GoalInput = React.createClass({
                         <FormControl
                             type="number"
                             value={this.state.score}
-                            min={1}
+                            min={0}
                             max={5}
                             onChange={this.onScoreChange}
                             onKeyPress={this.handleKeyPress}
