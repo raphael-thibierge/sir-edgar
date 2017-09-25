@@ -234,6 +234,25 @@ const GoalInput = React.createClass({
 
         }
 
+        function toHuman(time){
+            if (time === null){
+                return null;
+            }
+
+            const minutes = time % 60;
+            const hours = (time-minutes) / 60;
+
+            let string = "";
+
+            if (hours < 10) string += "0";
+            string += hours.toString() + 'h';
+            if (minutes < 10) string += "0";
+            string += minutes.toString() ;
+
+            return  string;
+
+        }
+
         const goal = this.props.goal;
         let priorityRender = "";
         if (goal.priority !== null){
@@ -280,6 +299,23 @@ const GoalInput = React.createClass({
                     {goal.title}
                 </a>
 
+
+                {goal.due_date !== null && goal.due_date !== "1970-01-01 00:00:00" ? (
+                    <strong style={{marginLeft: 10}} className="text-right">
+                        <em className="text text-right" >
+                            {(new Date(goal.due_date)).toISOString().slice(0,10)}
+                        </em>
+                    </strong>
+                ) : null}
+
+                {goal.estimated_time !== null && goal.estimated_time > 0 ? (
+                <strong style={{marginLeft: 10}} className="text-right">
+                    <em className="text text-right" >
+                        ... {toHuman(goal.estimated_time)}
+                    </em>
+                </strong>
+                ) : null}
+
                 {daydiffString(goal)}
 
                 <Badge>{goal.score}</Badge>
@@ -302,6 +338,15 @@ const GoalInput = React.createClass({
                 <a style={{marginLeft : '10px'}}onClick={this.setEditMode}>
                     {goal.title}
                 </a>
+
+                {goal.time_spent !== null && goal.time_spent > 0 ? (
+                    <strong style={{marginLeft: 10}} className="text-right">
+                        <em className="text text-right" >
+                            ... {toHuman(goal.time_spent)}
+                        </em>
+                    </strong>
+                ) : null}
+
                 <Badge>{goal.score}</Badge>
             </ListGroupItem>
         );
