@@ -308,7 +308,6 @@ const GoalInput = React.createClass({
                     </strong>
                 ) : null}
 
-                {daydiffString(goal)}
 
                 {goal.estimated_time !== null && goal.estimated_time > 0 ? (
                 <strong style={{marginLeft: 10}} className="text-right">
@@ -318,6 +317,7 @@ const GoalInput = React.createClass({
                 </strong>
                 ) : null}
 
+                {daydiffString(goal)}
 
                 <Badge>{goal.score}</Badge>
 
