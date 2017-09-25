@@ -116,6 +116,7 @@ class BotManController extends Controller
                 $project = $user->projects()->find($projectId);
                 if ($project !== null) {
                     $goals = $project->goals()->whereNull('completed_at')->chunk(4 , function ($goals) use ($bot){
+                        $bot->types();
                         $bot->reply($this->goalListRender($goals));
                     });
                 } else {
@@ -128,13 +129,13 @@ class BotManController extends Controller
 
 
         $botman->hears('projects', function( BotMan $bot) {
-            $bot->types();
 
             $user = $this->getCurrentUser($bot);
 
             if ($user !== null){
 
                 $projects = $user->projects()->chunk(4, function($projects) use($bot){
+                    $bot->types();
                     $project_list = ListTemplate::create()
                         ->useCompactView();
                         //->addGlobalButton(ElementButton::create('view more')->url('http://test.at'));
