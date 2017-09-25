@@ -150,7 +150,7 @@ const GoalsDetailsModal = React.createClass({
                             type="number"
                             value={this.state.priority}
                             min={0}
-                            max={5}
+                            max={3}
                             placeholder=""
                             onChange={(e) => {this.setState({ priority: e.target.value })}}
                             onKeyPress={this.handleKeyPress}

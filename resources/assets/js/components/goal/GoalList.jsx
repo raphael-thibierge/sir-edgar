@@ -100,7 +100,7 @@ const GoalList = React.createClass({
             } else if (firstGoal.priority === null && secondGoal.priority !== null){
                 return 1;
             }
-            
+
             return compareToday(firstGoal, secondGoal);
         });
 
