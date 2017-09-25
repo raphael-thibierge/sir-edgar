@@ -82,7 +82,7 @@ const GoalInput = React.createClass({
      */
     handleKeyPress: function(target) {
         // when pressing enter key
-        if(target.charCode==13){
+        if(target.charCode===13){
             this.onEnterPress();
         }
     },
@@ -235,6 +235,15 @@ const GoalInput = React.createClass({
         }
 
         const goal = this.props.goal;
+        let priorityRender = "";
+        if (goal.priority !== null){
+            for (let i = 0; i < goal.priority; i++){
+                priorityRender += "!";
+            }
+
+            priorityRender = <span className={"text-danger"}><strong>{priorityRender}</strong></span>
+        }
+
 
         return (goal.is_completed === false) ? (
             <ListGroupItem key={goal._id} bsStyle={goal.today === true ? 'warning' : 'default'}>
@@ -265,6 +274,8 @@ const GoalInput = React.createClass({
 
                 <GoalDetailsModal goal={goal}/>
 
+                {priorityRender}
+
                 <a style={{marginLeft : '5px'}} onClick={this.setEditMode}>
                     {goal.title}
                 </a>
@@ -283,6 +294,11 @@ const GoalInput = React.createClass({
                         bsStyle="danger"
                     ><Glyphicon glyph="trash"/></Button>
                 </span>
+
+                <GoalDetailsModal goal={goal}/>
+
+                {priorityRender}
+
                 <a style={{marginLeft : '10px'}}onClick={this.setEditMode}>
                     {goal.title}
                 </a>

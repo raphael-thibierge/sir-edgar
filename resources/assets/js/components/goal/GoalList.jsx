@@ -67,13 +67,50 @@ const GoalList = React.createClass({
             }
         }
 
+
+
+        function compareToday(firstGoal, secondGoal){
+            if (firstGoal.today === true && secondGoal.today === false){
+                return -1;
+            } else if (firstGoal.today === false && secondGoal.today === true ) {
+                return 1;
+            }
+            return 0;
+        }
+
+        todoGoals.sort((firstGoal, secondGoal) => {
+
+            // both as priority
+            if (firstGoal.priority !== null && secondGoal.priority !== null){
+                // same priority
+                if (firstGoal.priority === secondGoal.priority){
+
+                    //return 0;
+                    return compareToday(firstGoal, secondGoal);
+
+                }
+                // simple priority comparate
+                else if (firstGoal.priority > secondGoal.priority) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            } else if (firstGoal.priority !== null && secondGoal.priority === null){
+                return -1;
+            } else if (firstGoal.priority === null && secondGoal.priority !== null){
+                return 1;
+            }
+            
+            return compareToday(firstGoal, secondGoal);
+        });
+
         if (typeof this.props.createGoal === 'function'){
-            todoGoals.push(newGoal);
+            todoGoals.unshift(newGoal);
         }
 
 
         // render html foreach to-do goal
-        const todoList = todoGoals.length > 0 ? todoGoals.reverse().map((goal) => (
+        const todoList = todoGoals.length > 0 ? todoGoals.map((goal) => (
             <GoalInput goal={goal} key={goal._id}/>
         )) : null; // can't be null because there is the new Goals todoGoals
 
