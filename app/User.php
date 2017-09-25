@@ -29,6 +29,7 @@ class User extends \Jenssegers\Mongodb\Auth\User
         'timezone',
         'email_daily_report',
         'email_weekly_report',
+        'facebook_sending_id'
     ];
 
     /**
