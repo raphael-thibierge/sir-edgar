@@ -15,6 +15,7 @@ use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 use BotMan\Drivers\Facebook\Extensions\ListTemplate;
 use BotMan\Drivers\Facebook\FacebookDriver;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -126,7 +127,35 @@ class BotManController extends Controller
             $response = false;
             if ($user !== null){
 
-                $user->goals()->whereNull('completed_at')->whereNotNull('estimated_time')->where('estimated_time', $operator, (int)$time)
+                $user->goals()
+                    ->whereNull('completed_at')
+                    ->whereNotNull('estimated_time')
+                    ->where('estimated_time', $operator, (int)$time)
+                    ->chunk(4, function ($goals) use($bot, &$response){
+                        $response = true;
+                        $bot->reply($this->goalListRender($goals));
+                    });
+                if (!$response){
+                    $bot->reply("No goal founded");
+                }
+
+            } else {
+                $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
+            }
+        });
+
+        $botman->hears('due today', function(BotMan $bot) {
+            $bot->types();
+
+            $user = $this->getCurrentUser($bot);
+            $response = false;
+            if ($user !== null){
+
+                $user->goals()
+                    ->whereNull('completed_at')
+                    ->whereNotNull('due_date')
+                    ->where('due_date', '>=', Carbon::today($user->timezone))
+                    ->where('due_date', '<', Carbon::tomorrow($user->timezone))
                     ->chunk(4, function ($goals) use($bot, &$response){
                         $response = true;
                         $bot->reply($this->goalListRender($goals));
@@ -242,6 +271,9 @@ class BotManController extends Controller
         });
 
 
+        $botman->fallback(function($bot) {
+            $bot->reply('Sorry, I did not understand these commands. Please retry :)');
+        });
 
 
         // start listening
