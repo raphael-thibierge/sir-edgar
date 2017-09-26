@@ -97,7 +97,7 @@ class BotManController extends Controller
             $bot->reply("You are welcome!");
         });
 
-        $botman->hears('important goals', function( BotMan $bot) {
+        $botman->hears('important', function( BotMan $bot) {
             $bot->types();
 
             $user = $this->getCurrentUser($bot);
@@ -226,7 +226,6 @@ class BotManController extends Controller
             }
 
         });
-
 
         $botman->hears('goal.complete:{id}', function (BotMan $bot, $id) {
 
