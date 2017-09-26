@@ -27,7 +27,7 @@ class BotManController extends Controller
     {
 
         event(new PusherDebugEvent([
-            'medthod' => 'BotManController@handle',
+            'method' => 'BotManController@handle',
             'request' => $request->toArray(),
         ]));
 
@@ -96,19 +96,50 @@ class BotManController extends Controller
             $bot->reply("You are welcome!");
         });
 
-
-
         $botman->hears('important goals', function( BotMan $bot) {
             $bot->types();
 
             $user = $this->getCurrentUser($bot);
+            $response = false;
             if ($user !== null){
-                $goals = $user->goals()->where('today', true)->whereNull('completed_at')->get();
-                $bot->reply($this->goalListRender($goals));
+                $user->goals()
+                    ->where('today', true)
+                    ->whereNull('completed_at')
+                    ->chunk(4, function ($goals) use($bot, &$response){
+                        $response = true;
+                        $bot->reply($this->goalListRender($goals));
+                    });
+                if (!$response){
+                    $bot->reply("No goal founded");
+                }
+
             } else {
                 $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
             }
         });
+
+
+        $botman->hears('estimated time {operator} {time}', function( BotMan $bot, $operator, $time) {
+            $bot->types();
+
+            $user = $this->getCurrentUser($bot);
+            $response = false;
+            if ($user !== null){
+
+                $user->goals()->whereNull('completed_at')->whereNotNull('estimated_time')->where('estimated_time', $operator, (int)$time)
+                    ->chunk(4, function ($goals) use($bot, &$response){
+                        $response = true;
+                        $bot->reply($this->goalListRender($goals));
+                    });
+                if (!$response){
+                    $bot->reply("No goal founded");
+                }
+
+            } else {
+                $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
+            }
+        });
+
 
         $botman->hears('project.goals:{projectId}', function( BotMan $bot, $projectId) {
             $user = $this->getCurrentUser($bot);
@@ -197,30 +228,7 @@ class BotManController extends Controller
                 $goal = $user->goals()->with('project')->find($id);
                 if ($goal !== null){
 
-
-
-                    $description =
-                        "Project  : {$goal->project->title}\r\n" .
-                        "Score    : {$goal->score}\r\n";
-
-                    if ($goal->priority !== null){
-                        $description .= "Priority : {$goal->priority}\r\n";
-                    }
-
-                    if ($goal->due_date !== null){
-                        $description .= "Due Date : {$goal->due_date}\r\n";
-                    }
-
-                    $bot->reply(
-                        GenericTemplate::create()->addElement(Element::create($goal->title)
-                            ->subtitle($description)
-                            ->addButton(ElementButton::create('Set completed')
-                                ->type('postback')->payload('goal.complete:' . $goal->id))
-                        //    ->addButton(ElementButton::create('Set as important')
-                        //        ->type('postback')->payload('goal.important:' . $goal->id))
-                        //    ->addButton(ElementButton::create('Edit')
-                        //        ->type('postback')->payload('goal.edit' . $goal->id))
-                    ));
+                    $bot->reply($this->goalRender($goal));
 
 
                 } else {
@@ -240,13 +248,39 @@ class BotManController extends Controller
         $botman->listen();
 
     }
+    public function goalRender(Goal $goal){
+        $description =
+            "Project  : {$goal->project->title}\r\n" .
+            "Score    : {$goal->score}\r\n";
+
+        if ($goal->priority !== null){
+            $description .= "Priority : {$goal->priority}\r\n";
+        }
+
+        if ($goal->due_date !== null){
+            $description .= "Due Date : {$goal->due_date}\r\n";
+        }
+
+        return GenericTemplate::create()->addElement(Element::create($goal->title)
+            ->subtitle($description)
+            ->addButton(ElementButton::create('Set completed')
+                ->type('postback')
+                ->payload('goal.complete:' . $goal->id)
+            )
+        );
+    }
 
     private function goalListRender($goals){
+        if (count($goals) == 1){
+            return $this->goalRender($goals[0]);
+        }
+
         $goalList = ListTemplate::create()
             ->useCompactView();
         //->addGlobalButton(ElementButton::create('view more')->url('http://test.at'));
 
         foreach ($goals as $goal){
+
             $goalList->addElement(
                 Element::create($goal->title)
                     ->subtitle($goal->project->title)
