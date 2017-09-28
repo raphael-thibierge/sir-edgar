@@ -109,7 +109,6 @@ const GoalsDetailsModal = React.createClass({
                 <Glyphicon glyph="cog"/>
             </Button>
             <Modal
-                bsSize="medium"
                 aria-labelledby="contained-modal-title-lg"
                 show={this.state.display}
                 onHide={()=> {this.setState({display: false})}}

@@ -302,9 +302,26 @@ const ProjectRoot = React.createClass({
                 return <ProjectRender
                         project={project}
                         createGoal={this.addGoal}
+                        onTitleChange={this.editProjectTitle}
                     />;
                 return
         }
+    },
+
+
+    editProjectTitle(title, project_id){
+
+        let projects = this.state.projects;
+
+        let project = projects[this.projectMap[project_id]];
+
+        project.title = title;
+
+        projects[this.projectMap[project_id]] = project;
+
+        this.setState({
+            projects: projects
+        });
     },
 
 

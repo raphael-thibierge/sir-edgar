@@ -24,6 +24,11 @@ const AjaxEditableValue = React.createClass({
                 _token: window.token
             };
 
+            if (this.props.method === 'PUT'){
+                data.method = this.props.method;
+                data._method = this.props.method;
+            }
+
             if (this.props.inputName){
                 data[this.props.inputName] = this.state.value;
             } else {
@@ -120,7 +125,8 @@ const AjaxEditableValue = React.createClass({
     defaultProps: {
         type: 'text',
         style: {},
-        classNameLink: ''
+        classNameLink: '',
+        method: 'POST'
 
     },
 });
@@ -135,7 +141,8 @@ AjaxEditableValue.propTypes = {
     ]).isRequired,
     type: PropTypes.string,
     className: PropTypes.string,
-    style: PropTypes.object
+    style: PropTypes.object,
+    method: PropTypes.oneOf(['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
 
 
 };
