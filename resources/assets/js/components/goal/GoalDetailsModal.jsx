@@ -33,7 +33,6 @@ const GoalsDetailsModal = React.createClass({
     getInitialState() {
         return {
             display: false,
-
             due_date: null,
             estimated_time:null,
             time_spent:null,
@@ -45,14 +44,31 @@ const GoalsDetailsModal = React.createClass({
 
     componentDidMount(){
 
+        const goal = this.props.goal;
+
+        const diff = Math.floor((new Date() - goal.created_at ) / 1000);
+
         this.setState({
-            due_date: new Date(this.props.goal.due_date),
-            estimated_time: this.props.goal.estimated_time,
-            time_spent: this.props.goal.time_spent,
-            priority: this.props.goal.priority,
-            notes: this.props.goal.notes,
+            due_date: goal.due_date !== null ? new Date(goal.due_date) : null,
+            estimated_time: goal.estimated_time,
+            time_spent: goal.time_spent,
+            priority: goal.priority,
+            notes: goal.notes,
+            display: diff < 3,
         })
 
+    },
+
+    /**
+     * Called when the user hit a keyboard key in input
+     *
+     * @param target
+     */
+    handleKeyPress: function(target) {
+        // when pressing enter key
+        if(target.charCode===13){
+            this.onSave();
+        }
     },
 
     onSave(){
@@ -112,6 +128,9 @@ const GoalsDetailsModal = React.createClass({
                         <DayPicker
                             selectedDays={[this.state.due_date]}
                             onDayClick={(day) => {this.setState({due_date: day})}}
+                            firstDayOfWeek={1}
+                            numberOfMonths={2}
+                            fixedWeeks
                         />
                     </FormGroup>
 

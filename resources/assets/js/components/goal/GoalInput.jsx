@@ -212,8 +212,7 @@ const GoalInput = React.createClass({
                 return null;
             }
 
-            const first = new Date(goal.created_at.slice(0,10));
-
+            const first = goal.created_at;
 
             const second = new Date();
             let value = Math.round((second-first)/(1000*60*60*24));
@@ -301,11 +300,13 @@ const GoalInput = React.createClass({
 
 
 
-                {typeof goal.due_date !== 'undefined' && goal.due_date !== null && goal.due_date !== "1970-01-01 00:00:00" ? (
+                {typeof goal.due_date !== 'undefined' && goal.due_date !== null ? (
                     <strong style={{marginLeft: 10}} className="text-right">
-                        <em className={(new Date(goal.due_date)).toISOString().slice(0,10)
-                        === (new Date()).toISOString().slice(0,10) ? "text-danger" : ""} >
-                            {(new Date(goal.due_date)).toISOString().slice(0,10)}
+                        <em className={
+                            goal.due_date.toISOString().slice(0,10) === (new Date()).toISOString().slice(0,10)
+                            || goal.due_date < new Date()
+                                ? "text-danger" : ""} >
+                            {goal.due_date.toISOString().slice(0,10)}
                         </em>
                     </strong>
                 ) : null}

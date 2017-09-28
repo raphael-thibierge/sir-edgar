@@ -21,9 +21,32 @@ class Goal {
         }
     }
 
+    static dateFormat(dateAsString){
+        return new Date(
+            parseInt(dateAsString.slice(0,4)), // year
+            parseInt(dateAsString.slice(5,7)) - 1, // month
+            parseInt(dateAsString.slice(8,10)), // day
+            parseInt(dateAsString.slice(11,13)), // hour
+            parseInt(dateAsString.slice(14,16)), // minutes
+            parseInt(dateAsString.slice(17,19)), // seconds
+            0
+        );
+    }
+
     fillData(goalData){
+        const TIMEZONE_OFFSET = new Date().getTimezoneOffset();
+
+        const MS_PER_MINUTES = 60000;
+
         Object.keys(goalData).forEach((key) => {
-            this[key] = goalData[key];
+
+            if (key === 'due_date' || key === 'created_at' || key === 'completed_at'){
+
+                this[key] = new Date (Goal.dateFormat(goalData[key]) - TIMEZONE_OFFSET*MS_PER_MINUTES);
+
+            } else {
+                this[key] = goalData[key];
+            }
         });
     }
 
@@ -146,11 +169,11 @@ class Goal {
                 console.log(response);
                 // check status
                 if (response.status && response.status === 'success'){
-                    this.due_date= due_date;
-                    this.estimated_time= estimated_time;
-                    this.time_spent= time_spent;
-                    this.priority= priority;
-                    this.notes= notes;
+                    this.due_date = due_date;
+                    this.estimated_time = estimated_time;
+                    this.time_spent = time_spent;
+                    this.priority = priority;
+                    this.notes = notes;
 
                     this.updateView();
                 } else {
