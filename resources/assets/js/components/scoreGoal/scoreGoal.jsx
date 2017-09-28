@@ -13,6 +13,12 @@ const ScoreGoal = React.createClass({
 
     componentDidMount: function(){
         this.request();
+
+        // reset score at 00:00:00
+        const now = new Date();
+        const nextDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, 0, 0, 0, 0);
+        const millisTill10 =  nextDate - now;
+        setTimeout(this.setState.bind(this, {score: 0}), millisTill10);
     },
 
 
