@@ -22,6 +22,11 @@ class Goal {
     }
 
     static dateFormat(dateAsString){
+
+        if (typeof dateAsString === 'undefined' || dateAsString === null || dateAsString.length < 19){
+            return null;
+        }
+
         return new Date(
             parseInt(dateAsString.slice(0,4)), // year
             parseInt(dateAsString.slice(5,7)) - 1, // month
