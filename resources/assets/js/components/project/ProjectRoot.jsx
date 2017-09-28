@@ -328,7 +328,7 @@ const ProjectRoot = React.createClass({
                     />
                 </div>
 
-                <div className="col-xs-8">
+                <div className="col-xs-12 col-sm-9">
 
                     <ScoreGoal/>
 
