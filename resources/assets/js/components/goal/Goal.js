@@ -47,7 +47,11 @@ class Goal {
 
             if (key === 'due_date' || key === 'created_at' || key === 'completed_at'){
 
-                this[key] = new Date (Goal.dateFormat(goalData[key]) - TIMEZONE_OFFSET*MS_PER_MINUTES);
+                const value = goalData[key];
+                if (typeof value !== "undefined" && value !== null){
+                    this[key] = new Date (Goal.dateFormat(value) - TIMEZONE_OFFSET*MS_PER_MINUTES);
+                }
+
 
             } else {
                 this[key] = goalData[key];
