@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1>
-                        Sir Edgar
+                        <a href="/">Sir Edgar</a>
                     </h1>
                 </div>
             </div>
