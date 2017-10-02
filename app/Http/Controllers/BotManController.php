@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Events\PusherDebugEvent;
+use App\FinancialTransaction;
 use App\Goal;
 use App\User;
 use BotMan\BotMan\BotMan;
@@ -267,6 +268,88 @@ class BotManController extends Controller
                 $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
             }
 
+        });
+
+        $botman->hears('/expense {price} {currency} {tags}', function(Botman $bot, $price, $currency, $tags){
+            $user = $this->getCurrentUser($bot);
+            if ($user !== null) {
+
+                $tagsArray = [];
+
+                $price = str_replace(',', '.', $price);
+
+                foreach (explode('#', $tags) as $tag){
+                    if (!empty($tag)){
+                        $tagsArray []= $tag;
+                    }
+                }
+
+                $ft = FinancialTransaction::create([
+                    'user_id' => $user->id,
+                    'price' => (float)$price,
+                    'currency' => $currency,
+                    'tags' => $tagsArray,
+                    'type' => FinancialTransaction::EXPENSE,
+                ]);
+
+
+                $bot->reply($ft->toString());
+
+            } else {
+                $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
+            }
+        });
+
+        $botman->hears('/entrance {price} {currency} {tags}', function(Botman $bot, $price, $currency, $tags){
+            $user = $this->getCurrentUser($bot);
+            if ($user !== null) {
+
+                $tagsArray = [];
+
+                $price = str_replace(',', '.', $price);
+
+                foreach (explode('#', $tags) as $tag){
+                    if (!empty($tag)){
+                        $tagsArray []= $tag;
+                    }
+                }
+
+                $ft = FinancialTransaction::create([
+                    'user_id' => $user->id,
+                    'price' => (float)$price,
+                    'currency' => $currency,
+                    'tags' => $tagsArray,
+                    'type' => FinancialTransaction::ENTRANCE,
+                ]);
+
+
+                $bot->reply($ft->toString());
+
+            } else {
+                $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
+            }
+        });
+
+        $botman->hears('expenses', function(Botman $bot){
+            $user = $this->getCurrentUser($bot);
+            if ($user !== null) {
+
+                $expenses = $user->financialTransactions()
+                    ->where('created_at', '>=', Carbon::today($user->timezone))
+                    ->get();
+
+                $list = "";
+
+                foreach ($expenses as $expense){
+                    $list .= $expense->toString() . "\r\n";
+                }
+
+
+                $bot->reply($list);
+
+            } else {
+                $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
+            }
         });
 
 
