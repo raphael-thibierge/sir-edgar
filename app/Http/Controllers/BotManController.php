@@ -46,7 +46,12 @@ class BotManController extends Controller
 
         $botman = BotManFactory::create($config);
 
-
+        $commandList = "Available commands : \r\n"
+            . "- login : login form to link your sir edgar account\r\n"
+            . "- projects : show your projects \r\n"
+            . "- important : show your important goals \r\n"
+            . "- estimated time {'<', '<=', '>', '>='} {time in minutes} : show your goals with this amount of estimated time \r\n"
+            . "- due today : goals which have today as due date \r\n";
 
 
         $message = $request->only(['entry'])['entry'][0]['messaging'][0];
@@ -85,8 +90,9 @@ class BotManController extends Controller
 
 
         // give the bot something to listen for.
-        $botman->hears('Hi', function (BotMan $bot) {
+        $botman->hears('Hi', function (BotMan $bot) use ($commandList){
             $bot->reply('Hello ! A lot of new features are coming, see you soon ;) I hope will like it !');
+            $bot->reply($commandList);
         });
 
         $botman->hears('Hi Edgar', function (BotMan $bot) {
@@ -352,9 +358,13 @@ class BotManController extends Controller
             }
         });
 
+        $botman->hears('help', function($bot) use ($commandList){
+            $bot->reply($commandList);
+        });
 
-        $botman->fallback(function($bot) {
-            $bot->reply('Sorry, I did not understand these commands. Please retry :)');
+        $botman->fallback(function($bot) use ($commandList){
+            $bot->reply("Sorry, I did not understand these commands. Please retry :)");
+            $bot->reply($commandList);
         });
 
 
