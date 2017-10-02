@@ -18,7 +18,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/about', 'HomeController@about')->name('about');
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/privacy-policy', 'HomeController@privacyPolicy')->name('privacy.policy ');
 Route::get('/test', 'HomeController@test')->name('test');
 
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');

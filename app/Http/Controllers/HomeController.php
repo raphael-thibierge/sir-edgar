@@ -33,6 +33,10 @@ class HomeController extends Controller
         return view('about');
     }
 
+    public function privacyPolicy(){
+        return view('policy');
+    }
+
     public function test(){
 
         $user = Auth::user();
