@@ -49,6 +49,14 @@ class User extends \Jenssegers\Mongodb\Auth\User
         return $this->hasMany('App\Goal');
     }
 
+    /**
+     * User's goals
+     * @return HasMany
+     */
+    public function financialTransactions() : HasMany{
+        return $this->hasMany('App\FinancialTransaction');
+    }
+
     public function yesterday_goals() : HasMany{
         return $this->goals()
             ->where('completed_at', '>=', Carbon::yesterday($this->timezone))
