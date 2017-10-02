@@ -330,7 +330,7 @@ class BotManController extends Controller
             }
         });
 
-        $botman->hears('expenses', function(Botman $bot){
+        $botman->hears('transactions', function(Botman $bot){
             $user = $this->getCurrentUser($bot);
             if ($user !== null) {
 
@@ -345,7 +345,7 @@ class BotManController extends Controller
                 }
 
 
-                $bot->reply($list);
+                $bot->reply($list !== "" ? $list : 'No financial transaction');
 
             } else {
                 $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
