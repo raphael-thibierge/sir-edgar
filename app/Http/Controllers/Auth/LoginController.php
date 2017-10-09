@@ -57,7 +57,10 @@ class LoginController extends Controller
             $response = $this->loginTrait($request);
             // if success redirect to messenger
             if (($user = Auth::user()) !== null){
-                return Redirect::to($request->get('redirect_uri') . '&authorization_code=' . $user->id);
+                return Redirect::to(route('botman.confirm.show', [
+                    'redirect_uri' => $request->get('redirect_uri'),
+                    'account_linking_token' => $request->get('account_linking_token'),
+                ]));
             }
             return $response;
         }

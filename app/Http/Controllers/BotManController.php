@@ -24,6 +24,13 @@ use Pusher;
 
 class BotManController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', [
+            'only' => ['showConfirm', 'confirm']
+        ]);
+    }
+
 
     public function handle(Request $request)
     {
@@ -110,7 +117,6 @@ class BotManController extends Controller
                 ])
             );
         });
-
 
         // give the bot something to listen for.
         $botman->hears('Hi', function (BotMan $bot) use ($commandList){
@@ -246,10 +252,6 @@ class BotManController extends Controller
                     }
                     $bot->reply($project_list);
                 });
-
-
-
-
 
             } else {
                 $bot->reply('You have to connect to sir edgar. Just send \'Login\'');
@@ -456,13 +458,29 @@ class BotManController extends Controller
      */
     public function showMessengerLoginForm(Request $request)
     {
-
         if ($request->has('redirect_uri') && $request->has('account_linking_token')){
             if (($user = Auth::user()) !== null){
-                return Redirect::to($request->get('redirect_uri') . '&authorization_code=' . $user->id);
+                return Redirect::to(route('botman.confirm.show', [
+                    'redirect_uri' => $request->get('redirect_uri'),
+                    'account_linking_token' => $request->get('account_linking_token'),
+                ]));
             }
         }
         return view('auth.login');
+    }
+
+    public function confirm(Request $request){
+        $this->validate($request, [
+            'redirect_uri' => 'required'
+        ]);
+
+        $user = Auth::user();
+
+        return Redirect::to($request->get('redirect_uri') . '&authorization_code=' . $user->id);
+    }
+
+    public function showConfirm(){
+        return view('auth.messenger-confiramtion');
     }
 
 
