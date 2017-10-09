@@ -54,7 +54,11 @@ class BotManController extends Controller
             . "- due today : goals which have today as due date \r\n";
 
 
-        $message = $request->only(['entry'])['entry'][0]['messaging'][0];
+        try {
+            $message = $request->only(['entry'])['entry'][0]['messaging'][0];
+        } catch (\Exception $e){
+            $message = [];
+        }
 
         if (isset($message['account_linking'])) {
 
