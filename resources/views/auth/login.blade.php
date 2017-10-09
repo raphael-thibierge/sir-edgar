@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+@section('title')
+    Login -- @parent
+@endsection
+
+@section('description', 'Log in ' . config('app.name') . ' to complete new goals and increase your productivity')
+
 @section('content')
 <div class="container">
     <div class="row">

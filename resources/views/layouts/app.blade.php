@@ -8,8 +8,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }} -- Your productivity assistant</title>
-    <meta name="description" content="Sir Edgard aims to help you make your goals done and track your productivity">
+    <title>@section('title'){{ config('app.name', 'Laravel') }}, your productivity assistant @show</title>
+    <meta name="description" content="@section('description') Sir Edgard aims to help you make your goals done and track your productivity @show">
 
 
     <!-- Styles -->

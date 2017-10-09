@@ -1,8 +1,8 @@
 <!doctype html>
 <html>
 <head>
-    <title>Privacy Policy of Sir Edgar</title>
-
+    <title>{{ config('app.name') }} privacy policy</title>
+    <meta name="description" content="{{ config('app.name') }} privacy policy">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1>
-                        <a href="/">Sir Edgar</a>
+                        <a href="/">{{ config('app.name') }}</a>
                     </h1>
                 </div>
             </div>
@@ -35,7 +35,7 @@
 
                         <p>Last updated: October 02, 2017</p>
 
-                        <p>Sir Edgar ("us", "we", or "our") operates the https://www.sir-edgar.com website (the "Service").</p>
+                        <p>{{ config('app.name') }} ("us", "we", or "our") operates the {{ env('APP_URL', 'https://www.sir-edgar.com website') }} (the "Service").</p>
 
                         <p>This page informs you of our policies regarding the collection, use and disclosure of Personal Information when you use our Service.</p>
 
@@ -94,7 +94,7 @@
 
                         <p>If you have any questions about this Privacy Policy, please contact us.</p>                            </div>
 
-                        <p>support@sir-edgar.com</p>
+                        <p>{{ env('MAIL_FROM_ADDRESS', 'support@sir-edgar.com') }}</p>
 
                 </div>
             </div>
@@ -105,7 +105,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    Privacy Policy of https://www.sir-edgar.com
+                    Privacy Policy of {{ env('APP_URL', 'https://www.sir-edgar.com website') }}
                 </div>
             </div>
         </div>

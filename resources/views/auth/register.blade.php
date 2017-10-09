@@ -1,5 +1,12 @@
 @extends('layouts.app')
 
+@section('title')
+    Register -- @parent
+@endsection
+
+@section('description', 'Create an account to register in ' . config('app.name', 'Sir Edgar')
+. ' and start completing goals to increase your productivity !' )
+
 @section('content')
 <div class="container">
     <div class="row">

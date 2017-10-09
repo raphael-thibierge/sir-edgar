@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('description', config('app.name', 'Sir Edgar') . ' dashboard. Start boosting your productivity here !')
+
 @section('content')
 <div class="container">
     <div class="row">

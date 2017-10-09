@@ -1,8 +1,14 @@
 @extends('layouts.app')
 
+
+@section('title')
+    About @parent
+@endsection
+
+@section('description', 'Learn more about Sir Edgar, your productivity assistant !')
+
 @section('content')
 <div class="container">
-
 
     <div class="row">
         <div class="col-xs-12">
