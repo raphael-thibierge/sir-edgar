@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
+@section('title')
+    Reset password -- @parent
+@endsection
 
-
+@section('description', 'Reset your ' . config('app.name', 'Sir Edgar')
+. ' password' )
 
 @section('content')
 <div class="container">
