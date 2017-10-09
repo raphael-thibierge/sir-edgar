@@ -70,8 +70,8 @@ class RegisterController extends Controller
             'admin' => false,
             'daily_score_goal' => 5,
             'timezone' => 'Europe/Paris',
-            'email_daily_report' => true,
-            'email_weekly_report' => true,
+            'email_daily_report' => false,
+            'email_weekly_report' => false,
         ]);
 
         Mail::to(User::where('admin', true)->first())
