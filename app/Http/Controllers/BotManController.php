@@ -114,7 +114,7 @@ class BotManController extends Controller
 
         // give the bot something to listen for.
         $botman->hears('Hi', function (BotMan $bot) use ($commandList){
-            $bot->reply('Hello ! A lot of new features are coming, see you soon ;) I hope will like it !');
+            $bot->reply('Hello ! Send \'Login\' to link your SirEdgar Account');
             //$bot->reply($commandList);
         });
 
