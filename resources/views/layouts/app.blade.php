@@ -8,13 +8,16 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
-    <form action="" method=""></form>
+    <title>{{ config('app.name', 'Laravel') }} -- Your productivity assistant</title>
+    <meta name="description" content="Sir Edgard aims to help you make your goals done and track your productivity">
+
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/react-day-picker.css') }}" rel="stylesheet">
 
     @if(env('APP_ENV') === 'production')
+    <!-- Google analytics -->
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
