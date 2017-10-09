@@ -145,7 +145,7 @@ class BotManController extends Controller
                 }
 
             } else {
-                $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
+                $bot->reply('You have to connect to sir edgar. Just send \'Login\'');
             }
         });
 
@@ -170,7 +170,7 @@ class BotManController extends Controller
                 }
 
             } else {
-                $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
+                $bot->reply('You have to connect to sir edgar. Just send \'Login\'');
             }
         });
 
@@ -195,7 +195,7 @@ class BotManController extends Controller
                 }
 
             } else {
-                $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
+                $bot->reply('You have to connect to sir edgar. Just send \'Login\'');
             }
         });
 
@@ -213,7 +213,7 @@ class BotManController extends Controller
                     $bot->reply('Project does not exist anymore..');
                 }
             } else {
-                $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
+                $bot->reply('You have to connect to sir edgar. Just send \'Login\'');
             }
         });
 
@@ -252,7 +252,7 @@ class BotManController extends Controller
 
 
             } else {
-                $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
+                $bot->reply('You have to connect to sir edgar. Just send \'Login\'');
             }
 
         });
@@ -274,7 +274,7 @@ class BotManController extends Controller
                 }
 
             } else {
-                $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
+                $bot->reply('You have to connect to sir edgar. Just send \'Login\'');
             }
         });
 
@@ -294,7 +294,7 @@ class BotManController extends Controller
                 }
 
             } else {
-                $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
+                $bot->reply('You have to connect to sir edgar. Just send \'Login\'');
             }
 
         });
@@ -325,7 +325,7 @@ class BotManController extends Controller
                 $bot->reply($ft->toString());
 
             } else {
-                $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
+                $bot->reply('You have to connect to sir edgar. Just send \'Login\'');
             }
         });
 
@@ -355,7 +355,7 @@ class BotManController extends Controller
                 $bot->reply($ft->toString());
 
             } else {
-                $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
+                $bot->reply('You have to connect to sir edgar. Just send \'Login\'');
             }
         });
 
@@ -377,7 +377,7 @@ class BotManController extends Controller
                 $bot->reply($list !== "" ? $list : 'No financial transaction');
 
             } else {
-                $bot->reply('You have to connect to sir edgar. Ask \"Login\"');
+                $bot->reply('You have to connect to sir edgar. Just send \'Login\'');
             }
         });
 
