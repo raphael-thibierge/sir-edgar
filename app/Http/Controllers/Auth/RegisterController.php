@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\Mail\NewUserRegistration;
 use App\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -22,7 +25,9 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    use RegistersUsers {
+        register as protected registerTrait;
+    }
 
     /**
      * Where to redirect users after registration.
@@ -79,4 +84,22 @@ class RegisterController extends Controller
 
         return $userRegistered;
     }
+
+    public function register(Request $request)
+    {
+        // messenger account linking case
+        if ($request->has('redirect_uri') && $request->has('account_linking_token')){
+            // process normal register
+            $response = $this->registerTrait($request);
+            // if success redirect to messenger
+            if (($user = Auth::user()) != null){
+                return Redirect::to($request->get('redirect_uri') . '&authorization_code=' . $user->id);
+            }
+            return $response;
+        }
+
+        return $this->registerTrait($request);
+    }
+
+
 }

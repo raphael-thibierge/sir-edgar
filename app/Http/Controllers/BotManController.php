@@ -59,18 +59,25 @@ class BotManController extends Controller
         if (isset($message['account_linking'])) {
 
             $account_linking = $message['account_linking'];
+            $sender_id = $message['sender']['id'];
 
             if ($account_linking['status'] === "linked"){
 
                 $user_id = $account_linking['authorization_code'];
 
+
                 if ( ($user = User::find($user_id)) !== null){
 
-                    $user->update(['facebook_sending_id' => $message['sender']['id']]);
+                    $user->update(['facebook_sending_id' => $sender_id]);
 
                     $botman->say("Wecome {$user->name} ! You're account has been successfully linked to messenger ",
-                        $user->facebook_sending_id);
+                        $sender_id);
                 }
+            } else if ($account_linking['status'] === "unlinked") {
+                User::where('facebook_sending_id', $sender_id)->update(['facebook_sending_id' => null]);
+
+                $botman->say("Your SirEdgar account has been successfully unlinked !",
+                    $sender_id);
             }
         }
 
@@ -78,7 +85,7 @@ class BotManController extends Controller
             $bot->reply(GenericTemplate::create()
                 ->addElements([
                     Element::create('Account linking')
-                        ->subtitle('All about BotMan')
+                        ->subtitle('Link your Sir Edgar account')
                         ->addButton(
                             ElementButton::create('Login')
                                 ->url(env('APP_URL') . '/botman/authorize')
@@ -88,11 +95,23 @@ class BotManController extends Controller
             );
         });
 
+        $botman->hears('Logout', function (BotMan $bot) {
+            $bot->reply(GenericTemplate::create()
+                ->addElements([
+                    Element::create('Unlink account')
+                        ->addButton(
+                            ElementButton::create('Log Out')
+                                ->type('account_unlink')
+                        )
+                ])
+            );
+        });
+
 
         // give the bot something to listen for.
         $botman->hears('Hi', function (BotMan $bot) use ($commandList){
             $bot->reply('Hello ! A lot of new features are coming, see you soon ;) I hope will like it !');
-            $bot->reply($commandList);
+            //$bot->reply($commandList);
         });
 
         $botman->hears('Hi Edgar', function (BotMan $bot) {
@@ -424,41 +443,22 @@ class BotManController extends Controller
         return User::where('facebook_sending_id', $bot->getUser()->getId())->first();
     }
 
-    public function authorizeRequest(Request $request){
 
-        $redirect_uri = $request->get('redirect_uri');
-        $account_linking_token = $request->get('account_linking_token');
+    /**
+     * Display login form for messenger account linking
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showMessengerLoginForm(Request $request)
+    {
 
-
-        return view('auth.messenger_login', [
-            'redirect_uri' => $redirect_uri,
-            'account_linking_token' => $account_linking_token,
-        ]);
-
-    }
-
-    public function authorizePost(Request $request){
-
-        $this->validate($request, [
-            'redirect_uri' => 'required',
-            'account_linking_token' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-        ]);
-
-
-        if (Auth::once([
-            'email' => $request->get('email'),
-            'password' => $request->get('password'),
-        ])) {
-
-            $user = Auth::user();
-
-            return Redirect::to($request->get('redirect_uri') . '&authorization_code=' . $user->id);
-
+        if ($request->has('redirect_uri') && $request->has('account_linking_token')){
+            if (($user = Auth::user()) !== null){
+                return Redirect::to($request->get('redirect_uri') . '&authorization_code=' . $user->id);
+            }
         }
-
-        return Redirect::to($request->get('redirect_uri'));
+        return view('auth.login');
     }
 
 

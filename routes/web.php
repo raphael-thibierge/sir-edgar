@@ -42,5 +42,5 @@ Route::resource('users', 'UserController', ['only' => ['index', 'destroy']]);
 Route::resource('projects', 'ProjectController', ['only' => ['index', 'store', 'update']]);
 
 Route::match(['get', 'post'], '/botman', 'BotManController@handle')->middleware('botman');
-Route::match(['get', 'post'], '/botman/authorize', 'BotManController@authorizeRequest')->middleware('botman');
+Route::match(['get', 'post'], '/botman/authorize', 'BotManController@showMessengerLoginForm')->middleware('botman')->name('botman.authorize');
 Route::post('/botman/authorize', 'BotManController@authorizePost')->middleware('botman')->name('botman.authorize.post');
