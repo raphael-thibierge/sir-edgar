@@ -5,13 +5,9 @@
 @section('content')
 <div class="container">
     <div class="row">
-            <div id="app-root">
-                <!-- React component will be inserted here by app.js script, included in app.layout -->
-            </div>
-            <div id="goal-root">
-                <!-- React component will be inserted here by app.js script, included in app.layout -->
-            </div>
-
+        <div id="app-root" class="col-xs-12">
+            <img src="/images/logo.png" alt="" class="img-responsive img-circle img-rounded img-thumbnail">
+        </div>
     </div>
 </div>
 @endsection
