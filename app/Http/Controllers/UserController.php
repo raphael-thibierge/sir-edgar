@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Goal;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,18 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('auth.index',compact("users"));
+
+        $activeUsers =
+            Goal::whereNotNull('completed_at')
+                ->groupBy('user_id')
+                ->orderBy('user_id')
+                ->pluck('user_id')
+                ->count();
+
+        return view('auth.index', [
+            "users" => $users,
+            "activeUsers" => $activeUsers
+        ]);
     }
 
     /**
