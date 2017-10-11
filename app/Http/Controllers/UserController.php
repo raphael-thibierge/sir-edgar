@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Goal;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,6 +32,7 @@ class UserController extends Controller
 
         $activeUsers =
             Goal::whereNotNull('completed_at')
+                ->where('completed_at', '>=', Carbon::now()->subDays(15))
                 ->groupBy('user_id')
                 ->orderBy('user_id')
                 ->pluck('user_id')
