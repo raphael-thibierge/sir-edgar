@@ -11,9 +11,10 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class GoalCreated implements ShouldBroadcast
+class GoalCompleted implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
 
     /**
      * @var Goal
@@ -46,7 +47,10 @@ class GoalCreated implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'goal' => $this->goal
+            'goal' => [
+                '_id' => $this->goal->id,
+                'score' => $this->goal->score,
+            ],
         ];
     }
 }

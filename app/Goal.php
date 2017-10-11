@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\GoalCompleted;
 use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsTo;
@@ -14,6 +15,7 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  * @property mixed title
  * @property mixed project
  * @property mixed score
+ * @property mixed user
  */
 class Goal extends Model
 {
@@ -97,6 +99,7 @@ class Goal extends Model
 
     public function setCompleted(){
         $this->completed_at = Carbon::now();
+        broadcast(new GoalCompleted($this));
     }
 
 }

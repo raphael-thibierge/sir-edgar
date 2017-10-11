@@ -12,11 +12,5 @@
 */
 
 Broadcast::channel('App.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
-});
-
-
-
-Broadcast::channel('goal.{goalId}', function ($user, $goalId) {
-    return $user->id === \App\Goal::findOrNew(goalId)->user_id;
+    return $user->id === $id;
 });

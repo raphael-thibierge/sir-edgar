@@ -26,6 +26,7 @@ const ScoreGoal = React.createClass({
      * AJAX request to get goals from server
      */
     request: function(){
+
         const request = $.ajax({
             url: './goals/current-score',
             cache: false,
@@ -35,8 +36,25 @@ const ScoreGoal = React.createClass({
                 if (response && response.status === 'success'){
                     this.setState({
                         score: response.data.score,
-                        scoreGoal: response.data.daily_score_goal,
-                    })
+                        scoreGoal: parseInt(response.data.daily_score_goal),
+                    }, () => {
+
+                        if (window.Echo) {
+                            window.Echo.private('App.User.' + window.user_id)
+                                .listen('GoalCompleted', (e) => {
+                                    this.setState({
+                                        score: this.state.score + e.goal.score,
+                                    });
+                                });
+                            window.Echo.private('App.User.' + window.user_id)
+                                .listen('GoalDeleted', (e) => {
+                                    this.setState({
+                                        score: this.state.score - e.goal.score,
+                                    });
+                                });
+                        }
+
+                    });
                 }
 
             },

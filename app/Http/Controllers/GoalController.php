@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\GoalCreated;
+use App\Events\GoalDeleted;
 use App\Goal;
 use App\User;
 use Carbon\Carbon;
@@ -55,7 +56,7 @@ class GoalController extends Controller
             "score" => (int)$request->get('score'),
         ]);
 
-        event(new GoalCreated($goal));
+        broadcast(new GoalCreated($goal));
 
         return $this->successResponse([
             'goal'  => $goal
@@ -137,6 +138,7 @@ class GoalController extends Controller
      */
     public function destroy(Goal $goal)
     {
+        broadcast(new GoalDeleted($goal));
         $goal->delete();
         return $this->successResponse();
     }
