@@ -211,10 +211,22 @@ class BotManController extends Controller
             if ($user !== null){
                 $project = $user->projects()->find($projectId);
                 if ($project !== null) {
-                    $goals = $project->goals()->whereNull('completed_at')->chunk(4 , function ($goals) use ($bot){
+
+                    $found = false;
+                    $goals = $project->goals()->whereNull('completed_at')->chunk(4 , function ($goals) use ($bot, &$found){
                         $bot->types();
+                        $found = true;
                         $bot->reply($this->goalListRender($goals));
                     });
+
+                    if (!$found){
+                        $text = 'You don\'t have any goal in this project. Visit SirEdgar web app to add goals in your project' ;
+                        $bot->reply(ButtonTemplate::create($text)
+                            ->addButton(ElementButton::create('Visit web app')->url(route('home')))
+                        );
+
+                    }
+
                 } else {
                     $bot->reply('Project does not exist anymore..');
                 }
@@ -224,40 +236,71 @@ class BotManController extends Controller
         });
 
 
+
         $botman->hears('projects', function( BotMan $bot) {
 
             $user = $this->getCurrentUser($bot);
 
             if ($user !== null){
 
-                $projects = $user->projects()->chunk(4, function($projects) use($bot){
+                $found = false;
+
+                $projects = $user->projects()->chunk(4, function($projects) use($bot, &$found){
                     $bot->types();
-                    $project_list = ListTemplate::create()
-                        ->useCompactView();
-                        //->addGlobalButton(ElementButton::create('view more')->url('http://test.at'));
-                    foreach($projects as $project){
+                    $found = true;
+
+                    if (count($projects )== 1){
+
+                        $project = $projects[0];
 
                         $nbTodo = $project->goals()->whereNull('completed_at')->count();
                         $description = "Goals to complete : {$nbTodo}";
 
-                        $project_list->addElement(
-                            Element::create($project->title)
-                                ->subtitle($description)
-                                ->addButton(
-                                    ElementButton::create('Display goals')
-                                        ->type('postback')
-                                        ->payload("project.goals:{$project->id}")
-                                )
-                        );
+                        $bot->reply(GenericTemplate::create()->addElement(Element::create($project->title)
+                            ->subtitle($description)
+                            ->addButton(
+                                ElementButton::create('Display goals')
+                                    ->type('postback')
+                                    ->payload("project.goals:{$project->id}")
+                            )));
+                    } else {
+
+                        $project_list = ListTemplate::create()
+                            ->useCompactView();
+                        //->addGlobalButton(ElementButton::create('view more')->url('http://test.at'));
+                        foreach ($projects as $project) {
+
+
+                            $nbTodo = $project->goals()->whereNull('completed_at')->count();
+                            $description = "Goals to complete : {$nbTodo}";
+
+                            $project_list->addElement(
+                                Element::create($project->title)
+                                    ->subtitle($description)
+                                    ->addButton(
+                                        ElementButton::create('Display goals')
+                                            ->type('postback')
+                                            ->payload("project.goals:{$project->id}")
+                                    )
+                            );
+                        }
+                        $bot->reply($project_list);
                     }
-                    $bot->reply($project_list);
                 });
+
+                if (!$found){
+                    $text = 'You don\'t have any project yet. Create your first one in the web app' ;
+                    $bot->reply(ButtonTemplate::create($text)
+                        ->addButton(ElementButton::create('Visit web app')->url(route('home')))
+                    );
+                }
 
             } else {
                 $bot->reply('You have to connect to sir edgar. Just send \'Login\'');
             }
 
         });
+
 
         $botman->hears('goal.complete:{id}', function (BotMan $bot, $id) {
 
@@ -482,6 +525,7 @@ class BotManController extends Controller
     public function showConfirm(){
         return view('auth.messenger-confiramtion');
     }
+
 
 
 
