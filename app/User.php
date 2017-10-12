@@ -10,6 +10,7 @@ use Jenssegers\Mongodb\Relations\HasMany;
  * @property string name
  * @property string email
  * @property bool admin
+ * @property mixed id
  */
 class User extends \Jenssegers\Mongodb\Auth\User
 {

@@ -48,4 +48,6 @@ Route::post('/botman/confirm', 'BotManController@confirm')->middleware('botman')
 Route::get('/botman/confirm', 'BotManController@showConfirm')->middleware('botman')->name('botman.confirm.show');
 
 
+
 Route::post('/dialogflow/webhook', 'DialogflowController@dialogflow')->middleware('botman')->name('doalogflow');
+Route::get('/dialogflow/messenger/{senderId}/authorize', 'DialogflowController@messengerAuthorizePost')->name('dialogflow.authorize.messenger.post');
