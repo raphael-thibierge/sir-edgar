@@ -39,11 +39,19 @@ const NewProjectRoot = React.createClass({
                 <div className="col-xs-12">
 
                     {this.props.projectCurrentNumber === 0 ? (
-                        <div className="alert alert-info">
-                            <Glyphicon glyph="info-sign"/>
-                            <strong> Welcome ! </strong>
-                            You don't have any project yet !
-                            Create your first one to add goal inside to start completing them !
+                        <div>
+
+                            <div className="alert alert-info">
+                                <Glyphicon glyph="info-sign"/>
+                                <strong> Welcome ! </strong>
+                                You don't have any project yet !
+                                Create your first one to add goal inside and start completing them !
+                            </div>
+                            <div className="alert alert-warning">
+                                <Glyphicon glyph="info-sign"/>
+                                <strong> Wait ! </strong>
+                                A project is not a goal or task, and can't be completed ! It's a container, like a list.
+                            </div>
                         </div>
                     ) : null}
 
