@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\PusherDebugEvent;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -59,15 +60,14 @@ class DialogflowController extends Controller
     private function findProject(){
         $projectName = $this->findParameter('project');
 
+        $project = $this->userInDB->projects()->where('title', $projectName)->first();
+
         event(new PusherDebugEvent([
-            'method' => 'DialogflowController@dialogflow1',
-            'project' => $projectName,
-            'user' => $this->userInDB->projects,
+            'project' => $project,
+            'projectName' => $projectName
         ]));
 
-
-        return $this->userInDB->projects()->where('title', $projectName)->first();
-
+        return $project;
     }
 
 
@@ -79,10 +79,11 @@ class DialogflowController extends Controller
             $responseData = $this->buildSimpleTextResponseData('Project not found');
         } else {
 
-            $responseData = $this->buildEventResponse('goals_in_project', [
-                'Project' => $project->title,
-                'nbGoals' => (string)$project->goals()->count(),
-            ]);
+
+            $goals = $project->goals()->select(['title', 'score', 'completed_at'])
+                ->whereNull('completed_at')->get();
+
+            $responseData = $this->goalListAsString($goals);
         }
 
         return $responseData;
@@ -150,6 +151,23 @@ class DialogflowController extends Controller
                 }
                 break;
 
+            case 'important_goals_action':
+                $responseData = $this->important_goals_action();
+                break;
+
+            case 'project_list_action':
+                $responseData = $this->project_list_action();
+                break;
+
+            case 'complete_goal_action':
+                $responseData = $this->complete_goal_action();
+                break;
+
+            case 'due_today_action':
+                $responseData = $this->due_today_action();
+                break;
+
+
             default:
                 $responseData = $this->buildSimpleTextResponseData('action not understood');
                 break;
@@ -213,5 +231,76 @@ class DialogflowController extends Controller
 
     public function showConfirm(){
         return view('auth.messenger-confiramtion');
+    }
+
+    public function goalListAsString($goals){
+        $goals->each(function ($goal, $key) use(&$goalList)
+        {
+            $goalList []= "- $goal->title ($goal->score)";
+        });
+
+        return $this->buildSimpleTextResponseData(
+            (!empty($goalList) ? implode("\r\n", $goalList): "No goal found"));
+    }
+
+    public function projectListAsString($projects){
+        $projects->each(function ($project, $key) use(&$goalList)
+        {
+            $goalList []= "- $project->title (" . $project->goals()->whereNull('completed_at')->count() . ")";
+        });
+
+        return $this->buildSimpleTextResponseData(
+            (!empty($goalList) ? implode("\r\n", $goalList): "No goal found"));
+    }
+
+    private function important_goals_action()
+    {
+        return $this->goalListAsString($this->userInDB->goals()->where('today', true)->get());
+    }
+
+    private function project_list_action()
+    {
+        $projects = $this->userInDB->projects;
+        return $this->projectListAsString($projects);
+    }
+
+    private function complete_goal_action()
+    {
+        $goalTitle = $this->findParameter('goal');
+
+        $goal = $this->userInDB->goals()->where('title', $goalTitle)->first();
+
+        if ($goal !== null){
+            $goal->setCompleted();
+            return $this->buildSimpleTextResponseData('Goal completed !');
+        } else {
+            return $this->buildSimpleTextResponseData('Goal not found..');
+        }
+    }
+
+    private function due_today_action()
+    {
+        $due_date= $this->findParameter('due_date');
+
+        $start = new Carbon($due_date, $this->userInDB->timezone);
+        $start->subDay(1);
+        $stop = new Carbon($due_date, $this->userInDB->timezone);
+        $stop->addDay(1);
+
+
+        $goals = $this->userInDB->goals()
+            ->whereNull('completed_at')
+            ->whereNotNull('due_date')
+            ->where('due_date', '>=', Carbon::today($this->userInDB->timezone))
+            ->where('due_date', '<', Carbon::tomorrow($this->userInDB->timezone))
+            ->get();
+        event(new PusherDebugEvent([
+            'request' => $start,
+            'goals' => $goals,
+            'carbi' => Carbon::now($this->userInDB->timezone),
+        ]));
+
+        return $this->goalListAsString($goals);
+
     }
 }
