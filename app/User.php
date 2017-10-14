@@ -12,6 +12,7 @@ use Jenssegers\Mongodb\Relations\HasMany;
  * @property bool admin
  * @property mixed id
  * @property mixed timezone
+ * @property int daily_score_goal
  */
 class User extends \Jenssegers\Mongodb\Auth\User
 {
@@ -93,6 +94,20 @@ class User extends \Jenssegers\Mongodb\Auth\User
         }
 
         return User::create($attributes);
+    }
+
+    public function getCurrentScore(): int{
+        $date = Carbon::today($this->timezone);
+
+        return $this->goals()->where('completed_at', '>=', $date)->sum('score');
+    }
+
+    public function setDailyScoreGoal(int $score){
+        $this->daily_score_goal = $score;
+    }
+
+    public function currentProgress(): int{
+        return $this->getCurrentScore() / $this->daily_score_goal * 100;
     }
 
 
