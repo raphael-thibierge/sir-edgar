@@ -17,6 +17,15 @@ class User extends \Jenssegers\Mongodb\Auth\User
 {
     use Notifiable;
 
+
+    const DEFAULT_ATTRIBUTES = [
+        'admin' => false,
+        'daily_score_goal' => 5,
+        'timezone' => 'Europe/Paris',
+        'email_daily_report' => false,
+        'email_weekly_report' => false,
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -72,5 +81,19 @@ class User extends \Jenssegers\Mongodb\Auth\User
     public function isAdmin(): bool {
         return $this->admin != null ? $this->admin : false;
     }
+
+    public static function newUser(array $attributes = []): User
+    {
+
+        // set default attributes
+        foreach (self::DEFAULT_ATTRIBUTES as $attributeName => $attributeValue){
+            if (!isset($attributes[$attributeName]) || empty($attributes[$attributeName])){
+                $attributes[$attributeName] = $attributeValue;
+            }
+        }
+
+        return User::create($attributes);
+    }
+
 
 }
