@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\DialogflowWebhook;
 use App\Events\PusherDebugEvent;
+use App\Goal;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -11,6 +13,12 @@ use Illuminate\Support\Facades\Redirect;
 
 class DialogflowController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('admin', ['only' => 'index', 'show']);
+    }
+
+
 
     /**
      * @var Request
@@ -22,22 +30,26 @@ class DialogflowController extends Controller
      */
     private $userInDB;
 
+    /**
+     * @var DialogflowWebhook
+     */
+    private $webhook;
 
 
-    private function getAction(){
-        return $this->request->get('result')['action'];
+    public function index(){
+        $webhooks = DialogflowWebhook::orderBy('created_at', 'DESC')->paginate(20);
+
+        return view('dialogflow.index', ['webhooks' => $webhooks]);
     }
 
-    private function getFacebookSenderId(){
-        return $this->request->get('originalRequest')['data']['sender']['id'];
+    public function show(DialogflowWebhook $webhook){
+        dd($webhook->request);
     }
 
-    private function getOriginalRequestProvider(){
-        return $this->request->get('originalRequest')['source'];
-    }
+
 
     private function getUserFromFacebook(){
-        $this->userInDB = User::where('facebook_sending_id', $this->getFacebookSenderId())->first();
+        $this->userInDB = $this->webhook->user;
     }
 
 
@@ -52,20 +64,15 @@ class DialogflowController extends Controller
         ];
     }
 
-    private function findParameter($parameter){
-        return $this->request->get('result')['parameters'][$parameter];
+    private function findParameter(string $parameter){
+        return $this->webhook->findParameter($parameter);
     }
 
 
     private function findProject(){
-        $projectName = $this->findParameter('project');
+        $projectName = $this->webhook->findParameter('project');
 
         $project = $this->userInDB->projects()->where('title', $projectName)->first();
-
-        event(new PusherDebugEvent([
-            'project' => $project,
-            'projectName' => $projectName
-        ]));
 
         return $project;
     }
@@ -90,7 +97,7 @@ class DialogflowController extends Controller
     }
 
     private function ask_login_action(){
-        $senderId = $this->getFacebookSenderId();
+        $senderId = $this->webhook->getSender()['id'];
 
         if ($this->userInDB !== null){
             return $this->buildSimpleTextResponseData('Your account is already linked.');
@@ -105,7 +112,7 @@ class DialogflowController extends Controller
 
 
     /**
-     * Dialogflow webhook handler
+     * dialogflow webhook handler
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -117,10 +124,14 @@ class DialogflowController extends Controller
             'request' => $request->toArray(),
         ]));
 
+        $this->webhook= DialogflowWebhook::createFromRequest($request);
+
+        $this->webhook->save();
+
 
         $this->getUserFromFacebook();
 
-        $action = $this->getAction();
+        $action = $this->webhook->getAction();
 
         if ($this->userInDB === null && $action !== 'ask_login_action' && $action !== 'ask_logout_action' ){
             return $this->simpleTextResponse('User not found');
@@ -167,6 +178,9 @@ class DialogflowController extends Controller
                 $responseData = $this->due_today_action();
                 break;
 
+            case 'project_create_action':
+                $responseData = $this->project_create_action();
+                break;
 
             default:
                 $responseData = $this->buildSimpleTextResponseData('action not understood');
@@ -197,8 +211,8 @@ class DialogflowController extends Controller
             return $this->buildSimpleTextResponseData('Project not found');
         }
 
-        $title = $this->findParameter('goal');
-        $score = $this->findParameter('score');
+        $title = $this->webhook->findParameter('goal');
+        $score = $this->webhook->findParameter('score');
 
         $project->goals()->create([
             'user_id'   => $this->userInDB->id,
@@ -234,8 +248,15 @@ class DialogflowController extends Controller
     }
 
     public function goalListAsString($goals){
-        $goals->each(function ($goal, $key) use(&$goalList)
+        $goalList = [];
+        $goals->each(function (Goal $goal, $key) use(&$goalList)
         {
+
+            event(new PusherDebugEvent([
+                'method' => 'DialogflowController@dialogflow1',
+                'goal' => $goal->toArray(),
+            ]));
+
             $goalList []= "- $goal->title ($goal->score)";
         });
 
@@ -244,13 +265,14 @@ class DialogflowController extends Controller
     }
 
     public function projectListAsString($projects){
-        $projects->each(function ($project, $key) use(&$goalList)
+        $projectList = [];
+        $projects->each(function ($project, $key) use(&$projectList)
         {
-            $goalList []= "- $project->title (" . $project->goals()->whereNull('completed_at')->count() . ")";
+            $projectList []= "- $project->title (" . $project->goals()->whereNull('completed_at')->count() . ")";
         });
 
         return $this->buildSimpleTextResponseData(
-            (!empty($goalList) ? implode("\r\n", $goalList): "No goal found"));
+            (!empty($projectList) ? implode("\r\n", $projectList): "No project found"));
     }
 
     private function important_goals_action()
@@ -302,5 +324,14 @@ class DialogflowController extends Controller
 
         return $this->goalListAsString($goals);
 
+    }
+
+    private function project_create_action()
+    {
+        $project = $this->userInDB->projects()->create([
+            'title' => $this->webhook->findParameter('project')
+        ]);
+
+        return $this->buildSimpleTextResponseData("Project $project->title created" );
     }
 }
