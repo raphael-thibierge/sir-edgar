@@ -182,8 +182,27 @@ class DialogflowController extends Controller
                 $responseData = $this->project_create_action();
                 break;
 
+            case 'current_score_action':
+                $responseData = $this->current_score_action();
+                break;
+
+            case 'set_score_goal_action':
+                $responseData = $this->set_score_goal_action();
+                break;
+
+            case 'test_action':
+                $responseData = $this->buildSimpleTextResponseData('Test validate ;)');
+                break;
+
+            case 'score_progress_action':
+                $responseData = $this->score_progress_action();
+                break;
+
+            case 'show_daily_score_action':
+                $responseData = $this->show_daily_score_action();
+                break;
+
             default:
-                $responseData = $this->buildSimpleTextResponseData('action not understood');
                 break;
         }
 
@@ -212,7 +231,7 @@ class DialogflowController extends Controller
         }
 
         $title = $this->webhook->findParameter('goal');
-        $score = $this->webhook->findParameter('score');
+        $score = (int)$this->webhook->findParameter('score');
 
         $project->goals()->create([
             'user_id'   => $this->userInDB->id,
@@ -294,6 +313,7 @@ class DialogflowController extends Controller
 
         if ($goal !== null){
             $goal->setCompleted();
+            $goal->update();
             return $this->buildSimpleTextResponseData('Goal completed !');
         } else {
             return $this->buildSimpleTextResponseData('Goal not found..');
@@ -334,4 +354,34 @@ class DialogflowController extends Controller
 
         return $this->buildSimpleTextResponseData("Project $project->title created" );
     }
+
+    private function current_score_action()
+    {
+        $score = $this->webhook->user->getCurrentScore();
+
+        return $this->buildSimpleTextResponseData("Your current score is $score");
+    }
+
+    public function set_score_goal_action()
+    {
+        $score = $this->webhook->findParameter('score');
+        $this->webhook->user->setDailyScoreGoal((int) $score);
+        $this->webhook->user->update();
+
+        return $this->buildSimpleTextResponseData("Your goal score is now $score");
+    }
+
+    private function score_progress_action()
+    {
+        $progress = $this->webhook->user->currentProgress();
+        return $this->buildSimpleTextResponseData("You achieve $progress% !");
+    }
+
+    private function show_daily_score_action()
+    {
+        $score = $this->webhook->user->daily_score_goal;
+        return $this->buildSimpleTextResponseData("Your current score intent is $score");
+    }
+
+
 }
