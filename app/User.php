@@ -11,6 +11,7 @@ use Jenssegers\Mongodb\Relations\HasMany;
  * @property string email
  * @property bool admin
  * @property mixed id
+ * @property mixed timezone
  */
 class User extends \Jenssegers\Mongodb\Auth\User
 {
