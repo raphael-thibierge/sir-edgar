@@ -9,6 +9,7 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
 
 /**
  * @property json request
+ * @property User user
  */
 class DialogflowWebhook extends Model
 {
