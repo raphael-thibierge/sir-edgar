@@ -96,9 +96,7 @@ class GoalController extends Controller
     public function updateDetails(Request $request, $id)
     {
 
-
         $updates = [];
-
 
         if (($due_date = $request->get('due_date')) !== null){
             $updates ['due_date'] = new Carbon($due_date);

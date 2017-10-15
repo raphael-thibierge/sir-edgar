@@ -49,10 +49,10 @@ Route::get('/botman/confirm', 'BotManController@showConfirm')->middleware('botma
 
 
 
-Route::post('/dialogflow/webhook', 'DialogflowController@dialogflow')->middleware('botman')->name('doalogflow');
-Route::get('/dialogflow/messenger/{senderId}/authorize', 'DialogflowController@messengerAuthorizePost')->name('dialogflow.authorize.messenger.post');
+Route::post('/dialogflow/webhook', 'BotController@dialogflow')->middleware('botman')->name('doalogflow');
+Route::get('/dialogflow/messenger/{senderId}/authorize', 'BotController@messengerAuthorizePost')->name('dialogflow.authorize.messenger.post');
 
 
-Route::get('/dialogflow/webhooks', 'DialogflowController@index')->name('dailogflow.webhooks.index');
-Route::get('/dialogflow/webhooks{webhook}/', 'DialogflowController@show')->name('dailogflow.webhooks.show');
+Route::get('/bot/requests', 'BotController@index')->name('dailogflow.webhooks.index');
+Route::get('/bot/requests/{botMessage}/', 'BotController@show')->name('dailogflow.webhooks.show');
 //Route::get('/dialogflow/webhooks/{webhook}', 'DialogflowController@show')->name('dailogflow.webhooks.show');

@@ -10,23 +10,25 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
 /**
  * @property json request
  * @property User user
+ * @property array response
  */
-class DialogflowWebhook extends Model
+class BotMessage extends Model
 {
     protected $collection = 'dialogflow_webhooks';
 
     protected $primaryKey = '_id';
 
-    protected $fillable = ['request', 'user_id'];
+    protected $fillable = ['request', 'user_id', 'response'];
 
 
-    public static function createFromRequest(Request $request): DialogflowWebhook{
 
-        $webhook = DialogflowWebhook::create([
+    public static function createFromRequest(Request $request): BotMessage{
+
+        $message = BotMessage::create([
             'request' => $request->toArray()
         ]);
 
-        $senderId = $webhook->getSender()['id'];
+        $senderId = $message->getSender()['id'];
 
         $user = User::where('facebook_sending_id', $senderId)->first();
 
@@ -36,9 +38,9 @@ class DialogflowWebhook extends Model
             ]);
         }
 
-        $webhook->user()->associate($user);
+        $message->user()->associate($user);
 
-        return $webhook;
+        return $message;
     }
 
     /**
@@ -68,12 +70,32 @@ class DialogflowWebhook extends Model
         return $this->getResult()['action'];
     }
 
-    public function findParameter(string $parameter) {
+    public function getParameter(string $parameter) {
         if (isset($this->getResult()['parameters'][$parameter])){
             return $this->getResult()['parameters'][$parameter];
         } else {
             return null;
         }
+    }
+
+    public function buildTextResponse(string $text){
+        $this->response = [
+            'speech' => $text,
+            'displayText' => $text,
+        ];
+    }
+
+    public function buildEventResponse(string $event, array $parameters = []){
+        $this->response = $parameters === [] ? [
+            "followupEvent" => [
+                "name" => $event,
+            ]
+        ] : [
+            "followupEvent" => [
+                "name" => $event,
+                "data" => $parameters
+            ]
+        ];
     }
 
 }
