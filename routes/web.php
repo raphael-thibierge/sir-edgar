@@ -46,3 +46,13 @@ Route::match(['get', 'post'], '/botman/authorize', 'BotManController@showMesseng
 Route::post('/botman/authorize', 'BotManController@authorizePost')->middleware('botman')->name('botman.authorize.post');
 Route::post('/botman/confirm', 'BotManController@confirm')->middleware('botman')->name('botman.confirm');
 Route::get('/botman/confirm', 'BotManController@showConfirm')->middleware('botman')->name('botman.confirm.show');
+
+
+
+Route::post('/dialogflow/webhook', 'BotController@dialogflow')->middleware('botman')->name('doalogflow');
+Route::get('/dialogflow/messenger/{senderId}/authorize', 'BotController@messengerAuthorizePost')->name('dialogflow.authorize.messenger.post');
+
+
+Route::get('/bot/requests', 'BotController@index')->name('dailogflow.webhooks.index');
+Route::get('/bot/requests/{botMessage}/', 'BotController@show')->name('dailogflow.webhooks.show');
+//Route::get('/dialogflow/webhooks/{webhook}', 'DialogflowController@show')->name('dailogflow.webhooks.show');

@@ -82,7 +82,8 @@ class UserController extends Controller
 
         $user = Auth::user();
 
-        $user->update(['daily_score_goal' => $request->get('daily_score_goal')]);
+        $user->setDailyScoreGoal((int)$request->get('daily_score_goal'));
+        $user->update();
 
         return $this->successResponse();
     }

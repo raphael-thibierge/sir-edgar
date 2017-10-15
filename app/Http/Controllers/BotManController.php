@@ -519,6 +519,10 @@ class BotManController extends Controller
 
         $user = Auth::user();
 
+        if ($request->session()->has('messenger_sender_id')){
+            $user->update(['facebook_sending_id' => $request->session()->get('messenger_sender_id') ]);
+        }
+
         return Redirect::to($request->get('redirect_uri') . '&authorization_code=' . $user->id);
     }
 

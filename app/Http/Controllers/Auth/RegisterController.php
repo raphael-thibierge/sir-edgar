@@ -68,15 +68,10 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $userRegistered = User::create([
+        $userRegistered = User::newUser([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'admin' => false,
-            'daily_score_goal' => 5,
-            'timezone' => 'Europe/Paris',
-            'email_daily_report' => false,
-            'email_weekly_report' => false,
         ]);
 
         Mail::to(User::where('admin', true)->first())

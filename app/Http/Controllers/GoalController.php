@@ -96,9 +96,7 @@ class GoalController extends Controller
     public function updateDetails(Request $request, $id)
     {
 
-
         $updates = [];
-
 
         if (($due_date = $request->get('due_date')) !== null){
             $updates ['due_date'] = new Carbon($due_date);
@@ -213,19 +211,7 @@ class GoalController extends Controller
     }
 
 
-    public function todayScore(){
 
-        $user = Auth::user();
-
-        $score = $user->goals()
-            ->where('completed_at', '>=', Carbon::yesterday($user->timezone))
-            ->select('score')->get()
-            ->sum('score');
-
-        return $this->successResponse([
-            'score' => $score
-        ]);
-    }
 
     public function reComplete(Goal $goal){
 
@@ -268,13 +254,25 @@ class GoalController extends Controller
     public function currentScore(){
         $user = Auth::user();
 
-        $date = Carbon::today($user->timezone);
-
-        $score = $user->goals()->where('completed_at', '>=', $date)->sum('score');
+        $score = $user->getCurrentScore();
 
         return $this->successResponse([
             'score' => $score,
             'daily_score_goal' => $user->daily_score_goal,
+        ]);
+    }
+
+    public function todayScore(){
+
+        $user = Auth::user();
+
+        $score = $user->goals()
+            ->where('completed_at', '>=', Carbon::yesterday($user->timezone))
+            ->select('score')->get()
+            ->sum('score');
+
+        return $this->successResponse([
+            'score' => $score
         ]);
     }
 

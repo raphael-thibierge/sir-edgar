@@ -75,7 +75,7 @@ const ScoreGoal = React.createClass({
             <div>
                 <div className="row">
                     <div className="col-xs-6 col-xs-offset-6 text-right">
-                        <small style={{marginRight: 5}}>Score goal : </small>
+                        <small style={{marginRight: 5}}>Score intent : </small>
                         <span>
 
                         <AjaxEditableValue
