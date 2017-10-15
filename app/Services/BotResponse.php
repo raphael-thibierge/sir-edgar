@@ -9,6 +9,7 @@
 namespace App\Services;
 
 use App\BotMessage;
+use App\FinancialTransaction;
 use App\Goal;
 use Illuminate\Support\Collection;
 
@@ -73,6 +74,11 @@ class BotResponse
      */
     public static function fallback_response(BotMessage &$botMessage){
         $botMessage->buildTextResponse("Sorry i don't understand...");
+    }
+
+    public static function display_expense_response(FinancialTransaction $expense, BotMessage &$botMessage)
+    {
+        $botMessage->buildTextResponse("New expense \"$expense->title\" of $expense->price $expense->currency saved");
     }
 
 }

@@ -21,8 +21,8 @@
                     <td><a href="{{ route('dailogflow.webhooks.show', ['webhook' => $webhook]) }}">{{ $webhook->id }}</a></td>
                     <td>{{ $webhook->getSource() }}</td>
                     <td>{{ $webhook->getAction() }}</td>
-                    <td>{{ $webhook->user->id }}</td>
-                    <td>{{ $webhook->user->email }}</td>
+                    <td>{{ $webhook->user !== null ? $webhook->user->id : ''}}</td>
+                    <td>{{ $webhook->user !== null ? $webhook->user->email : ''}}</td>
                     <td>{{ $webhook->created_at }}</td>
                 </tr>
             @endforeach

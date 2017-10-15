@@ -112,10 +112,10 @@ class BotController extends Controller
         $senderId = $this->botMessage->getSender()['id'];
 
         if ($this->userInDB !== null){
-            return $this->buildSimpleTextResponseData('Your account is already linked.');
+            $this->botMessage->buildTextResponse('Your account is already linked.');
         }
 
-        return $this->buildEventResponse('send_login', [
+        $this->botMessage->buildEventResponse('send_login', [
             'url' => route('dialogflow.authorize.messenger.post', [
                 'senderId' => $senderId
             ])
@@ -165,16 +165,16 @@ class BotController extends Controller
 
                     // todo
                 case 'ask_login_action':
-                    $responseData = $this->ask_login_action();
+                    $this->ask_login_action();
                     break;
                 // todo
                 case 'ask_logout_action':
                     $this->getUserFromFacebook();
                     if ($this->userInDB !== null) {
                         $this->userInDB->update(['facebook_sending_id' => null]);
-                        $responseData = $this->buildEventResponse('logout_event');
+                        $this->botMessage->buildEventResponse('logout_event');
                     } else {
-                        $responseData = $this->simpleTextResponse('Your messenger account is not linked');
+                        $this->botMessage->buildTextResponse('Your messenger account is not linked');
                     }
                     break;
 
@@ -222,6 +222,16 @@ class BotController extends Controller
                 case 'find_goal_action':
                     BotActions::goal_find_action($this->botMessage);
                     break;
+
+                case 'expense_create_action':
+                    BotActions::expense_create_action($this->botMessage);
+                    break;
+
+                case 'expense_total_action':
+                    BotActions::expense_total_action($this->botMessage);
+                    break;
+
+
 
                 default:
                     BotResponse::fallback_response($this->botMessage);

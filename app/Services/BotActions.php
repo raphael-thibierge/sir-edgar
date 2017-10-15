@@ -11,8 +11,13 @@ namespace App\Services;
 use App\BotMessage;
 use App\Exceptions\GoalNameNotFound;
 use App\Exceptions\ProjectNameNotFound;
+use App\FinancialTransaction;
 use Carbon\Carbon;
 
+/**
+ * Class BotActions
+ * @package App\Services
+ */
 class BotActions
 {
 
@@ -47,7 +52,6 @@ class BotActions
         }
         return $goals;
     }
-
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      *                                                               *
@@ -170,6 +174,15 @@ class BotActions
     public static function project_create_action(BotMessage &$botMessage)
     {
         // get parameter
+        try {
+            self::searchProjectsByNameFromMessage($botMessage);
+            $botMessage->buildTextResponse("You already have a project with this name");
+            return;
+
+        } catch (ProjectNameNotFound $exception){
+
+        }
+
         $projectTitle = $botMessage->getParameter('project');
         // create project
         $project = $botMessage->user->projects()->create([
@@ -236,5 +249,45 @@ class BotActions
     {
         $progress = $botMessage->user->currentProgress();
         $botMessage->buildTextResponse("You achieve $progress% !");
+    }
+
+    public static function expense_create_action(BotMessage &$botMessage)
+    {
+        $expense = $botMessage->getParameter('expense');
+        $unitCurrency = $botMessage->getParameter('unit-currency');
+
+        $expense = $botMessage->user->financialTransactions()->create([
+            'title'     => $expense,
+            'currency'  => strtoupper($unitCurrency['currency']),
+            'price'     => (float)$unitCurrency['amount'],
+            'type'      => FinancialTransaction::EXPENSE
+        ]);
+
+        BotResponse::display_expense_response($expense, $botMessage);
+    }
+
+    public static function expense_total_action(BotMessage &$botMessage)
+    {
+        if (($datePeriod = $botMessage->getParameter('date-period')) !== null){
+            $datePeriod = explode('/', $datePeriod);
+            $startDate = (new Carbon($datePeriod[0], $botMessage->user->timezone))->startOfDay();
+            $stopDate = (new Carbon($datePeriod[1], $botMessage->user->timezone))->startOfDay()->addDay(1);
+        } else if (($date = $botMessage->getParameter('date')) !== null){
+            $startDate = (new Carbon($date, $botMessage->user->timezone))->startOfDay();
+            $stopDate = (new Carbon($startDate, $botMessage->user->timezone))->startOfDay()->addDay(1);
+        } else {
+            $startDate = new Carbon('1970/01/01');
+            $stopDate = Carbon::tomorrow($botMessage->user->timezone);
+        }
+
+        $stopDate->addDay(1);
+
+        $total = $botMessage->user->financialTransactions()
+            ->where('type', FinancialTransaction::EXPENSE)
+            ->where('created_at', '>=', $startDate)
+            ->where('created_at', '<', $stopDate)
+            ->sum('price');
+
+        $botMessage->buildTextResponse("You spent $total of your usual devise");
     }
 }
