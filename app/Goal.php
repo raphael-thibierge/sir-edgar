@@ -19,6 +19,9 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  */
 class Goal extends Model
 {
+    const TYPE_NOTE = 'note';
+    const TYPE_REMINDER = 'reminder';
+    
     /**
      * Mongo collection
      * @var string
@@ -44,7 +47,7 @@ class Goal extends Model
         'project_id',
         'completed_at',
         'today', // --> must be achieved today
-
+        'type',
         'start_time_tracker',
         'end_time_tracker',
         'due_date',
