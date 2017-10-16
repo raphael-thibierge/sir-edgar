@@ -238,7 +238,9 @@ class BotController extends Controller
                     break;
             }
         } catch (ProjectNameNotFound $exception){
-            $this->botMessage->buildTextResponse($exception->getNiceMessage());
+            $this->botMessage->buildTextResponse($exception->getNiceMessage()
+                . " I think it not exists, check it by asking me your project list or create it :)"
+            );
         } catch (GoalNameNotFound $exception){
             $this->botMessage->buildTextResponse($exception->getNiceMessage());
         }
@@ -248,18 +250,6 @@ class BotController extends Controller
         return response()->json($this->botMessage->response);
     }
 
-    private function buildEventResponse(string $event, array $parameters = []){
-        return $parameters === [] ? [
-            "followupEvent" => [
-                "name" => $event,
-            ]
-        ] : [
-            "followupEvent" => [
-                "name" => $event,
-                "data" => $parameters
-            ]
-        ];
-    }
 
     public function messengerAuthorizePost(Request $request, string $senderId){
         if ($request->has('redirect_uri') && $request->has('account_linking_token')){

@@ -111,6 +111,23 @@ class BotActions
             $goalParameters['due_date'] = new Carbon($due_date, $botMessage->user->timezone);
         }
 
+        if (($time = $botMessage->getParameter(('time'))) !== null){
+
+            if (!isset($goalParameters['due_date'])){
+                $goalParameters['due_date'] = Carbon::today($botMessage->user->timezone);
+            }
+
+            event(new PusherDebugEvent([
+                'before' => $goalParameters['due_date'],
+            ]));
+            $goalParameters['due_date'] = $goalParameters['due_date']->setTimeFromTimeString($time);
+            event(new PusherDebugEvent([
+                'after' => $goalParameters['due_date'],
+            ]));
+        }
+
+
+
         if (($notes = $botMessage->getParameter(('notes'))) !== null){
             $goalParameters['notes'] = $notes;
         }
