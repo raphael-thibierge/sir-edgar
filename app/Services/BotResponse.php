@@ -9,8 +9,10 @@
 namespace App\Services;
 
 use App\BotMessage;
+use App\Events\PusherDebugEvent;
 use App\FinancialTransaction;
 use App\Goal;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class BotResponse
@@ -24,11 +26,34 @@ class BotResponse
      */
     public static function display_goal_response(Goal $goal, BotMessage &$botMessage)
     {
-        $botMessage->buildEventResponse('show_goal', [
-            'title' => $goal->title,
-            'score' => $goal->score,
-            'project' => $goal->project->title
-        ]);
+
+        if ($goal->type === Goal::TYPE_NOTE){
+            $botMessage->buildTextResponse(
+                $goal->title . "\r\n" .
+                    $goal->notes
+            );
+        } else if ($goal->type === Goal::TYPE_REMINDER){
+            $dueDate = '';
+            if ($goal->due_date !== null){
+                $date = new Carbon($goal->due_date);
+                $date->tz = $botMessage->user->timezone;
+                $dueDate = $date . '';
+            }
+
+            $botMessage->buildTextResponse(
+                $goal->title . " at " . $dueDate
+            );
+        }
+
+        else {
+            $botMessage->buildEventResponse('show_goal', [
+                'title' => $goal->title,
+                'score' => $goal->score,
+                'project' => $goal->project->title
+            ]);
+
+        }
+
     }
 
     /**
@@ -39,9 +64,17 @@ class BotResponse
      */
     public static function display_goal_list_response(Collection $goals, BotMessage &$botMessage){
         $goalList = [];
-        $goals->each(function (Goal $goal, $key) use(&$goalList)
+        $goals->each(function (Goal $goal, $key) use(&$goalList, $botMessage)
         {
-            $goalList []= "- $goal->title ($goal->score)";
+            $dueDate = '';
+            if ($goal->due_date !== null){
+                $date = new Carbon($goal->due_date);
+                $date->tz = $botMessage->user->timezone;
+                $dueDate = ' at ' . $date;
+            }
+
+            $goalList []= "- $goal->title ($goal->score)"
+                . $dueDate;
         });
 
         $text = !empty($goalList) ? implode("\r\n", $goalList) : "No goal found";

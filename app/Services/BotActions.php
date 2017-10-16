@@ -208,7 +208,7 @@ class BotActions
         // find project
         $project = self::searchProjectsByNameFromMessage($botMessage)->first();
         // get project's content
-        $goals = $project->goals()->select(['title', 'score', 'completed_at'])->whereNull('completed_at')->get();
+        $goals = $project->goals()->whereNull('completed_at')->get();
         // build response
         BotResponse::display_goal_list_response($goals, $botMessage);
     }
