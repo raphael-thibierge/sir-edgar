@@ -19,9 +19,11 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  */
 class Goal extends Model
 {
+    const TYPE_GOAL = 'goal';
     const TYPE_NOTE = 'note';
     const TYPE_REMINDER = 'reminder';
-    
+    const TYPE_DEFAULT = Goal::TYPE_GOAL;
+
     /**
      * Mongo collection
      * @var string

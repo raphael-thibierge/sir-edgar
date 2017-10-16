@@ -9,9 +9,11 @@
 namespace App\Services;
 
 use App\BotMessage;
+use App\Events\PusherDebugEvent;
 use App\Exceptions\GoalNameNotFound;
 use App\Exceptions\ProjectNameNotFound;
 use App\FinancialTransaction;
+use App\Goal;
 use Carbon\Carbon;
 
 /**
@@ -68,15 +70,54 @@ class BotActions
     public static function goal_create_action(BotMessage &$botMessage)
     {
         // get parameters
-        $goalTitle = $botMessage->getParameter('goal');
         $goalScore = (int)$botMessage->getParameter('score');
+        $goalType = $botMessage->getParameter('type');
 
-        // create goal
-        $goal = self::searchProjectsByNameFromMessage($botMessage)->first()->goals()->create([
+        event(new PusherDebugEvent([
+            'type' => $goalType,
+        ]));
+
+        // prevent null type
+        if ($goalType === null){
+            $goalType = Goal::TYPE_DEFAULT;
+            $goalTitle = $botMessage->getParameter('goal');
+            $project = self::searchProjectsByNameFromMessage($botMessage)->first();
+        } else {
+            $projectTitle = $goalType . 's';
+            $goalTitle = $botMessage->getParameter('title');
+
+            // find or create project of this type of goal
+            $project = $botMessage->user->projects()->where('title', $projectTitle)->first();
+            if ($project === null){
+                $project = $botMessage->user->projects()->create([
+                    'title' => $projectTitle
+                ]);
+            }
+        }
+
+        event(new PusherDebugEvent([
+            'project' => $project,
+            'type' => $goalType,
+        ]));
+
+        $goalParameters = [
             'user_id'   => $botMessage->user->id,
             'title'     => $goalTitle,
-            'score'     => $goalScore
-        ]);
+            'score'     => $goalScore,
+            'type'      => $goalType,
+        ];
+
+        if (($due_date = $botMessage->getParameter(('due_date'))) !== null){
+            $goalParameters['due_date'] = new Carbon($due_date, $botMessage->user->timezone);
+        }
+
+        if (($notes = $botMessage->getParameter(('notes'))) !== null){
+            $goalParameters['notes'] = $notes;
+        }
+
+
+        // create goal
+        $goal = $project->goals()->create($goalParameters);
 
         // build response
         BotResponse::display_goal_response($goal, $botMessage);
