@@ -174,7 +174,9 @@ class BotActions
      */
     public static function important_goals_action(BotMessage $botMessage)
     {
-        $goals = $botMessage->user->goals()->where('today', true)->get();
+        $goals = $botMessage->user->goals()
+            ->whereNull('completed_at')
+            ->where('today', true)->get();
         BotResponse::display_goal_list_response($goals, $botMessage);
     }
 
