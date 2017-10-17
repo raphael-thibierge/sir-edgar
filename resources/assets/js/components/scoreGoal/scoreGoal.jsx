@@ -74,7 +74,10 @@ const ScoreGoal = React.createClass({
         return (
             <div>
                 <div className="row">
-                    <div className="col-xs-6 col-xs-offset-6 text-right">
+                    <div className="col-xs-6">
+                        <small style={{marginLeft: 5}}>Score score : {this.state.score}</small>
+                    </div>
+                    <div className="col-xs-6 text-right">
                         <small style={{marginRight: 5}}>Score intent : </small>
                         <span>
 
