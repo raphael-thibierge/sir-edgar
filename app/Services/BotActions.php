@@ -73,10 +73,6 @@ class BotActions
         $goalScore = (int)$botMessage->getParameter('score');
         $goalType = $botMessage->getParameter('type');
 
-        event(new PusherDebugEvent([
-            'type' => $goalType,
-        ]));
-
         // prevent null type
         if ($goalType === null){
             $goalType = Goal::TYPE_DEFAULT;
@@ -95,11 +91,6 @@ class BotActions
             }
         }
 
-        event(new PusherDebugEvent([
-            'project' => $project,
-            'type' => $goalType,
-        ]));
-
         $goalParameters = [
             'user_id'   => $botMessage->user->id,
             'title'     => $goalTitle,
@@ -117,13 +108,7 @@ class BotActions
                 $goalParameters['due_date'] = Carbon::today($botMessage->user->timezone);
             }
 
-            event(new PusherDebugEvent([
-                'before' => $goalParameters['due_date'],
-            ]));
             $goalParameters['due_date'] = $goalParameters['due_date']->setTimeFromTimeString($time);
-            event(new PusherDebugEvent([
-                'after' => $goalParameters['due_date'],
-            ]));
         }
 
 
