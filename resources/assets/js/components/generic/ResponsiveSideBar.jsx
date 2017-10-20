@@ -1,7 +1,4 @@
 const React = require('react');
-const FormControl = require('react-bootstrap').FormControl;
-const Button = require('react-bootstrap').Button;
-const Glyphicon = require('react-bootstrap').Glyphicon;
 
 const PropTypes = require('prop-types');
 const SideNav = require('react-sidenav').SideNav;

@@ -1,7 +1,7 @@
 const React = require('react');
-const FormControl = require('react-bootstrap').FormControl;
-const Button = require('react-bootstrap').Button;
-const Glyphicon = require('react-bootstrap').Glyphicon;
+const Input = require('reactstrap').Input;
+const Button = require('reactstrap').Button;
+const Form = require('reactstrap').Form;
 
 const PropTypes = require('prop-types');
 
@@ -76,9 +76,10 @@ const AjaxEditableValue = React.createClass({
     editModeRender: function () {
         return (
             <div style={{marginBottom: '10px'}}>
+                <Form inline>
 
-                <div className="col-xs-10">
-                    <FormControl
+                <div className="col-sm-10">
+                    <Input
                         type={this.props.type}
                         value={this.state.value}
                         placeholder=""
@@ -87,12 +88,13 @@ const AjaxEditableValue = React.createClass({
                     />
                 </div>
 
-                <div className="col-xs-1">
+                <div className="col-sm-1">
 
-                    <Button bsSize="sm" bsStyle="success" onClick={this.validate}>
-                        <Glyphicon glyph="ok"/>
+                    <Button size="sm" color="success" onClick={this.validate}>
+                        OK
                     </Button>
                 </div>
+                </Form>
             </div>
         );
     },
@@ -108,7 +110,7 @@ const AjaxEditableValue = React.createClass({
     displayModeRender: function () {
 
         return (
-            <a onClick={this.setEditMode} style={{cursor: 'pointer'}}>
+            <a onClick={this.setEditMode}>
                 <span className={this.props.classNameLink} style={this.props.style}>
                     <strong>
                         {this.props.value}

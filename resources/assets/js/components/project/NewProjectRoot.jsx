@@ -1,9 +1,8 @@
 const React = require('react');
 const PropTypes = require('prop-types').PropTypes;
-const FormGroup = require('react-bootstrap').FormGroup;
-const FormControl = require('react-bootstrap').FormControl;
-const Button = require('react-bootstrap').Button;
-const Glyphicon = require('react-bootstrap').Glyphicon;
+const FormGroup = require('reactstrap').FormGroup;
+const Input = require('reactstrap').Input;
+const Button = require('reactstrap').Button;
 
 
 const NewProjectRoot = React.createClass({
@@ -42,13 +41,11 @@ const NewProjectRoot = React.createClass({
                         <div>
 
                             <div className="alert alert-info">
-                                <Glyphicon glyph="info-sign"/>
                                 <strong> Welcome ! </strong>
                                 You don't have any project yet !
                                 Create your first one to add goal inside and start completing them !
                             </div>
                             <div className="alert alert-warning">
-                                <Glyphicon glyph="info-sign"/>
                                 <strong> Wait ! </strong>
                                 A project is not a goal or task, and can't be completed ! It's a container, like a list.
                             </div>
@@ -60,7 +57,7 @@ const NewProjectRoot = React.createClass({
                         controlId="formBasicText"
                     >
                         <div className="col-xs-11">
-                            <FormControl
+                            <Input
                                 type="text"
                                 value={this.state.newProjectTitle}
                                 placeholder="Project title"
@@ -70,10 +67,10 @@ const NewProjectRoot = React.createClass({
                         </div>
                         <div className="col-xs-1">
 
-                        <Button bsSize="sm" bsStyle="success"
+                        <Button size="sm" color="success"
                                 onClick={this.onClick}
                         >
-                            <Glyphicon glyph="ok"/>
+                            OK
                         </Button>
                     </div>
                 </FormGroup>

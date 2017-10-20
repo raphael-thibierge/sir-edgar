@@ -1,7 +1,6 @@
 const React = require('react');
 const Chart = require('react-google-charts').Chart;
 const PropTypes = require('prop-types').PropTypes;
-const Glyphicon = require('react-bootstrap').Glyphicon;
 const GoalsGraph = React.createClass({
 
 
@@ -170,9 +169,8 @@ const GoalsGraph = React.createClass({
         if (this.props.projectCurrentNumber === 0 ){
             return (
                 <div className="row">
-                    <div className="col-xs-12">
+                    <div className="col-sm-12">
                         <div className="alert alert-info">
-                            <Glyphicon glyph="info-sign "/>
                             <strong> Statistics ! </strong>
                             <span>
                                 After creating your first project and compete your first goal,
@@ -207,10 +205,10 @@ const GoalsGraph = React.createClass({
 
         return (
             <div className="row">
-                <div className="col-xs-12">
+                <div className="col-sm-12">
                     <h1>Completed goals stats</h1>
                 </div>
-                <div className="col-xs-12">
+                <div className="col-sm-12">
                     <Chart
                         chartType="ColumnChart"
                         data={this.state.data}

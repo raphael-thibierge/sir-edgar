@@ -1,11 +1,12 @@
 const React = require('react');
-const FormControl = require('react-bootstrap').FormControl;
-const FormGroup = require('react-bootstrap').FormGroup;
-const ControlLabel = require('react-bootstrap').ControlLabel;
-const HelpBlock = require('react-bootstrap').HelpBlock;
-const Button = require('react-bootstrap').Button;
-const Modal = require('react-bootstrap').Modal;
-const Glyphicon = require('react-bootstrap').Glyphicon;
+const Input = require('reactstrap').Input;
+const FormGroup = require('reactstrap').FormGroup;
+const Label = require('reactstrap').Label;
+const Button = require('reactstrap').Button;
+const Modal = require('reactstrap').Modal;
+const ModalHeader = require('reactstrap').ModalHeader;
+const ModalBody = require('reactstrap').ModalBody;
+const ModalFooter = require('reactstrap').ModalFooter;
 const DayPicker = require('react-day-picker');
 const DateUtils = require('react-day-picker').DateUtils;
 
@@ -105,25 +106,24 @@ const GoalsDetailsModal = React.createClass({
 
         return (
             <span className="text-left" style={{marginLeft : '5px', marginRight:'10px'}} >
-            <Button bsStyle="default" bsSize="xs" onClick={()=>{this.setState({ display: true })}}>
-                <Glyphicon glyph="cog"/>
+            <Button color="default" size="sm" onClick={()=>{this.setState({ display: true })}}>
+                D
             </Button>
             <Modal
+                size="lg"
                 aria-labelledby="contained-modal-title-lg"
-                show={this.state.display}
-                onHide={()=> {this.setState({display: false})}}
+                isOpen={this.state.display}
+                toggle={()=> {this.setState({display: !this.state.display})}}
             >
-                <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-lg">
-                        <strong>
-                            {this.props.goal.title}
-                        </strong>
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+                <ModalHeader toggle={()=> {this.setState({display: !this.state.display})}}>
+                    <strong>
+                        {this.props.goal.title}
+                    </strong>
+                </ModalHeader>
+                <ModalBody>
 
                     <FormGroup>
-                        <ControlLabel>Due Date</ControlLabel><br/>
+                        <Label>Due Date</Label><br/>
                         <DayPicker
                             selectedDays={[this.state.due_date]}
                             onDayClick={(day) => {this.setState({due_date: day})}}
@@ -134,8 +134,8 @@ const GoalsDetailsModal = React.createClass({
                     </FormGroup>
 
                     <FormGroup>
-                        <ControlLabel>Estimed time (min) to complete goal</ControlLabel>
-                        <FormControl
+                        <Label>Estimed time (min) to complete goal</Label>
+                        <Input
                             componentClass='input'
                             type="number"
                             min={0}
@@ -147,8 +147,8 @@ const GoalsDetailsModal = React.createClass({
                     </FormGroup>
 
                     <FormGroup>
-                        <ControlLabel>Time (min) spent to complete goal</ControlLabel>
-                        <FormControl
+                        <Label>Time (min) spent to complete goal</Label>
+                        <Input
                             componentClass='input'
                             type="number"
                             min={0}
@@ -160,8 +160,8 @@ const GoalsDetailsModal = React.createClass({
                     </FormGroup>
 
                      <FormGroup>
-                        <ControlLabel>Priority</ControlLabel>
-                        <FormControl
+                        <Label>Priority</Label>
+                        <Input
                             componentClass='input'
                             type="number"
                             value={this.state.priority}
@@ -174,8 +174,8 @@ const GoalsDetailsModal = React.createClass({
                     </FormGroup>
 
                     <FormGroup>
-                        <ControlLabel>Notes</ControlLabel>
-                        <FormControl
+                        <Label>Notes</Label>
+                        <Input
                             componentClass="textarea"
                             placeholder="textarea"
                             onChange={(e) => {this.setState({ notes: e.target.value })}}
@@ -184,11 +184,11 @@ const GoalsDetailsModal = React.createClass({
                     </FormGroup>
 
 
-                </Modal.Body>
-                <Modal.Footer>
+                </ModalBody>
+                <ModalFooter>
                     <Button onClick={()=> {this.setState({display: false})}}>Cancel</Button>
-                    <Button bsStyle="success" onClick={this.onSave}>Save</Button>
-                </Modal.Footer>
+                    <Button color="success" onClick={this.onSave}>Save</Button>
+                </ModalFooter>
             </Modal>
             </span>
         )

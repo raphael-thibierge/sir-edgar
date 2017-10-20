@@ -1,5 +1,5 @@
 const React = require('react');
-const ProgressBar = require('react-bootstrap').ProgressBar;
+const Progress = require('reactstrap').Progress;
 const AjaxEditableValue = require('../generic/AjaxEditableValue.jsx');
 
 const ScoreGoal = React.createClass({
@@ -74,10 +74,10 @@ const ScoreGoal = React.createClass({
         return (
             <div>
                 <div className="row">
-                    <div className="col-xs-6">
+                    <div className="col-sm-6">
                         <small style={{marginLeft: 5}}>Score score : {this.state.score}</small>
                     </div>
-                    <div className="col-xs-6 text-right">
+                    <div className="col-sm-6 text-right">
                         <small style={{marginRight: 5}}>Score intent : </small>
                         <span>
 
@@ -94,8 +94,10 @@ const ScoreGoal = React.createClass({
                 </div>
 
                 <div className="row">
-                    <div className="col-xs-12">
-                        <ProgressBar now={barValue} bsStyle={color} label={`${progressValue}%`}/>
+                    <div className="col-sm-12">
+                        <Progress value={barValue} color={color}>
+                            {progressValue}%
+                        </Progress>
                     </div>
                 </div>
             </div>

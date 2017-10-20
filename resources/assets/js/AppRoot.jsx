@@ -1,5 +1,4 @@
 import React from 'react';
-import {Image} from 'react-bootstrap';
 import Echo from "laravel-echo";
 
 window.pusher = require('pusher-js');
@@ -60,8 +59,8 @@ export default class AppRoot extends React.Component {
         if (this.state.loaded === false && this.state.user === null){
             return (
                 <div className="row">
-                    <div className="col-xs-12">
-                        <Image src="/images/logo.png" rounded circle responsive thumbnail/>
+                    <div className="col-sm-12">
+                        <img src="/images/logo.png" alt="Sir-Edgar logo" className="rounded img-circle rounded-circle"/>
                     </div>
                 </div>
             );

@@ -1,12 +1,12 @@
 const React = require('react');
-const FormGroup = require('react-bootstrap').FormGroup;
-const FormControl = require('react-bootstrap').FormControl;
-const HelpBlock = require('react-bootstrap').HelpBlock;
-const ListGroupItem = require('react-bootstrap').ListGroupItem;
-const Button = require('react-bootstrap').Button;
-const Badge = require('react-bootstrap').Badge;
-const Glyphicon = require('react-bootstrap').Glyphicon;
+const Form = require('reactstrap').Form;
+const FormGroup = require('reactstrap').FormGroup;
+const Input = require('reactstrap').Input;
+const ListGroupItem = require('reactstrap').ListGroupItem;
+const Button = require('reactstrap').Button;
+const Badge = require('reactstrap').Badge;
 const GoalDetailsModal = require('./GoalDetailsModal.jsx');
+var FontAwesome = require('react-fontawesome');
 
 /**
  *
@@ -139,11 +139,12 @@ const GoalInput = React.createClass({
     editModeRender: function () {
         return (
             <ListGroupItem key="input" style={{height: 57}}>
+                <Form inline>
                 <FormGroup
                     controlId="formBasicText"
                 >
-                    <div className="col-xs-8">
-                        <FormControl
+                    <div className="col-sm-8">
+                        <Input
                             type="text"
                             value={this.state.title}
                             placeholder="New goal"
@@ -151,9 +152,9 @@ const GoalInput = React.createClass({
                             onKeyPress={this.handleKeyPress}
                         />
                     </div>
-                    <div className="col-xs-3">
+                    <div className="col-sm-3">
 
-                        <FormControl
+                        <Input
                             type="number"
                             value={this.state.score}
                             min={0}
@@ -162,13 +163,14 @@ const GoalInput = React.createClass({
                             onKeyPress={this.handleKeyPress}
                         />
                     </div>
-                    <div className="col-xs-1">
+                    <div className="col-sm-1">
 
-                        <Button bsSize="sm" bsStyle="success" onClick={this.setDisplayMode}>
-                            <Glyphicon glyph="ok"/>
+                        <Button size="sm" color="success" onClick={this.setDisplayMode}>
+                            V
                         </Button>
                     </div>
                 </FormGroup>
+                </Form>
             </ListGroupItem>
         );
     },
@@ -264,30 +266,30 @@ const GoalInput = React.createClass({
 
 
         return (goal.is_completed === false) ? (
-            <ListGroupItem key={goal._id} bsStyle={goal.today === true ? 'warning' : 'default'}>
+            <ListGroupItem key={goal._id} color={goal.today === true ? 'warning' : 'default'}>
 
                 <span className="text-left">
                     <Button
                         onClick={typeof goal.remove === 'function' ? goal.remove: null}
-                        bsSize="xs"
-                        bsStyle="danger"
-                    ><Glyphicon glyph="trash"/></Button>
+                        size="sm"
+                        color="danger"
+                    >T<FontAwesome name="trash" /></Button>
                 </span>
 
                 <span className="text-left" style={{marginLeft : '5px'}}>
                     <Button
                         onClick={typeof goal.setCompleted === 'function' ? goal.setCompleted.bind(goal): null}
-                        bsSize="xs"
-                        bsStyle="success"
-                    ><Glyphicon glyph="ok"/></Button>
+                        size="sm"
+                        color="success"
+                    >C<FontAwesome name='check' /></Button>
                 </span>
 
                 <span className="text-left" style={{marginLeft : '5px'}}>
                     <Button
                         onClick={typeof goal.setToday === 'function' ? goal.setToday.bind(goal): null}
-                        bsSize="xs"
-                        bsStyle="warning"
-                    ><Glyphicon glyph="warning-sign"/></Button>
+                        size="sm"
+                        color="warning"
+                    >I<FontAwesome name="warning"/></Button>
                 </span>
 
                 <GoalDetailsModal goal={goal}/>
@@ -325,13 +327,13 @@ const GoalInput = React.createClass({
 
             </ListGroupItem>
         ) : (
-            <ListGroupItem key={goal._id} bsStyle="success">
+            <ListGroupItem key={goal._id} color="success">
                 <span className="text-left">
                     <Button
                         onClick={typeof goal.remove === 'function' ? goal.remove: null}
-                        bsSize="xs"
-                        bsStyle="danger"
-                    ><Glyphicon glyph="trash"/></Button>
+                        size="sm"
+                        color="danger"
+                    ><FontAwesome name="trash"/></Button>
                 </span>
 
                 <GoalDetailsModal goal={goal}/>

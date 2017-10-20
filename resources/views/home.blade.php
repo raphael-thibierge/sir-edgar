@@ -5,8 +5,8 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div id="app-root" class="col-xs-12">
-            <img src="/images/logo.png" alt="" class="img-responsive img-circle img-rounded img-thumbnail">
+        <div id="app-root" class="col-sm-12">
+            <img src="/images/logo.png" alt="" class="img-fluid rounded-circle rounded ">
         </div>
     </div>
 </div>

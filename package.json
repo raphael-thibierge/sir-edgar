@@ -27,9 +27,11 @@
     "react-bootstrap": "^0.31.1",
     "react-day-picker": "^6.1.0",
     "react-dom": "^15.6.1",
+    "react-fontawesome": "^1.6.1",
     "react-google-charts": "^1.5.5",
     "react-icons-kit": "^1.0.7",
     "react-redux": "^5.0.6",
-    "react-sidenav": "^2.1.2"
+    "react-sidenav": "^2.1.2",
+    "reactstrap": "^5.0.0-alpha.3"
   }
 }

@@ -1,12 +1,6 @@
 const GoalList = require("../goal/GoalList");
 
 const React = require('react');
-const Accordion = require('react-bootstrap').Accordion;
-const Button = require('react-bootstrap').Button;
-const Glyphicon = require('react-bootstrap').Glyphicon;
-const Collapse = require('react-bootstrap').Collapse;
-const FormGroup = require('react-bootstrap').FormGroup;
-const FormControl = require('react-bootstrap').FormControl;
 const ProjectRender = require('./ProjectRender.jsx');
 const Goal = require('../goal/Goal');
 const GoalsGraph = require('../goal/GoalsGraph.jsx');
@@ -336,7 +330,7 @@ const ProjectRoot = React.createClass({
             <div className="row">
 
 
-                <div className=" col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <div className="col-sm-4 col-md-3 col-lg-3">
                     <ResponsiveSideBar
                         projects={this.state.projects}
                         onItemSelection={(selected) => {this.setState({view: selected})}}
@@ -344,7 +338,7 @@ const ProjectRoot = React.createClass({
                     />
                 </div>
 
-                <div className="col-xs-12 col-sm-9">
+                <div className="col-sm-8 col-md-9">
 
                     <ScoreGoal/>
 

@@ -1,9 +1,4 @@
 const React = require('react');
-const Accordion = require('react-bootstrap').Accordion;
-const Panel = require('react-bootstrap').Panel;
-const ListGroup = require('react-bootstrap').ListGroup;
-const ListGroupItem = require('react-bootstrap').ListGroupItem;
-const Table = require('react-bootstrap').Table;
 const GoalList = require('../goal/GoalList.jsx');
 const AjaxEditableValue = require('../generic/AjaxEditableValue.jsx');
 const PropTypes = require('prop-types').PropTypes;
@@ -43,7 +38,7 @@ const ProjectRender = React.createClass({
 
         return (
             <div className="row">
-                <div className="col-xs-12">
+                <div className="col-sm-12">
                     <div className="page-heading">
                         <div className="h1">
                             {typeof project.routes !== "undefined" ?

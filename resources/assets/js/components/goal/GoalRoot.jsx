@@ -44,16 +44,16 @@ const GoalRoot = React.createClass({
      */
     render: function () {
         return (
-            <div className="row col-xs-12">
+            <div className="row col-sm-12">
                 <div className="row">
-                    <div className="col-xs-12">
+                    <div className="col-sm-12">
                         <GoalInput
                             onStoreSuccess={this.addToList}
                         />
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-xs-12">
+                    <div className="col-sm-12">
                         <GoalList
                             ref="goalList"
                             onGoalCompleted={this.onGoalCompleted}
@@ -62,7 +62,7 @@ const GoalRoot = React.createClass({
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-xs-12">
+                    <div className="col-sm-12">
                         <GoalsGraph
                             ref="goalGraph"
                         />

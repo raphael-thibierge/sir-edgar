@@ -1,9 +1,5 @@
 const React = require('react');
-const ListGroup = require('react-bootstrap').ListGroup;
-const ListGroupItem = require('react-bootstrap').ListGroupItem;
-const Button = require('react-bootstrap').Button;
-const Badge = require('react-bootstrap').Badge;
-const Glyphicon = require('react-bootstrap').Glyphicon;
+const ListGroup = require('reactstrap').ListGroup;
 const GoalInput = require('./GoalInput.jsx');
 /**
  * React component managing goal lists
@@ -124,7 +120,7 @@ const GoalList = React.createClass({
         return (
             <div>
                 <div className="row">
-                    <div className="col-xs-12">
+                    <div className="col-sm-12">
                         <ListGroup>
                             {todoList}
                         </ListGroup>
@@ -132,7 +128,7 @@ const GoalList = React.createClass({
                 </div>
                 {doneList !== null ? (
                     <div className="row">
-                        <div className="col-xs-12">
+                        <div className="col-sm-12">
                             <ListGroup>
                                 {doneList}
                             </ListGroup>
