@@ -62,22 +62,23 @@
                 <div class="title m-b-md">
                     {{ config('app.name') }}
                 </div>
-                <div class="col-md-8 col-md-offset-2">
-                <h3 class="text-center">
-                    Sir-Edgar aims to improve your personal productivity by adding all your goals with a score
-                    and helps you to complete your daily score goal !
-                </h3>
-                    <a href="{{ route('home') }}" class="btn btn-success">Get Started</a>
+                <div class="row">
+                    <div class="col-sm-10 offset-sm-1">
+                    <h3 class="text-center">
+                        Sir-Edgar aims to improve your personal productivity by adding all your goals with a score
+                        and helps you to complete your daily score goal !
+                    </h3>
+                        <br>
+                    <a href="{{ route('home') }}" class="btn btn-outline-success">Get Started</a>
+                </div>
                 </div>
             </div>
         </div>
                 <br>
-                <br>
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-sm-10 offset-sm-1">
             <div class="thumbnail">
                 <img src="{{ asset('images/screenshot.png') }}" alt="Sir Edgar dashboard screenshot" style="width: 100%">
             </div>
-
         </div>
     </div>
 
