@@ -13,7 +13,7 @@
             <div class="card">
                 <h4 class="card-header">Login</h4>
                 <div class="card-body">
-                    
+
                     <form role="form" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
 
@@ -24,12 +24,6 @@
                         <input type="hidden" name="account_linking_token" value="{{ $_REQUEST['account_linking_token'] }}">
                         @endif
 
-                        <div class="form-group row">
-                            <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
-                            <div class="col-sm-10">
-                                <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="email@example.com">
-                            </div>
-                        </div>
 
                         <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }} row ">
                             <label for="email" class="col-sm-2 form-control-label">Email</label>
