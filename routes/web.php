@@ -56,3 +56,6 @@ Route::get('/dialogflow/messenger/{senderId}/authorize', 'BotController@messenge
 Route::get('/bot/requests', 'BotController@index')->name('dailogflow.webhooks.index');
 Route::get('/bot/requests/{botMessage}/', 'BotController@show')->name('dailogflow.webhooks.show');
 //Route::get('/dialogflow/webhooks/{webhook}', 'DialogflowController@show')->name('dailogflow.webhooks.show');
+
+
+Route::get('/expenses', 'FinancialTransactionController@index')->name('expense')->middleware('auth');

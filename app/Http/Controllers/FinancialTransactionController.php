@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\FinancialTransaction;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FinancialTransactionController extends Controller
 {
@@ -14,7 +16,12 @@ class FinancialTransactionController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+
+        $expense = $user->financialTransactions()->where('type', FinancialTransaction::EXPENSE)->get();
+
+        return view('expenses.index', ['expenses' => $expense]);
+
     }
 
     /**
