@@ -9,6 +9,7 @@
         <table class="table table-responsive table-bordered table-hover">
             <thead>
                 <td>Title</td>
+                <td>Date</td>
                 <td>Tags</td>
                 <td>Price</td>
                 <td>Currency</td>
@@ -19,6 +20,7 @@
             @foreach($expenses as $expense)
                 <tr>
                     <td>{{ $expense->title }}</td>
+                    <td>{{ $expense->created_at}}</td>
                     <td>{{ is_array($expense->tags) ? implode(', ', $expense->tags ) : $expense->tags}}</td>
                     <td>{{ $expense->price }}</td>
                     <td>{{ $expense->currency }}</td>
