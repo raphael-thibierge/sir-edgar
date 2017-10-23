@@ -35,7 +35,7 @@
 
                         <p>Last updated: October 02, 2017</p>
 
-                        <p>{{ config('app.name') }} ("us", "we", or "our") operates the {{ env('APP_URL', 'https://www.sir-edgar.com website') }} (the "Service").</p>
+                        <p>{{ config('app.name') }} ("us", "we", or "our") operates the {{ env('APP_URL', 'https://www.sir-edgar.com') }} (the "Service").</p>
 
                         <p>This page informs you of our policies regarding the collection, use and disclosure of Personal Information when you use our Service.</p>
 
