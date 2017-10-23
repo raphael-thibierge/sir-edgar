@@ -9,6 +9,8 @@ use Jenssegers\Mongodb\Eloquent\Model;
  * @property string type
  * @property mixed price
  * @property mixed currency
+ * @property array|mixed tags
+ * @property string title
  */
 class FinancialTransaction extends Model
 {
@@ -52,4 +54,24 @@ class FinancialTransaction extends Model
         return $this->type . ' : ' . $this->price . $this->currency . ' ' . $tags;
     }
 
+
+    public function tagsEdit()
+    {
+        $tags = [];
+        $titlesFormatted = [];
+        $titlesParts = explode('#', $this->title);
+
+
+         foreach ($titlesParts as $part){
+
+             if (!empty($part)){
+                 $titlesFormatted []= $part;
+                $partPiece = explode(' ', $part);
+                $tags []= $partPiece[0];
+             }
+        }
+        $this->tags = $tags;
+        $this->title = implode($titlesFormatted, '');
+
+    }
 }

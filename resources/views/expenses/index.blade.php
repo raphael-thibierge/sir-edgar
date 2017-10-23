@@ -8,21 +8,17 @@
         <h1>Expens</h1>
         <table class="table table-responsive table-bordered table-hover">
             <thead>
-                <td>ID</td>
-                <td>Name</td>
-                <td>Email</td>
-                <td>Projects</td>
-                <td>Goals</td>
-                <td>Done goals</td>
+                <td>Title</td>
+                <td>Tags</td>
+                <td>Price</td>
+                <td>Currency</td>
             </thead>
             <tbody>
 
             <?php $total = 0.0; ?>
             @foreach($expenses as $expense)
                 <tr>
-                    <td>{{ $expense->id }}</td>
                     <td>{{ $expense->title }}</td>
-                    <td>{{ $expense->description }}</td>
                     <td>{{ is_array($expense->tags) ? implode(', ', $expense->tags ) : $expense->tags}}</td>
                     <td>{{ $expense->price }}</td>
                     <td>{{ $expense->currency }}</td>

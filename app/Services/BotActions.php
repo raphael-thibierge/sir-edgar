@@ -301,12 +301,16 @@ class BotActions
         $expense = $botMessage->getParameter('expense');
         $unitCurrency = $botMessage->getParameter('unit-currency');
 
-        $expense = $botMessage->user->financialTransactions()->create([
+
+        $expense = new FinancialTransaction([
             'title'     => $expense,
             'currency'  => strtoupper($unitCurrency['currency']),
             'price'     => (float)$unitCurrency['amount'],
             'type'      => FinancialTransaction::EXPENSE
         ]);
+        $expense->tagsEdit();
+
+        $expense = $botMessage->user->financialTransactions()->save($expense);
 
         BotResponse::display_expense_response($expense, $botMessage);
     }
