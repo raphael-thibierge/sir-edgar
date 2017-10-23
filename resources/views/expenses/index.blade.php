@@ -23,7 +23,7 @@
                     <td>{{ $expense->id }}</td>
                     <td>{{ $expense->title }}</td>
                     <td>{{ $expense->description }}</td>
-                    <td>{{ implode(', ', $expense->tags )}}</td>
+                    <td>{{ is_array($expense->tags) ? implode(', ', $expense->tags ) : $expense->tags}}</td>
                     <td>{{ $expense->price }}</td>
                     <td>{{ $expense->currency }}</td>
                     <?php $total += (float)$expense->price ?>
