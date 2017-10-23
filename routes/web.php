@@ -59,3 +59,4 @@ Route::get('/bot/requests/{botMessage}/', 'BotController@show')->name('dailogflo
 
 
 Route::get('/expenses', 'FinancialTransactionController@index')->name('expense')->middleware('auth');
+Route::get('/expenses/tag/{tag}', 'FinancialTransactionController@byTag')->name('expense')->middleware('auth');

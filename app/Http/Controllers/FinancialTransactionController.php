@@ -25,6 +25,21 @@ class FinancialTransactionController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function byTag($tag)
+    {
+        $user = Auth::user();
+
+        $expense = $user->financialTransactions()->where('tags', '=', $tag)->get();
+
+        return view('expenses.index', ['expenses' => $expense]);
+
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
