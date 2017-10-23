@@ -5,7 +5,7 @@
 @section("content")
 <div class="row col-xs-12">
     <div class="container">
-        <h1>Expens</h1>
+        <h1>Expenses</h1>
         <table class="table table-responsive table-bordered table-hover">
             <thead>
                 <td>Title</td>
