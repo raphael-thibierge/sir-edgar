@@ -5,12 +5,12 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div id="app-productivity" class="col-xs-12">
+        <div id="app-finance" class="col-xs-12">
             <img src="/images/logo.png" alt="" class="img-responsive img-circle img-rounded img-thumbnail">
         </div>
     </div>
 </div>
 <script>
-    window.app = 'productivity'
+    window.app = 'finance'
 </script>
 @endsection

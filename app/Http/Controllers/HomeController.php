@@ -36,6 +36,20 @@ class HomeController extends Controller
         return view('policy');
     }
 
+    public function finance(){
+        return view('finance');
+    }
+
+    public function financialData(){
+        $user = Auth::user();
+        $budgets = $user->budgets;
+        $expenses = $user->expenses;
+        return $this->successResponse([
+            'expenses' => $expenses,
+            'budgets' => $budgets,
+        ]);
+    }
+
     public function initialAppRequest(){
         return $this->successResponse([
             'user'=> Auth::user(),

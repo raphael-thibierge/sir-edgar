@@ -4,7 +4,31 @@ const ReactDOM = require('react-dom');
 
 import AppRoot from './AppRoot';
 
-ReactDOM.render(
-    React.createElement(AppRoot, {}),
-    document.getElementById('app-root')
-);
+Array.prototype.sum = function (prop) {
+    let total = 0;
+    for ( let i = 0, _len = this.length; i < _len; i++ ) {
+        total += this[i][prop];
+    }
+    return total
+}
+
+if (window.app){
+    switch (window.app){
+        case 'finance':
+            ReactDOM.render(
+                React.createElement(AppRoot, {app: 'finance'}),
+                document.getElementById('app-finance')
+            );
+            break;
+
+        case 'productivity':
+            ReactDOM.render(
+                React.createElement(AppRoot, {app: 'productivity'}),
+                document.getElementById('app-productivity')
+            );
+            break;
+
+    }
+}
+
+

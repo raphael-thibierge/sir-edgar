@@ -74,6 +74,9 @@ class Goal {
             url: this.routes.complete,
             cache: false,
             method: 'POST',
+            data: {
+                _token: window.token,
+            },
             // when server return success
             success: function (response) {
                 // check status
@@ -94,7 +97,8 @@ class Goal {
             cache: false,
             method: 'POST',
             data: {
-                today: !this.today
+                today: !this.today,
+                _token: window.token,
             },
             // when server return success
             success: function (response) {
@@ -135,6 +139,7 @@ class Goal {
                 token: window.token,
                 method: 'PATCH',
                 _method: 'PATCH',
+                _token: window.token,
 
             },
             // when server return success
@@ -165,7 +170,7 @@ class Goal {
                 token: window.token,
                 method: 'PATCH',
                 _method: 'PATCH',
-
+                _token: window.token,
                 due_date: due_date,
                 estimated_time: estimated_time,
                 time_spent: time_spent,

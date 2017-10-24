@@ -57,30 +57,7 @@ const ProjectRoot = React.createClass({
         });
     },
 
-    /**
-     * AJAX request to create new project
-     */
-    newProject: function(){
-        const request = $.ajax({
-            url: './projects',
-            cache: false,
-            method: 'POST',
-            success: function(response){
-                if (response.status && response.status === 'success'){
-                    let projects = this.state.projects;
-                    projects.push(response.data.project);
-                    this.setState({
-                        projects: projects
-                    });
-                }
-            },
-            error: (error) => {console.error(error.message); alert(error)},
-        });
-    },
 
-    formatGoal(goal){
-
-    },
 
     /**
      * AJAX goal loading success method that store returned goals in component state
@@ -132,7 +109,8 @@ const ProjectRoot = React.createClass({
             datatype: 'json',
             data: {
                 method: 'DELETE',
-                _method: 'DELETE'
+                _method: 'DELETE',
+                _token: window.token,
             },
             success: function (goal) {
 
@@ -175,6 +153,7 @@ const ProjectRoot = React.createClass({
                 title: title,
                 score: score,
                 project_id: project_id,
+                _token: window.token,
             },
             success: function (response) {
 

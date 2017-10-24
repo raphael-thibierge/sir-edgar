@@ -123,6 +123,14 @@ class User extends \Jenssegers\Mongodb\Auth\User
         return $this->hasMany('App\Project');
     }
 
+    public function budgets(): HasMany{
+        return $this->hasMany('App\Budget');
+    }
+
+    public function expenses(): HasMany{
+        return $this->financialTransactions()->where('type', FinancialTransaction::EXPENSE);
+    }
+
     /**
      * User's admin state
      *

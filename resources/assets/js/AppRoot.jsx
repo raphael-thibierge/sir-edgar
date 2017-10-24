@@ -5,6 +5,7 @@ import Echo from "laravel-echo";
 window.pusher = require('pusher-js');
 
 const ProjectRoot = require('./components/project/ProjectRoot.jsx');
+import FinanceRoot from './components/financial/FinanceRoot';
 
 export default class AppRoot extends React.Component {
 
@@ -57,7 +58,7 @@ export default class AppRoot extends React.Component {
 
     render(){
 
-        if (this.state.loaded === false && this.state.user === null){
+        if (this.state.loading === false && this.state.user === null){
             return (
                 <div className="row">
                     <div className="col-xs-12">
@@ -67,9 +68,18 @@ export default class AppRoot extends React.Component {
             );
         }
 
-        return (
-            <ProjectRoot user={this.state.user}/>
-        );
+        if (this.props.app == 'productivity'){
+            return (
+                <ProjectRoot user={this.user}/>
+            )
+        }
+
+        if (this.props.app == 'finance'){
+            return (
+                <FinanceRoot user={this.state.user}/>
+            );
+        }
+
     }
 
 }

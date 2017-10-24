@@ -63,6 +63,8 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         <li class="change_log"></li>
+                        <li><a href="{{ route('home') }}">Productivity</a></li>
+                        <li><a href="{{ route('finance') }}">Finance</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -117,8 +119,7 @@
             selector: ".change_log", // CSS selector where to inject the badge
             account: "xGMR2J", // your account ID,
         };
-        Headway.init(config);
-        console.log('inited')
+        //Headway.init(config);
     </script>
 
 </body>

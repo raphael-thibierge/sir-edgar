@@ -6,7 +6,7 @@
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
+| routes are loading by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
 */
@@ -60,3 +60,8 @@ Route::get('/bot/requests/{botMessage}/', 'BotController@show')->name('dailogflo
 
 Route::get('/expenses', 'FinancialTransactionController@index')->name('expense')->middleware('auth');
 Route::get('/expenses/tag/{tag}', 'FinancialTransactionController@byTag')->name('expense')->middleware('auth');
+
+Route::get('/financial-data', 'HomeController@financialData')->middleware('auth');
+Route::get('/finance', 'HomeController@finance')->middleware('auth')->name('finance');
+
+Route::resource('budgets', 'BudgetController');

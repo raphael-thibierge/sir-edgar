@@ -181,7 +181,7 @@ return [
          */
         Jenssegers\Mongodb\MongodbServiceProvider::class,
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
-        \BotMan\BotMan\BotManServiceProvider::class,
+        BotMan\BotMan\BotManServiceProvider::class,
 
     ],
 
