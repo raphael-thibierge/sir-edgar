@@ -49,10 +49,13 @@ class BudgetController extends Controller
             'amount' => 'required|numeric',
             'currency' => 'required|in:€,CAD',
             'period' => 'required|in:week,month',
-            //'tags' => 'required|string',
+            'tags' => 'present',
         ]);
 
-        $tags = explode(' ', $request->get('tags'));
+
+        $tagsAsString = trim($request->get('tags'));
+
+        $tags = $tagsAsString !== "" ? explode(' ', $tagsAsString) : [];
 
         $budget = $user->budgets()->create([
             'name' => $request->get('name'),

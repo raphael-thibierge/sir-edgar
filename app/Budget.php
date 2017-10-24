@@ -62,13 +62,18 @@ class Budget extends Model
             $endDate = Carbon::now($this->user->timezone)->endOfMonth()->endOfDay();
         }
 
-        return  FinancialTransaction::
+
+        $query = FinancialTransaction::
             where('user_id', $this->user_id)
             ->where('type', FinancialTransaction::EXPENSE)
             ->where('currency', $this->currency)
             ->where('created_at', '>=', $startDate)
-            ->where('created_at', '<', $endDate)
-            ->whereRaw(['tags' => ['$in' => $this->tags]]);
+            ->where('created_at', '<', $endDate);
+
+        if (isset($this->tags) && count($this->tags) > 0){
+            $query->whereRaw(['tags' => ['$in' => $this->tags]]);
+        }
+        return $query;
     }
 
     public function getTotalAttribute(){
