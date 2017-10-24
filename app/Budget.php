@@ -58,19 +58,17 @@ class Budget extends Model
             $startDate = Carbon::now($this->user->timezone)->startOfWeek();
             $endDate = Carbon::now($this->user->timezone)->endOfWeek();
         } else {
-            $startDate = Carbon::now($this->user->timezone)->startOfMonth();
-            $endDate = Carbon::now($this->user->timezone)->endOfMonth();
+            $startDate = Carbon::now($this->user->timezone)->startOfMonth()->startOfDay();
+            $endDate = Carbon::now($this->user->timezone)->endOfMonth()->endOfDay();
         }
-        //Page::
-        //whereRaw(['links' => [ '$elemMatch' =>  [ 'page_id' => $this->id ]]])->select('url')
 
-        return FinancialTransaction::
+        return  FinancialTransaction::
             where('user_id', $this->user_id)
             ->where('type', FinancialTransaction::EXPENSE)
             ->where('currency', $this->currency)
             ->where('created_at', '>=', $startDate)
             ->where('created_at', '<', $endDate)
-            ->where('tags', 'all', $this->tags);
+            ->whereRaw(['tags' => ['$in' => $this->tags]]);
     }
 
     public function getTotalAttribute(){
