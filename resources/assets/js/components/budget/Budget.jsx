@@ -11,17 +11,20 @@ export default class Budget extends React.Component {
             <div>
                 <div className="row">
                     <div className="col-xs-4">
-                        <small style={{marginLeft: 5}}>
-                            Total : {this.props.budget.total} {this.props.budget.currency}
-                            </small>
+                        <span style={{marginLeft: 5}}>
+                            {this.props.budget.total}
+                            <small> {this.props.budget.currency}</small>
+                        </span>
                     </div>
                     <div className="col-xs-4 text-center">
                         {this.props.budget.name}
+                        <small> /{this.props.budget.period}</small>
                     </div>
                     <div className="col-xs-4 text-right">
-                        <small style={{marginRight: 5}}
-                        >Intent : {this.props.budget.amount} {this.props.budget.currency}
-                        </small>
+                        <span style={{marginRight: 5}}>
+                            {this.props.budget.amount}
+                            <small> {this.props.budget.currency}</small>
+                        </span>
                     </div>
                 </div>
                 <div className="row">

@@ -18,7 +18,6 @@ export default class ExpenseRoot extends React.Component {
 
     }
 
-
     filter(){
         console.log(this.state.start_date);
         return this.props.expenses.filter((expense) => {
