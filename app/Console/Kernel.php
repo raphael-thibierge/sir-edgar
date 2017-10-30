@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\CheckRemindersCommand;
 use App\Console\Commands\DailyGoalsReportCommand;
+use App\Console\Commands\MorningEdgarMessageCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -17,7 +18,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         DailyGoalsReportCommand::class,
         CheckRemindersCommand::class,
-        DailyGoalsReportCommand::class
+        DailyGoalsReportCommand::class,
+        MorningEdgarMessageCommand::class,
     ];
 
     /**
@@ -41,6 +43,12 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('reminders:check')
             ->everyMinute();
+
+        $schedule->command('user:morningMessage')
+            ->timezone('America/Toronto')
+            ->dailyAt('05:00');
+
+
     }
 
     /**

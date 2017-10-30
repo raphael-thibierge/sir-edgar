@@ -12,7 +12,7 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  * @property mixed completed_at
  * @property mixed id
  * @property mixed priority
- * @property mixed due_date
+ * @property Carbon due_date
  * @property mixed title
  * @property mixed project
  * @property mixed score
@@ -111,6 +111,10 @@ class Goal extends Model
 
     public static function searchByTitle(string $title): Builder{
         return Goal::where('title', 'like', $title);
+    }
+
+    public function toString(){
+        return $this->title . "($this->score) ";
     }
 
 }

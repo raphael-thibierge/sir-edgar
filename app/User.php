@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Relations\HasMany;
 
 /**
@@ -14,8 +15,9 @@ use Jenssegers\Mongodb\Relations\HasMany;
  * @property mixed timezone
  * @property int daily_score_goal
  * @property mixed projects
+ * @property Collection budgets
  */
-class User extends \Jenssegers\Mongodb\Auth\User
+class   User extends \Jenssegers\Mongodb\Auth\User
 {
     use Notifiable;
 
@@ -202,6 +204,23 @@ class User extends \Jenssegers\Mongodb\Auth\User
 
         return $this->goals()
             ->whereIn('title', [$projectNameLowerCase, $projectNameFirstUpperCase]);
+    }
+
+
+    public function allBudgetsToStringWithEOL(){
+        $string = "";
+        foreach ($this->budgets as $budget){
+            $string .= $budget->toString() . PHP_EOL;
+        }
+        return $string;
+    }
+
+    public function endingTodayGoalsToStringWithEOL(){
+        $string = "";
+        foreach ($this->goalsEndingToday()->get() as $goal){
+            $string .= $goal->toString() . PHP_EOL;
+        }
+        return $string;
     }
 
 }

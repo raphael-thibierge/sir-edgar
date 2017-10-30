@@ -31,6 +31,7 @@ class Budget extends Model
      */
     protected $appends = [
         'total',
+        'progress',
     ];
 
     protected $fillable = [
@@ -80,7 +81,11 @@ class Budget extends Model
         return $this->expenses()->sum('price');
     }
 
-    public function progress(){
-        return (int)(($this->getT() / $this->amount ) * 100 );
+    public function getProgressAttribute(){
+        return (int)(($this->getTotalAttribute() / $this->amount ) * 100 );
+    }
+
+    public function toString(): string {
+        return $this->name . ' : ' . $this->getProgressAttribute() .'% (' . $this->getTotalAttribute() .'/'. $this->amount . ' ' . $this->currency . ')';
     }
 }
