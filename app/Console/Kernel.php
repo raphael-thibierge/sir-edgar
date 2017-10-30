@@ -36,7 +36,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('reminders:check')
             ->timezone('America/Toronto')
-            ->dailyAt('16:02');
+            ->dailyAt('16:03');
     }
 
     /**
