@@ -53,7 +53,7 @@ class BudgetController extends Controller
         ]);
 
 
-        $tagsAsString = trim($request->get('tags'));
+        $tagsAsString = str_replace('#', '', strtolower(trim($request->get('tags'))));
 
         $tags = $tagsAsString !== "" ? explode(' ', $tagsAsString) : [];
 

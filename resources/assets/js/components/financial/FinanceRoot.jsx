@@ -79,7 +79,7 @@ export default class FinanceRoot extends React.Component {
 
                         <Tab eventKey={2} title="Expenses">
                             <br/>
-                            <ExpensexRoot
+                            <ExpenseRoot
                                 expenses={this.state.expenses}
                             />
                         </Tab>
