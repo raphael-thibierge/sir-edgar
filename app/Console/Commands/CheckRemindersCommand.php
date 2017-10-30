@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Notifications\MessengerGenericNotification;
 use App\Notifications\MessengerNotification;
-use App\User;
+use App\Goal;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -41,20 +41,19 @@ class CheckRemindersCommand extends Command
      */
     public function handle()
     {
-        User::where('admin', true)->whereNotNull('facebook_sending_id')->each(function ($user, $key){
+        $start = Carbon::now()->second(0);
+        $end = Carbon::now()->second(0)->addMinute(1);
+        $goals = Goal::where('due_date', '>=', $start)
+            ->where('due_date', '<', $end)
+            ->get();
 
-            $dateStart = Carbon::today($user->timezone)->startOfDay();
-            $dateEnd = Carbon::tomorrow($user->timezone)->startOfDay();
+        foreach ($goals as $goal){
+            if (isset($goal->user->facebook_sending_id) && $goal->user->facebook_sending_id !== null){
+                $goal->user->notify(
+                    new MessengerNotification("Bip bip ! I remind you to do : \r\n" . $goal->title . " ($goal->score)")
+                );
+            }
+        }
 
-            $goals = $user->goals()
-                ->whereNull('completed_at')
-                ->where('due_date', '>=', $dateStart)
-                ->where('due_date', '<', $dateEnd)
-                ->pluck('title')
-                ->toArray();
-
-            $user->notify(new MessengerNotification("Today : \r\n" . implode('\r\n', $goals)));
-
-        });
     }
 }

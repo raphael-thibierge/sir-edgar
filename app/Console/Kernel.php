@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         DailyGoalsReportCommand::class,
         CheckRemindersCommand::class,
+        DailyGoalsReportCommand::class
     ];
 
     /**
@@ -32,11 +33,14 @@ class Kernel extends ConsoleKernel
             $schedule->command('report:goals:daily')
                 ->timezone($timezone)
                 ->dailyAt(0);
+
+            $schedule->command('goals:check ' . $timezone)
+                ->timezone($timezone)
+                ->dailyAt(8);
         }
 
         $schedule->command('reminders:check')
-            ->timezone('America/Toronto')
-            ->dailyAt('16:03');
+            ->everyMinute();
     }
 
     /**
