@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CheckRemindersCommand;
 use App\Console\Commands\DailyGoalsReportCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -14,7 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        DailyGoalsReportCommand::class
+        DailyGoalsReportCommand::class,
+        CheckRemindersCommand::class,
     ];
 
     /**
@@ -26,9 +28,15 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
-        $schedule->command('report:goals:daily')
+        foreach (timezone_identifiers_list() as $timezone){
+            $schedule->command('report:goals:daily')
+                ->timezone($timezone)
+                ->dailyAt(0);
+        }
+
+        $schedule->command('reminders:check')
             ->timezone('America/Toronto')
-            ->dailyAt(0);
+            ->dailyAt('16:02');
     }
 
     /**
