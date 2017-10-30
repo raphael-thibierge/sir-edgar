@@ -61,6 +61,7 @@ export default class ExpenseRoot extends React.Component {
                         <div>
                             <div className="col-xs-6">
                                 <DayPicker
+                                    title="Start"
                                     modifiersStyles={{marginLeft: 0}}
                                     selectedDays={[this.state.start_date]}
                                     onDayClick={(day) => {this.setState({start_date: day})}}

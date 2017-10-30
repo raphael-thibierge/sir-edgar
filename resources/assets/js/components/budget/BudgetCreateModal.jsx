@@ -146,7 +146,7 @@ export default class BudgetCreateModal extends React.Component {
                                         onChange={(e) => {this.setState({ currency: e.target.value })}}
                                     >
                                         <option value="CAD">Canadian dollar</option>
-                                        <option value="€">Euro</option>
+                                        <option value="EUR">Euro</option>
                                   </FormControl>
                                 </FormGroup>
 

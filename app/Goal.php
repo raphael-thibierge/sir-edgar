@@ -5,6 +5,7 @@ namespace App;
 use App\Events\GoalCompleted;
 use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Query\Builder;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 
 /**
@@ -105,6 +106,11 @@ class Goal extends Model
     public function setCompleted(){
         $this->completed_at = Carbon::now();
         broadcast(new GoalCompleted($this));
+    }
+
+
+    public static function searchByTitle(string $title): Builder{
+        return Goal::where('title', 'like', $title);
     }
 
 }
