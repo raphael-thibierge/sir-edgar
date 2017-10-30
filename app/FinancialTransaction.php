@@ -59,8 +59,7 @@ class FinancialTransaction extends Model
     {
         $tags = [];
         $titlesFormatted = [];
-        $titlesParts = explode('#', $this->title);
-
+        $titlesParts = explode('#', strtolower($this->title));
 
          foreach ($titlesParts as $part){
 

@@ -30,9 +30,9 @@ class Kernel extends ConsoleKernel
     {
 
         foreach (timezone_identifiers_list() as $timezone){
-            $schedule->command('report:goals:daily')
-                ->timezone($timezone)
-                ->dailyAt(0);
+           // $schedule->command('report:goals:daily')
+            //    ->timezone($timezone)
+            //    ->dailyAt(0);
 
             $schedule->command('goals:check ' . $timezone)
                 ->timezone($timezone)
