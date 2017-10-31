@@ -173,8 +173,7 @@ class BotActions
     {
         $goal = self::searchGoalsByNameFromMessage($botMessage)->first();
 
-        $goal->setCompleted();
-        $goal->update();
+        $goal->setCompletedAndSave();
 
         $botMessage->buildTextResponse('Goal completed !');
     }

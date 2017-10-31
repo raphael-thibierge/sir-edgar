@@ -9,14 +9,14 @@ use Jenssegers\Mongodb\Query\Builder;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 
 /**
- * @property mixed completed_at
- * @property mixed id
- * @property mixed priority
+ * @property Carbon completed_at
+ * @property string id
+ * @property int priority
  * @property Carbon due_date
- * @property mixed title
- * @property mixed project
- * @property mixed score
- * @property mixed user
+ * @property string title
+ * @property Project project
+ * @property int score
+ * @property User user
  */
 class Goal extends Model
 {
@@ -103,8 +103,9 @@ class Goal extends Model
         return $this->completed_at != null;
     }
 
-    public function setCompleted(){
+    public function setCompletedAndSave(){
         $this->completed_at = Carbon::now();
+        $this->save();
         broadcast(new GoalCompleted($this));
     }
 
