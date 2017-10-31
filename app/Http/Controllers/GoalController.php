@@ -149,9 +149,7 @@ class GoalController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function complete(Request $request, Goal $goal){
-
-        $goal->setCompleted();
-        $goal->update();
+        $goal->setCompletedAndSave();
         return $this->successResponse();
     }
 
@@ -225,8 +223,7 @@ class GoalController extends Controller
             ]);
 
         } else {
-            $goal->setCompleted();
-            $goal->save();
+            $goal->setCompletedAndSave();
         }
 
         return $this->successResponse();

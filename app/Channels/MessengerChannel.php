@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: raphael
@@ -26,6 +27,10 @@ class MessengerChannel
     {
         // get notification content
         $message = $notification->toMessenger($notifiable);
+
+        if (!$notifiable->hasMessenger()){
+            return;
+        }
 
         // get user's sender id
         $senderId = $notifiable->facebook_sending_id;
