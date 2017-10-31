@@ -47,7 +47,7 @@ class MorningEdgarMessageCommand extends Command
             . 'and ' . $user->getTotalCurrentMonthExpensesAttribute() . ' CAD this month !' . PHP_EOL;
 
 
-        $goalsToday =  'You have to comlete this today: ' . PHP_EOL
+        $goalsToday =  'You have to comlete this today : ' . PHP_EOL
             . $user->endingTodayGoalsToStringWithEOL();
 
         $importantGoals =  'And here are important things : ' . PHP_EOL
