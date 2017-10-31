@@ -44,10 +44,16 @@ class Kernel extends ConsoleKernel
         $schedule->command('reminders:check')
             ->everyMinute();
 
-        $schedule->command('user:morningMessage')
+        // raphael
+        $schedule->command('user:morningMessage first' )
             ->timezone('America/Toronto')
             ->dailyAt('05:00');
 
+
+        // arthur
+        $schedule->command('user:morningMessage 59ca9b30b2530a3d1345003e')
+            ->timezone('America/Toronto')
+            ->dailyAt('08:30');
 
     }
 

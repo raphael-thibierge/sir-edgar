@@ -28,6 +28,7 @@ class   User extends \Jenssegers\Mongodb\Auth\User
         'timezone' => 'Europe/Paris',
         'email_daily_report' => false,
         'email_weekly_report' => false,
+        'morning_report' => false,
     ];
 
     /**
@@ -44,7 +45,8 @@ class   User extends \Jenssegers\Mongodb\Auth\User
         'timezone',
         'email_daily_report',
         'email_weekly_report',
-        'facebook_sending_id'
+        'facebook_sending_id',
+        'morning_report',
     ];
 
     /**

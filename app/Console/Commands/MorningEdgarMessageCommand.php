@@ -13,7 +13,7 @@ class MorningEdgarMessageCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'user:morningMessage';
+    protected $signature = 'user:morningMessage {user}';
 
     /**
      * The console command description.
@@ -39,7 +39,10 @@ class MorningEdgarMessageCommand extends Command
      */
     public function handle()
     {
-        $user = User::first();
+
+        $user = $this->argument('user') === 'first' ? User::first() : User::find($this->argument('user'));
+        if ($user === null) return;
+
         $message = "Hey " . $user->name . ', it\'s morning report time !' . PHP_EOL
             . 'Yesterday, your score was ' . $user->yesterday_goals()->sum('score')
             . ', today the intent is ' . $user->daily_score_goal . PHP_EOL
@@ -55,8 +58,6 @@ class MorningEdgarMessageCommand extends Command
 
         $budgets = 'Oh, budgets :' . PHP_EOL
             . $user->allBudgetsToStringWithEOL();
-
-
 
 
         $user->notify(new MessengerNotification($message));
