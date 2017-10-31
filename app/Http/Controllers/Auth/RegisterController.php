@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Mail\NewUserRegistration;
+use App\Notifications\MessengerNotification;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -74,8 +73,9 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
         ]);
 
-        Mail::to(User::where('admin', true)->first())
-            ->send(new NewUserRegistration($userRegistered));
+        User::first()->notify(new MessengerNotification(
+            "I have good news for you ;) \r\n You have a new user : $userRegistered->name ($userRegistered->email)"
+        ));
 
         return $userRegistered;
     }
