@@ -245,4 +245,8 @@ class   User extends \Jenssegers\Mongodb\Auth\User
             ->sum('price');
     }
 
+    public function hasMessenger(): bool {
+        return isset($this->facebook_sending_id) && !empty($this->facebook_sending_id) && $this->facebook_sending_id !== null;
+    }
+
 }
