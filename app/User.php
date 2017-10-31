@@ -223,4 +223,24 @@ class   User extends \Jenssegers\Mongodb\Auth\User
         return $string;
     }
 
+    public function importantGoalsToStringWithEOL(){
+        $string = "";
+        foreach ($this->goals()->whereNull('completed_at')->where('today', true)->get() as $goal){
+            $string .= $goal->toString() . PHP_EOL;
+        }
+        return $string;
+    }
+
+    public function getTotalCurrentMonthExpensesAttribute(){
+        return $this->expenses()
+            ->where('created_at', '>=' , Carbon::now($this->timezone)->startOfMonth())
+            ->sum('price');
+    }
+
+    public function getTotalCurrentWeekExpensesAttribute(){
+        return $this->expenses()
+            ->where('created_at', '>=' , Carbon::now($this->timezone)->startOfWeek())
+            ->sum('price');
+    }
+
 }

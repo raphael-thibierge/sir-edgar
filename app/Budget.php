@@ -86,6 +86,6 @@ class Budget extends Model
     }
 
     public function toString(): string {
-        return $this->name . ' : ' . $this->getProgressAttribute() .'% (' . $this->getTotalAttribute() .'/'. $this->amount . ' ' . $this->currency . ')';
+        return "$this->name /$this->period : " . $this->getProgressAttribute() .'% --> ' . $this->getTotalAttribute()  . ' ' . $this->currency;
     }
 }

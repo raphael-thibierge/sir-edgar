@@ -41,13 +41,27 @@ class MorningEdgarMessageCommand extends Command
     {
         $user = User::first();
         $message = "Hey " . $user->name . ', it\'s morning report time !' . PHP_EOL
-            . 'Yesterday score :' . $user->yesterday_goals()->sum('score') . PHP_EOL
-            . 'Score intent : ' . $user->daily_score_goal . PHP_EOL
-            . 'Important goals : ' . PHP_EOL
-            . $user->endingTodayGoalsToStringWithEOL()
-            . 'Budgets :' . PHP_EOL
+            . 'Yesterday, your score was ' . $user->yesterday_goals()->sum('score')
+            . ', today the intent is ' . $user->daily_score_goal . PHP_EOL
+            . 'You spent ' . $user->getTotalCurrentWeekExpensesAttribute() . ' CAD this week '
+            . 'and ' . $user->getTotalCurrentMonthExpensesAttribute() . ' CAD this month !' . PHP_EOL;
+
+
+        $goalsToday =  'You have to comlete this today: ' . PHP_EOL
+            . $user->endingTodayGoalsToStringWithEOL();
+
+        $importantGoals =  'And here are important things : ' . PHP_EOL
+            . $user->importantGoalsToStringWithEOL();
+
+        $budgets = 'Oh, budgets :' . PHP_EOL
             . $user->allBudgetsToStringWithEOL();
 
+
+
+
         $user->notify(new MessengerNotification($message));
+        $user->notify(new MessengerNotification($goalsToday));
+        $user->notify(new MessengerNotification($importantGoals));
+        $user->notify(new MessengerNotification($budgets));
     }
 }

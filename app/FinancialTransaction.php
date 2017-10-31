@@ -4,6 +4,7 @@ namespace App;
 
 
 use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Relations\BelongsTo;
 
 /**
  * @property string type
