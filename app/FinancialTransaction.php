@@ -17,6 +17,7 @@ class FinancialTransaction extends Model
 {
     const EXPENSE = "expense";
     const ENTRANCE = "entrance";
+    const SAVING = "saving";
 
     protected $primaryKey = '_id';
 

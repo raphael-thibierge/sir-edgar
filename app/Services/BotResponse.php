@@ -111,7 +111,7 @@ class BotResponse
 
     public static function display_expense_response(FinancialTransaction $expense, BotMessage &$botMessage)
     {
-        $botMessage->buildTextResponse("New expense \"$expense->title\" of $expense->price $expense->currency saved");
+        $botMessage->buildTextResponse("New $expense->type \"$expense->title\" of $expense->price $expense->currency saved");
     }
 
 }

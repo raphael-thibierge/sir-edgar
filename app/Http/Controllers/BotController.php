@@ -223,14 +223,13 @@ class BotController extends Controller
                     BotActions::goal_find_action($this->botMessage);
                     break;
 
-                case 'expense_create_action':
-                    BotActions::expense_create_action($this->botMessage);
+                case 'financial_transaction_create_action':
+                    BotActions::financial_transaction_create_action($this->botMessage);
                     break;
 
-                case 'expense_total_action':
-                    BotActions::expense_total_action($this->botMessage);
+                case 'financial_transaction_expense_total_action':
+                    BotActions::financial_transactions_total_action($this->botMessage);
                     break;
-
 
 
                 default:

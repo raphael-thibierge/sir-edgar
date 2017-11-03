@@ -295,17 +295,23 @@ class BotActions
         $botMessage->buildTextResponse("You achieve $progress% !");
     }
 
-    public static function expense_create_action(BotMessage &$botMessage)
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     *                                                               *
+     *                 TRANSACTIONS ACTIONS                          *
+     *                                                               *
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    public static function financial_transaction_create_action(BotMessage &$botMessage)
     {
         $expense = $botMessage->getParameter('expense');
         $unitCurrency = $botMessage->getParameter('unit-currency');
-
+        $type = $botMessage->getParameter('type');
 
         $expense = new FinancialTransaction([
             'title'     => $expense,
             'currency'  => strtoupper($unitCurrency['currency']),
             'price'     => (float)$unitCurrency['amount'],
-            'type'      => FinancialTransaction::EXPENSE
+            'type'      => $type,
         ]);
         $expense->tagsEdit();
 
@@ -314,8 +320,11 @@ class BotActions
         BotResponse::display_expense_response($expense, $botMessage);
     }
 
-    public static function expense_total_action(BotMessage &$botMessage)
+    public static function financial_transactions_total_action(BotMessage &$botMessage)
     {
+
+        $type = $botMessage->getParameter('type');
+
         if (($datePeriod = $botMessage->getParameter('date-period')) !== null){
             $datePeriod = explode('/', $datePeriod);
             $startDate = (new Carbon($datePeriod[0], $botMessage->user->timezone))->startOfDay();
@@ -331,11 +340,14 @@ class BotActions
         $stopDate->addDay(1);
 
         $total = $botMessage->user->financialTransactions()
-            ->where('type', FinancialTransaction::EXPENSE)
+            ->where('type', $type)
             ->where('created_at', '>=', $startDate)
             ->where('created_at', '<', $stopDate)
             ->sum('price');
 
-        $botMessage->buildTextResponse("You spent $total of your usual devise");
+        $action = $type === FinancialTransaction::EXPENSE ? 'spent' :
+            $type === FinancialTransaction::ENTRANCE ? 'earned' : 'savec';
+
+        $botMessage->buildTextResponse("You $action $total of your usual devise");
     }
 }
