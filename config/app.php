@@ -182,6 +182,8 @@ return [
         Jenssegers\Mongodb\MongodbServiceProvider::class,
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
         BotMan\BotMan\BotManServiceProvider::class,
+        // server monitoring
+        EricMakesStuff\ServerMonitor\ServerMonitorServiceProvider::class,
 
     ],
 

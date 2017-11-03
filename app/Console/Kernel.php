@@ -31,6 +31,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
+        // server monitoring
+        $schedule->command('monitor:run')->daily()->at('10:00');
+        $schedule->command('monitor:run HttpPing')->hourly();
+
         foreach (timezone_identifiers_list() as $timezone){
            // $schedule->command('report:goals:daily')
             //    ->timezone($timezone)
