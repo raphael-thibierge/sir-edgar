@@ -56,13 +56,13 @@ class MorningEdgarMessageCommand extends Command
         $importantGoals =  'And here are important things : ' . PHP_EOL
             . $user->importantGoalsToStringWithEOL();
 
-        $budgets = 'Oh, budgets :' . PHP_EOL
-            . $user->allBudgetsToStringWithEOL();
+        //$budgets = 'Oh, budgets :' . PHP_EOL
+        //    . $user->allBudgetsToStringWithEOL();
 
 
         $user->notify(new MessengerNotification($message));
         $user->notify(new MessengerNotification($goalsToday));
         $user->notify(new MessengerNotification($importantGoals));
-        $user->notify(new MessengerNotification($budgets));
+        //$user->notify(new MessengerNotification($budgets));
     }
 }
