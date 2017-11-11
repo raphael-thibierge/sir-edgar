@@ -27,7 +27,6 @@ class CheckRemindersCommand extends Command
     /**
      * Create a new command instance.
      *
-     * @return void
      */
     public function __construct()
     {
@@ -43,7 +42,8 @@ class CheckRemindersCommand extends Command
     {
         $start = Carbon::now()->second(0);
         $end = Carbon::now()->second(0)->addMinute(1);
-        $goals = Goal::where('due_date', '>=', $start)
+        $goals = Goal::whereNull('completed_at')
+            ->where('due_date', '>=', $start)
             ->where('due_date', '<', $end)
             ->get();
 
