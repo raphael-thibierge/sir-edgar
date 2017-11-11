@@ -276,7 +276,7 @@ export default class ProjectRoot extends React.Component {
                 const project = this.state.projects[this.projectMap[this.state.view]];
                 return <ProjectRender
                         project={project}
-                        createGoal={this.addGoal}
+                        createGoal={this.addGoal.bind(this)}
                         onTitleChange={this.editProjectTitle.bind(this)}
                     />;
                 return
