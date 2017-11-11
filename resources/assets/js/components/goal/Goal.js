@@ -1,4 +1,6 @@
-class Goal {
+import Tools from '../Tools';
+
+export default class Goal {
 
     constructor(goal = null){
 
@@ -21,23 +23,6 @@ class Goal {
         }
     }
 
-    static dateFormat(dateAsString){
-
-        if (typeof dateAsString === 'undefined' || dateAsString === null || dateAsString.length < 19){
-            return null;
-        }
-
-        return new Date(
-            parseInt(dateAsString.slice(0,4)), // year
-            parseInt(dateAsString.slice(5,7)) - 1, // month
-            parseInt(dateAsString.slice(8,10)), // day
-            parseInt(dateAsString.slice(11,13)), // hour
-            parseInt(dateAsString.slice(14,16)), // minutes
-            parseInt(dateAsString.slice(17,19)), // seconds
-            0
-        );
-    }
-
     fillData(goalData){
         const TIMEZONE_OFFSET = new Date().getTimezoneOffset();
 
@@ -49,7 +34,7 @@ class Goal {
 
                 const value = goalData[key];
                 if (typeof value !== "undefined" && value !== null){
-                    this[key] = new Date (Goal.dateFormat(value) - TIMEZONE_OFFSET*MS_PER_MINUTES);
+                    this[key] = new Date (Tools.dateFormater(value) - TIMEZONE_OFFSET*MS_PER_MINUTES);
                 }
 
 
@@ -200,5 +185,3 @@ class Goal {
     }
 
 };
-
-module.exports = Goal;

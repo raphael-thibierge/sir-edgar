@@ -92,13 +92,13 @@ export default class AjaxEditableValue extends React.Component {
                         value={this.state.value}
                         placeholder=""
                         onChange={(e) => {this.setState({ value: e.target.value })}}
-                        onKeyPress={this.handleKeyPress}
+                        onKeyPress={this.handleKeyPress.bind(this)}
                     />
                 </div>
 
                 <div className="col-xs-1">
 
-                    <Button bsSize="sm" bsStyle="success" onClick={this.validate}>
+                    <Button bsSize="sm" bsStyle="success" onClick={this.validate.bind(this)}>
                         <Glyphicon glyph="ok"/>
                     </Button>
                 </div>
@@ -117,7 +117,7 @@ export default class AjaxEditableValue extends React.Component {
     displayModeRender() {
 
         return (
-            <a onClick={this.setEditMode} style={{cursor: 'pointer'}}>
+            <a onClick={this.setEditMode.bind(this)} style={{cursor: 'pointer'}}>
                 <span className={this.props.classNameLink} style={this.props.style}>
                     <strong>
                         {this.props.value}

@@ -67,13 +67,13 @@ export default class NewProjectRoot extends React.Component{
                                 value={this.state.newProjectTitle}
                                 placeholder="Project title"
                                 onChange={(e) => this.setState({newProjectTitle: e.target.value})}
-                                onKeyPress={this.handleKeyPress}
+                                onKeyPress={this.handleKeyPress.bind(this)}
                             />
                         </div>
                         <div className="col-xs-1">
 
                         <Button bsSize="sm" bsStyle="success"
-                                onClick={this.onClick}
+                                onClick={this.onClick.bind(this)}
                         >
                             <Glyphicon glyph="ok"/>
                         </Button>

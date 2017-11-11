@@ -1,38 +1,43 @@
-const React = require('react');
-const GoalList = require('../goal/GoalList.jsx');
-const AjaxEditableValue = require('../generic/AjaxEditableValue.jsx');
-const PropTypes = require('prop-types').PropTypes;
+import React from 'react';
+import GoalList from '../goal/GoalList';
+import AjaxEditableValue from '../generic/AjaxEditableValue';
+import PropTypes from 'prop-types';
 /**
  * Main component managing goals
  */
-const ProjectRender = React.createClass({
+export default class ProjectRender extends React.Component{
 
-    propTypes:{
+     /* propTypes:{
         project: PropTypes.object.isRequired,
         onTitleChange: PropTypes.func,
-    },
+    },*/
+
+    constructor(props){
+        super(props);
+        this.state = this.getInitialState();
+    }
 
     /**
      * Define component initial state
      *
      * @returns {{}}
      */
-    getInitialState: function () {
+    getInitialState() {
         return {};
-    },
+    }
 
-    editTitle: function(title){
+    editTitle(title){
         if (typeof this.props.onTitleChange === 'function'){
             this.props.onTitleChange(title, this.props.project._id)
         }
-    },
+    }
 
     /**
      * Render method, returning HTML code for goal input and list
      *
      * @returns {XML}
      */
-    render: function () {
+    render() {
 
         const project = this.props.project;
 
@@ -47,7 +52,7 @@ const ProjectRender = React.createClass({
                                     ajaxURI={project.routes.update}
                                     inputName="title"
                                     method="PUT"
-                                    onSuccess={this.editTitle}
+                                    onSuccess={this.editTitle.bind(this)}
                                 /> : this.props.project.title
                             }
                             </div>
@@ -63,6 +68,4 @@ const ProjectRender = React.createClass({
         );
     }
 
-});
-
-module.exports = ProjectRender;
+};

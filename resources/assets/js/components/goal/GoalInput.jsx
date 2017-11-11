@@ -149,8 +149,8 @@ export default class GoalInput extends React.Component{
                             type="text"
                             value={this.state.title}
                             placeholder="New goal"
-                            onChange={this.onTitleChange}
-                            onKeyPress={this.handleKeyPress}
+                            onChange={this.onTitleChange.bind(this)}
+                            onKeyPress={this.handleKeyPress.bind(this)}
                         />
                     </div>
                     <div className="col-xs-3">
@@ -160,13 +160,13 @@ export default class GoalInput extends React.Component{
                             value={this.state.score}
                             min={0}
                             max={5}
-                            onChange={this.onScoreChange}
-                            onKeyPress={this.handleKeyPress}
+                            onChange={this.onScoreChange.bind(this)}
+                            onKeyPress={this.handleKeyPress.bind(this)}
                         />
                     </div>
                     <div className="col-xs-1">
 
-                        <Button bsSize="sm" bsStyle="success" onClick={this.setDisplayMode}>
+                        <Button bsSize="sm" bsStyle="success" onClick={this.setDisplayMode.bind(this)}>
                             <Glyphicon glyph="ok"/>
                         </Button>
                     </div>
@@ -296,7 +296,7 @@ export default class GoalInput extends React.Component{
 
                 {priorityRender}
 
-                <a style={{marginLeft : '5px'}} onClick={this.setEditMode}>
+                <a style={{marginLeft : '5px'}} onClick={this.setEditMode.bind(this)}>
                     {goal.title}
                 </a>
 
@@ -340,7 +340,7 @@ export default class GoalInput extends React.Component{
 
                 {priorityRender}
 
-                <a style={{marginLeft : '10px'}}onClick={this.setEditMode}>
+                <a style={{marginLeft : '10px'}}onClick={this.setEditMode.bind(this)}>
                     {goal.title}
                 </a>
 

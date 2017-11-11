@@ -1,53 +1,57 @@
-const React = require('react');
-const ProjectRender = require('./ProjectRender.jsx');
-const Goal = require('../goal/Goal');
-const GoalsGraph = require('../goal/GoalsGraph.jsx');
-const ScoreGoal = require('../scoreGoal/scoreGoal.jsx');
-const ResponsiveSideBar = require('../generic/ResponsiveSideBar.jsx');
-const NewProjectRoot = require('../project/NewProjectRoot.jsx');
+import React from 'react';
+import ProjectRender from './ProjectRender.jsx';
+import Goal from '../goal/Goal';
+import GoalsGraph from '../goal/GoalsGraph.jsx';
+import ScoreGoal from '../scoreGoal/scoreGoal.jsx';
+import ResponsiveSideBar from '../generic/ResponsiveSideBar.jsx';
+import NewProjectRoot from '../project/NewProjectRoot.jsx';
 
 /**
  * Main component managing goals
  */
-const ProjectRoot = React.createClass({
+export default class ProjectRoot extends React.Component {
 
-    projectMap:{},
 
+    constructor(props){
+        super(props);
+        this.state = this.getInitialState();
+        this.projectMap={};
+    }
 
     /**
      * Define component initial state
      *
      * @returns {{goals: Array}}
      */
-    getInitialState: function () {
+    getInitialState(){
         return {
             projects: [],
             newProjectCollapseOpen: false,
             newProjectTitle: '',
             view: 'stats',
         };
-    },
+    }
 
     /**
      * Method called when component is mounted in html
      * Loads goal list in AJAX
      */
-    componentDidMount: function () {
+    componentDidMount(){
         this.request();
-    },
+    }
 
     /**
      * AJAX request to get goals from server
      */
-    request: function(){
+    request(){
         const request = $.ajax({
             url: './projects',
             cache: false,
             method: 'GET',
-            success: this.onSuccess,
+            success: this.onSuccess.bind(this),
             error: (error) => {console.error(error.message); alert(error)},
         });
-    },
+    }
 
 
 
@@ -55,7 +59,7 @@ const ProjectRoot = React.createClass({
      * AJAX goal loading success method that store returned goals in component state
      * @param response
      */
-    onSuccess: function (response) {
+    onSuccess(response) {
         if (response.status && response.status === 'success'){
 
             let projects = response.data.projects;
@@ -91,9 +95,9 @@ const ProjectRoot = React.createClass({
                 projects: projects
             });
         }
-    },
+    }
 
-    deleteGoal: function (goalToDelete) {
+    deleteGoal(goalToDelete) {
         $.ajax({
             url: goalToDelete.routes.destroy,
             cache: false,
@@ -130,9 +134,9 @@ const ProjectRoot = React.createClass({
             error: this.onError,
         });
 
-    },
+    }
 
-    addGoal: function (title, score, project_id) {
+    addGoal(title, score, project_id) {
 
         const url = './goals';
 
@@ -176,10 +180,10 @@ const ProjectRoot = React.createClass({
         });
 
 
-    },
+    }
 
 
-    onNewProjectClick: function (title) {
+    onNewProjectClick(title) {
         const url = 'projects';
         $.ajax({
             url: url,
@@ -212,7 +216,7 @@ const ProjectRoot = React.createClass({
             error: (error)=> {alert('Creating project failed'); console.error(error)},
         });
 
-    },
+    }
 
     viewRender(){
         const view = this.state.view;
@@ -229,7 +233,7 @@ const ProjectRoot = React.createClass({
 
             case 'new_project':
                 return <NewProjectRoot
-                    onNewProjectClick={this.onNewProjectClick}
+                    onNewProjectClick={this.onNewProjectClick.bind(this)}
                     projectCurrentNumber={this.state.projects.length}
                 />;
                 break;
@@ -273,11 +277,11 @@ const ProjectRoot = React.createClass({
                 return <ProjectRender
                         project={project}
                         createGoal={this.addGoal}
-                        onTitleChange={this.editProjectTitle}
+                        onTitleChange={this.editProjectTitle.bind(this)}
                     />;
                 return
         }
-    },
+    }
 
 
     editProjectTitle(title, project_id){
@@ -293,7 +297,7 @@ const ProjectRoot = React.createClass({
         this.setState({
             projects: projects
         });
-    },
+    }
 
 
     /**
@@ -301,7 +305,7 @@ const ProjectRoot = React.createClass({
      *
      * @returns {XML}
      */
-    render: function () {
+    render() {
 
         return (
             <div className="row">
@@ -326,6 +330,4 @@ const ProjectRoot = React.createClass({
         );
     }
 
-});
-
-module.exports = ProjectRoot;
+};

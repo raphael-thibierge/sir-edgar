@@ -135,7 +135,7 @@ export default class GoalsDetailsModal extends React.Component{
                             value={this.state.estimated_time}
                             placeholder=""
                             onChange={(e) => {this.setState({ estimated_time: e.target.value })}}
-                            onKeyPress={this.handleKeyPress}
+                            onKeyPress={this.handleKeyPress.bind(this)}
                          />
                     </FormGroup>
 
@@ -148,7 +148,7 @@ export default class GoalsDetailsModal extends React.Component{
                             value={this.state.time_spent}
                             placeholder=""
                             onChange={(e) => {this.setState({ time_spent: e.target.value })}}
-                            onKeyPress={this.handleKeyPress}
+                            onKeyPress={this.handleKeyPress.bind(this)}
                         />
                     </FormGroup>
 
@@ -162,7 +162,7 @@ export default class GoalsDetailsModal extends React.Component{
                             max={3}
                             placeholder=""
                             onChange={(e) => {this.setState({ priority: e.target.value })}}
-                            onKeyPress={this.handleKeyPress}
+                            onKeyPress={this.handleKeyPress.bind(this)}
                         />
                     </FormGroup>
 
@@ -180,7 +180,7 @@ export default class GoalsDetailsModal extends React.Component{
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={()=> {this.setState({display: false})}}>Cancel</Button>
-                    <Button bsStyle="success" onClick={this.onSave}>Save</Button>
+                    <Button bsStyle="success" onClick={this.onSave.bind(this)}>Save</Button>
                 </Modal.Footer>
             </Modal>
             </span>
