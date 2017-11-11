@@ -58,7 +58,7 @@ export default class AppRoot extends React.Component {
 
     render(){
 
-        if (this.state.loading === false && this.state.user === null){
+        if (this.state.loading === false || this.state.user === null){
             return (
                 <div className="row">
                     <div className="col-xs-12">
