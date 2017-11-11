@@ -10,7 +10,7 @@ Array.prototype.sum = function (prop) {
         total += this[i][prop];
     }
     return total
-}
+};
 
 if (window.app){
     switch (window.app){

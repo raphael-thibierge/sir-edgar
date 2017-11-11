@@ -23,7 +23,7 @@ export default class ExpenseTable extends React.Component {
                                     <tr key={expense._id}>
                                         <td>{expense.title}</td>
                                         <td>{expense.created_at}</td>
-                                        <td>{expense.tags.join(', ')}</td>
+                                        <td>{Array.isArray(expense.tags) ? expense.tags.join(', ') : expense.tags}</td>
                                         <td>{expense.price}</td>
                                         <td>{expense.currency}</td>
                                     </tr>

@@ -4,7 +4,7 @@ import Echo from "laravel-echo";
 
 window.pusher = require('pusher-js');
 
-const ProjectRoot = require('./components/project/ProjectRoot.jsx');
+import ProjectRoot from './components/project/ProjectRoot.jsx';
 import FinanceRoot from './components/financial/FinanceRoot';
 
 export default class AppRoot extends React.Component {

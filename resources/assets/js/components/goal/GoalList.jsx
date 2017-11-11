@@ -1,35 +1,23 @@
 const React = require('react');
-const ListGroup = require('react-bootstrap').ListGroup;
-const ListGroupItem = require('react-bootstrap').ListGroupItem;
-const Button = require('react-bootstrap').Button;
-const Badge = require('react-bootstrap').Badge;
-const Glyphicon = require('react-bootstrap').Glyphicon;
-const GoalInput = require('./GoalInput.jsx');
+
+import {ListGroup, ListGroupItem,Button,Badge,Glyphicon } from 'react-bootstrap';
+
+import GoalInput from './GoalInput.jsx';
 /**
  * React component managing goal lists
  */
-const GoalList = React.createClass({
+export default class GoalList extends React.Component{
 
-    propTypes: {
+    constructor(props){
+        super(props);
+    }
+
+    /*propTypes: {
         goals: React.PropTypes.array.isRequired,
         createGoal: React.PropTypes.func,
         project_id: React.PropTypes.string.isRequired,
-    },
+    },*/
 
-    /**
-     * Define component initial state
-     *
-     * @returns {{goals: Array}}
-     */
-    getInitialState: function () {
-        return {};
-    },
-
-    /**
-     * Method called when component is mounted in html
-     * Loads goal list in AJAX
-     */
-    componentDidMount: function () {},
 
 
     /**
@@ -37,7 +25,7 @@ const GoalList = React.createClass({
      *
      * @returns {XML}
      */
-    render() {
+    render(){
 
         // goal list
         const goals = this.props.goals;
@@ -142,6 +130,4 @@ const GoalList = React.createClass({
             </div>
         );
     }
-});
-
-module.exports = GoalList;
+};

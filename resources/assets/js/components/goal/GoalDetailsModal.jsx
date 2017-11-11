@@ -1,28 +1,26 @@
-const React = require('react');
-const FormControl = require('react-bootstrap').FormControl;
-const FormGroup = require('react-bootstrap').FormGroup;
-const ControlLabel = require('react-bootstrap').ControlLabel;
-const HelpBlock = require('react-bootstrap').HelpBlock;
-const Button = require('react-bootstrap').Button;
-const Modal = require('react-bootstrap').Modal;
-const Glyphicon = require('react-bootstrap').Glyphicon;
-const DayPicker = require('react-day-picker');
-const DateUtils = require('react-day-picker').DateUtils;
+import React from 'react';
+import {FormControl, FormGroup, ControlLabel, Button, Modal, Glyphicon } from 'react-bootstrap';
+import DayPicker from 'react-day-picker';
 
 /**
  * React component managing goal input
  */
-const GoalsDetailsModal = React.createClass({
+export default class GoalsDetailsModal extends React.Component{
+
+    constructor(props){
+        super(props);
+        this.state = this.getInitialState();
+    }
 
     /**
      * Define required component's properties
      */
-    propTypes: {
+    //propTypes= {
         /**
          * Method to call when the new goal has been send to server successfully
          */
-        goal: React.PropTypes.object.isRequired,
-    },
+      //  goal: React.PropTypes.object.isRequired,
+   // }
 
     /**
      * Return component initial state
@@ -40,7 +38,7 @@ const GoalsDetailsModal = React.createClass({
             notes: null,
 
         };
-    },
+    }
 
     componentDidMount(){
 
@@ -57,19 +55,19 @@ const GoalsDetailsModal = React.createClass({
             display: diff < 3,
         })
 
-    },
+    }
 
     /**
      * Called when the user hit a keyboard key in input
      *
      * @param target
      */
-    handleKeyPress: function(target) {
+    handleKeyPress(target) {
         // when pressing enter key
         if(target.charCode===13){
             this.onSave();
         }
-    },
+    }
 
     onSave(){
         this.props.goal.updateDetails(
@@ -83,13 +81,8 @@ const GoalsDetailsModal = React.createClass({
         this.setState({
             display: false
         });
-    },
+    }
 
-
-    handleDayClick(day) {
-        const range = DateUtils.addDayToRange(day, this.state);
-        this.setState(range);
-    },
 
 
     /**
@@ -193,6 +186,4 @@ const GoalsDetailsModal = React.createClass({
             </span>
         )
     }
-});
-
-module.exports = GoalsDetailsModal;
+};

@@ -1,12 +1,8 @@
-const React = require('react');
-const FormControl = require('react-bootstrap').FormControl;
-const Button = require('react-bootstrap').Button;
-const Glyphicon = require('react-bootstrap').Glyphicon;
+import React from 'react';
 
-const PropTypes = require('prop-types');
-const SideNav = require('react-sidenav').SideNav;
-const Nav = require('react-sidenav').Nav;
-const NavText = require('react-sidenav').NavText;
+import PropTypes from 'prop-types';
+
+import {SideNav, Nav, NavText} from 'react-sidenav';
 
 
 const NavMain = {
@@ -33,7 +29,7 @@ const SeparatorTitle = props => {
     );
 };
 
-const ResponsiveSideBar = React.createClass({
+export default class ResponsiveSideBar extends React.Component{
 
 
 
@@ -69,14 +65,12 @@ const ResponsiveSideBar = React.createClass({
             </SideNav>
         )
     }
-});
-
+};
+/*
 ResponsiveSideBar.propTypes = {
     projects: PropTypes.array.isRequired,
     onItemSelection: PropTypes.func.isRequired,
     selected: PropTypes.string.isRequired
 
 
-};
-
-module.exports = ResponsiveSideBar;
+};*/

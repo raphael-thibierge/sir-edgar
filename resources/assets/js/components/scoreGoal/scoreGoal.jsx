@@ -1,17 +1,22 @@
-const React = require('react');
-const ProgressBar = require('react-bootstrap').ProgressBar;
-const AjaxEditableValue = require('../generic/AjaxEditableValue.jsx');
+import React from 'react';
+import {ProgressBar} from 'react-bootstrap';
+import AjaxEditableValue from '../generic/AjaxEditableValue.jsx';
 
-const ScoreGoal = React.createClass({
+export default class ScoreGoal extends React.Component{
 
-    getInitialState: function(){
+    constructor(props){
+        super(props);
+        this.state = this.getInitialState();
+    }
+
+    getInitialState(){
         return {
             score: 0,
             scoreGoal: 1,
         }
-    },
+    }
 
-    componentDidMount: function(){
+    componentDidMount(){
         this.request();
 
         // reset score at 00:00:00
@@ -19,13 +24,13 @@ const ScoreGoal = React.createClass({
         const nextDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, 0, 0, 0, 0);
         const millisTill10 =  nextDate - now;
         setTimeout(this.setState.bind(this, {score: 0}), millisTill10);
-    },
+    }
 
 
     /**
      * AJAX request to get goals from server
      */
-    request: function(){
+    request(){
 
         const request = $.ajax({
             url: './goals/current-score',
@@ -60,10 +65,10 @@ const ScoreGoal = React.createClass({
             },
             error: (error) => {console.error(error.message); alert(error)},
         });
-    },
+    }
 
 
-    render: function(){
+    render(){
 
         const progressValue = Math.floor((this.state.score / this.state.scoreGoal) * 100 );
 
@@ -102,6 +107,4 @@ const ScoreGoal = React.createClass({
         )
 
     }
-});
-
-module.exports = ScoreGoal;
+};

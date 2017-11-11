@@ -1,28 +1,30 @@
-const React = require('react');
-const FormGroup = require('react-bootstrap').FormGroup;
-const FormControl = require('react-bootstrap').FormControl;
-const HelpBlock = require('react-bootstrap').HelpBlock;
-const ListGroupItem = require('react-bootstrap').ListGroupItem;
-const Button = require('react-bootstrap').Button;
-const Badge = require('react-bootstrap').Badge;
-const Glyphicon = require('react-bootstrap').Glyphicon;
-const GoalDetailsModal = require('./GoalDetailsModal.jsx');
+import React from 'react';
+
+import {FormGroup,FormControl,ListGroupItem,Button,Badge,Glyphicon } from 'react-bootstrap';
+
+
+import GoalDetailsModal from './GoalDetailsModal';
 
 /**
  *
  * React component managing goal input
  */
-const GoalInput = React.createClass({
+export default class GoalInput extends React.Component{
+
+    constructor(props){
+        super(props);
+        this.state = this.getInitialState();
+    }
 
     /**
      * Define required component's properties
      */
-    propTypes: {
+   // propTypes: {
         /**
          * Method to call when the new goal has been send to server successfully
          */
-        goal: React.PropTypes.object.isRequired,
-    },
+     //   goal: React.PropTypes.object.isRequired,
+    //},
 
     /**
      * Return component initial state
@@ -36,13 +38,13 @@ const GoalInput = React.createClass({
             score: 1,
             editMode: false,
         };
-    },
+    }
 
     componentDidMount(){
         if (this.props.goal._id === null){
             this.setEditMode();
         }
-    },
+    }
 
 
     /**
@@ -50,12 +52,12 @@ const GoalInput = React.createClass({
      *
      * @returns {{title, score: (number|*)}}
      */
-    getFormValues: function (){
+    getFormValues(){
         return {
             title: this.state.title,
             score: this.state.score,
         }
-    },
+    }
 
     /**
      * Update this.state.title value when user edit title score value
@@ -64,7 +66,7 @@ const GoalInput = React.createClass({
      */
     onTitleChange(e) {
         this.setState({ title: e.target.value });
-    },
+    }
 
     /**
      * Update this.state.score when user edit score input value
@@ -73,19 +75,19 @@ const GoalInput = React.createClass({
      */
     onScoreChange(e){
         this.setState({ score: e.target.value });
-    },
+    }
 
     /**
      * Called when the user hit a keyboard key in input
      *
      * @param target
      */
-    handleKeyPress: function(target) {
+    handleKeyPress(target) {
         // when pressing enter key
         if(target.charCode===13){
             this.onEnterPress();
         }
-    },
+    }
 
     /**
      * Send form values to server when user hit enter key in input
@@ -93,14 +95,14 @@ const GoalInput = React.createClass({
     onEnterPress(){
 
         this.setDisplayMode();
-    },
+    }
 
     /**
      * Calls onStoreSuccess function when data has been send to server success successfully.
      *
      * @param response
      */
-    onSuccess: function (response) {
+    onSuccess(response) {
 
         // check response status
         if (response.status && response.status == 'success'){
@@ -116,27 +118,27 @@ const GoalInput = React.createClass({
             // reset component state
             this.setState(this.getInitialState());
         }
-    },
+    }
 
     /**
      * Called when server return error while trying to send form's data
      * @param response
      */
-    onError: function (response) {
+    onError(response) {
         alert('error');
         console.error(response);
-    },
+    }
 
     /**
      * AJAX request to notify server that user has complete a goal
      * @param goal
      */
-    onCompleteGoalClick: function(goal){
+    onCompleteGoalClick(goal){
 
-    },
+    }
 
 
-    editModeRender: function () {
+    editModeRender(){
         return (
             <ListGroupItem key="input" style={{height: 57}}>
                 <FormGroup
@@ -171,17 +173,17 @@ const GoalInput = React.createClass({
                 </FormGroup>
             </ListGroupItem>
         );
-    },
+    }
 
-    setEditMode: function () {
+    setEditMode() {
         this.setState({
             editMode: true,
             title: this.props.goal.title,
             score: this.props.goal.score,
         });
-    },
+    }
 
-    setDisplayMode: function () {
+    setDisplayMode() {
 
         if (this.props.goal._id !== null){
             // update goal
@@ -195,10 +197,10 @@ const GoalInput = React.createClass({
             this.setEditMode();
         }
 
-    },
+    }
 
 
-    displayModeRender: function () {
+    displayModeRender() {
 
         /**
          * Compute number of days difference from today
@@ -353,7 +355,7 @@ const GoalInput = React.createClass({
                 <Badge>{goal.score}</Badge>
             </ListGroupItem>
         );
-    },
+    }
 
 
     /**
@@ -364,6 +366,4 @@ const GoalInput = React.createClass({
     render() {
         return this.state.editMode === true ? this.editModeRender() : this.displayModeRender();
     }
-});
-
-module.exports = GoalInput;
+};

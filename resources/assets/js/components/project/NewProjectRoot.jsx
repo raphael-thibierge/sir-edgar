@@ -1,37 +1,39 @@
-const React = require('react');
-const PropTypes = require('prop-types').PropTypes;
-const FormGroup = require('react-bootstrap').FormGroup;
-const FormControl = require('react-bootstrap').FormControl;
-const Button = require('react-bootstrap').Button;
-const Glyphicon = require('react-bootstrap').Glyphicon;
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import {FormGroup, FormControl, Button, Glyphicon } from 'react-bootstrap';
 
 
-const NewProjectRoot = React.createClass({
+export default class NewProjectRoot extends React.Component{
 
+    constructor(props){
+        super(props);
+        this.state = this.getInitialState();
+    }
 
     getInitialState(){
 
         return {
             newProjectTitle: ''
         };
-    },
+    }
 
     /**
      * Called when the user hit a keyboard key in input
      *
      * @param target
      */
-    handleKeyPress: function(target) {
+    handleKeyPress(target) {
         // when pressing enter key
         if(target.charCode==13){
             this.onClick();
         }
-    },
+    }
 
 
     onClick(){
         this.props.onNewProjectClick(this.state.newProjectTitle);
-    },
+    }
 
     render() {
         return (
@@ -82,11 +84,10 @@ const NewProjectRoot = React.createClass({
             </div>
         );
     }
-});
+};
 
+/*
 NewProjectRoot.propTypes = {
     onNewProjectClick: PropTypes.func.isRequired,
     projectCurrentNumber: PropTypes.number.isRequired
-};
-
-module.exports = NewProjectRoot;
+};*/

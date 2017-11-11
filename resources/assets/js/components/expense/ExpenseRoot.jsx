@@ -1,7 +1,7 @@
 import React from 'react';
 import ExpenseTable from './ExpenseTable';
 import DayPicker from 'react-day-picker';
-
+import Tools from '../Tools'
 
 export default class ExpenseRoot extends React.Component {
 
@@ -23,7 +23,7 @@ export default class ExpenseRoot extends React.Component {
         return this.props.expenses.filter((expense) => {
 
             // expense created at
-            var expense_date = new Date(expense.created_at);
+            var expense_date = Tools.dateFormater(expense.created_at);
             expense_date.setMinutes(expense_date.getMinutes() - expense_date.getTimezoneOffset());
 
             if (this.state.start_date !== null){

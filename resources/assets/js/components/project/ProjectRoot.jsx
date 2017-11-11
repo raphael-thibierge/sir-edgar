@@ -1,12 +1,4 @@
-const GoalList = require("../goal/GoalList");
-
 const React = require('react');
-const Accordion = require('react-bootstrap').Accordion;
-const Button = require('react-bootstrap').Button;
-const Glyphicon = require('react-bootstrap').Glyphicon;
-const Collapse = require('react-bootstrap').Collapse;
-const FormGroup = require('react-bootstrap').FormGroup;
-const FormControl = require('react-bootstrap').FormControl;
 const ProjectRender = require('./ProjectRender.jsx');
 const Goal = require('../goal/Goal');
 const GoalsGraph = require('../goal/GoalsGraph.jsx');

@@ -1,38 +1,45 @@
-const React = require('react');
-const Chart = require('react-google-charts').Chart;
-const PropTypes = require('prop-types').PropTypes;
-const Glyphicon = require('react-bootstrap').Glyphicon;
-const GoalsGraph = React.createClass({
+import React from 'react';
+import {Chart} from 'react-google-charts';
+import PropTypes from 'prop-types';
+import {Glyphicon} from 'react-bootstrap';
+
+export default class GoalsGraph extends React.Component{
+
+
+    constructor(props){
+        super(props);
+        this.state = this.getInitialState();
+    }
 
 
     getInitialState(){
         return{
             data: []
         }
-    },
+    }
 
 
     /**
      * Method called when component is mounted
      * Loads total score per day list in AJAX
      */
-    componentDidMount: function () {
+    componentDidMount() {
         this.request();
-    },
+    }
 
 
     /**
      * AJAX request to get goals from server
      */
-    request: function(){
+    request(){
         const request = $.ajax({
             url: './goals/score?offset=' + new Date().getTimezoneOffset(),
             cache: false,
             method: 'GET',
-            success: this.onSuccess,
-            error: this.onError,
+            success: this.onSuccess.bind(this),
+            error: this.onError.bind(),
         });
-    },
+    }
 
 
     sameDay(date1, date2){
@@ -41,13 +48,13 @@ const GoalsGraph = React.createClass({
             && date1.getMonth() == date2.getMonth()
             && date1.getFullYear() == date2.getFullYear()
         );
-    },
+    }
 
     /**
      * AJAX goal loading success method that store returned goals in component state
      * @param response
      */
-    onSuccess: function (response) {
+    onSuccess(response) {
         if (response.status && response.status == 'success'){
 
             // list of scores per project per day
@@ -114,16 +121,16 @@ const GoalsGraph = React.createClass({
                 data: data
             });
         }
-    },
+    }
 
     /**
      * alert user when an ajax request failed
      * @param response
      */
-    onError: function (response) {
+    onError(response) {
         alert('error');
         console.error(response);
-    },
+    }
 
 
     increaseTodayScore(score){
@@ -137,7 +144,7 @@ const GoalsGraph = React.createClass({
                 data: data
             });
         }
-    },
+    }
 
     deleteGoal(goal){
         console.log(goal);
@@ -162,7 +169,7 @@ const GoalsGraph = React.createClass({
             }
         }
 
-    },
+    }
 
     render(){
 
@@ -225,10 +232,8 @@ const GoalsGraph = React.createClass({
 
         )
     }
-});
-
+};
+/*
 GoalsGraph.propTypes = {
     projectCurrentNumber: PropTypes.number.isRequired
-};
-
-module.exports = GoalsGraph;
+};*/
