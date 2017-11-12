@@ -1,5 +1,5 @@
 import React from 'react';
-import {} from 'react-bootstrap';
+import {PanelGroup} from 'react-bootstrap';
 import Budget from './Budget';
 import BudgetCreateModal from './BudgetCreateModal';
 
@@ -23,6 +23,7 @@ export default class BudgetRoot extends React.Component {
                     </div>
                     <div className="row">
                         <div className="col-xs-12">
+                            <PanelGroup>
                             {this.props.budgets.map((budget) => (
                                 <Budget
                                     key={budget._id}
@@ -31,6 +32,7 @@ export default class BudgetRoot extends React.Component {
                                     onEdit={this.props.onEdit}
                                 />
                             ))}
+                            </PanelGroup>
                         </div>
                     </div>
                 </div>

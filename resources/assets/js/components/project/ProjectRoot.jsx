@@ -5,6 +5,8 @@ import GoalsGraph from '../goal/GoalsGraph.jsx';
 import ScoreGoal from '../scoreGoal/scoreGoal.jsx';
 import ResponsiveSideBar from '../generic/ResponsiveSideBar.jsx';
 import NewProjectRoot from '../project/NewProjectRoot.jsx';
+import BudgetRoot from '../budget/BudgetRoot';
+import ExpenseRoot from '../expense/ExpenseRoot';
 
 /**
  * Main component managing goals
@@ -38,6 +40,72 @@ export default class ProjectRoot extends React.Component {
      */
     componentDidMount(){
         this.request();
+        $.get('/financial-data')
+            .catch(error => {
+                alert('Failed to load app...');
+                console.error(error);
+            })
+            .then(responseJSON => {
+                if (responseJSON.status === 'success'){
+                    // get response data
+                    const data = responseJSON.data;
+
+                    this.setState({
+                        loaded: true,
+                        budgets: data.budgets,
+                        expenses: data.expenses,
+                    });
+                }
+            });
+    }
+
+    onBudgetCreated(budget){
+        let budgets = this.state.budgets;
+        budgets.push(budget);
+        this.setState({
+            budgets: budgets
+        });
+    }
+
+    handleSelect(eventKey) {
+        event.preventDefault();
+        this.setState({
+            tab: eventKey
+        });
+    }
+
+    onBudgetDeleted(budgetId){
+
+        let budgets = [];
+
+        this.state.budgets.forEach((budget) => {
+            if (budget._id !== budgetId){
+                budgets.push(budget);
+            }
+        });
+
+        this.setState({
+            budgets: budgets
+        });
+
+    }
+
+    onBudgetEdited(budgetEdited){
+
+        let budgets = [];
+
+        this.state.budgets.forEach((budget) => {
+            if (budget._id === budgetEdited._id){
+                budgets.push(budgetEdited);
+            } else {
+                budgets.push(budget);
+            }
+        });
+
+        this.setState({
+            budgets: budgets
+        });
+
     }
 
     /**
@@ -221,8 +289,31 @@ export default class ProjectRoot extends React.Component {
     viewRender(){
         const view = this.state.view;
 
+        console.log(view);
         if (typeof view === 'undefined')
             return null;
+
+        let viewPathParts = view.split('/');
+        console.log(viewPathParts);
+        if (viewPathParts.length === 2){
+
+            console.log('no');
+            switch (viewPathParts[0]){
+                case 'projects':
+                    const project = this.state.projects[this.projectMap[viewPathParts[1]]];
+                    console.log('ok');
+                    return <ProjectRender
+                        project={project}
+                        createGoal={this.addGoal.bind(this)}
+                        onTitleChange={this.editProjectTitle.bind(this)}
+                    />;
+                    break;
+
+                default:
+                    return null;
+                    break;
+            }
+        }
 
         switch (view){
             case 'stats':
@@ -272,14 +363,24 @@ export default class ProjectRoot extends React.Component {
                     />;
                 break;
 
+            case 'budgets':
+                return <BudgetRoot
+                    hide
+                    budgets={this.state.budgets}
+                    onCreate={this.onBudgetCreated.bind(this)}
+                    onDelete={this.onBudgetDeleted.bind(this)}
+                    onEdit={this.onBudgetEdited.bind(this)}
+                />;
+                break;
+
+            case 'expenses':
+                return <ExpenseRoot
+                    expenses={this.state.expenses}
+                />;
+                break;
+
             default:
-                const project = this.state.projects[this.projectMap[this.state.view]];
-                return <ProjectRender
-                        project={project}
-                        createGoal={this.addGoal.bind(this)}
-                        onTitleChange={this.editProjectTitle.bind(this)}
-                    />;
-                return
+                return null;
         }
     }
 
@@ -314,7 +415,7 @@ export default class ProjectRoot extends React.Component {
                 <div className=" col-xs-12 col-sm-3 col-md-3 col-lg-3">
                     <ResponsiveSideBar
                         projects={this.state.projects}
-                        onItemSelection={(selected) => {this.setState({view: selected})}}
+                        onItemSelection={(selected) => {if (selected !== 'projects') this.setState({view: selected})}}
                         selected={this.state.view}
                     />
                 </div>

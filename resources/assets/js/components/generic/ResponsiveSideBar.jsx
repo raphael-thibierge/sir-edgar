@@ -2,7 +2,7 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import {SideNav, Nav, NavText} from 'react-sidenav';
+import {SideNav, Nav, NavText, NavIcon} from 'react-sidenav';
 
 
 const NavMain = {
@@ -41,9 +41,10 @@ export default class ResponsiveSideBar extends React.Component{
                 selected={this.props.selected}
                 onItemSelection={this.props.onItemSelection}
             >
+
                 <SeparatorTitle>
                     <div>
-                        Dashboard
+                        Productivity
                     </div>
                 </SeparatorTitle>
                 {Object.keys(NavMain).map(key =>
@@ -51,16 +52,33 @@ export default class ResponsiveSideBar extends React.Component{
                         <NavText> {NavMain[key].title} </NavText>
                     </Nav>
                 )}
+
+                <Nav id="projects">
+                    <NavText>Projects</NavText>
+
+                    {this.props.projects.map(project =>
+                        <Nav key={project._id} id={project._id}>
+                            <NavText>
+                                {project.title}
+                            </NavText>
+                        </Nav>
+                    )}
+                </Nav>
+
                 <SeparatorTitle>
-                    <div> Projects</div>
+                    <div> Finance</div>
                 </SeparatorTitle>
-                {this.props.projects.map(project =>
-                    <Nav key={project._id} id={project._id}>
-                        <NavText>
-                            {project.title}
-                        </NavText>
-                    </Nav>
-                )}
+
+                <Nav id="budgets">
+                    <NavText> Budgets </NavText>
+                </Nav>
+
+                <Nav id="expenses">
+                    <NavText> Expense </NavText>
+                </Nav>
+
+
+
 
             </SideNav>
         )

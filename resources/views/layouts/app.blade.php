@@ -67,12 +67,6 @@
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        <li class="change_log"></li>
-                        <li><a href="{{ route('home') }}">Productivity</a></li>
-                        <li><a href="{{ route('finance') }}">Finance</a></li>
-                    </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">

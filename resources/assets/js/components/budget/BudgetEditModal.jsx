@@ -8,7 +8,7 @@ export default class BudgetEditModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = this.props.budget;
-        this.state.tags = this.state.tags.join(' ');
+        this.state.tags = Array.isArray(this.state.tags) ? this.state.tags.join(' '): this.state.tags;
         this.state.display = false;
         this.state.loading = false;
         this.state.error = false;

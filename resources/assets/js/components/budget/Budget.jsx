@@ -1,5 +1,5 @@
 import React from 'react';
-import {ProgressBar} from 'react-bootstrap';
+import {ProgressBar, Panel} from 'react-bootstrap';
 import BudgetEditModal from './BudgetEditModal'
 
 export default class Budget extends React.Component {
@@ -59,8 +59,9 @@ export default class Budget extends React.Component {
         }
 
         return (
-            <div>
+            <Panel>
                 <div className="row">
+
                     <div className="col-xs-4">
                         <span style={{marginLeft: 5}}>
                             {this.props.budget.total}
@@ -83,11 +84,11 @@ export default class Budget extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-xs-14">
+                    <div className="col-xs-12">
                         {progressBar}
                     </div>
                 </div>
-            </div>
+            </Panel>
         );
     }
 
