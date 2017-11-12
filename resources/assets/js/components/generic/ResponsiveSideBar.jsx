@@ -1,15 +1,28 @@
 import React from 'react';
 
 import PropTypes from 'prop-types';
+import SvgIcon from 'react-icons-kit';
+import { ic_aspect_ratio } from 'react-icons-kit/md/ic_aspect_ratio';
+import {
+    ic_business,
+    ic_create_new_folder,
+    ic_folder,
+    ic_folder_special,
+    ic_equalizer,
+    ic_list,
+    ic_warning,
+    ic_work,
+    ic_attach_money,
+} from 'react-icons-kit/md';
 
 import {SideNav, Nav, NavText, NavIcon} from 'react-sidenav';
 
 
 const NavMain = {
-    stats: { title: 'Stats'},
-    important: { title: 'Important goals'},
-    all_goals: { title: 'All goals'},
-    new_project: { title: 'New project'},
+    stats: { title: 'Stats', icon: ic_equalizer},
+    important: { title: 'Important goals', icon: ic_warning},
+    all_goals: { title: 'All goals', icon: ic_list},
+    new_project: { title: 'New project', icon:ic_create_new_folder},
 };
 
 
@@ -49,36 +62,36 @@ export default class ResponsiveSideBar extends React.Component{
                 </SeparatorTitle>
                 {Object.keys(NavMain).map(key =>
                     <Nav key={key} id={key}>
+                        <NavIcon><SvgIcon size={20} icon={NavMain[key].icon}/></NavIcon>
                         <NavText> {NavMain[key].title} </NavText>
                     </Nav>
                 )}
 
                 <Nav id="projects">
                     <NavText>Projects</NavText>
+                    <NavIcon><SvgIcon size={20} icon={ic_folder_special}/></NavIcon>
 
                     {this.props.projects.map(project =>
                         <Nav key={project._id} id={project._id}>
-                            <NavText>
-                                {project.title}
-                            </NavText>
+                            <NavIcon><SvgIcon size={20} icon={ic_folder}/></NavIcon>
+                            <NavText>{project.title}</NavText>
                         </Nav>
                     )}
                 </Nav>
-
+                <br/>
                 <SeparatorTitle>
-                    <div> Finance</div>
+                    <div>Finance</div>
                 </SeparatorTitle>
 
                 <Nav id="budgets">
-                    <NavText> Budgets </NavText>
+                    <NavIcon><SvgIcon size={20} icon={ic_work}/></NavIcon>
+                    <NavText>Budgets</NavText>
                 </Nav>
 
                 <Nav id="expenses">
-                    <NavText> Expense </NavText>
+                    <NavIcon><SvgIcon size={20} icon={ic_attach_money}/></NavIcon>
+                    <NavText>Expenses</NavText>
                 </Nav>
-
-
-
 
             </SideNav>
         )

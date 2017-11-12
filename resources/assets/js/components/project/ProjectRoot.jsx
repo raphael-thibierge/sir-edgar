@@ -28,6 +28,8 @@ export default class ProjectRoot extends React.Component {
     getInitialState(){
         return {
             projects: [],
+            budgets: [],
+            expenses: [],
             newProjectCollapseOpen: false,
             newProjectTitle: '',
             view: 'stats',
@@ -289,19 +291,15 @@ export default class ProjectRoot extends React.Component {
     viewRender(){
         const view = this.state.view;
 
-        console.log(view);
         if (typeof view === 'undefined')
             return null;
 
         let viewPathParts = view.split('/');
-        console.log(viewPathParts);
         if (viewPathParts.length === 2){
 
-            console.log('no');
             switch (viewPathParts[0]){
                 case 'projects':
                     const project = this.state.projects[this.projectMap[viewPathParts[1]]];
-                    console.log('ok');
                     return <ProjectRender
                         project={project}
                         createGoal={this.addGoal.bind(this)}
