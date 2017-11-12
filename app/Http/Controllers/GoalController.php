@@ -96,10 +96,20 @@ class GoalController extends Controller
     public function updateDetails(Request $request, $id)
     {
 
+        $this->validate($request, [
+            'due_date' => 'present',
+        ]);
+
         $updates = [];
 
         if (($due_date = $request->get('due_date')) !== null){
             $updates ['due_date'] = new Carbon($due_date);
+        } else {
+            $updates ['due_date'] = null;
+        }
+
+        if (($title = $request->get('title')) !== null){
+            $updates ['title'] = $title;
         }
 
         if (($due_date = $request->get('estimated_time')) !== null){
@@ -136,7 +146,9 @@ class GoalController extends Controller
      */
     public function destroy(Goal $goal)
     {
-        broadcast(new GoalDeleted($goal));
+        if ($goal->getIsCompletedAttribute()){
+            broadcast(new GoalDeleted($goal));
+        }
         $goal->delete();
         return $this->successResponse();
     }
