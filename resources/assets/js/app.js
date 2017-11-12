@@ -4,6 +4,9 @@ const ReactDOM = require('react-dom');
 
 import AppRoot from './AppRoot';
 
+import 'react-datetime/css/react-datetime.css';
+
+
 Array.prototype.sum = function (prop) {
     let total = 0;
     for ( let i = 0, _len = this.length; i < _len; i++ ) {

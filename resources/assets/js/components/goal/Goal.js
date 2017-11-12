@@ -143,9 +143,7 @@ export default class Goal {
 
     }
 
-    updateDetails(due_date, estimated_time, time_spent, priority, notes){
-
-
+    updateDetails(title, score, due_date, estimated_time, time_spent, priority, notes){
 
         const request = $.ajax({
             url: this.routes.update_details,
@@ -160,12 +158,13 @@ export default class Goal {
                 estimated_time: estimated_time,
                 time_spent: time_spent,
                 priority: priority,
-                notes: notes
+                notes: notes,
+                title: title,
+                score: score,
 
             },
             // when server return success
             success: function (response) {
-                console.log(response);
                 // check status
                 if (response.status && response.status === 'success'){
                     this.due_date = due_date;
@@ -173,6 +172,8 @@ export default class Goal {
                     this.time_spent = time_spent;
                     this.priority = priority;
                     this.notes = notes;
+                    this.title = title;
+                    this.score = score;
 
                     this.updateView();
                 } else {
