@@ -15,7 +15,8 @@ export default class Budget extends React.Component {
         let nbDays = 1;
         if (this.props.budget.period === 'week'){
             days = 7;
-            nbDays = today.getDay();
+            nbDays = today.getDay() > 0 ? today.getDay() : 7;
+
         } else {
             days = today.monthDays();
             nbDays = today.getDate();
@@ -24,6 +25,9 @@ export default class Budget extends React.Component {
         const expenseExpected = nbDays * expensePerDayExpected;
         const progressExpected = Math.floor((expenseExpected/this.props.budget.amount)*100);
 
+        console.log('--');
+        console.log('expected:' + progressExpected);
+        console.log('progress:' + progress);
         let progressBar = null;
         if (progressExpected < progress){
             const value = progress - progressExpected;
