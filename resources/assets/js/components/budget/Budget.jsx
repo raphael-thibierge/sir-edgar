@@ -1,6 +1,6 @@
 import React from 'react';
 import {ProgressBar} from 'react-bootstrap';
-
+import BudgetEditModal from './BudgetEditModal'
 
 export default class Budget extends React.Component {
     render(){
@@ -17,7 +17,11 @@ export default class Budget extends React.Component {
                         </span>
                     </div>
                     <div className="col-xs-4 text-center">
-                        {this.props.budget.name}
+                        <BudgetEditModal
+                            budget={this.props.budget}
+                            onDelete={this.props.onDelete}
+                            onEdit={this.props.onEdit}
+                        />
                         <small> /{this.props.budget.period}</small>
                     </div>
                     <div className="col-xs-4 text-right">

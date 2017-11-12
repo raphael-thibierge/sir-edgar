@@ -24,7 +24,12 @@ export default class BudgetRoot extends React.Component {
                     <div className="row">
                         <div className="col-xs-12">
                             {this.props.budgets.map((budget) => (
-                                <Budget key={budget._id} budget={budget} />
+                                <Budget
+                                    key={budget._id}
+                                    budget={budget}
+                                    onDelete={this.props.onDelete}
+                                    onEdit={this.props.onEdit}
+                                />
                             ))}
                         </div>
                     </div>

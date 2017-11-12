@@ -36,7 +36,7 @@ export default class FinanceRoot extends React.Component {
             });
     }
 
-    onBudgetCreate(budget){
+    onBudgetCreated(budget){
         let budgets = this.state.budgets;
         budgets.push(budget);
         this.setState({
@@ -49,6 +49,40 @@ export default class FinanceRoot extends React.Component {
         this.setState({
             tab: eventKey
         });
+    }
+
+    onBudgetDeleted(budgetId){
+
+        let budgets = [];
+
+        this.state.budgets.forEach((budget) => {
+            if (budget._id !== budgetId){
+                budgets.push(budget);
+            }
+        });
+
+        this.setState({
+            budgets: budgets
+        });
+
+    }
+
+    onBudgetEdited(budgetEdited){
+
+        let budgets = [];
+
+        this.state.budgets.forEach((budget) => {
+            if (budget._id === budgetEdited._id){
+                budgets.push(budgetEdited);
+            } else {
+                budgets.push(budget);
+            }
+        });
+
+        this.setState({
+            budgets: budgets
+        });
+
     }
 
 
@@ -73,7 +107,9 @@ export default class FinanceRoot extends React.Component {
                             <BudgetRoot
                                 hide
                                 budgets={this.state.budgets}
-                                onCreate={this.onBudgetCreate.bind(this)}
+                                onCreate={this.onBudgetCreated.bind(this)}
+                                onDelete={this.onBudgetDeleted.bind(this)}
+                                onEdit={this.onBudgetEdited.bind(this)}
                             />
                         </Tab>
 

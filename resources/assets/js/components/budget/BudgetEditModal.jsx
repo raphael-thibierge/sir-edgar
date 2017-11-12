@@ -3,11 +3,17 @@ import {
     FormControl, FormGroup, ControlLabel, Modal, Button, Glyphicon, Alert
 } from 'react-bootstrap';
 
-export default class BudgetCreateModal extends React.Component {
+export default class BudgetEditModal extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = this.defaultState();
+        this.state = this.props.budget;
+        this.state.tags = this.state.tags.join(', ');
+        this.state.display = false;
+        this.state.loading = false;
+        this.state.error = false;
+
+
     }
 
     defaultState(){
@@ -29,15 +35,14 @@ export default class BudgetCreateModal extends React.Component {
             loading: true
         });
 
-        console.log(window.token);
-
-        $.post('./budgets', {
+        $.post('./budgets/'+this.state._id, {
             name: this.state.name,
             amount: this.state.amount,
             currency: this.state.currency,
             period: this.state.period,
-            tags: this.state.tags,
+            tags: this.state.tags.split(' '),
             _token: window.token,
+            _method: 'PUT',
         }).catch(error => {
             this.state({
                 error: true,
@@ -48,16 +53,57 @@ export default class BudgetCreateModal extends React.Component {
 
             if (responseJSON.status === 'success') {
                 // get response data
-                const data = responseJSON.data;
-
-                this.setState(this.defaultState());
-
-                this.props.onCreate(data.budget);
+                if (typeof this.props.onEdit === 'function'){
+                    this.props.onEdit(this.state);
+                }
+                this.setState({
+                    error: false,
+                    loading: false,
+                    display: false,
+                });
             } else {
                 this.setState({
                     error: true,
                     loading: false,
+                    display: false,
                 });
+                console.error(responseJSON);
+            }
+        });
+    }
+
+    onDelete(){
+
+        this.setState({
+            loading: true
+        });
+
+        $.post('./budgets/'+this.state._id, {
+            _token: window.token,
+            _method: 'DELETE',
+        }).catch(error => {
+            this.state({
+                error: true,
+                loading: false,
+            });
+            console.error(error);
+        }).then(responseJSON => {
+
+            if (responseJSON.status === 'success') {
+                // get response data
+                if (typeof this.props.onDelete === 'function'){
+                    this.props.onDelete(this.state._id);
+                }
+                this.setState({
+                    error: false,
+                    loading: false,
+                    display: false,
+                });
+            } else {
+                this.setState({
+                    error: true,
+                    loading: false,
+                },);
                 console.error(responseJSON);
             }
         });
@@ -73,9 +119,9 @@ export default class BudgetCreateModal extends React.Component {
         return (
 
             <span>
-                <Button bsStyle="default" onClick={()=>{this.setState({ display: true })}}>
-                    <Glyphicon glyph="plus"/>
-                </Button>
+                <a onClick={()=>{this.setState({ display: true })}}>
+                    {this.state.name}
+                </a>
                 <Modal
                     aria-labelledby="contained-modal-title-lg"
                     show={this.state.display}
@@ -84,14 +130,14 @@ export default class BudgetCreateModal extends React.Component {
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title-lg">
                             <strong>
-                                Create a new budget
+                                Edit budget
                             </strong>
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {(this.state.loading) ? (
                             <Alert bsStyle="info">
-                                Creating your budget...
+                                Editing your budget...
                             </Alert>
                         ) : (
                             <div className="row">
@@ -99,7 +145,7 @@ export default class BudgetCreateModal extends React.Component {
 
                                 {this.state.error ? (
                                     <Alert bsStyle="danger">
-                                        Creating budget failed...
+                                        Updating budget failed...
                                     </Alert>
                                 ): null}
 
@@ -162,6 +208,11 @@ export default class BudgetCreateModal extends React.Component {
                                         <option value="month">month</option>
                                   </FormControl>
                                 </FormGroup>
+
+                                    <FormGroup controlId="formControlsDelete">
+                                        <ControlLabel>Period</ControlLabel>
+                                        <Button onClick={this.onDelete.bind(this)} bsStyle="danger" className="col-xs-12">Delete</Button>
+                                    </FormGroup>
                                 </div>
                             </div>
                             )}
