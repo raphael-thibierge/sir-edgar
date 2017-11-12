@@ -420,7 +420,10 @@ export default class ProjectRoot extends React.Component {
 
                 <div className="col-xs-12 col-sm-9">
 
-                    <ScoreGoal/>
+                    {this.state.view !== 'expenses' && this.state.view !== 'budgets' ? (
+                        <ScoreGoal/>
+                    ): null}
+
 
                     {this.viewRender()}
 

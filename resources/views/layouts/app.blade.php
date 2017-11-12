@@ -43,6 +43,13 @@
         .react-calendar-heatmap .color-scale-2 { fill: #8cc665;}
         .react-calendar-heatmap .color-scale-3 { fill: #44a340;}
         .react-calendar-heatmap .color-scale-4 { fill: #1e6823;}
+        .productivity-page-header {
+            margin-top: 5px;
+        }
+        .finance-page-header {
+            margin-top: 0px;
+        }
+
     </style>
 
 </head>

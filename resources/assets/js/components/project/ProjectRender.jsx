@@ -44,24 +44,33 @@ export default class ProjectRender extends React.Component{
         return (
             <div className="row">
                 <div className="col-xs-12">
-                    <div className="page-heading">
-                        <div className="h1">
-                            {typeof project.routes !== "undefined" ?
-                                <AjaxEditableValue
-                                    value={this.props.project.title}
-                                    ajaxURI={project.routes.update}
-                                    inputName="title"
-                                    method="PUT"
-                                    onSuccess={this.editTitle.bind(this)}
-                                /> : this.props.project.title
-                            }
-                            </div>
+
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <h1 className="page-header productivity-page-header">
+                                {typeof project.routes !== "undefined" ?
+                                    <AjaxEditableValue
+                                        value={this.props.project.title}
+                                        ajaxURI={project.routes.update}
+                                        inputName="title"
+                                        method="PUT"
+                                        onSuccess={this.editTitle.bind(this)}
+                                    /> : this.props.project.title
+                                }
+                            </h1>
+                        </div>
                     </div>
-                    <GoalList
-                        goals={project.goals}
-                        createGoal={this.props.createGoal}
-                        project_id={project._id}
-                    />
+
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <GoalList
+                                goals={project.goals}
+                                createGoal={this.props.createGoal}
+                                project_id={project._id}
+                            />
+                        </div>
+                    </div>
+
 
                 </div>
             </div>

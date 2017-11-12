@@ -3,6 +3,8 @@ import ExpenseTable from './ExpenseTable';
 import DayPicker from 'react-day-picker';
 import Tools from '../Tools'
 
+import {Glyphicon} from 'react-bootstrap';
+
 export default class ExpenseRoot extends React.Component {
 
     constructor(props) {
@@ -53,12 +55,22 @@ export default class ExpenseRoot extends React.Component {
             <div className="row">
                 <div className="col-xs-12">
 
-                    {this.props.length == 0 ? (
-                        <div className="alert alert-info">
-                            Add your expenses with SirEdagr's messenger bot
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <h1 className="page-header finance-page-header">Expenses</h1>
                         </div>
-                    ):(
-                        <div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <div className="alert alert-info">
+                                <p><Glyphicon glyph="info-sign"/> When spending money, <strong>ask edgar on messenger</strong> to save it :</p>
+                                <p><em>"Add a new expense of 10.2 CAD #lunch at #restaurant with #friends"</em></p>
+                            </div>
+                        </div>
+                    </div>
+                    {this.props.expenses.length > 0 ? (
+                        <div className="row text-center">
                             <div className="col-xs-6">
                                 <DayPicker
                                     title="Start"
@@ -84,7 +96,7 @@ export default class ExpenseRoot extends React.Component {
 
                             <ExpenseTable expenses={expenses}/>
                         </div>
-                    )}
+                    ): null}
                 </div>
             </div>
         );

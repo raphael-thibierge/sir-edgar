@@ -255,7 +255,7 @@ export default class GoalsGraph extends React.Component{
 
                     <div className="row">
                         <div className="col-xs-12">
-                            <h1>Stats <small>Best score : {this.state.scoreMax}</small></h1>
+                            <h1 className="page-header productivity-page-header">Stats <small>Best score : {this.state.scoreMax}</small></h1>
                         </div>
                     </div>
                     <br/>
