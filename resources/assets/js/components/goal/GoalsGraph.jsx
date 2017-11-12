@@ -134,7 +134,8 @@ export default class GoalsGraph extends React.Component{
                 }
 
                 let minimalDate= new Date();
-                minimalDate.setMonth(minimalDate.getMonth()-3);
+                minimalDate.setMonth(minimalDate.getMonth()-2);
+                minimalDate.setDate(minimalDate.getDate()-15);
 
                 if (date > minimalDate){
                     // insert day line in chart data
