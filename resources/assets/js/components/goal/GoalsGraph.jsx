@@ -1,7 +1,8 @@
 import React from 'react';
 import {Chart} from 'react-google-charts';
 import PropTypes from 'prop-types';
-import {Glyphicon} from 'react-bootstrap';
+import {Glyphicon, Popover, OverlayTrigger} from 'react-bootstrap';
+import CalendarHeatmap from 'react-calendar-heatmap';
 
 export default class GoalsGraph extends React.Component{
 
@@ -14,7 +15,9 @@ export default class GoalsGraph extends React.Component{
 
     getInitialState(){
         return{
-            data: []
+            googleChartData: [],
+            calendarData: [],
+            scoreMax: 0,
         }
     }
 
@@ -75,12 +78,16 @@ export default class GoalsGraph extends React.Component{
             // start filling data, with header as first line
             let data = [header];
 
+
             // get first date of scores
             let date = new Date(response.data.firstDate);
             // get last date (today)
             let lastDate = new Date;
             lastDate.setDate(lastDate.getDate() + 1);
 
+            // calendar chart data
+            let calendatData = [];
+            let scoreMax = 0;
             // get score per project foreach day
             do  {
 
@@ -90,8 +97,10 @@ export default class GoalsGraph extends React.Component{
                 // first column is the date
                 let line = [dateAsString];
 
-
                 let total = 0;
+
+                let projetScores = [];
+
                 // insert each projects score per day in a separate column
                 for (let i=0; i<projects_ids.length; i++){
 
@@ -100,6 +109,15 @@ export default class GoalsGraph extends React.Component{
                         typeof scores[dateAsString][projects_ids[i]] !== 'undefined'
                     ){
                         const score = scores[dateAsString][projects_ids[i]];
+
+                        if (score > 0){
+                            projetScores.push({
+                                name: projects_names[i],
+                                score: score,
+                                id: projects_ids[i],
+                            })
+                        }
+
                         total+=score;
                         line.push(score);
                     } else {
@@ -108,6 +126,12 @@ export default class GoalsGraph extends React.Component{
                 }
                 line.push(total > 0? total : "");
 
+                calendatData.push({date: dateAsString, count: total, projects: projetScores});
+
+                // update score max
+                if (total > scoreMax){
+                    scoreMax = total;
+                }
 
                 // insert day line in chart data
                 data.push(line);
@@ -118,7 +142,11 @@ export default class GoalsGraph extends React.Component{
 
 
             this.setState({
-                data: data
+                googleChartData: data,
+                calendarData: calendatData,
+                scoreMax: scoreMax,
+                projects: projects,
+                projectIds: projects_ids,
             });
         }
     }
@@ -134,7 +162,7 @@ export default class GoalsGraph extends React.Component{
 
 
     increaseTodayScore(score){
-        data = this.state.data;
+        data = this.state.googleChartData;
         const today = (new Date).toISOString().slice(0, 10);
         if (data.length > 1){
             let value = data[data.length-1];
@@ -149,7 +177,7 @@ export default class GoalsGraph extends React.Component{
     deleteGoal(goal){
         console.log(goal);
         if (goal && goal.is_completed){
-            let data = this.state.data;
+            let data = this.state.googleChartData;
 
             if (goal.completed_at){
                 const goalDate = goal.completed_at.slice(0,10);
@@ -215,21 +243,87 @@ export default class GoalsGraph extends React.Component{
         return (
             <div className="row">
                 <div className="col-xs-12">
-                    <h1>Completed goals stats</h1>
-                </div>
-                <div className="col-xs-12">
-                    <Chart
-                        chartType="ColumnChart"
-                        data={this.state.data}
-                        options={options}
-                        graph_id="ScatterChart_material"
-                        width="100%"
-                        height="400px"
-                        legend_toggle
-                    />
+
+
+
+
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <h1>Completed goals stats</h1>
+                            <h2>Best score : {this.state.scoreMax}</h2>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <Chart
+                                chartType="ColumnChart"
+                                data={this.state.googleChartData}
+                                options={options}
+                                graph_id="ScatterChart_material"
+                                width="100%"
+                                height="400px"
+                                legend_toggle
+                            />
+                        </div>
+                    </div>
+
+                    <br/>
+                    <div className="row">
+                        <div className="col-xs-12">
+
+                            <CalendarHeatmap
+                                values={this.state.calendarData}
+                                tooltipDataAttrs={{ 'data-toggle': 'tooltip' }}
+                                numDays={365}
+                                titleForValue={(value) => {
+                                    if (!value) {
+                                        return '';
+                                    }
+                                    return value.date;
+                                }}
+                                transformDayElement={(rect, value, index) => {
+                                    if (!value || value.count === 0){
+                                        return rect;
+                                    }
+                                    const tooltip = (
+                                        <Popover id="tooltip" title={value.date}>
+                                            <h4>Total : {value.count}</h4>
+                                            <ul>
+                                                {value.projects.map((project) => (
+                                                    <li key={project.id}> {project.name} : {project.score}</li>
+                                                    ))}
+                                            </ul>
+                                        </Popover>
+                                    );
+                                    return (
+                                        <OverlayTrigger placement="top" overlay={tooltip}>
+                                            {rect}
+                                        </OverlayTrigger>
+                                    );
+                                }}
+                                classForValue={(value) => {
+                                    if (!value) {
+                                        return 'color-scale-0';
+                                    }
+
+                                    let color = 0;
+                                    const scoreMax= this.state.scoreMax;
+
+                                    const nbColor = 4;
+                                    for (let i = 0; i < nbColor; i++){
+                                        if (value.count > i * scoreMax / nbColor){
+                                            color = i + 1;
+                                        }
+                                    }
+
+                                    return `color-scale-${color}`;
+                                }}
+                            />
+
+                        </div>
+                    </div>
                 </div>
             </div>
-
         )
     }
 };

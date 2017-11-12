@@ -37,6 +37,13 @@
         });
     </script>
     @endif
+    <style>
+        .react-calendar-heatmap .color-scale-0 { fill: #ebedf0;}
+        .react-calendar-heatmap .color-scale-1 { fill: #d6e685;}
+        .react-calendar-heatmap .color-scale-2 { fill: #8cc665;}
+        .react-calendar-heatmap .color-scale-3 { fill: #44a340;}
+        .react-calendar-heatmap .color-scale-4 { fill: #1e6823;}
+    </style>
 
 </head>
 <body style="background-color: #ffffff">
