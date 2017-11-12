@@ -12,7 +12,7 @@ Array.prototype.sum = function (prop) {
     for ( let i = 0, _len = this.length; i < _len; i++ ) {
         total += this[i][prop];
     }
-    return total
+    return parseFloat(total.toFixed(2));
 };
 
 if (window.app){
