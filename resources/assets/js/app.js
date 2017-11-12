@@ -15,6 +15,11 @@ Array.prototype.sum = function (prop) {
     return parseFloat(total.toFixed(2));
 };
 
+Date.prototype.monthDays= function(){
+    const d= new Date(this.getFullYear(), this.getMonth()+1, 0);
+    return d.getDate();
+}
+
 if (window.app){
     switch (window.app){
         case 'finance':

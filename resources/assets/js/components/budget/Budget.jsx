@@ -5,7 +5,58 @@ import BudgetEditModal from './BudgetEditModal'
 export default class Budget extends React.Component {
     render(){
 
-        const progress =Math.floor((this.props.budget.total/this.props.budget.amount)*100);
+
+        const progress = Math.floor((this.props.budget.total/this.props.budget.amount)*100);
+
+
+        const today = new Date();
+
+        let days = 1;
+        let nbDays = 1;
+        if (this.props.budget.period === 'week'){
+            days = 7;
+            nbDays = today.getDay();
+        } else {
+            days = today.monthDays();
+            nbDays = today.getDate();
+        }
+        const expensePerDayExpected = this.props.budget.amount / days;
+        const expenseExpected = nbDays * expensePerDayExpected;
+        const progressExpected = Math.floor((expenseExpected/this.props.budget.amount)*100);
+
+        let progressBar = null;
+        if (progressExpected < progress){
+            const value = progress - progressExpected;
+            let now;
+
+            if (progress >= 100){
+                now = 100 - progressExpected
+            } else {
+                now = progress - progressExpected;
+            }
+
+            progressBar = (
+                <ProgressBar>
+                    <ProgressBar key={1} striped active now={progressExpected > 100 ? 100 : progressExpected} bsStyle="warning" label={`${progressExpected}%`}/>
+                    <ProgressBar key={2} striped active now={now < 4 ? 4 : now} bsStyle="danger" label={`${progress}%`} />
+                </ProgressBar>
+            )
+
+        } else if (progressExpected > progress){
+            const diff = progressExpected-progress;
+            progressBar = (
+                <ProgressBar>
+                    <ProgressBar key={2} striped active now={progress} bsStyle="success" label={`${progress}%`} />
+                    <ProgressBar key={1} now={diff < 4 ? 4 : diff } bsStyle="info" label={`${progressExpected}%`}/>
+                </ProgressBar>
+            );
+        } else {
+            progressBar = (
+                <ProgressBar>
+                    <ProgressBar key={2} striped active now={progress < 4 ? 4 : progress} bsStyle="success" label={`${progress}%`} />
+                </ProgressBar>
+            );
+        }
 
         return (
             <div>
@@ -33,7 +84,7 @@ export default class Budget extends React.Component {
                 </div>
                 <div className="row">
                     <div className="col-xs-14">
-                        <ProgressBar now={progress > 100 ? 100 : progress} bsStyle={progress < 80 ? 'success' : progress < 100 ? 'warning' : 'danger'} label={`${progress}%`}/>
+                        {progressBar}
                     </div>
                 </div>
             </div>

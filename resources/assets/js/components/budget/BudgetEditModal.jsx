@@ -217,7 +217,7 @@ export default class BudgetEditModal extends React.Component {
                             )}
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={() => {this.setState(this.defaultState())}}>Cancel</Button>
+                        <Button onClick={() => {this.setState({display: false})}}>Cancel</Button>
                         <Button bsStyle="success" onClick={this.onSave.bind(this)}>Save</Button>
                     </Modal.Footer>
                 </Modal>
