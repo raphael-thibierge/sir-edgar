@@ -1,56 +1,80 @@
-const React = require('react');
-const Accordion = require('react-bootstrap').Accordion;
-const Panel = require('react-bootstrap').Panel;
-const ListGroup = require('react-bootstrap').ListGroup;
-const ListGroupItem = require('react-bootstrap').ListGroupItem;
-const Table = require('react-bootstrap').Table;
-const GoalList = require('../goal/GoalList.jsx');
-const GoalInput = require('../goal/GoalInput.jsx');
-
+import React from 'react';
+import GoalList from '../goal/GoalList';
+import AjaxEditableValue from '../generic/AjaxEditableValue';
+import PropTypes from 'prop-types';
 /**
  * Main component managing goals
  */
-const ProjectRender = React.createClass({
+export default class ProjectRender extends React.Component{
 
-    propTypes:{
-        project: React.PropTypes.object.isRequired,
-    },
+     /* propTypes:{
+        project: PropTypes.object.isRequired,
+        onTitleChange: PropTypes.func,
+    },*/
+
+    constructor(props){
+        super(props);
+        this.state = this.getInitialState();
+    }
 
     /**
      * Define component initial state
      *
      * @returns {{}}
      */
-    getInitialState: function () {
+    getInitialState() {
         return {};
-    },
+    }
+
+    editTitle(title){
+        if (typeof this.props.onTitleChange === 'function'){
+            this.props.onTitleChange(title, this.props.project._id)
+        }
+    }
 
     /**
      * Render method, returning HTML code for goal input and list
      *
      * @returns {XML}
      */
-    render: function () {
+    render() {
 
         const project = this.props.project;
 
         return (
             <div className="row">
                 <div className="col-xs-12">
-                    <div className="page-heading">
-                        <div className="h1">{this.props.project.title}</div>
+
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <h1 className="page-header productivity-page-header">
+                                {typeof project.routes !== "undefined" ?
+                                    <AjaxEditableValue
+                                        value={this.props.project.title}
+                                        ajaxURI={project.routes.update}
+                                        inputName="title"
+                                        method="PUT"
+                                        onSuccess={this.editTitle.bind(this)}
+                                    /> : this.props.project.title
+                                }
+                            </h1>
+                        </div>
                     </div>
-                    <GoalList
-                        goals={project.goals}
-                        createGoal={this.props.createGoal}
-                        project_id={project._id}
-                    />
+
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <GoalList
+                                goals={project.goals}
+                                createGoal={this.props.createGoal}
+                                project_id={project._id}
+                            />
+                        </div>
+                    </div>
+
 
                 </div>
             </div>
         );
     }
 
-});
-
-module.exports = ProjectRender;
+};

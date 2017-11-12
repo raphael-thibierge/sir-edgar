@@ -68,7 +68,10 @@
                     and helps you to complete your daily score goal !
                 </h3>
                     <a href="{{ route('home') }}" class="btn btn-success">Get Started</a>
+                    <a href="https://www.music.sir-edgar.com" class="btn btn-info">Music by Edgar (soon)</a>
                 </div>
+
+
             </div>
         </div>
                 <br>

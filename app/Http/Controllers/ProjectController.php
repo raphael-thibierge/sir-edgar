@@ -73,7 +73,24 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        //
+        $this->validate($request, [
+            'title' => 'string'
+        ]);
+
+        $updates = [];
+
+        if ($request->has('title')){
+            $updates['title'] = $request->get('title');
+        }
+
+        if (count($updates) > 0){
+            $project->update($updates);
+        }
+
+        return $this->successResponse([
+            'project' => $project
+        ]);
+
     }
 
     /**

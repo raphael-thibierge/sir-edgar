@@ -2,7 +2,9 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CheckRemindersCommand;
 use App\Console\Commands\DailyGoalsReportCommand;
+use App\Console\Commands\MorningEdgarMessageCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -14,7 +16,10 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        DailyGoalsReportCommand::class
+        DailyGoalsReportCommand::class,
+        CheckRemindersCommand::class,
+        DailyGoalsReportCommand::class,
+        MorningEdgarMessageCommand::class,
     ];
 
     /**
@@ -26,9 +31,34 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
-        $schedule->command('report:goals:daily')
+        // server monitoring
+        $schedule->command('monitor:run')->daily()->at('10:00');
+        $schedule->command('monitor:run HttpPing')->hourly();
+
+        foreach (timezone_identifiers_list() as $timezone){
+           // $schedule->command('report:goals:daily')
+            //    ->timezone($timezone)
+            //    ->dailyAt(0);
+
+            $schedule->command('goals:check ' . $timezone)
+                ->timezone($timezone)
+                ->dailyAt(8);
+        }
+
+        $schedule->command('reminders:check')
+            ->everyMinute();
+
+        // raphael
+        $schedule->command('user:morningMessage first' )
             ->timezone('America/Toronto')
-            ->dailyAt(0);
+            ->dailyAt('05:00');
+
+
+        // arthur
+        $schedule->command('user:morningMessage 59ca9b30b2530a3d1345003e')
+            ->timezone('America/Toronto')
+            ->dailyAt('08:30');
+
     }
 
     /**

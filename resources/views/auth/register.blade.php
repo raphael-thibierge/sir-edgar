@@ -1,5 +1,12 @@
 @extends('layouts.app')
 
+@section('title')
+    Register -- @parent
+@endsection
+
+@section('description', 'Create an account to register in ' . config('app.name', 'Sir Edgar')
+. ' and start completing goals to increase your productivity !' )
+
 @section('content')
 <div class="container">
     <div class="row">
@@ -9,6 +16,13 @@
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ route('register') }}">
                         {{ csrf_field() }}
+
+                        @if(isset($_REQUEST['redirect_uri']))
+                            <input type="hidden" name="redirect_uri" value="{{ $_REQUEST['redirect_uri'] }}">
+                        @endif
+                        @if(isset($_REQUEST['account_linking_token']))
+                            <input type="hidden" name="account_linking_token" value="{{ $_REQUEST['account_linking_token'] }}">
+                        @endif
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                             <label for="name" class="col-md-4 control-label">Name</label>

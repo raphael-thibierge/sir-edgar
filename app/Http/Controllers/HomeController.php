@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\DailyGoalsReportMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -15,7 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth', ['only' => ['index']]);
+        $this->middleware('auth', ['only' => ['index', 'initialAppRequest']]);
     }
 
     /**
@@ -33,11 +32,31 @@ class HomeController extends Controller
         return view('about');
     }
 
-    public function test(){
+    public function privacyPolicy(){
+        return view('policy');
+    }
 
+    public function finance(){
+        return view('finance');
+    }
+
+    public function financialData(){
         $user = Auth::user();
+        $budgets = $user->budgets;
+        $expenses = $user->expenses;
+        return $this->successResponse([
+            'expenses' => $expenses,
+            'budgets' => $budgets,
+        ]);
+    }
 
-        Mail::to($user)->send(new DailyGoalsReportMail($user, 7));
-        return 'ok';
+    public function initialAppRequest(){
+        return $this->successResponse([
+            'user'=> Auth::user(),
+            'pusher' => [
+                'key' => env('PUSHER_APP_KEY'),
+                'cluster' => env('PUSHER_CLUSTER'),
+            ]
+        ]);
     }
 }

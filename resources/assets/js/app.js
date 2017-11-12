@@ -2,20 +2,41 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-// get Goal react component
-const GoalRoot = require('./components/goal/GoalRoot.jsx');
-const ProjectRoot = require('./components/project/ProjectRoot.jsx');
+import AppRoot from './AppRoot';
 
-// default react component
-const reactComponent = GoalRoot;
-// react component properties
-const props = {};
-// container (div) to insert component in
-const container = 'goal-root';
+import 'react-datetime/css/react-datetime.css';
 
 
+Array.prototype.sum = function (prop) {
+    let total = 0;
+    for ( let i = 0, _len = this.length; i < _len; i++ ) {
+        total += this[i][prop];
+    }
+    return parseFloat(total.toFixed(2));
+};
 
-ReactDOM.render(
-    React.createElement(ProjectRoot, props),
-    document.getElementById('project-root')
-);
+Date.prototype.monthDays= function(){
+    const d= new Date(this.getFullYear(), this.getMonth()+1, 0);
+    return d.getDate();
+}
+
+if (window.app){
+    switch (window.app){
+        case 'finance':
+            ReactDOM.render(
+                React.createElement(AppRoot, {app: 'finance'}),
+                document.getElementById('app-finance')
+            );
+            break;
+
+        case 'productivity':
+            ReactDOM.render(
+                React.createElement(AppRoot, {app: 'productivity'}),
+                document.getElementById('app-productivity')
+            );
+            break;
+
+    }
+}
+
+

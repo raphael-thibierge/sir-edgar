@@ -1,28 +1,41 @@
-const React = require('react');
-const FormGroup = require('react-bootstrap').FormGroup;
-const FormControl = require('react-bootstrap').FormControl;
-const HelpBlock = require('react-bootstrap').HelpBlock;
-const ListGroupItem = require('react-bootstrap').ListGroupItem;
-const Button = require('react-bootstrap').Button;
-const Badge = require('react-bootstrap').Badge;
-const Glyphicon = require('react-bootstrap').Glyphicon;
-const GoalDetailsModal = require('./GoalDetailsModal.jsx');
+import React from 'react';
+
+import {
+    FormGroup,
+    FormControl,
+    ListGroupItem,
+    Button,
+    Badge,
+    Glyphicon,
+    OverlayTrigger,
+    Popover
+
+} from 'react-bootstrap';
+
+
+import GoalDetailsModal from './GoalDetailsModal';
+import GoalRender from './GoalRender';
 
 /**
  *
  * React component managing goal input
  */
-const GoalInput = React.createClass({
+export default class GoalInput extends React.Component{
+
+    constructor(props){
+        super(props);
+        this.state = this.getInitialState();
+    }
 
     /**
      * Define required component's properties
      */
-    propTypes: {
+   // propTypes: {
         /**
          * Method to call when the new goal has been send to server successfully
          */
-        goal: React.PropTypes.object.isRequired,
-    },
+     //   goal: React.PropTypes.object.isRequired,
+    //},
 
     /**
      * Return component initial state
@@ -36,13 +49,13 @@ const GoalInput = React.createClass({
             score: 1,
             editMode: false,
         };
-    },
+    }
 
     componentDidMount(){
         if (this.props.goal._id === null){
             this.setEditMode();
         }
-    },
+    }
 
 
     /**
@@ -50,12 +63,12 @@ const GoalInput = React.createClass({
      *
      * @returns {{title, score: (number|*)}}
      */
-    getFormValues: function (){
+    getFormValues(){
         return {
             title: this.state.title,
             score: this.state.score,
         }
-    },
+    }
 
     /**
      * Update this.state.title value when user edit title score value
@@ -64,7 +77,7 @@ const GoalInput = React.createClass({
      */
     onTitleChange(e) {
         this.setState({ title: e.target.value });
-    },
+    }
 
     /**
      * Update this.state.score when user edit score input value
@@ -73,19 +86,19 @@ const GoalInput = React.createClass({
      */
     onScoreChange(e){
         this.setState({ score: e.target.value });
-    },
+    }
 
     /**
      * Called when the user hit a keyboard key in input
      *
      * @param target
      */
-    handleKeyPress: function(target) {
+    handleKeyPress(target) {
         // when pressing enter key
-        if(target.charCode==13){
+        if(target.charCode===13){
             this.onEnterPress();
         }
-    },
+    }
 
     /**
      * Send form values to server when user hit enter key in input
@@ -93,14 +106,14 @@ const GoalInput = React.createClass({
     onEnterPress(){
 
         this.setDisplayMode();
-    },
+    }
 
     /**
      * Calls onStoreSuccess function when data has been send to server success successfully.
      *
      * @param response
      */
-    onSuccess: function (response) {
+    onSuccess(response) {
 
         // check response status
         if (response.status && response.status == 'success'){
@@ -116,27 +129,11 @@ const GoalInput = React.createClass({
             // reset component state
             this.setState(this.getInitialState());
         }
-    },
-
-    /**
-     * Called when server return error while trying to send form's data
-     * @param response
-     */
-    onError: function (response) {
-        alert('error');
-        console.error(response);
-    },
-
-    /**
-     * AJAX request to notify server that user has complete a goal
-     * @param goal
-     */
-    onCompleteGoalClick: function(goal){
-
-    },
+    }
 
 
-    editModeRender: function () {
+
+    editModeRender(){
         return (
             <ListGroupItem key="input" style={{height: 57}}>
                 <FormGroup
@@ -147,8 +144,8 @@ const GoalInput = React.createClass({
                             type="text"
                             value={this.state.title}
                             placeholder="New goal"
-                            onChange={this.onTitleChange}
-                            onKeyPress={this.handleKeyPress}
+                            onChange={this.onTitleChange.bind(this)}
+                            onKeyPress={this.handleKeyPress.bind(this)}
                         />
                     </div>
                     <div className="col-xs-3">
@@ -156,32 +153,32 @@ const GoalInput = React.createClass({
                         <FormControl
                             type="number"
                             value={this.state.score}
-                            min={1}
+                            min={0}
                             max={5}
-                            onChange={this.onScoreChange}
-                            onKeyPress={this.handleKeyPress}
+                            onChange={this.onScoreChange.bind(this)}
+                            onKeyPress={this.handleKeyPress.bind(this)}
                         />
                     </div>
                     <div className="col-xs-1">
 
-                        <Button bsSize="sm" bsStyle="success" onClick={this.setDisplayMode}>
+                        <Button bsSize="sm" bsStyle="success" onClick={this.setDisplayMode.bind(this)}>
                             <Glyphicon glyph="ok"/>
                         </Button>
                     </div>
                 </FormGroup>
             </ListGroupItem>
         );
-    },
+    }
 
-    setEditMode: function () {
+    setEditMode() {
         this.setState({
             editMode: true,
             title: this.props.goal.title,
             score: this.props.goal.score,
         });
-    },
+    }
 
-    setDisplayMode: function () {
+    setDisplayMode() {
 
         if (this.props.goal._id !== null){
             // update goal
@@ -195,101 +192,7 @@ const GoalInput = React.createClass({
             this.setEditMode();
         }
 
-    },
-
-
-    displayModeRender: function () {
-
-        /**
-         * Compute number of days difference from today
-         *
-         * @returns {*}
-         * @param goal
-         */
-        function daydiffString(goal) {
-
-            if (!goal.created_at){
-                return null;
-            }
-
-            const first = new Date(goal.created_at.slice(0,10));
-
-
-            const second = new Date();
-            let value = Math.round((second-first)/(1000*60*60*24));
-
-            if (value <= 0){
-                return null;
-            }
-
-            return (
-                <small>
-                    <strong>
-                        <em className={value >= 7 ? 'text-danger' : value >= 3 ? 'text-warning' : ''}>
-                            ...{value}{value > 1 ? ' days' : ' day'} ago
-                        </em>
-                    </strong>
-                </small>
-            );
-
-        }
-
-        const goal = this.props.goal;
-
-        return (goal.is_completed === false) ? (
-            <ListGroupItem key={goal._id} bsStyle={goal.today === true ? 'warning' : 'default'}>
-
-                <span className="text-left">
-                    <Button
-                        onClick={typeof goal.remove === 'function' ? goal.remove: null}
-                        bsSize="xs"
-                        bsStyle="danger"
-                    ><Glyphicon glyph="trash"/></Button>
-                </span>
-
-                <span className="text-left" style={{marginLeft : '5px'}}>
-                    <Button
-                        onClick={typeof goal.setCompleted === 'function' ? goal.setCompleted.bind(goal): null}
-                        bsSize="xs"
-                        bsStyle="success"
-                    ><Glyphicon glyph="ok"/></Button>
-                </span>
-
-                <span className="text-left" style={{marginLeft : '5px'}}>
-                    <Button
-                        onClick={typeof goal.setToday === 'function' ? goal.setToday.bind(goal): null}
-                        bsSize="xs"
-                        bsStyle="warning"
-                    ><Glyphicon glyph="warning-sign"/></Button>
-                </span>
-
-                <GoalDetailsModal goal={goal}/>
-
-                <a style={{marginLeft : '5px'}} onClick={this.setEditMode}>
-                    {goal.title}
-                </a>
-
-                {daydiffString(goal)}
-
-                <Badge>{goal.score}</Badge>
-
-            </ListGroupItem>
-        ) : (
-            <ListGroupItem key={goal._id} bsStyle="success">
-                <span className="text-left">
-                    <Button
-                        onClick={typeof goal.remove === 'function' ? goal.remove: null}
-                        bsSize="xs"
-                        bsStyle="danger"
-                    ><Glyphicon glyph="trash"/></Button>
-                </span>
-                <a style={{marginLeft : '10px'}}onClick={this.setEditMode}>
-                    {goal.title}
-                </a>
-                <Badge>{goal.score}</Badge>
-            </ListGroupItem>
-        );
-    },
+    }
 
 
     /**
@@ -298,8 +201,6 @@ const GoalInput = React.createClass({
      * @returns {XML}
      */
     render() {
-        return this.state.editMode === true ? this.editModeRender() : this.displayModeRender();
+        return this.state.editMode === true ? this.editModeRender() : <GoalRender goal={this.props.goal}/>;
     }
-});
-
-module.exports = GoalInput;
+};

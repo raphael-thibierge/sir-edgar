@@ -8,13 +8,16 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
-    <form action="" method=""></form>
+    <title>@section('title'){{ config('app.name', 'Laravel') }}, your productivity assistant @show</title>
+    <meta name="description" content="@section('description') Sir Edgard aims to help you make your goals done and track your productivity @show">
+
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/react-day-picker.css') }}" rel="stylesheet">
 
     @if(env('APP_ENV') === 'production')
+    <!-- Google analytics -->
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -25,7 +28,29 @@
         ga('send', 'pageview');
 
     </script>
+    <!-- Google AdSense -->
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-6757486619789376",
+            enable_page_level_ads: true
+        });
+    </script>
     @endif
+    <style>
+        .react-calendar-heatmap .color-scale-0 { fill: #ebedf0;}
+        .react-calendar-heatmap .color-scale-1 { fill: #d6e685;}
+        .react-calendar-heatmap .color-scale-2 { fill: #8cc665;}
+        .react-calendar-heatmap .color-scale-3 { fill: #44a340;}
+        .react-calendar-heatmap .color-scale-4 { fill: #1e6823;}
+        .productivity-page-header {
+            margin-top: 5px;
+        }
+        .finance-page-header {
+            margin-top: 0px;
+        }
+
+    </style>
 
 </head>
 <body style="background-color: #ffffff">
@@ -49,10 +74,6 @@
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        <li class="change_log"></li>
-                    </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
@@ -106,8 +127,7 @@
             selector: ".change_log", // CSS selector where to inject the badge
             account: "xGMR2J", // your account ID,
         };
-        Headway.init(config);
-        console.log('inited')
+        //Headway.init(config);
     </script>
 
 </body>
@@ -115,8 +135,11 @@
     <hr>
     <div class="container">
         <div class="row">
-            <div class="col-xs-2 col-xs-offset-10">
+            <div class="col-xs-2 col-xs-offset-8">
                 <a href="{{ route('about') }}" class="text-right">About page</a>
+            </div>
+            <div class="col-xs-2">
+                <a href="{{ route('privacy.policy ') }}" class="text-right">Privacy policy</a>
             </div>
         </div>
     </div>

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Mail\NewUserRegistration;
+use App\Notifications\MessengerNotification;
 use App\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -22,7 +24,9 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    use RegistersUsers {
+        register as protected registerTrait;
+    }
 
     /**
      * Where to redirect users after registration.
@@ -63,20 +67,37 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $userRegistered = User::create([
+        $userRegistered = User::newUser([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'admin' => false,
-            'daily_score_goal' => 5,
-            'timezone' => 'Europe/Paris',
-            'email_daily_report' => true,
-            'email_weekly_report' => true,
         ]);
 
-        Mail::to(User::where('admin', true)->first())
-            ->send(new NewUserRegistration($userRegistered));
+        User::first()->notify(new MessengerNotification(
+            "I have good news for you ;) \r\n You have a new user : $userRegistered->name ($userRegistered->email)"
+        ));
 
         return $userRegistered;
     }
+
+    public function register(Request $request)
+    {
+        // messenger account linking case
+        if ($request->has('redirect_uri') && $request->has('account_linking_token')){
+            // process normal register
+            $response = $this->registerTrait($request);
+            // if success redirect to messenger
+            if (($user = Auth::user()) != null){
+                return Redirect::to(route('botman.confirm', [
+                    'redirect_uri' => $request->get('redirect_uri'),
+                    'account_linking_token' => $request->get('account_linking_token'),
+                ]));
+            }
+            return $response;
+        }
+
+        return $this->registerTrait($request);
+    }
+
+
 }

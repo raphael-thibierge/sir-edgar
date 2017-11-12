@@ -1,92 +1,135 @@
-const GoalList = require("../goal/GoalList");
-
-const React = require('react');
-const Accordion = require('react-bootstrap').Accordion;
-const Button = require('react-bootstrap').Button;
-const Glyphicon = require('react-bootstrap').Glyphicon;
-const Collapse = require('react-bootstrap').Collapse;
-const FormGroup = require('react-bootstrap').FormGroup;
-const FormControl = require('react-bootstrap').FormControl;
-const ProjectRender = require('./ProjectRender.jsx');
-const Goal = require('../goal/Goal');
-const GoalsGraph = require('../goal/GoalsGraph.jsx');
-const ScoreGoal = require('../scoreGoal/scoreGoal.jsx');
-const ResponsiveSideBar = require('../generic/ResponsiveSideBar.jsx');
-const NewProjectRoot = require('../project/NewProjectRoot.jsx');
+import React from 'react';
+import ProjectRender from './ProjectRender.jsx';
+import Goal from '../goal/Goal';
+import GoalsGraph from '../goal/GoalsGraph.jsx';
+import ScoreGoal from '../scoreGoal/scoreGoal.jsx';
+import ResponsiveSideBar from '../generic/ResponsiveSideBar.jsx';
+import NewProjectRoot from '../project/NewProjectRoot.jsx';
+import BudgetRoot from '../budget/BudgetRoot';
+import ExpenseRoot from '../expense/ExpenseRoot';
 
 /**
  * Main component managing goals
  */
-const ProjectRoot = React.createClass({
+export default class ProjectRoot extends React.Component {
 
-    projectMap:{},
 
+    constructor(props){
+        super(props);
+        this.state = this.getInitialState();
+        this.projectMap={};
+    }
 
     /**
      * Define component initial state
      *
      * @returns {{goals: Array}}
      */
-    getInitialState: function () {
+    getInitialState(){
         return {
             projects: [],
+            budgets: [],
+            expenses: [],
             newProjectCollapseOpen: false,
             newProjectTitle: '',
             view: 'stats',
         };
-    },
+    }
 
     /**
      * Method called when component is mounted in html
      * Loads goal list in AJAX
      */
-    componentDidMount: function () {
+    componentDidMount(){
         this.request();
-    },
+        $.get('/financial-data')
+            .catch(error => {
+                alert('Failed to load app...');
+                console.error(error);
+            })
+            .then(responseJSON => {
+                if (responseJSON.status === 'success'){
+                    // get response data
+                    const data = responseJSON.data;
+
+                    this.setState({
+                        loaded: true,
+                        budgets: data.budgets,
+                        expenses: data.expenses,
+                    });
+                }
+            });
+    }
+
+    onBudgetCreated(budget){
+        let budgets = this.state.budgets;
+        budgets.push(budget);
+        this.setState({
+            budgets: budgets
+        });
+    }
+
+    handleSelect(eventKey) {
+        event.preventDefault();
+        this.setState({
+            tab: eventKey
+        });
+    }
+
+    onBudgetDeleted(budgetId){
+
+        let budgets = [];
+
+        this.state.budgets.forEach((budget) => {
+            if (budget._id !== budgetId){
+                budgets.push(budget);
+            }
+        });
+
+        this.setState({
+            budgets: budgets
+        });
+
+    }
+
+    onBudgetEdited(budgetEdited){
+
+        let budgets = [];
+
+        this.state.budgets.forEach((budget) => {
+            if (budget._id === budgetEdited._id){
+                budgets.push(budgetEdited);
+            } else {
+                budgets.push(budget);
+            }
+        });
+
+        this.setState({
+            budgets: budgets
+        });
+
+    }
 
     /**
      * AJAX request to get goals from server
      */
-    request: function(){
+    request(){
         const request = $.ajax({
             url: './projects',
             cache: false,
             method: 'GET',
-            success: this.onSuccess,
+            success: this.onSuccess.bind(this),
             error: (error) => {console.error(error.message); alert(error)},
         });
-    },
+    }
 
-    /**
-     * AJAX request to create new project
-     */
-    newProject: function(){
-        const request = $.ajax({
-            url: './projects',
-            cache: false,
-            method: 'POST',
-            success: function(response){
-                if (response.status && response.status === 'success'){
-                    let projects = this.state.projects;
-                    projects.push(response.data.project);
-                    this.setState({
-                        projects: projects
-                    });
-                }
-            },
-            error: (error) => {console.error(error.message); alert(error)},
-        });
-    },
 
-    formatGoal(goal){
-
-    },
 
     /**
      * AJAX goal loading success method that store returned goals in component state
      * @param response
      */
-    onSuccess: function (response) {
+    onSuccess(response) {
         if (response.status && response.status === 'success'){
 
             let projects = response.data.projects;
@@ -122,9 +165,9 @@ const ProjectRoot = React.createClass({
                 projects: projects
             });
         }
-    },
+    }
 
-    deleteGoal: function (goalToDelete) {
+    deleteGoal(goalToDelete) {
         $.ajax({
             url: goalToDelete.routes.destroy,
             cache: false,
@@ -132,7 +175,8 @@ const ProjectRoot = React.createClass({
             datatype: 'json',
             data: {
                 method: 'DELETE',
-                _method: 'DELETE'
+                _method: 'DELETE',
+                _token: window.token,
             },
             success: function (goal) {
 
@@ -160,9 +204,9 @@ const ProjectRoot = React.createClass({
             error: this.onError,
         });
 
-    },
+    }
 
-    addGoal: function (title, score, project_id) {
+    addGoal(title, score, project_id) {
 
         const url = './goals';
 
@@ -175,6 +219,7 @@ const ProjectRoot = React.createClass({
                 title: title,
                 score: score,
                 project_id: project_id,
+                _token: window.token,
             },
             success: function (response) {
 
@@ -205,10 +250,10 @@ const ProjectRoot = React.createClass({
         });
 
 
-    },
+    }
 
 
-    onNewProjectClick: function (title) {
+    onNewProjectClick(title) {
         const url = 'projects';
         $.ajax({
             url: url,
@@ -241,13 +286,32 @@ const ProjectRoot = React.createClass({
             error: (error)=> {alert('Creating project failed'); console.error(error)},
         });
 
-    },
+    }
 
     viewRender(){
         const view = this.state.view;
 
         if (typeof view === 'undefined')
             return null;
+
+        let viewPathParts = view.split('/');
+        if (viewPathParts.length === 2){
+
+            switch (viewPathParts[0]){
+                case 'projects':
+                    const project = this.state.projects[this.projectMap[viewPathParts[1]]];
+                    return <ProjectRender
+                        project={project}
+                        createGoal={this.addGoal.bind(this)}
+                        onTitleChange={this.editProjectTitle.bind(this)}
+                    />;
+                    break;
+
+                default:
+                    return null;
+                    break;
+            }
+        }
 
         switch (view){
             case 'stats':
@@ -258,7 +322,7 @@ const ProjectRoot = React.createClass({
 
             case 'new_project':
                 return <NewProjectRoot
-                    onNewProjectClick={this.onNewProjectClick}
+                    onNewProjectClick={this.onNewProjectClick.bind(this)}
                     projectCurrentNumber={this.state.projects.length}
                 />;
                 break;
@@ -297,15 +361,42 @@ const ProjectRoot = React.createClass({
                     />;
                 break;
 
+            case 'budgets':
+                return <BudgetRoot
+                    hide
+                    budgets={this.state.budgets}
+                    onCreate={this.onBudgetCreated.bind(this)}
+                    onDelete={this.onBudgetDeleted.bind(this)}
+                    onEdit={this.onBudgetEdited.bind(this)}
+                />;
+                break;
+
+            case 'expenses':
+                return <ExpenseRoot
+                    expenses={this.state.expenses}
+                />;
+                break;
+
             default:
-                const project = this.state.projects[this.projectMap[this.state.view]];
-                return <ProjectRender
-                        project={project}
-                        createGoal={this.addGoal}
-                    />;
-                return
+                return null;
         }
-    },
+    }
+
+
+    editProjectTitle(title, project_id){
+
+        let projects = this.state.projects;
+
+        let project = projects[this.projectMap[project_id]];
+
+        project.title = title;
+
+        projects[this.projectMap[project_id]] = project;
+
+        this.setState({
+            projects: projects
+        });
+    }
 
 
     /**
@@ -313,8 +404,7 @@ const ProjectRoot = React.createClass({
      *
      * @returns {XML}
      */
-    render: function () {
-
+    render() {
 
         return (
             <div className="row">
@@ -323,14 +413,17 @@ const ProjectRoot = React.createClass({
                 <div className=" col-xs-12 col-sm-3 col-md-3 col-lg-3">
                     <ResponsiveSideBar
                         projects={this.state.projects}
-                        onItemSelection={(selected) => {this.setState({view: selected})}}
+                        onItemSelection={(selected) => {if (selected !== 'projects') this.setState({view: selected})}}
                         selected={this.state.view}
                     />
                 </div>
 
-                <div className="col-xs-8">
+                <div className="col-xs-12 col-sm-9">
 
-                    <ScoreGoal/>
+                    {this.state.view !== 'expenses' && this.state.view !== 'budgets' ? (
+                        <ScoreGoal/>
+                    ): null}
+
 
                     {this.viewRender()}
 
@@ -339,6 +432,4 @@ const ProjectRoot = React.createClass({
         );
     }
 
-});
-
-module.exports = ProjectRoot;
+};

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Goal;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,7 +29,19 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('auth.index',compact("users"));
+
+        $activeUsers =
+            Goal::whereNotNull('completed_at')
+                ->where('completed_at', '>=', Carbon::now()->subDays(15))
+                ->groupBy('user_id')
+                ->orderBy('user_id')
+                ->pluck('user_id')
+                ->count();
+
+        return view('auth.index', [
+            "users" => $users,
+            "activeUsers" => $activeUsers
+        ]);
     }
 
     /**
@@ -68,7 +82,8 @@ class UserController extends Controller
 
         $user = Auth::user();
 
-        $user->update(['daily_score_goal' => $request->get('daily_score_goal')]);
+        $user->setDailyScoreGoal((int)$request->get('daily_score_goal'));
+        $user->update();
 
         return $this->successResponse();
     }

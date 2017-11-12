@@ -2,16 +2,29 @@
 
 namespace App;
 
+use App\Events\GoalCompleted;
 use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Query\Builder;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 
 /**
- * @property mixed completed_at
- * @property mixed id
+ * @property Carbon completed_at
+ * @property string id
+ * @property int priority
+ * @property Carbon due_date
+ * @property string title
+ * @property Project project
+ * @property int score
+ * @property User user
  */
 class Goal extends Model
 {
+    const TYPE_GOAL = 'goal';
+    const TYPE_NOTE = 'note';
+    const TYPE_REMINDER = 'reminder';
+    const TYPE_DEFAULT = Goal::TYPE_GOAL;
+
     /**
      * Mongo collection
      * @var string
@@ -37,7 +50,7 @@ class Goal extends Model
         'project_id',
         'completed_at',
         'today', // --> must be achieved today
-
+        'type',
         'start_time_tracker',
         'end_time_tracker',
         'due_date',
@@ -90,8 +103,19 @@ class Goal extends Model
         return $this->completed_at != null;
     }
 
-    public function setCompleted(){
+    public function setCompletedAndSave(){
         $this->completed_at = Carbon::now();
+        $this->save();
+        broadcast(new GoalCompleted($this));
+    }
+
+
+    public static function searchByTitle(string $title): Builder{
+        return Goal::where('title', 'like', $title);
+    }
+
+    public function toString(){
+        return $this->title . "($this->score) ";
     }
 
 }

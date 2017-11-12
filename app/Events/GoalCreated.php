@@ -15,7 +15,6 @@ class GoalCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-
     /**
      * @var Goal
      */
@@ -38,7 +37,7 @@ class GoalCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('goal.' . $this->goal->id);
+        return new PrivateChannel('App.User.' . $this->goal->user->id);
     }
 
     /**

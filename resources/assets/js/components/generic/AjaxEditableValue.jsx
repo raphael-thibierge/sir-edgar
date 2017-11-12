@@ -1,11 +1,20 @@
-const React = require('react');
-const FormControl = require('react-bootstrap').FormControl;
-const Button = require('react-bootstrap').Button;
-const Glyphicon = require('react-bootstrap').Glyphicon;
+import React from 'react';
+import {FormControl, Button, Glyphicon} from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
-const PropTypes = require('prop-types');
+export default class AjaxEditableValue extends React.Component {
 
-const AjaxEditableValue = React.createClass({
+    constructor(props){
+        super(props);
+        this.state = this.getInitialState();
+        this.defaultProps = {
+            type: 'text',
+            style: {},
+            classNameLink: '',
+            method: 'POST'
+
+        };
+    }
 
     getInitialState(){
         return {
@@ -13,7 +22,7 @@ const AjaxEditableValue = React.createClass({
             edit: false,
         }
 
-    },
+    }
 
 
     validate(){
@@ -23,6 +32,11 @@ const AjaxEditableValue = React.createClass({
             let data = {
                 _token: window.token
             };
+
+            if (this.props.method === 'PUT'){
+                data.method = this.props.method;
+                data._method = this.props.method;
+            }
 
             if (this.props.inputName){
                 data[this.props.inputName] = this.state.value;
@@ -54,21 +68,21 @@ const AjaxEditableValue = React.createClass({
             });
 
         }
-    },
+    }
 
     /**
      * Called when the user hit a keyboard key in input
      *
      * @param target
      */
-    handleKeyPress: function(target) {
+    handleKeyPress(target) {
         // when pressing enter key
         if(target.charCode==13){
             this.validate();
         }
-    },
+    }
 
-    editModeRender: function () {
+    editModeRender() {
         return (
             <div style={{marginBottom: '10px'}}>
 
@@ -78,32 +92,32 @@ const AjaxEditableValue = React.createClass({
                         value={this.state.value}
                         placeholder=""
                         onChange={(e) => {this.setState({ value: e.target.value })}}
-                        onKeyPress={this.handleKeyPress}
+                        onKeyPress={this.handleKeyPress.bind(this)}
                     />
                 </div>
 
                 <div className="col-xs-1">
 
-                    <Button bsSize="sm" bsStyle="success" onClick={this.validate}>
+                    <Button bsSize="sm" bsStyle="success" onClick={this.validate.bind(this)}>
                         <Glyphicon glyph="ok"/>
                     </Button>
                 </div>
             </div>
         );
-    },
+    }
 
     setEditMode(){
         this.setState({
             value: this.props.value,
             edit: true,
         });
-    },
+    }
 
 
-    displayModeRender: function () {
+    displayModeRender() {
 
         return (
-            <a onClick={this.setEditMode} style={{cursor: 'pointer'}}>
+            <a onClick={this.setEditMode.bind(this)} style={{cursor: 'pointer'}}>
                 <span className={this.props.classNameLink} style={this.props.style}>
                     <strong>
                         {this.props.value}
@@ -111,20 +125,14 @@ const AjaxEditableValue = React.createClass({
                 </span>
             </a>
         );
-    },
+    }
 
     render(){
         return this.state.edit === true ? this.editModeRender() : this.displayModeRender();
-    },
+    }
+};
 
-    defaultProps: {
-        type: 'text',
-        style: {},
-        classNameLink: ''
-
-    },
-});
-
+/*
 AjaxEditableValue.propTypes = {
     onSuccess: PropTypes.func,
     ajaxURI: PropTypes.string,
@@ -135,9 +143,8 @@ AjaxEditableValue.propTypes = {
     ]).isRequired,
     type: PropTypes.string,
     className: PropTypes.string,
-    style: PropTypes.object
+    style: PropTypes.object,
+    method: PropTypes.oneOf(['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
 
 
-};
-
-module.exports = AjaxEditableValue;
+}; */

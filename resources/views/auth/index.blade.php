@@ -5,7 +5,7 @@
 @section("content")
 <div class="row col-xs-12">
     <div class="container">
-        <h1>User list</h1>
+        <h1>User list ( {{ $activeUsers }}/ {{ $users->count() }})</h1>
         <table class="table table-responsive table-bordered table-hover">
             <thead>
                 <td>ID</td>
@@ -14,6 +14,7 @@
                 <td>Projects</td>
                 <td>Goals</td>
                 <td>Done goals</td>
+                <td>Goals done last 48h</td>
                 <td>Delete</td>
             </thead>
             <tbody>
@@ -25,6 +26,8 @@
                     <td>{{ $user->projects()->count() }}</td>
                     <td>{{ $user->goals()->count() }}</td>
                     <td>{{ $user->goals()->whereNotNull('completed_at')->count() }}</td>
+                    <td>{{ $user->goals()->whereNotNull('completed_at')
+                    ->where('completed_at', '>=', Carbon\Carbon::yesterday($user->timezone))->count() }}</td>
                     <td>
                         <form action="{{route("users.destroy", ["user" => $user->id])}}" method="POST">
                             {{ csrf_field() }}

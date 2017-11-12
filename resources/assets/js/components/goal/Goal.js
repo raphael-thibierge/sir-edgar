@@ -1,4 +1,6 @@
-class Goal {
+import Tools from '../Tools';
+
+export default class Goal {
 
     constructor(goal = null){
 
@@ -22,8 +24,23 @@ class Goal {
     }
 
     fillData(goalData){
+        const TIMEZONE_OFFSET = new Date().getTimezoneOffset();
+
+        const MS_PER_MINUTES = 60000;
+
         Object.keys(goalData).forEach((key) => {
-            this[key] = goalData[key];
+
+            if (key === 'due_date' || key === 'created_at' || key === 'completed_at'){
+
+                const value = goalData[key];
+                if (typeof value !== "undefined" && value !== null){
+                    this[key] = new Date (Tools.dateFormater(value) - TIMEZONE_OFFSET*MS_PER_MINUTES);
+                }
+
+
+            } else {
+                this[key] = goalData[key];
+            }
         });
     }
 
@@ -42,6 +59,9 @@ class Goal {
             url: this.routes.complete,
             cache: false,
             method: 'POST',
+            data: {
+                _token: window.token,
+            },
             // when server return success
             success: function (response) {
                 // check status
@@ -62,7 +82,8 @@ class Goal {
             cache: false,
             method: 'POST',
             data: {
-                today: !this.today
+                today: !this.today,
+                _token: window.token,
             },
             // when server return success
             success: function (response) {
@@ -103,6 +124,7 @@ class Goal {
                 token: window.token,
                 method: 'PATCH',
                 _method: 'PATCH',
+                _token: window.token,
 
             },
             // when server return success
@@ -121,9 +143,7 @@ class Goal {
 
     }
 
-    updateDetails(due_date, estimated_time, time_spent, priority, notes){
-
-
+    updateDetails(title, score, due_date, estimated_time, time_spent, priority, notes){
 
         const request = $.ajax({
             url: this.routes.update_details,
@@ -133,24 +153,27 @@ class Goal {
                 token: window.token,
                 method: 'PATCH',
                 _method: 'PATCH',
-
+                _token: window.token,
                 due_date: due_date,
                 estimated_time: estimated_time,
                 time_spent: time_spent,
                 priority: priority,
-                notes: notes
+                notes: notes,
+                title: title,
+                score: score,
 
             },
             // when server return success
             success: function (response) {
-                console.log(response);
                 // check status
                 if (response.status && response.status === 'success'){
-                    this.due_date= due_date;
-                    this.estimated_time= estimated_time;
-                    this.time_spent= time_spent;
-                    this.priority= priority;
-                    this.notes= notes;
+                    this.due_date = due_date;
+                    this.estimated_time = estimated_time;
+                    this.time_spent = time_spent;
+                    this.priority = priority;
+                    this.notes = notes;
+                    this.title = title;
+                    this.score = score;
 
                     this.updateView();
                 } else {
@@ -162,9 +185,4 @@ class Goal {
 
     }
 
-
-
-
 };
-
-module.exports = Goal;

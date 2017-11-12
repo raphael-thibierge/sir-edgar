@@ -29,6 +29,22 @@ class Project extends Model
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'routes',
+    ];
+
+    public function getRoutesAttribute(): array {
+        return [
+            'store'     => route('projects.store'),
+            'update'    => route('projects.update', ['project' => $this]),
+        ];
+    }
+
+    /**
      * Project's user
      *
      * @return BelongsTo
