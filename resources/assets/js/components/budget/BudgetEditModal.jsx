@@ -8,11 +8,10 @@ export default class BudgetEditModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = this.props.budget;
-        this.state.tags = this.state.tags.join(', ');
+        this.state.tags = this.state.tags.join(' ');
         this.state.display = false;
         this.state.loading = false;
         this.state.error = false;
-
 
     }
 
@@ -40,7 +39,7 @@ export default class BudgetEditModal extends React.Component {
             amount: this.state.amount,
             currency: this.state.currency,
             period: this.state.period,
-            tags: this.state.tags.split(' '),
+            tags: this.state.tags.trim().split(' '),
             _token: window.token,
             _method: 'PUT',
         }).catch(error => {
