@@ -45,6 +45,7 @@ export default class BudgetRoot extends React.Component {
                             <BudgetCreateModal onCreate={this.props.onCreate}/>
                         </div>
                     </div>
+                    <br/>
                     <div className="row">
                         <div className="col-xs-12">
                             <PanelGroup>

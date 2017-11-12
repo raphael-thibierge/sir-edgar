@@ -74,7 +74,7 @@ export default class BudgetCreateModal extends React.Component {
 
             <span>
                 <Button bsStyle="default" onClick={()=>{this.setState({ display: true })}}>
-                    <Glyphicon glyph="plus"/>
+                    <Glyphicon glyph="plus"/> New budget
                 </Button>
                 <Modal
                     aria-labelledby="contained-modal-title-lg"

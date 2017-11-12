@@ -39,12 +39,15 @@ export default class Budget extends React.Component {
                 now = progress - progressExpected;
             }
 
-            progressBar = (
-                <ProgressBar>
-                    <ProgressBar key={1} striped active now={progressExpected > 100 ? 100 : progressExpected} bsStyle="warning" label={`${progressExpected}%`}/>
-                    <ProgressBar key={2} striped active now={now < 4 ? 4 : now} bsStyle="danger" label={`${progress}%`} />
-                </ProgressBar>
-            )
+            progressBar = progressExpected < 100 ?
+                (
+                    <ProgressBar>
+                        <ProgressBar key={1} striped active now={progressExpected > 100 ? 100 : progressExpected} bsStyle="warning" label={`${progressExpected}%`}/>
+                        <ProgressBar key={2} striped active now={now < 4 ? 4 : now} bsStyle="danger" label={`${progress}%`} />
+                    </ProgressBar>
+                ): (
+                    <ProgressBar key={2} striped active now={100} bsStyle="danger" label={`${progress}%`} />
+                )
 
         } else if (progressExpected > progress){
             const diff = progressExpected-progress;
@@ -57,7 +60,7 @@ export default class Budget extends React.Component {
         } else {
             progressBar = (
                 <ProgressBar>
-                    <ProgressBar key={2} striped active now={progress < 4 ? 4 : progress} bsStyle="success" label={`${progress}%`} />
+                    <ProgressBar key={2} striped active now={progress < 4 ? 4 : progress} bsStyle="warning" label={`${progress}%`} />
                 </ProgressBar>
             );
         }
