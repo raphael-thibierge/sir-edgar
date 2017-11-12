@@ -112,7 +112,6 @@ class BotActions
         }
 
 
-
         if (($notes = $botMessage->getParameter(('notes'))) !== null){
             $goalParameters['notes'] = $notes;
         }
@@ -345,8 +344,8 @@ class BotActions
             ->where('created_at', '<', $stopDate)
             ->sum('price');
 
-        $action = $type === FinancialTransaction::EXPENSE ? 'spent' :
-            $type === FinancialTransaction::ENTRANCE ? 'earned' : 'savec';
+        $action = $type === FinancialTransaction::EXPENSE ? 'spent' : (
+            $type === FinancialTransaction::ENTRANCE ? 'earned' : 'saved' );
 
         $botMessage->buildTextResponse("You $action $total of your usual devise");
     }
