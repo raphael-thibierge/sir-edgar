@@ -27,7 +27,6 @@ class BudgetController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function create()
@@ -101,7 +100,8 @@ class BudgetController extends Controller
      */
     public function update(Request $request, Budget $budget)
     {
-        //
+        $budget->update($request->all());
+        return $this->successResponse();
     }
 
     /**
@@ -112,6 +112,7 @@ class BudgetController extends Controller
      */
     public function destroy(Budget $budget)
     {
-        //
+        $budget->delete();
+        return $this->successResponse();
     }
 }
