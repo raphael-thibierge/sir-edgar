@@ -1,7 +1,7 @@
 import React from 'react';
 import {Chart} from 'react-google-charts';
 import PropTypes from 'prop-types';
-import {Glyphicon, Popover, OverlayTrigger} from 'react-bootstrap';
+import {Glyphicon, Popover, OverlayTrigger, Panel, PanelGroup} from 'react-bootstrap';
 import CalendarHeatmap from 'react-calendar-heatmap';
 
 export default class GoalsGraph extends React.Component{
@@ -88,18 +88,18 @@ export default class GoalsGraph extends React.Component{
             // calendar chart data
             let calendatData = [];
             let scoreMax = 0;
+
             // get score per project foreach day
             do  {
 
-                // convet date to format "dd-mm-yyyy"
+                // convert date to format "dd-mm-yyyy"
                 const dateAsString = date.toISOString().slice(0,10);
 
                 // first column is the date
                 let line = [dateAsString];
 
                 let total = 0;
-
-                let projetScores = [];
+                let projectScores = [];
 
                 // insert each projects score per day in a separate column
                 for (let i=0; i<projects_ids.length; i++){
@@ -111,30 +111,36 @@ export default class GoalsGraph extends React.Component{
                         const score = scores[dateAsString][projects_ids[i]];
 
                         if (score > 0){
-                            projetScores.push({
+                            projectScores.push({
                                 name: projects_names[i],
                                 score: score,
                                 id: projects_ids[i],
-                            })
+                            });
+                            total+=score;
                         }
-
-                        total+=score;
                         line.push(score);
+
                     } else {
                         line.push(0);
                     }
                 }
                 line.push(total > 0? total : "");
 
-                calendatData.push({date: dateAsString, count: total, projects: projetScores});
+                calendatData.push({date: dateAsString, count: total, projects: projectScores});
 
                 // update score max
                 if (total > scoreMax){
                     scoreMax = total;
                 }
 
-                // insert day line in chart data
-                data.push(line);
+                let minimalDate= new Date();
+                minimalDate.setMonth(minimalDate.getMonth()-2);
+
+                if (date > minimalDate){
+                    // insert day line in chart data
+                    data.push(line);
+                }
+
 
                 // increment date and stop if date is tomorrow
                 date.setDate(date.getDate() + 1);
@@ -221,6 +227,7 @@ export default class GoalsGraph extends React.Component{
 
         const options = {
             isStacked: true,
+            is3D: true,
             vAxis: {
                 minValue: 5,
             },
@@ -246,82 +253,81 @@ export default class GoalsGraph extends React.Component{
 
 
 
-
                     <div className="row">
                         <div className="col-xs-12">
-                            <h1>Completed goals stats</h1>
-                            <h2>Best score : {this.state.scoreMax}</h2>
+                            <h1>Stats <small>Best score : {this.state.scoreMax}</small></h1>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-xs-12">
-                            <Chart
-                                chartType="ColumnChart"
-                                data={this.state.googleChartData}
-                                options={options}
-                                graph_id="ScatterChart_material"
-                                width="100%"
-                                height="400px"
-                                legend_toggle
-                            />
-                        </div>
-                    </div>
-
                     <br/>
+
                     <div className="row">
                         <div className="col-xs-12">
+                            <PanelGroup>
+                                <Panel header={<h2>Daily score over year</h2>} footer={<small>Lines ordered by day of the week</small>}>
+                                    <CalendarHeatmap
+                                        values={this.state.calendarData}
+                                        tooltipDataAttrs={{ 'data-toggle': 'tooltip' }}
+                                        numDays={365}
+                                        titleForValue={(value) => {
+                                            if (!value) {
+                                                return '';
+                                            }
+                                            return value.date;
+                                        }}
+                                        transformDayElement={(rect, value, index) => {
+                                            if (!value || value.count === 0){
+                                                return rect;
+                                            }
+                                            const tooltip = (
+                                                <Popover id="tooltip" title={value.date}>
+                                                    <h4>Total : {value.count}</h4>
+                                                    <ul>
+                                                        {value.projects.map((project) => (
+                                                            <li key={project.id}> {project.name} : {project.score}</li>
+                                                        ))}
+                                                    </ul>
+                                                </Popover>
+                                            );
+                                            return (
+                                                <OverlayTrigger placement="top" overlay={tooltip}>
+                                                    {rect}
+                                                </OverlayTrigger>
+                                            );
+                                        }}
+                                        classForValue={(value) => {
+                                            if (!value) {
+                                                return 'color-scale-0';
+                                            }
 
-                            <CalendarHeatmap
-                                values={this.state.calendarData}
-                                tooltipDataAttrs={{ 'data-toggle': 'tooltip' }}
-                                numDays={365}
-                                titleForValue={(value) => {
-                                    if (!value) {
-                                        return '';
-                                    }
-                                    return value.date;
-                                }}
-                                transformDayElement={(rect, value, index) => {
-                                    if (!value || value.count === 0){
-                                        return rect;
-                                    }
-                                    const tooltip = (
-                                        <Popover id="tooltip" title={value.date}>
-                                            <h4>Total : {value.count}</h4>
-                                            <ul>
-                                                {value.projects.map((project) => (
-                                                    <li key={project.id}> {project.name} : {project.score}</li>
-                                                    ))}
-                                            </ul>
-                                        </Popover>
-                                    );
-                                    return (
-                                        <OverlayTrigger placement="top" overlay={tooltip}>
-                                            {rect}
-                                        </OverlayTrigger>
-                                    );
-                                }}
-                                classForValue={(value) => {
-                                    if (!value) {
-                                        return 'color-scale-0';
-                                    }
+                                            let color = 0;
+                                            const scoreMax= this.state.scoreMax;
 
-                                    let color = 0;
-                                    const scoreMax= this.state.scoreMax;
+                                            const nbColor = 4;
+                                            for (let i = 0; i < nbColor; i++){
+                                                if (value.count > i * scoreMax / nbColor){
+                                                    color = i + 1;
+                                                }
+                                            }
 
-                                    const nbColor = 4;
-                                    for (let i = 0; i < nbColor; i++){
-                                        if (value.count > i * scoreMax / nbColor){
-                                            color = i + 1;
-                                        }
-                                    }
-
-                                    return `color-scale-${color}`;
-                                }}
-                            />
-
+                                            return `color-scale-${color}`;
+                                        }}
+                                    />
+                                </Panel>
+                                <Panel header={<h2>Project scores per day</h2>} style={{paddingTop: -10}}>
+                                    <Chart
+                                        chartType="ColumnChart"
+                                        data={this.state.googleChartData}
+                                        options={options}
+                                        graph_id="ScatterChart_material"
+                                        width="100%"
+                                        height="400px"
+                                        legend_toggle
+                                    />
+                                </Panel>
+                            </PanelGroup>
                         </div>
                     </div>
+
                 </div>
             </div>
         )
