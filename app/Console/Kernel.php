@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\CheckRemindersCommand;
 use App\Console\Commands\DailyGoalsReportCommand;
+use App\Console\Commands\ImportantNotificationEdgar;
 use App\Console\Commands\MorningEdgarMessageCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -20,6 +21,7 @@ class Kernel extends ConsoleKernel
         CheckRemindersCommand::class,
         DailyGoalsReportCommand::class,
         MorningEdgarMessageCommand::class,
+        ImportantNotificationEdgar  ::class
     ];
 
     /**
@@ -58,6 +60,11 @@ class Kernel extends ConsoleKernel
         $schedule->command('user:morningMessage 59ca9b30b2530a3d1345003e')
             ->timezone('America/Toronto')
             ->dailyAt('08:30');
+
+
+
+        $schedule->command('goals:important:messenger')->hourly();
+
 
     }
 
