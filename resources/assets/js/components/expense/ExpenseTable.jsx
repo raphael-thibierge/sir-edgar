@@ -19,22 +19,19 @@ export default class ExpenseTable extends React.Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.props.expenses.map((expense) => (
+                                {this.props.expenses.reverse().map((expense) => (
                                     <tr key={expense._id}>
                                         <td>{expense.price}</td>
                                         <td>{expense.currency}</td>
                                         <td>{expense.title}</td>
-                                        <td>{expense.created_at}</td>
                                         <td>{Array.isArray(expense.tags) ? expense.tags.join(', ') : expense.tags}</td>
+                                        <td>{expense.created_at}</td>
                                     </tr>
                                 ))}
                                 <tr><td colSpan={5}></td></tr>
                                 <tr>
+                                    <td>{this.props.expenses.sum('price')}</td>
                                     <td colSpan="4"> Total</td>
-                                    <td>
-
-                                        {this.props.expenses.sum('price')}
-                                    </td>
                                 </tr>
                             </tbody>
                         </table>
