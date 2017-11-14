@@ -25,9 +25,6 @@ export default class Budget extends React.Component {
         const expenseExpected = nbDays * expensePerDayExpected;
         const progressExpected = Math.floor((expenseExpected/this.props.budget.amount)*100);
 
-        console.log('--');
-        console.log('expected:' + progressExpected);
-        console.log('progress:' + progress);
         let progressBar = null;
         if (progressExpected < progress){
             const value = progress - progressExpected;

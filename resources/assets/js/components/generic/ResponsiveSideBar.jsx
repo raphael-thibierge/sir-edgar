@@ -1,8 +1,5 @@
 import React from 'react';
-
-import PropTypes from 'prop-types';
 import SvgIcon from 'react-icons-kit';
-import { ic_aspect_ratio } from 'react-icons-kit/md/ic_aspect_ratio';
 import {
     ic_business,
     ic_create_new_folder,
@@ -17,15 +14,12 @@ import {
 
 import {SideNav, Nav, NavText, NavIcon} from 'react-sidenav';
 
-
 const NavMain = {
     stats: { title: 'Stats', icon: ic_equalizer},
     important: { title: 'Important goals', icon: ic_warning},
     all_goals: { title: 'All goals', icon: ic_list},
     new_project: { title: 'New project', icon:ic_create_new_folder},
 };
-
-
 
 const SeparatorTitleContainer = (props)=>
     <div style={{fontSize: '14px',color: '#AAA',margin: '10px 12p',padding: '4px 12px 2px'}}>
@@ -43,8 +37,6 @@ const SeparatorTitle = props => {
 };
 
 export default class ResponsiveSideBar extends React.Component{
-
-
 
     render(){
         return (

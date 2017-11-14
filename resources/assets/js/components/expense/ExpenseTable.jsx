@@ -11,21 +11,21 @@ export default class ExpenseTable extends React.Component {
                         <table className="table table-bordered table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>Title</th>
-                                    <th>Date</th>
-                                    <th>Tags</th>
                                     <th>Price</th>
                                     <th>Currency</th>
+                                    <th>Title</th>
+                                    <th>Tags</th>
+                                    <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {this.props.expenses.map((expense) => (
                                     <tr key={expense._id}>
+                                        <td>{expense.price}</td>
+                                        <td>{expense.currency}</td>
                                         <td>{expense.title}</td>
                                         <td>{expense.created_at}</td>
                                         <td>{Array.isArray(expense.tags) ? expense.tags.join(', ') : expense.tags}</td>
-                                        <td>{expense.price}</td>
-                                        <td>{expense.currency}</td>
                                     </tr>
                                 ))}
                                 <tr><td colSpan={5}></td></tr>
