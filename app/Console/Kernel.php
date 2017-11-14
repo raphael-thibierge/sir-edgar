@@ -62,7 +62,6 @@ class Kernel extends ConsoleKernel
             ->dailyAt('08:30');
 
 
-
         $schedule->command('goals:important:messenger')->hourly();
 
 

@@ -47,6 +47,9 @@ class ImportantNotificationEdgar extends Command
             ->orderBy('priority', 'DESC')
             ->get();
 
+        if (count($importantGoals) === 0){
+            return;
+        }
 
         $now = Carbon::now($user->timezone);
         $hour = $heure = $now->hour;
