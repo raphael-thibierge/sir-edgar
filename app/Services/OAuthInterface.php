@@ -16,12 +16,4 @@ interface OAuthInterface
 
     public function getTokenUrl();
 
-    public function getRedirectUri();
-
-    public function getAccessRequestUrl();
-
-    public function getExchangeTokenUrl();
-
-    public function getScopes();
-
 }

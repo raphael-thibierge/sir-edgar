@@ -57,4 +57,11 @@ return [
         'wechat_app_key' => 'YOUR-WECHAT-APP-KEY',
     ],
 
+
+    'coinbase' => [
+        'key' => 'ea7c5c606d51df5d3c7135b94d5eddfd8510d2d4b4d166e8e5b9642696db745e',
+        'secret' => 'af4ff4468a6c036dcc4ae33daaa11f992a8f9e7734b6df03d4a3cdef4850fc9f',
+        'redirect_uri' => 'https://www.sir-edgar.com/oauth/redirect/coinbase'
+    ]
+
 ];
