@@ -53,7 +53,7 @@ class Kernel extends ConsoleKernel
         // raphael
         $schedule->command('user:morningMessage first' )
             ->timezone('America/Toronto')
-            ->dailyAt('05:00');
+            ->dailyAt('08:30');
 
 
         // arthur
