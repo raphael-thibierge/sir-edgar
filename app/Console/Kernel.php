@@ -51,9 +51,9 @@ class Kernel extends ConsoleKernel
             ->everyMinute();
 
         // raphael
-        $schedule->command('user:morningMessage first' )
+        $schedule->command('user:morningMessage first')
             ->timezone('America/Toronto')
-            ->dailyAt('05:00');
+            ->dailyAt('08:30');
 
 
         // arthur

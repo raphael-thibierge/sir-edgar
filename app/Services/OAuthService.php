@@ -43,5 +43,7 @@ abstract class OAuthService
         return $this->authorize_url . '?' . http_build_query($parameters);
     }
 
+    public abstract function getAccessTocken();
+
 
 }
