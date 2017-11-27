@@ -56,7 +56,7 @@ class ImportantNotificationEdgar extends Command
         $startAt = 8;
         $endAt = 20;
         
-        if ($hour >= $startAt && $endAt <= $endAt){
+        if ($hour >= $startAt && $hour <= $endAt){
 
             $offset = ($hour - $startAt) % count($importantGoals);
 
