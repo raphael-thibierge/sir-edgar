@@ -53,7 +53,7 @@ class ImportantNotificationEdgar extends Command
 
         $now = Carbon::now($user->timezone);
         $hour = $heure = $now->hour;
-        $startAt = 8;
+        $startAt = 9;
         $endAt = 20;
         
         if ($hour >= $startAt && $hour <= $endAt){
