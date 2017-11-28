@@ -66,7 +66,84 @@ class CoinbaseService extends OAuthService
         $configuration = Configuration::apiKey($apiKey, $apiSecret);
         $client = Client::create($configuration);
 
+        //$user = $client->getCurrentUser();
+
+        //$client->getAccounts()
+
         return $client;
+    }
+
+    public function getAccessTocken()
+    {
+        // TODO: Implement getAccessTocken() method.
+    }
+
+
+
+    public static function test(){
+
+        $client = self::connectWithAPI();
+
+        $accounts = $client->getAccounts();
+
+
+        foreach ($accounts as $account){
+            $name = $account->getName();
+
+            $nativeCurrency = $account->getNativeBalance()->getCurrency();
+
+            if ($account->getCurrency() === $nativeCurrency){
+                continue;
+            }
+
+            echo "=============================" . PHP_EOL;
+            echo $name . PHP_EOL;
+            echo "Balance   : " . $account->getBalance()->getAmount() . ' ' . $account->getBalance()->getCurrency() . PHP_EOL;
+            echo "Value     : " . $account->getNativeBalance()->getAmount() . ' ' . $account->getNativeBalance()->getCurrency() . PHP_EOL;
+
+            echo PHP_EOL;
+            echo "---------------" . PHP_EOL;
+            echo "Prices" . PHP_EOL;
+            echo "---------------" . PHP_EOL;
+
+            echo $account->getCurrency() . ' spot  : ' . $client->getSpotPrice($account->getCurrency() . '-' . $nativeCurrency)->getAmount() . ' ' . $nativeCurrency . PHP_EOL;
+            echo $account->getCurrency() . ' buy   : ' . $client->getBuyPrice($account->getCurrency() . '-' . $nativeCurrency)->getAmount() . ' ' . $nativeCurrency . PHP_EOL;
+            echo $account->getCurrency() . ' sell  : ' . $client->getSellPrice($account->getCurrency() . '-' . $nativeCurrency)->getAmount() . ' ' . $nativeCurrency . PHP_EOL;
+            echo PHP_EOL;
+
+            echo "---------------" . PHP_EOL;
+            echo "Transactions" . PHP_EOL;
+            echo "---------------" . PHP_EOL;
+
+            $transactions = $client->getAccountTransactions($account);
+            $totalBuy = 0.0;
+            foreach ($transactions as $transaction){
+
+                echo PHP_EOL;
+                echo $transaction->getCreatedAt()->format('d/m/Y')  . PHP_EOL;
+                echo $transaction->getAmount()->getCurrency() . ' : ' . $transaction->getAmount()->getAmount()  . PHP_EOL;
+                echo $transaction->getNativeAmount()->getCurrency() . ' : ' . $transaction->getNativeAmount()->getAmount()  . PHP_EOL;
+
+                $price = floatval($transaction->getNativeAmount()->getAmount()) / floatval($transaction->getAmount()->getAmount());
+                echo $transaction->getAmount()->getCurrency() . ' = ' . $price . ' ' . $transaction->getNativeAmount()->getCurrency() . PHP_EOL;
+
+                $totalBuy += floatval($transaction->getNativeAmount()->getAmount());
+            }
+
+            echo PHP_EOL;
+            echo "---------------" . PHP_EOL;
+            echo 'Total' .  PHP_EOL;
+            echo "---------------" . PHP_EOL;
+            echo 'Buys  : ' . $totalBuy . ' ' . $nativeCurrency . PHP_EOL;
+            echo 'Now   : ' . $account->getNativeBalance()->getAmount() . ' ' . $nativeCurrency . PHP_EOL;
+            $gains = floatval($account->getNativeBalance()->getAmount()) - $totalBuy;
+            $p = $totalBuy == 0 ? 0 : ($gains/$totalBuy)*100;
+
+            echo "Gains : " . $gains  . ' ' . $nativeCurrency . PHP_EOL;
+            echo " ==>  : " . $p . ' %' . PHP_EOL;
+
+        }
+
     }
 
 }
