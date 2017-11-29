@@ -11,6 +11,8 @@ namespace App\Services;
 
 use Coinbase\Wallet\Client;
 use Coinbase\Wallet\Configuration;
+use Coinbase\Wallet\Enum\Param;
+use Coinbase\Wallet\Resource\Sell;
 
 class CoinbaseService extends OAuthService
 {
@@ -80,7 +82,7 @@ class CoinbaseService extends OAuthService
 
 
 
-    public static function test(){
+    public static function consoleDisplay(){
 
         $client = self::connectWithAPI();
 
@@ -102,18 +104,20 @@ class CoinbaseService extends OAuthService
             echo "Value     : " . $account->getNativeBalance()->getAmount() . ' ' . $account->getNativeBalance()->getCurrency() . PHP_EOL;
 
             echo PHP_EOL;
-            echo "---------------" . PHP_EOL;
+            echo "---------------------------" . PHP_EOL;
             echo "Prices" . PHP_EOL;
-            echo "---------------" . PHP_EOL;
+            echo "---------------------------" . PHP_EOL;
+
+            $sellPrice = floatval($client->getSellPrice($account->getCurrency() . '-' . $nativeCurrency)->getAmount());
 
             echo $account->getCurrency() . ' spot  : ' . $client->getSpotPrice($account->getCurrency() . '-' . $nativeCurrency)->getAmount() . ' ' . $nativeCurrency . PHP_EOL;
             echo $account->getCurrency() . ' buy   : ' . $client->getBuyPrice($account->getCurrency() . '-' . $nativeCurrency)->getAmount() . ' ' . $nativeCurrency . PHP_EOL;
-            echo $account->getCurrency() . ' sell  : ' . $client->getSellPrice($account->getCurrency() . '-' . $nativeCurrency)->getAmount() . ' ' . $nativeCurrency . PHP_EOL;
+            echo $account->getCurrency() . ' sell  : ' . $sellPrice . ' ' . $nativeCurrency . PHP_EOL;
             echo PHP_EOL;
 
-            echo "---------------" . PHP_EOL;
+            echo "---------------------------" . PHP_EOL;
             echo "Transactions" . PHP_EOL;
-            echo "---------------" . PHP_EOL;
+            echo "---------------------------" . PHP_EOL;
 
             $transactions = $client->getAccountTransactions($account);
             $totalBuy = 0.0;
@@ -131,9 +135,9 @@ class CoinbaseService extends OAuthService
             }
 
             echo PHP_EOL;
-            echo "---------------" . PHP_EOL;
+            echo "---------------------------" . PHP_EOL;
             echo 'Total' .  PHP_EOL;
-            echo "---------------" . PHP_EOL;
+            echo "---------------------------" . PHP_EOL;
             echo 'Buys  : ' . $totalBuy . ' ' . $nativeCurrency . PHP_EOL;
             echo 'Now   : ' . $account->getNativeBalance()->getAmount() . ' ' . $nativeCurrency . PHP_EOL;
             $gains = floatval($account->getNativeBalance()->getAmount()) - $totalBuy;
@@ -141,6 +145,26 @@ class CoinbaseService extends OAuthService
 
             echo "Gains : " . $gains  . ' ' . $nativeCurrency . PHP_EOL;
             echo " ==>  : " . $p . ' %' . PHP_EOL;
+
+            if (floatval($account->getBalance()->getAmount() > 0)){
+                echo PHP_EOL;
+                echo "---------------------------" . PHP_EOL;
+                echo 'Sell now (fees included)' .  PHP_EOL;
+                echo "---------------------------" . PHP_EOL;
+                $sell = new Sell([
+                    'bitcoinAmount' => $account->getBalance()->getAmount()
+                ]);
+
+                $client->createAccountSell($account, $sell, [Param::COMMIT => false]);
+
+                $sellTotal = $sell->getTotal()->getAmount();
+                echo "Price : " . $sellTotal . ' ' . $nativeCurrency . PHP_EOL;
+                echo " ==>  : " . ($sellTotal - $totalBuy) . ' ' . $nativeCurrency . PHP_EOL;
+                echo " ==>  : " . ($sellTotal - $totalBuy)/$totalBuy*100 . ' %' . PHP_EOL;
+
+            }
+
+            echo PHP_EOL;
 
         }
 

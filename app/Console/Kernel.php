@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\AdminCoinBaseCommand;
 use App\Console\Commands\CheckRemindersCommand;
 use App\Console\Commands\DailyGoalsReportCommand;
 use App\Console\Commands\ImportantNotificationEdgar;
@@ -21,7 +22,8 @@ class Kernel extends ConsoleKernel
         CheckRemindersCommand::class,
         DailyGoalsReportCommand::class,
         MorningEdgarMessageCommand::class,
-        ImportantNotificationEdgar  ::class
+        ImportantNotificationEdgar::class,
+        AdminCoinBaseCommand::class,
     ];
 
     /**
