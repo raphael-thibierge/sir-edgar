@@ -47,4 +47,15 @@ class UpdateCoinbaseEvent implements ShouldBroadcast
     {
         return new Channel('coinbase');
     }
+
+    /**
+     * The event's broadcast name.
+     *
+     * @return string
+     */
+    public function broadcastAs()
+    {
+        return 'price.updated';
+    }
+
 }
