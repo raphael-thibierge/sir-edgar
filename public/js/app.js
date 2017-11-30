@@ -80078,6 +80078,7 @@ var PriceRoot = function (_React$Component) {
                 this.pusher();
             }
 
+            console.log(this.state.data);
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { className: 'row' },

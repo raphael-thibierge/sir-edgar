@@ -89,6 +89,7 @@ export default class PriceRoot extends React.Component{
             this.pusher();
         }
 
+        console.log(this.state.data);
         return (
             <div className="row">
                 <div className="col-xs-12">
