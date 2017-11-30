@@ -58,17 +58,17 @@ export default class PriceRoot extends React.Component{
                             {this.state.data !== null ? (
                                 <div className="div">
                                     <h3>BTC</h3>
-                                    <p>Spot : {this.state.data.BTC.spot}</p>
-                                    <p>Sell : {this.state.data.BTC.sell}</p>
-                                    <p>Buy  : {this.state.data.BTC.buy}</p>
+                                    <p>Spot : {this.state.data.BTC.spot} EUR</p>
+                                    <p>Sell : {this.state.data.BTC.sell} EUR</p>
+                                    <p>Buy  : {this.state.data.BTC.buy} EUR</p>
                                     <h3>ETH</h3>
-                                    <p>Spot : {this.state.data.ETH.spot}</p>
-                                    <p>Sell : {this.state.data.ETH.sell}</p>
-                                    <p>Buy  : {this.state.data.ETH.buy}</p>
+                                    <p>Spot : {this.state.data.ETH.spot} EUR</p>
+                                    <p>Sell : {this.state.data.ETH.sell} EUR</p>
+                                    <p>Buy  : {this.state.data.ETH.buy} EUR</p>
                                     <h3>LTC</h3>
-                                    <p>Spot : {this.state.data.LTC.spot}</p>
-                                    <p>Sell : {this.state.data.LTC.sell}</p>
-                                    <p>Buy  : {this.state.data.LTC.buy}</p>
+                                    <p>Spot : {this.state.data.LTC.spot} EUR</p>
+                                    <p>Sell : {this.state.data.LTC.sell} EUR</p>
+                                    <p>Buy  : {this.state.data.LTC.buy} EUR</p>
                                 </div>
                             ) : 'Updating..'}
                         </div>
