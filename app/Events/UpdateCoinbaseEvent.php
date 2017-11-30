@@ -45,6 +45,6 @@ class UpdateCoinbaseEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('coinbase');
+        return new Channel('coinbase');
     }
 }

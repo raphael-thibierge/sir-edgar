@@ -7,6 +7,7 @@ import ResponsiveSideBar from '../generic/ResponsiveSideBar.jsx';
 import NewProjectRoot from '../project/NewProjectRoot.jsx';
 import BudgetRoot from '../budget/BudgetRoot';
 import ExpenseRoot from '../expense/ExpenseRoot';
+import PriceRoot from '../coinbase/PriceRoot';
 
 /**
  * Main component managing goals
@@ -375,6 +376,10 @@ export default class ProjectRoot extends React.Component {
                 return <ExpenseRoot
                     expenses={this.state.expenses}
                 />;
+                break;
+
+            case 'coinbase':
+                return <PriceRoot/>;
                 break;
 
             default:

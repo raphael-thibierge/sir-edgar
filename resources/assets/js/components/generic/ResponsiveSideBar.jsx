@@ -12,6 +12,10 @@ import {
     ic_attach_money,
 } from 'react-icons-kit/md';
 
+import {
+    bitcoin
+} from 'react-icons-kit/fa';
+
 import {SideNav, Nav, NavText, NavIcon} from 'react-sidenav';
 
 const NavMain = {
@@ -83,6 +87,11 @@ export default class ResponsiveSideBar extends React.Component{
                 <Nav id="expenses">
                     <NavIcon><SvgIcon size={20} icon={ic_attach_money}/></NavIcon>
                     <NavText>Expenses</NavText>
+                </Nav>
+
+                <Nav id="coinbase">
+                    <NavIcon><SvgIcon size={20} icon={bitcoin}/></NavIcon>
+                    <NavText>Coinbase</NavText>
                 </Nav>
 
             </SideNav>
