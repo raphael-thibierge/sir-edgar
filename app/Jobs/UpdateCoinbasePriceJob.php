@@ -37,20 +37,20 @@ class UpdateCoinbasePriceJob implements ShouldQueue
 
         $btc = [
             'sell' => $client->getBuyPrice('BTC-EUR')->getAmount(),
-            'spot' => $btc = $client->getSpotPrice('BTC-EUR')->getAmount(),
-            'buy' => $btc = $client->getBuyPrice('BTC-EUR')->getAmount(),
+            'spot' => $client->getSpotPrice('BTC-EUR')->getAmount(),
+            'buy' => $client->getBuyPrice('BTC-EUR')->getAmount(),
         ];
 
         $eth = [
             'sell' => $client->getBuyPrice('ETH-EUR')->getAmount(),
-            'spot' => $btc = $client->getSpotPrice('ETH-EUR')->getAmount(),
-            'buy' => $btc = $client->getBuyPrice('ETH-EUR')->getAmount(),
+            'spot' => $client->getSpotPrice('ETH-EUR')->getAmount(),
+            'buy' => $client->getBuyPrice('ETH-EUR')->getAmount(),
         ];
 
         $ltc = [
             'sell' => $client->getBuyPrice('LTC-EUR')->getAmount(),
-            'spot' => $btc = $client->getSpotPrice('LTC-EUR')->getAmount(),
-            'buy' => $btc = $client->getBuyPrice('LTC-EUR')->getAmount(),
+            'spot' => $client->getSpotPrice('LTC-EUR')->getAmount(),
+            'buy' => $client->getBuyPrice('LTC-EUR')->getAmount(),
         ];
 
         event(new UpdateCoinbaseEvent([
