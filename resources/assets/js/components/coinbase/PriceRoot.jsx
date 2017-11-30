@@ -12,7 +12,7 @@ export default class PriceRoot extends React.Component{
     getInitialState(){
         return {
             score: 0,
-            data: {},
+            data: null,
             pusher: false,
         }
     }
@@ -89,6 +89,7 @@ export default class PriceRoot extends React.Component{
             this.pusher();
         }
 
+        console.log('data');
         console.log(this.state.data);
         return (
             <div className="row">
@@ -103,7 +104,7 @@ export default class PriceRoot extends React.Component{
 
                     <div className="row">
                         <div className="col-xs-12">
-                            {this.state.data !== {} ? (
+                            {this.state.data !== null ? (
                                 <div className="div">
                                     <h3>BTC</h3>
                                     <p>Spot : {this.state.data.BTC.spot}</p>

@@ -79999,7 +79999,7 @@ var PriceRoot = function (_React$Component) {
         value: function getInitialState() {
             return {
                 score: 0,
-                data: {},
+                data: null,
                 pusher: false
             };
         }
@@ -80078,6 +80078,7 @@ var PriceRoot = function (_React$Component) {
                 this.pusher();
             }
 
+            console.log('data');
             console.log(this.state.data);
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
@@ -80104,7 +80105,7 @@ var PriceRoot = function (_React$Component) {
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'div',
                             { className: 'col-xs-12' },
-                            this.state.data !== {} ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            this.state.data !== null ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'div',
                                 { className: 'div' },
                                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
