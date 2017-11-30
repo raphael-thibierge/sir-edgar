@@ -18,14 +18,17 @@ export default class PriceRoot extends React.Component{
     }
 
     pusher(){
+        console.log('ping');
         if (window.Echo) {
+            console.log('pong');
             window.Echo.channel('coinbase')
-                .listen('UpdateCoinbaseEvent', (e) => {
+                .listen('UpdateCoinbaseEvent', function(e){
+                    console.log('coucou');
                     this.setState({
                         data: e.data,
                         pusher: true,
                     });
-                });
+                }.bind(this));
         }
     }
 
