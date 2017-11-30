@@ -21,9 +21,13 @@ export default class PriceRoot extends React.Component{
         console.log('ping');
         if (window.Echo) {
             console.log('pong');
+            this.setState({
+                pusher: true
+            });
             window.Echo.channel('coinbase')
                 .listen('UpdateCoinbaseEvent', function(e){
                     console.log('coucou');
+                    console.log(e.data);
                     this.setState({
                         data: e.data,
                         pusher: true,
