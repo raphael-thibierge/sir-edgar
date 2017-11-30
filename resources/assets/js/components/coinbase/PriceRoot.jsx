@@ -13,20 +13,25 @@ export default class PriceRoot extends React.Component{
         return {
             score: 0,
             data: [],
+            pusher: false,
         }
     }
 
-    componentDidMount(){
-        //this.request();
-
+    pusher(){
         if (window.Echo) {
             window.Echo.public('coinbase')
                 .listen('UpdateCoinbaseEvent', (e) => {
                     this.setState({
                         data: e.data,
+                        pusher: true,
                     });
                 });
         }
+    }
+
+    componentDidMount(){
+        //this.request();
+        this.pusher();
     }
 
 
@@ -73,8 +78,9 @@ export default class PriceRoot extends React.Component{
 
     render(){
 
-        console.log(this.state.data);
-
+        if (this.state.pusher === false){
+            this.pusher();
+        }
 
         return (
             <div className="row">
