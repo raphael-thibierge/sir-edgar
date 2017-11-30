@@ -18,16 +18,12 @@ export default class PriceRoot extends React.Component{
     }
 
     pusher(){
-        console.log('ping');
         if (window.Echo) {
-            console.log('pong');
             this.setState({
                 pusher: true
             });
             window.Echo.channel('coinbase')
                 .listen('UpdateCoinbaseEvent', function(e){
-                    console.log('coucou');
-                    console.log(e.data);
                     this.setState({
                         data: e.data,
                         pusher: true,
@@ -37,51 +33,8 @@ export default class PriceRoot extends React.Component{
     }
 
     componentDidMount(){
-        //this.request();
         this.pusher();
     }
-
-
-    /**
-     * AJAX request to get goals from server
-     */
-    request(){
-
-        const request = $.ajax({
-            url: './goals/current-score',
-            cache: false,
-            method: 'GET',
-            success: (response) => {
-
-                if (response && response.status === 'success'){
-                    this.setState({
-                        score: response.data.score,
-                        scoreGoal: parseInt(response.data.daily_score_goal),
-                    }, () => {
-
-                        if (window.Echo) {
-                            window.Echo.private('App.User.' + window.user_id)
-                                .listen('GoalCompleted', (e) => {
-                                    this.setState({
-                                        score: this.state.score + e.goal.score,
-                                    });
-                                });
-                            window.Echo.private('App.User.' + window.user_id)
-                                .listen('GoalDeleted', (e) => {
-                                    this.setState({
-                                        score: this.state.score - e.goal.score,
-                                    });
-                                });
-                        }
-
-                    });
-                }
-
-            },
-            error: (error) => {console.error(error.message); alert(error)},
-        });
-    }
-
 
     render(){
 
@@ -89,8 +42,6 @@ export default class PriceRoot extends React.Component{
             this.pusher();
         }
 
-        console.log('data');
-        console.log(this.state.data);
         return (
             <div className="row">
                 <div className="col-xs-12">
