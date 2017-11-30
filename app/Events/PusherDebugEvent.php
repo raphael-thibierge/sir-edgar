@@ -45,4 +45,14 @@ class PusherDebugEvent implements ShouldBroadcast
             'data' => $this->object
         ];
     }
+
+    /**
+     * The event's broadcast name.
+     *
+     * @return string
+     */
+    public function broadcastAs()
+    {
+        return 'price.updated';
+    }
 }
