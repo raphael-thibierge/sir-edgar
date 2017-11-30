@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Events\UpdateCoinbaseEvent;
+use App\MoneyValue;
 use App\Services\CoinbaseService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -17,7 +18,6 @@ class UpdateCoinbasePriceJob implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
      */
     public function __construct()
     {
@@ -32,32 +32,26 @@ class UpdateCoinbasePriceJob implements ShouldQueue
     public function handle()
     {
 
-
         $client = CoinbaseService::connectWithAPI();
 
-        $btc = [
-            'sell' => $client->getSellPrice('BTC-EUR')->getAmount(),
-            'spot' => $client->getSpotPrice('BTC-EUR')->getAmount(),
-            'buy' => $client->getBuyPrice('BTC-EUR')->getAmount(),
-        ];
+        $data = [];
 
-        $eth = [
-            'sell' => $client->getSellPrice('ETH-EUR')->getAmount(),
-            'spot' => $client->getSpotPrice('ETH-EUR')->getAmount(),
-            'buy' => $client->getBuyPrice('ETH-EUR')->getAmount(),
-        ];
+        $native_currency = 'EUR';
 
-        $ltc = [
-            'sell' => $client->getSellPrice('LTC-EUR')->getAmount(),
-            'spot' => $client->getSpotPrice('LTC-EUR')->getAmount(),
-            'buy' => $client->getBuyPrice('LTC-EUR')->getAmount(),
-        ];
+        foreach (['BTC', 'ETH', 'LTC'] as $cryptoCurrency){
 
-        event(new UpdateCoinbaseEvent([
-            'BTC' => $btc,
-            'ETH' => $eth,
-            'LTC' => $ltc,
-        ]));
+            $conversion = $cryptoCurrency . '-' . $native_currency;
 
+            $data[$cryptoCurrency] = MoneyValue::create([
+                'native_currency' => $native_currency,
+                'currency' => $cryptoCurrency,
+                'source' => 'coinbase',
+                'sell_price' => floatval($client->getSellPrice($conversion)->getAmount()),
+                'spot_price' => floatval($client->getSpotPrice($conversion)->getAmount()),
+                'buy_price' => floatval($client->getBuyPrice($conversion)->getAmount()),
+            ]);
+        }
+
+        event(new UpdateCoinbaseEvent($data));
     }
 }
