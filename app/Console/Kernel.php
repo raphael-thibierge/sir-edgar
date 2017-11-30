@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\AdminCoinBaseCommand;
 use App\Console\Commands\CheckRemindersCommand;
+use App\Console\Commands\CoinbasPriceCommand;
 use App\Console\Commands\DailyGoalsReportCommand;
 use App\Console\Commands\ImportantNotificationEdgar;
 use App\Console\Commands\MorningEdgarMessageCommand;
@@ -24,6 +25,7 @@ class Kernel extends ConsoleKernel
         MorningEdgarMessageCommand::class,
         ImportantNotificationEdgar::class,
         AdminCoinBaseCommand::class,
+        CoinbasPriceCommand::class,
     ];
 
     /**
@@ -66,6 +68,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('goals:important:messenger')->hourly();
 
+        $schedule->command('coinbase:price:update')->everyMinute();
 
     }
 
