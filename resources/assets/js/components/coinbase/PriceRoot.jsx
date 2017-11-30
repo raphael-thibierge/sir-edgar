@@ -19,7 +19,7 @@ export default class PriceRoot extends React.Component{
 
     pusher(){
         if (window.Echo) {
-            window.Echo.public('coinbase')
+            window.Echo.channel('coinbase')
                 .listen('UpdateCoinbaseEvent', (e) => {
                     this.setState({
                         data: e.data,
