@@ -36,7 +36,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-
+        $schedule->command('coinbase:price:update')->everyMinute();
+        
         // server monitoring
         $schedule->command('monitor:run')->daily()->at('10:00');
         $schedule->command('monitor:run HttpPing')->hourly();
@@ -67,8 +68,6 @@ class Kernel extends ConsoleKernel
 
 
         $schedule->command('goals:important:messenger')->hourly();
-
-        $schedule->command('coinbase:price:update')->everyMinute();
 
     }
 
