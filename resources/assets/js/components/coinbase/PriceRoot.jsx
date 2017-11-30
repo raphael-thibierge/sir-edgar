@@ -57,6 +57,7 @@ export default class PriceRoot extends React.Component{
                         <div className="col-xs-12">
                             {this.state.data !== null ? (
                                 <div className="div">
+                                    <p>Updated at {(new Date().toLocaleString())}</p>
                                     <h3>BTC</h3>
                                     <p>Spot : {this.state.data.BTC.spot} EUR</p>
                                     <p>Sell : {this.state.data.BTC.sell} EUR</p>
