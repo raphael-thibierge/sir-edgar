@@ -65,3 +65,7 @@ Route::get('/financial-data', 'HomeController@financialData')->middleware('auth'
 Route::get('/finance', 'HomeController@finance')->middleware('auth')->name('finance');
 
 Route::resource('budgets', 'BudgetController');
+
+Route::get('money-values/24h/{currency}', 'MoneyValueController@twentyFourHourValues')
+    ->name('money_values.24h')
+    ->middleware('auth');

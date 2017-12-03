@@ -1,6 +1,8 @@
 import React from 'react';
 import {ProgressBar} from 'react-bootstrap';
 import AjaxEditableValue from '../generic/AjaxEditableValue.jsx';
+import MoneyGraph from './MoneyGraph';
+
 
 export default class PriceRoot extends React.Component{
 
@@ -14,8 +16,13 @@ export default class PriceRoot extends React.Component{
             score: 0,
             data: null,
             pusher: false,
+            BTC_values: null,
+            ETH_values: null,
+            LTC_values: null,
         }
     }
+
+
 
     pusher(){
         if (window.Echo) {
@@ -24,9 +31,16 @@ export default class PriceRoot extends React.Component{
             });
             window.Echo.channel('coinbase')
                 .listen('UpdateCoinbaseEvent', function(e){
+
+                    let BTC_values = this.state.BTC_values;
+                    if ( BTC_values !== null){
+                        BTC_values.push(e.data.BTC);
+                    }
+
                     this.setState({
                         data: e.data,
                         pusher: true,
+                        BTC_values: BTC_values,
                     });
                 }.bind(this));
         }
@@ -34,6 +48,39 @@ export default class PriceRoot extends React.Component{
 
     componentDidMount(){
         this.pusher();
+        const request = $.ajax({
+            url: './money-values/24h/BTC',
+            cache: false,
+            method: 'GET',
+            success: (response) => {
+
+                if (response && response.status === 'success'){
+                    this.setState({
+                        BTC_values: response.data.values,
+                    } /*, () => {
+
+                        if (window.Echo) {
+                            window.Echo.private('App.User.' + window.user_id)
+                                .listen('GoalCompleted', (e) => {
+                                    this.setState({
+                                        score: this.state.score + e.goal.score,
+                                    });
+                                });
+                            window.Echo.private('App.User.' + window.user_id)
+                                .listen('GoalDeleted', (e) => {
+                                    this.setState({
+                                        score: this.state.score - e.goal.score,
+                                    });
+                                });
+                        }
+
+
+                    }*/);
+                }
+
+            },
+            error: (error) => {console.error(error.message); alert(error)},
+        });
     }
 
     render(){
@@ -75,6 +122,16 @@ export default class PriceRoot extends React.Component{
                                     <p>Buy  : {this.state.data.LTC.buy_price} EUR</p>
                                 </div>
                             ) : 'Updating..'}
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-xs-12">
+                            {this.state.BTC_values !== null ? (
+                                <MoneyGraph
+                                    moneyValues={this.state.BTC_values}
+                                />
+                            ): null}
                         </div>
                     </div>
 

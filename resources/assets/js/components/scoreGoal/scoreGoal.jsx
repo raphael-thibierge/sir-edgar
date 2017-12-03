@@ -7,9 +7,11 @@ export default class ScoreGoal extends React.Component{
     constructor(props){
         super(props);
         this.state = this.getInitialState();
+
     }
 
     getInitialState(){
+
         return {
             score: 0,
             scoreGoal: 1,
