@@ -66,14 +66,26 @@ export default class MoneyGraph extends React.Component {
 
         let options = {
             title: this.props.currency + ' prices',
-            hAxis: {},
+            hAxis: {
+                format: 'hh:mm:ss',
+                gridlines: {
+                    count: 24,
+                }
+            },
             vAxis: {minValue: min, maxValue: max},
             legend: true,
+            selectionMode: 'multiple',
+            // Trigger tooltips
+            // on selections.
+            tooltip: {trigger: 'selection'},
+            // Group selections
+            // by x-value.
+            aggregationTarget: 'category',
         };
 
         let columns = [
             {
-                type: 'date',
+                type: 'datetime',
                 label: 'Date',
             },
         ];

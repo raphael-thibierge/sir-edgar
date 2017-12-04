@@ -12,6 +12,7 @@ namespace App\Services;
 use Coinbase\Wallet\Client;
 use Coinbase\Wallet\Configuration;
 use Coinbase\Wallet\Enum\Param;
+use Coinbase\Wallet\Resource\Account;
 use Coinbase\Wallet\Resource\Sell;
 
 class CoinbaseService extends OAuthService
@@ -161,13 +162,26 @@ class CoinbaseService extends OAuthService
                 echo "Price : " . $sellTotal . ' ' . $nativeCurrency . PHP_EOL;
                 echo " ==>  : " . ($sellTotal - $totalBuy) . ' ' . $nativeCurrency . PHP_EOL;
                 echo " ==>  : " . ($sellTotal - $totalBuy)/$totalBuy*100 . ' %' . PHP_EOL;
-
             }
-
             echo PHP_EOL;
-
         }
+    }
 
+    public function getAccountTotalSellPrice(Client $client, Account $account){
+        if (floatval($account->getBalance()->getAmount()) > 0){
+            $sell = new Sell([
+                'bitcoinAmount' => $account->getBalance()->getAmount()
+            ]);
+
+
+            // native balance
+            // balance
+            // sell balance
+            // fees
+
+            $client->createAccountSell($account, $sell, [Param::COMMIT => false]);
+            $sellTotal = $sell->getTotal()->getAmount();
+        }
     }
 
 }
