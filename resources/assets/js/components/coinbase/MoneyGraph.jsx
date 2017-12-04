@@ -1,7 +1,7 @@
 import React from 'react';
 import { Chart } from 'react-google-charts';
 import Tools from '../Tools';
-import {Checkbox, FormGroup} from 'react-bootstrap';
+import {Checkbox, FormGroup, Radio} from 'react-bootstrap';
 
 export default class MoneyGraph extends React.Component {
     constructor(props) {
@@ -19,6 +19,7 @@ export default class MoneyGraph extends React.Component {
             display_buy: false,
             display_sell: false,
             display_spot: true,
+            period: '24h'
         };
     }
 
@@ -27,7 +28,21 @@ export default class MoneyGraph extends React.Component {
         let max = 0;
         let min = 99999999999999999999999999999999999999999;
 
-        const rows = this.props.moneyValues.map((value) => {
+        let rows = [];
+        let startDate = new Date();
+        switch (this.state.period) {
+            case '10min': startDate.setMinutes(startDate.getMinutes()-10); break;
+            case '1h': startDate.setHours(startDate.getHours()-1); break;
+            case '12h': startDate.setHours(startDate.getHours()-12); break;
+            case '24h': startDate.setHours(startDate.getHours()-24); break;
+        }
+
+        this.props.moneyValues.forEach((value) => {
+
+            const created_at = Tools.dateFormater(value.created_at);
+
+            if (created_at < startDate) return;
+
 
             // get max value
             if (value.spot_price > max && this.state.display_spot){
@@ -61,16 +76,13 @@ export default class MoneyGraph extends React.Component {
                 row.push(value.sell_price);
             }
 
-            return row;
+            rows.push(row);
         });
 
         let options = {
             title: this.props.currency + ' prices',
             hAxis: {
                 format: 'hh:mm:ss',
-                gridlines: {
-                    count: 24,
-                }
             },
             vAxis: {minValue: min, maxValue: max},
             legend: true,
@@ -135,17 +147,41 @@ export default class MoneyGraph extends React.Component {
 
                     <div className="row">
                         <div className="col-xs-12">
-                            <Chart
-                                chartType="LineChart"
-                                rows={rows}
-                                columns={columns}
-                                options={options}
-                                graph_id={this.props.currency + '_price_chart'}
-                                width="100%"
-                                height="500px"
-                                chartEvents={this.chartEvents}
-                                legend_toggle
-                            />
+                            <FormGroup>
+                                <Radio inline checked={this.state.period == '10m'} onChange={() => {this.setState({period: '10m'})}}>
+                                    10min
+                                </Radio>
+                                {' '}
+                                <Radio inline checked={this.state.period == '1h'} onChange={() => {this.setState({period: '1h'})}}>
+                                    1h
+                                </Radio>
+                                {' '}
+                                <Radio inline checked={this.state.period == '12h'} onChange={() => {this.setState({period: '12h'})}}>
+                                    12h
+                                </Radio>
+                                {' '}
+                                <Radio inline checked={this.state.period == '24h'} onChange={() => {this.setState({period: '24h'})}}>
+                                    24h
+                                </Radio>
+                            </FormGroup>
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <div className={this.props.currency + '_price_chart'}>
+                                <Chart
+                                    chartType="LineChart"
+                                    rows={rows}
+                                    columns={columns}
+                                    options={options}
+                                    graph_id={this.props.currency + '_price_chart'}
+                                    width="100%"
+                                    height="500px"
+                                    chartEvents={this.chartEvents}
+                                    legend_toggle
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
