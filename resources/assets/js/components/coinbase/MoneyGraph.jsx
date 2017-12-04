@@ -74,13 +74,6 @@ export default class MoneyGraph extends React.Component {
             },
             vAxis: {minValue: min, maxValue: max},
             legend: true,
-            selectionMode: 'multiple',
-            // Trigger tooltips
-            // on selections.
-            tooltip: {trigger: 'selection'},
-            // Group selections
-            // by x-value.
-            aggregationTarget: 'category',
         };
 
         let columns = [
