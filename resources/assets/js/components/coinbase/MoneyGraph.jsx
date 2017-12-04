@@ -39,7 +39,7 @@ export default class MoneyGraph extends React.Component {
 
         this.props.moneyValues.forEach((value) => {
 
-            const created_at = Tools.dateFormater(value.created_at);
+            const created_at = Tools.dateFormatWithOffset(value.created_at);
 
             if (created_at < startDate) return;
 
@@ -62,7 +62,7 @@ export default class MoneyGraph extends React.Component {
                 min = value.buy_price;
             }
 
-            let row = [Tools.dateFormater(value.created_at)];
+            let row = [Tools.dateFormatWithOffset(value.created_at)];
 
             if (this.state.display_buy){
                 row.push(value.buy_price);
