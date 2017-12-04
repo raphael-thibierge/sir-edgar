@@ -53,7 +53,7 @@ export default class MoneyGraph extends React.Component {
                 options={this.state.options}
                 graph_id="LineChart"
                 width="100%"
-                height="400px"
+                height="600px"
                 chartEvents={this.chartEvents}
             />
         );
