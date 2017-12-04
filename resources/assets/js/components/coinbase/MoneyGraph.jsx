@@ -19,7 +19,7 @@ export default class MoneyGraph extends React.Component {
             display_buy: false,
             display_sell: false,
             display_spot: true,
-            period: '24h',
+            period: '6h',
             log_scale: true,
         };
     }
@@ -33,7 +33,7 @@ export default class MoneyGraph extends React.Component {
         let startDate = new Date();
         startDate.setSeconds(0);
         switch (this.state.period) {
-            case '10m': startDate.setMinutes(startDate.getMinutes()-10); break;
+            case '15m': startDate.setMinutes(startDate.getMinutes()-10); break;
             case '1h': startDate.setHours(startDate.getHours()-1); break;
             case '6h': startDate.setHours(startDate.getHours()-6); break;
             case '12h': startDate.setHours(startDate.getHours()-12); break;
@@ -130,8 +130,8 @@ export default class MoneyGraph extends React.Component {
                 <div className="row">
                     <div className="col-xs-12">
                         <FormGroup>
-                            <Radio inline checked={this.state.period == '10m'} onChange={() => {this.setState({period: '10m'})}}>
-                                10min
+                            <Radio inline checked={this.state.period == '15m'} onChange={() => {this.setState({period: '15m'})}}>
+                                15min
                             </Radio>
                             {' '}
                             <Radio inline checked={this.state.period == '1h'} onChange={() => {this.setState({period: '1h'})}}>
