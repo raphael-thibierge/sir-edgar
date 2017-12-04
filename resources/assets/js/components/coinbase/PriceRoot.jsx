@@ -44,7 +44,7 @@ export default class PriceRoot extends React.Component{
 
                     let ETH_values = this.state.ETH_values;
                     if ( ETH_values !== null){
-                        ETH_values.push(e.data.LTC);
+                        ETH_values.push(e.data.ETH);
                     }
 
                     this.setState({
