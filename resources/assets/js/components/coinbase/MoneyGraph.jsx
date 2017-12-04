@@ -118,6 +118,7 @@ export default class MoneyGraph extends React.Component {
             });
         }
 
+        const lastMoneyValue = this.props.moneyValues[this.props.moneyValues.length -1];
 
         return (
             <Panel header={<h2>{this.props.title}</h2>}>
@@ -126,15 +127,15 @@ export default class MoneyGraph extends React.Component {
                     <div className="col-xs-12">
                         <FormGroup>
                             <Checkbox inline checked={this.state.display_buy} onChange={this.setState.bind(this, {display_buy: !this.state.display_buy})}>
-                                Buy
+                                Buy ( {lastMoneyValue.buy_price} {lastMoneyValue.currency} )
                             </Checkbox>
                             {' '}
                             <Checkbox inline checked={this.state.display_spot} onChange={this.setState.bind(this, {display_spot: !this.state.display_spot})}>
-                                Spot
+                                Spot ( {lastMoneyValue.spot_price} {lastMoneyValue.currency} )
                             </Checkbox>
                             {' '}
                             <Checkbox inline checked={this.state.display_sell} onChange={this.setState.bind(this, {display_sell: !this.state.display_sell})}>
-                                Sell
+                                Sell ( {lastMoneyValue.sell_price} {lastMoneyValue.currency} )
                             </Checkbox>
                         </FormGroup>
                     </div>
