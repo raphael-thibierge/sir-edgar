@@ -31,7 +31,7 @@ export default class MoneyGraph extends React.Component {
         let rows = [];
         let startDate = new Date();
         switch (this.state.period) {
-            case '10min': startDate.setMinutes(startDate.getMinutes()-10); break;
+            case '10m': startDate.setMinutes(startDate.getMinutes()-10); break;
             case '1h': startDate.setHours(startDate.getHours()-1); break;
             case '12h': startDate.setHours(startDate.getHours()-12); break;
             case '24h': startDate.setHours(startDate.getHours()-24); break;
