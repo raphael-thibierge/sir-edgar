@@ -1,7 +1,7 @@
 import React from 'react';
 import { Chart } from 'react-google-charts';
 import Tools from '../Tools';
-import {Checkbox, FormGroup, Radio} from 'react-bootstrap';
+import {Checkbox, FormGroup, Radio, Panel} from 'react-bootstrap';
 
 export default class MoneyGraph extends React.Component {
     constructor(props) {
@@ -120,78 +120,70 @@ export default class MoneyGraph extends React.Component {
 
 
         return (
-            <div className="row">
-                <div className="col-xs-12">
+            <Panel header={<h2>{this.props.title}</h2>}>
 
-                    <div className="row">
-                        <div className="col-xs-12">
-                            <h3>{this.props.currency}</h3>
-                        </div>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <FormGroup>
+                            <Checkbox inline checked={this.state.display_buy} onChange={this.setState.bind(this, {display_buy: !this.state.display_buy})}>
+                                Buy
+                            </Checkbox>
+                            {' '}
+                            <Checkbox inline checked={this.state.display_spot} onChange={this.setState.bind(this, {display_spot: !this.state.display_spot})}>
+                                Spot
+                            </Checkbox>
+                            {' '}
+                            <Checkbox inline checked={this.state.display_sell} onChange={this.setState.bind(this, {display_sell: !this.state.display_sell})}>
+                                Sell
+                            </Checkbox>
+                        </FormGroup>
                     </div>
+                </div>
 
-                    <div className="row">
-                        <div className="col-xs-12">
-                            <FormGroup>
-                                <Checkbox inline checked={this.state.display_buy} onChange={this.setState.bind(this, {display_buy: !this.state.display_buy})}>
-                                    Buy
-                                </Checkbox>
-                                {' '}
-                                <Checkbox inline checked={this.state.display_spot} onChange={this.setState.bind(this, {display_spot: !this.state.display_spot})}>
-                                    Spot
-                                </Checkbox>
-                                {' '}
-                                <Checkbox inline checked={this.state.display_sell} onChange={this.setState.bind(this, {display_sell: !this.state.display_sell})}>
-                                    Sell
-                                </Checkbox>
-                            </FormGroup>
-                        </div>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <FormGroup>
+                            <Radio inline checked={this.state.period == '10m'} onChange={() => {this.setState({period: '10m'})}}>
+                                10min
+                            </Radio>
+                            {' '}
+                            <Radio inline checked={this.state.period == '1h'} onChange={() => {this.setState({period: '1h'})}}>
+                                1h
+                            </Radio>
+                            {' '}
+                            <Radio inline checked={this.state.period == '6h'} onChange={() => {this.setState({period: '6h'})}}>
+                                6h
+                            </Radio>
+                            {' '}
+                            <Radio inline checked={this.state.period == '12h'} onChange={() => {this.setState({period: '12h'})}}>
+                                12h
+                            </Radio>
+                            {' '}
+                            <Radio inline checked={this.state.period == '24h'} onChange={() => {this.setState({period: '24h'})}}>
+                                24h
+                            </Radio>
+                        </FormGroup>
                     </div>
+                </div>
 
-                    <div className="row">
-                        <div className="col-xs-12">
-                            <FormGroup>
-                                <Radio inline checked={this.state.period == '10m'} onChange={() => {this.setState({period: '10m'})}}>
-                                    10min
-                                </Radio>
-                                {' '}
-                                <Radio inline checked={this.state.period == '1h'} onChange={() => {this.setState({period: '1h'})}}>
-                                    1h
-                                </Radio>
-                                {' '}
-                                <Radio inline checked={this.state.period == '6h'} onChange={() => {this.setState({period: '6h'})}}>
-                                    6h
-                                </Radio>
-                                {' '}
-                                <Radio inline checked={this.state.period == '12h'} onChange={() => {this.setState({period: '12h'})}}>
-                                    12h
-                                </Radio>
-                                {' '}
-                                <Radio inline checked={this.state.period == '24h'} onChange={() => {this.setState({period: '24h'})}}>
-                                    24h
-                                </Radio>
-                            </FormGroup>
-                        </div>
-                    </div>
-
-                    <div className="row">
-                        <div className="col-xs-12">
-                            <div className={this.props.currency + '_price_chart'}>
-                                <Chart
-                                    chartType="LineChart"
-                                    rows={rows}
-                                    columns={columns}
-                                    options={options}
-                                    graph_id={this.props.currency + '_price_chart'}
-                                    width="100%"
-                                    height="500px"
-                                    chartEvents={this.chartEvents}
-                                    legend_toggle
-                                />
-                            </div>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <div id={this.props.currency + '_price_chart'}>
+                            <Chart
+                                chartType="LineChart"
+                                rows={rows}
+                                columns={columns}
+                                options={options}
+                                graph_id={this.props.currency + '_price_chart'}
+                                width="100%"
+                                height="500px"
+                                chartEvents={this.chartEvents}
+                                legend_toggle
+                            />
                         </div>
                     </div>
                 </div>
-            </div>
+            </Panel>
         );
     }
 }

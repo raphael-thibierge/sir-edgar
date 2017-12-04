@@ -2,6 +2,7 @@ import React from 'react';
 import {ProgressBar} from 'react-bootstrap';
 import AjaxEditableValue from '../generic/AjaxEditableValue.jsx';
 import MoneyGraph from './MoneyGraph';
+import {PanelGroup} from 'react-bootstrap';
 
 
 export default class PriceRoot extends React.Component{
@@ -117,6 +118,35 @@ export default class PriceRoot extends React.Component{
                         </div>
                     </div>
 
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <PanelGroup>
+                                {this.state.BTC_values !== null ? (
+                                    <MoneyGraph
+                                        title={"Bitcoin"}
+                                        currency="BTC"
+                                        moneyValues={this.state.BTC_values}
+                                    />
+                                ): null}
+
+                                {this.state.BTC_values !== null ? (
+                                    <MoneyGraph
+                                        title={"Ethereum"}
+                                        currency="ETH"
+                                        moneyValues={this.state.ETH_values}
+                                    />
+                                ): null}
+
+                                {this.state.BTC_values !== null ? (
+                                    <MoneyGraph
+                                        title={"Litecoin"}
+                                        currency="LTC"
+                                        moneyValues={this.state.LTC_values}
+                                    />
+                                ): null}
+                            </PanelGroup>
+                        </div>
+                    </div>
 
                     <div className="row">
                         <div className="col-xs-12">
@@ -142,40 +172,7 @@ export default class PriceRoot extends React.Component{
                             ) : 'Updating..'}
                         </div>
                     </div>
-
-                    {this.state.BTC_values !== null ? (
-                        <div className="row">
-                            <div className="col-xs-12">
-                                <MoneyGraph
-                                    currency="BTC"
-                                    moneyValues={this.state.BTC_values}
-                                />
-                            </div>
-                        </div>
-                    ): null}
-
-                    {this.state.BTC_values !== null ? (
-                        <div className="row">
-                            <div className="col-xs-12">
-                                <MoneyGraph
-                                    currency="ETH"
-                                    moneyValues={this.state.ETH_values}
-                                />
-                            </div>
-                        </div>
-                    ): null}
-
-                    {this.state.BTC_values !== null ? (
-                        <div className="row">
-                            <div className="col-xs-12">
-                                <MoneyGraph
-                                    currency="LTC"
-                                    moneyValues={this.state.LTC_values}
-                                />
-                            </div>
-                        </div>
-                    ): null}
-
+                    
                 </div>
             </div>
         )
