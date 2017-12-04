@@ -25,15 +25,15 @@ export default class MoneyGraph extends React.Component {
                     label: 'Buy Price',
                 },{
                     type: 'number',
-                    label: 'Sell Price',
-                },
-                {
-                    type: 'number',
                     label: 'Spot Price',
+                }, {
+                    type: 'number',
+                    label: 'Sell Price',
                 },
             ],
         };
     }
+
     render() {
 
         let max = 0;
@@ -65,8 +65,8 @@ export default class MoneyGraph extends React.Component {
 
         let options = {
             title: this.props.currency + ' prices',
-            hAxis: { title: 'Date' },
-            vAxis: { title: 'Price', minValue: min, maxValue: max},
+            hAxis: {},
+            vAxis: {minValue: min, maxValue: max},
             legend: true,
         };
 
@@ -79,7 +79,7 @@ export default class MoneyGraph extends React.Component {
                 options={options}
                 graph_id={this.props.currency + '_price_chart'}
                 width="100%"
-                height="600px"
+                height="500px"
                 chartEvents={this.chartEvents}
                 legend_toggle
             />
