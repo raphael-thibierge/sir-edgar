@@ -20,7 +20,7 @@ export default class MoneyGraph extends React.Component {
             display_sell: false,
             display_spot: true,
             period: '24h',
-            log_scale: false,
+            log_scale: true,
         };
     }
 
@@ -41,12 +41,11 @@ export default class MoneyGraph extends React.Component {
         }
 
         this.props.moneyValues.forEach((value) => {
-
             const created_at = Tools.dateFormatWithOffset(value.created_at);
 
             if (created_at < startDate) return;
 
-
+/*
             // get max value
             if (value.spot_price > max && this.state.display_spot){
                 max = value.spot_price;
@@ -64,7 +63,7 @@ export default class MoneyGraph extends React.Component {
             } if (value.buy_price < min && this.state.display_buy){
                 min = value.buy_price;
             }
-
+*/
             let row = [Tools.dateFormatWithOffset(value.created_at)];
 
             if (this.state.display_buy){
@@ -88,8 +87,8 @@ export default class MoneyGraph extends React.Component {
                 format: 'hh:mm:ss',
             },
             vAxis: {
-                minValue: min,
-                maxValue: max,
+                //minValue: min,
+                //maxValue: max,
                 logScale: this.state.log_scale
             },
             legend: true,
@@ -131,24 +130,6 @@ export default class MoneyGraph extends React.Component {
                 <div className="row">
                     <div className="col-xs-12">
                         <FormGroup>
-                            <Checkbox inline checked={this.state.display_buy} onChange={this.setState.bind(this, {display_buy: !this.state.display_buy})}>
-                                Buy ( {lastMoneyValue.buy_price} {lastMoneyValue.currency} )
-                            </Checkbox>
-                            {' '}
-                            <Checkbox inline checked={this.state.display_spot} onChange={this.setState.bind(this, {display_spot: !this.state.display_spot})}>
-                                Spot ( {lastMoneyValue.spot_price} {lastMoneyValue.currency} )
-                            </Checkbox>
-                            {' '}
-                            <Checkbox inline checked={this.state.display_sell} onChange={this.setState.bind(this, {display_sell: !this.state.display_sell})}>
-                                Sell ( {lastMoneyValue.sell_price} {lastMoneyValue.currency} )
-                            </Checkbox>
-                        </FormGroup>
-                    </div>
-                </div>
-
-                <div className="row">
-                    <div className="col-xs-12">
-                        <FormGroup>
                             <Radio inline checked={this.state.period == '10m'} onChange={() => {this.setState({period: '10m'})}}>
                                 10min
                             </Radio>
@@ -168,15 +149,26 @@ export default class MoneyGraph extends React.Component {
                             <Radio inline checked={this.state.period == '24h'} onChange={() => {this.setState({period: '24h'})}}>
                                 24h
                             </Radio>
+                            <Checkbox inline checked={this.state.log_scale} onChange={this.setState.bind(this, {log_scale: !this.state.log_scale})} style={{marginLeft: 15}}>
+                                Logarithmic scale
+                            </Checkbox>
                         </FormGroup>
                     </div>
                 </div>
 
                 <div className="row">
                     <div className="col-xs-12">
-                        <FormGroup>
-                            <Checkbox inline checked={this.state.log_scale} onChange={this.setState.bind(this, {log_scale: !this.state.log_scale})}>
-                                Logarithmic scale
+                        <FormGroup inline>
+                            <Checkbox inline checked={this.state.display_buy} onChange={this.setState.bind(this, {display_buy: !this.state.display_buy})}>
+                                Buy ( {lastMoneyValue.buy_price} {lastMoneyValue.currency} )
+                            </Checkbox>
+                            {' '}
+                            <Checkbox inline checked={this.state.display_spot} onChange={this.setState.bind(this, {display_spot: !this.state.display_spot})}>
+                                Spot ( {lastMoneyValue.spot_price} {lastMoneyValue.currency} )
+                            </Checkbox>
+                            {' '}
+                            <Checkbox inline checked={this.state.display_sell} onChange={this.setState.bind(this, {display_sell: !this.state.display_sell})}>
+                                Sell ( {lastMoneyValue.sell_price} {lastMoneyValue.currency} )
                             </Checkbox>
                         </FormGroup>
                     </div>
