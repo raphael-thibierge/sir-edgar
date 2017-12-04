@@ -15,12 +15,6 @@ export default class MoneyGraph extends React.Component {
             },
         ];
         this.state = {
-            options: {
-                title: 'BTC Prices',
-                hAxis: { title: 'Date'},
-                vAxis: { title: 'Price'},
-                legend: 'none',
-            },
             columns: [
                 {
                     type: 'date',
@@ -42,7 +36,39 @@ export default class MoneyGraph extends React.Component {
     }
     render() {
 
-        const rows = this.props.moneyValues.map((value) => [Tools.dateFormater(value.created_at), value.buy_price, value.spot_price, value.sell_price]);
+        let max = 0;
+        let min = 99999999999999999999999999999999999999999;
+
+        const rows = this.props.moneyValues.map((value) => {
+
+            // get max value
+            if (value.spot_price > max){
+                max = value.spot_price;
+            } if (value.sell_price > max){
+                max = value.sell_price;
+            } if (value.buy_price > max){
+                max = value.buy_price;
+            }
+
+            // get max value
+            if (value.spot_price < min){
+                min = value.spot_price;
+            } if (value.sell_price < min){
+                min = value.sell_price;
+            } if (value.buy_price < min){
+                min = value.buy_price;
+            }
+
+
+            return [Tools.dateFormater(value.created_at), value.buy_price, value.spot_price, value.sell_price];
+        });
+
+        let options = {
+            title: this.props.currency + ' prices',
+            hAxis: { title: 'Date' },
+            vAxis: { title: 'Price', minValue: min, maxValue: max},
+            legend: true,
+        };
 
 
         return (
@@ -50,11 +76,12 @@ export default class MoneyGraph extends React.Component {
                 chartType="LineChart"
                 rows={rows}
                 columns={this.state.columns}
-                options={this.state.options}
-                graph_id="LineChart"
+                options={options}
+                graph_id={this.props.currency + '_price_chart'}
                 width="100%"
                 height="600px"
                 chartEvents={this.chartEvents}
+                legend_toggle
             />
         );
     }

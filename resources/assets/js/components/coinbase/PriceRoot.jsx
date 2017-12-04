@@ -37,10 +37,22 @@ export default class PriceRoot extends React.Component{
                         BTC_values.push(e.data.BTC);
                     }
 
+                    let LTC_values = this.state.LTC_values;
+                    if ( LTC_values !== null){
+                        LTC_values.push(e.data.LTC);
+                    }
+
+                    let ETH_values = this.state.ETH_values;
+                    if ( ETH_values !== null){
+                        ETH_values.push(e.data.LTC);
+                    }
+
                     this.setState({
                         data: e.data,
                         pusher: true,
                         BTC_values: BTC_values,
+                        ETH_values: ETH_values,
+                        LTC_values: LTC_values,
                     });
                 }.bind(this));
         }
@@ -48,36 +60,42 @@ export default class PriceRoot extends React.Component{
 
     componentDidMount(){
         this.pusher();
-        const request = $.ajax({
+        const btc_request = $.ajax({
             url: './money-values/24h/BTC',
             cache: false,
             method: 'GET',
             success: (response) => {
-
                 if (response && response.status === 'success'){
                     this.setState({
                         BTC_values: response.data.values,
-                    } /*, () => {
-
-                        if (window.Echo) {
-                            window.Echo.private('App.User.' + window.user_id)
-                                .listen('GoalCompleted', (e) => {
-                                    this.setState({
-                                        score: this.state.score + e.goal.score,
-                                    });
-                                });
-                            window.Echo.private('App.User.' + window.user_id)
-                                .listen('GoalDeleted', (e) => {
-                                    this.setState({
-                                        score: this.state.score - e.goal.score,
-                                    });
-                                });
-                        }
-
-
-                    }*/);
+                    });
                 }
-
+            },
+            error: (error) => {console.error(error.message); alert(error)},
+        });
+        const eth_request = $.ajax({
+            url: './money-values/24h/ETH',
+            cache: false,
+            method: 'GET',
+            success: (response) => {
+                if (response && response.status === 'success'){
+                    this.setState({
+                        ETH_values: response.data.values,
+                    });
+                }
+            },
+            error: (error) => {console.error(error.message); alert(error)},
+        });
+        const ltc_request = $.ajax({
+            url: './money-values/24h/LTC',
+            cache: false,
+            method: 'GET',
+            success: (response) => {
+                if (response && response.status === 'success'){
+                    this.setState({
+                        LTC_values: response.data.values,
+                    });
+                }
             },
             error: (error) => {console.error(error.message); alert(error)},
         });
@@ -125,15 +143,38 @@ export default class PriceRoot extends React.Component{
                         </div>
                     </div>
 
-                    <div className="row">
-                        <div className="col-xs-12">
-                            {this.state.BTC_values !== null ? (
+                    {this.state.BTC_values !== null ? (
+                        <div className="row">
+                            <div className="col-xs-12">
                                 <MoneyGraph
+                                    currency="BTC"
                                     moneyValues={this.state.BTC_values}
                                 />
-                            ): null}
+                            </div>
                         </div>
-                    </div>
+                    ): null}
+
+                    {this.state.BTC_values !== null ? (
+                        <div className="row">
+                            <div className="col-xs-12">
+                                <MoneyGraph
+                                    currency="ETH"
+                                    moneyValues={this.state.ETH_values}
+                                />
+                            </div>
+                        </div>
+                    ): null}
+
+                    {this.state.BTC_values !== null ? (
+                        <div className="row">
+                            <div className="col-xs-12">
+                                <MoneyGraph
+                                    currency="LTC"
+                                    moneyValues={this.state.LTC_values}
+                                />
+                            </div>
+                        </div>
+                    ): null}
 
                 </div>
             </div>
