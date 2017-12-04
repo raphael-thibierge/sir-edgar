@@ -178,7 +178,7 @@ export default class MoneyGraph extends React.Component {
                     <div className="col-xs-12">
                         <div id={this.props.currency + '_price_chart'}>
                             <Chart
-                                chartType="LineChart"
+                                chartType="AreaChart"
                                 rows={rows}
                                 columns={columns}
                                 options={options}
