@@ -19,7 +19,8 @@ export default class MoneyGraph extends React.Component {
             display_buy: false,
             display_sell: false,
             display_spot: true,
-            period: '24h'
+            period: '24h',
+            log_scale: false,
         };
     }
 
@@ -86,7 +87,11 @@ export default class MoneyGraph extends React.Component {
             hAxis: {
                 format: 'hh:mm:ss',
             },
-            vAxis: {minValue: min, maxValue: max},
+            vAxis: {
+                minValue: min,
+                maxValue: max,
+                logScale: this.state.log_scale
+            },
             legend: true,
         };
 
@@ -163,6 +168,16 @@ export default class MoneyGraph extends React.Component {
                             <Radio inline checked={this.state.period == '24h'} onChange={() => {this.setState({period: '24h'})}}>
                                 24h
                             </Radio>
+                        </FormGroup>
+                    </div>
+                </div>
+
+                <div className="row">
+                    <div className="col-xs-12">
+                        <FormGroup>
+                            <Checkbox inline checked={this.state.log_scale} onChange={this.setState.bind(this, {log_scale: !this.state.log_scale})}>
+                                Logarithmic scale
+                            </Checkbox>
                         </FormGroup>
                     </div>
                 </div>
