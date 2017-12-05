@@ -304,7 +304,7 @@ export default class ProjectRoot extends React.Component {
                     return <ProjectRender
                         project={project}
                         createGoal={this.addGoal.bind(this)}
-                        onTitleChange={this.editProjectTitle.bind(this)}
+                        editProject={this.editProject.bind(this)}
                     />;
                     break;
 
@@ -388,18 +388,18 @@ export default class ProjectRoot extends React.Component {
     }
 
 
-    editProjectTitle(title, project_id){
+    editProject(projectEdited){
 
         let projects = this.state.projects;
 
-        let project = projects[this.projectMap[project_id]];
-
-        project.title = title;
-
-        projects[this.projectMap[project_id]] = project;
+        let project = projects[this.projectMap[projectEdited._id]];
+        project.title = projectEdited.title;
+        project.is_archived = projectEdited.is_archived;
+        projects[this.projectMap[project._id]] = project;
 
         this.setState({
-            projects: projects
+            projects: projects,
+            view: project.is_archived ? 'stats' : 'projects/' + project._id
         });
     }
 

@@ -67,11 +67,11 @@ export default class ResponsiveSideBar extends React.Component{
                     <NavText>Projects</NavText>
                     <NavIcon><SvgIcon size={20} icon={ic_folder_special}/></NavIcon>
 
-                    {this.props.projects.map(project =>
+                    {this.props.projects.map(project => !project.is_archived ?
                         <Nav key={project._id} id={project._id}>
                             <NavIcon><SvgIcon size={20} icon={ic_folder}/></NavIcon>
                             <NavText>{project.title}</NavText>
-                        </Nav>
+                        </Nav> : null
                     )}
                 </Nav>
                 <br/>

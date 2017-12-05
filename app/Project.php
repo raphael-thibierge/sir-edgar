@@ -25,6 +25,7 @@ class Project extends Model
      */
     protected $fillable = [
         'title',
+        'is_archived',
         'user_id'
     ];
 
