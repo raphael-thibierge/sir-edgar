@@ -82,7 +82,7 @@ export default class MoneyGraph extends React.Component {
         });
 
         let options = {
-            title: this.props.currency + ' prices',
+            //title: this.props.currency + ' prices',
             hAxis: {
                 format: 'hh:mm:ss',
             },
