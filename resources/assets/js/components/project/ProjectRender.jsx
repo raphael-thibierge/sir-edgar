@@ -41,6 +41,7 @@ export default class ProjectRender extends React.Component{
     render() {
 
         const project = this.props.project;
+        console.log(project);
 
         return (
             <div className="row">
@@ -52,10 +53,10 @@ export default class ProjectRender extends React.Component{
                                 {typeof project.routes !== "undefined" ?
 
                                     <ProjectDetailsModal
-                                        project={this.props.project}
+                                        project={project}
                                         onProjectUpdate={this.editProject.bind(this)}
                                     />
-                                     : this.props.project.title
+                                     : project.title
                                 }
                             </h1>
                         </div>

@@ -81,6 +81,13 @@ export default class ProjectDetailsModal extends React.Component{
 
     }
 
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            title: nextProps.project.title,
+            is_archived: nextProps.project.is_archived,
+        })
+    }
+
     /**
      * Render component's HTML code
      *
