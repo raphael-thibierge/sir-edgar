@@ -37,6 +37,7 @@ export default class MoneyGraph extends React.Component {
         switch (this.state.period) {
             case '15m': startDate.setMinutes(startDate.getMinutes()-10); break;
             case '1h': startDate.setHours(startDate.getHours()-1); break;
+            case '3h': startDate.setHours(startDate.getHours()-3); break;
             case '6h': startDate.setHours(startDate.getHours()-6); break;
             case '12h': startDate.setHours(startDate.getHours()-12); break;
             case '24h': startDate.setHours(startDate.getHours()-24); break;
@@ -47,25 +48,6 @@ export default class MoneyGraph extends React.Component {
 
             if (created_at < startDate) return;
 
-/*
-            // get max value
-            if (value.spot_price > max && this.state.display_spot){
-                max = value.spot_price;
-            } if (value.sell_price > max && this.state.display_sell){
-                max = value.sell_price;
-            } if (value.buy_price > max && this.state.display_buy){
-                max = value.buy_price;
-            }
-
-            // get max value
-            if (value.spot_price < min && this.state.display_spot){
-                min = value.spot_price;
-            } if (value.sell_price < min && this.state.display_sell){
-                min = value.sell_price;
-            } if (value.buy_price < min && this.state.display_buy){
-                min = value.buy_price;
-            }
-*/
             let row = [Tools.dateFormatWithOffset(value.created_at)];
 
             if (this.state.display_buy){
@@ -84,13 +66,10 @@ export default class MoneyGraph extends React.Component {
         });
 
         let options = {
-            //title: this.props.currency + ' prices',
             hAxis: {
                 format: 'hh:mm:ss',
             },
             vAxis: {
-                //minValue: min,
-                //maxValue: max,
                 logScale: this.state.log_scale
             },
             legend: true,
@@ -130,12 +109,12 @@ export default class MoneyGraph extends React.Component {
                 <div className="row">
                     <div className="col-xs-12">
                         <FormGroup>
-                            <Radio inline checked={this.state.period == '15m'} onChange={() => {this.setState({period: '15m'})}}>
-                                15min
-                            </Radio>
-                            {' '}
                             <Radio inline checked={this.state.period == '1h'} onChange={() => {this.setState({period: '1h'})}}>
                                 1h
+                            </Radio>
+                            {' '}
+                            <Radio inline checked={this.state.period == '3h'} onChange={() => {this.setState({period: '3h'})}}>
+                                3h
                             </Radio>
                             {' '}
                             <Radio inline checked={this.state.period == '6h'} onChange={() => {this.setState({period: '6h'})}}>
