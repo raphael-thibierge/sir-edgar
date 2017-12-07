@@ -2,7 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\Notifications\MessengerNotification;
+use App\Services\CoinbaseService;
+use App\User;
+use Coinbase\Wallet\Exception\HttpException;
+use Coinbase\Wallet\Exception\ServiceUnavailableException;
+use GuzzleHttp\Exception\ServerException;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 
 class CheckCoinbaseApiStatusCommand extends Command
 {
@@ -45,9 +52,12 @@ class CheckCoinbaseApiStatusCommand extends Command
         try {
             $client->getAccounts();
 
-            if (Cache::get(self::CACHE_KEY) === false){
-                User::first()->notify(new MessengerNotification('Coinbase API down !'));
-                Cache::put(self::CACHE_KEY, true);
+            if (!Cache::has(self::CACHE_KEY)){
+                User::first()->notify(new MessengerNotification('Coinbase API up !'));
+                Cache::forever(self::CACHE_KEY, true);
+            }else if (Cache::get(self::CACHE_KEY) === false){
+                User::first()->notify(new MessengerNotification('Coinbase API up !'));
+                Cache::forever(self::CACHE_KEY, true);
             }
 
         } catch (ServiceUnavailableException $exception){
@@ -56,17 +66,19 @@ class CheckCoinbaseApiStatusCommand extends Command
             $this->apiOff();
         } catch (HttpException $exception){
             $this->apiOff();
+        } catch (\Exception $exception){
+            $this->apiOff();
         }
 
     }
 
     private function apiOff(){
         if (!Cache::has(self::CACHE_KEY)){
-            Cache::put(self::CACHE_KEY, false);
+            Cache::forever(self::CACHE_KEY, false);
             User::first()->notify(new MessengerNotification('Coinbase API down !'));
         } else if (Cache::get(self::CACHE_KEY)){
             User::first()->notify(new MessengerNotification('Coinbase API down !'));
-            Cache::put(self::CACHE_KEY, false);
+            Cache::forever(self::CACHE_KEY, false);
         }
     }
 }
