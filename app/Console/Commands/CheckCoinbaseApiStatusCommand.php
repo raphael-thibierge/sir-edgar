@@ -11,7 +11,7 @@ class CheckCoinbaseApiStatusCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'coinbase:api:status';
 
     /**
      * The console command description.
@@ -30,6 +30,8 @@ class CheckCoinbaseApiStatusCommand extends Command
         parent::__construct();
     }
 
+    const CACHE_KEY = 'coinbase-api-status';
+
     /**
      * Execute the console command.
      *
@@ -37,6 +39,34 @@ class CheckCoinbaseApiStatusCommand extends Command
      */
     public function handle()
     {
-        //
+
+        $client = CoinbaseService::connectWithAPI();
+
+        try {
+            $client->getAccounts();
+
+            if (Cache::get(self::CACHE_KEY) === false){
+                User::first()->notify(new MessengerNotification('Coinbase API down !'));
+                Cache::put(self::CACHE_KEY, true);
+            }
+
+        } catch (ServiceUnavailableException $exception){
+            $this->apiOff();
+        } catch (ServerException $exception){
+            $this->apiOff();
+        } catch (HttpException $exception){
+            $this->apiOff();
+        }
+
+    }
+
+    private function apiOff(){
+        if (!Cache::has(self::CACHE_KEY)){
+            Cache::put(self::CACHE_KEY, false);
+            User::first()->notify(new MessengerNotification('Coinbase API down !'));
+        } else if (Cache::get(self::CACHE_KEY)){
+            User::first()->notify(new MessengerNotification('Coinbase API down !'));
+            Cache::put(self::CACHE_KEY, false);
+        }
     }
 }
