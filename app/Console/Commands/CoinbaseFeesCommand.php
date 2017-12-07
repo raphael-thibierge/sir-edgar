@@ -2,18 +2,17 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\UpdateCoinbasePriceJob;
 use App\Services\CoinbaseService;
 use Illuminate\Console\Command;
 
-class CoinbasPriceCommand extends Command
+class CoinbaseFeesCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'coinbase:price:update';
+    protected $signature = 'coinbase:fees';
 
     /**
      * The console command description.
@@ -25,6 +24,7 @@ class CoinbasPriceCommand extends Command
     /**
      * Create a new command instance.
      *
+     * @return void
      */
     public function __construct()
     {
@@ -38,6 +38,6 @@ class CoinbasPriceCommand extends Command
      */
     public function handle()
     {
-        dispatch(new UpdateCoinbasePriceJob());
+        CoinbaseService::fees();
     }
 }

@@ -3,8 +3,10 @@
 namespace App\Console;
 
 use App\Console\Commands\AdminCoinBaseCommand;
+use App\Console\Commands\CheckCoinbaseApiStatusCommand;
 use App\Console\Commands\CheckRemindersCommand;
-use App\Console\Commands\CoinbasPriceCommand;
+use App\Console\Commands\CoinbaseFeesCommand;
+use App\Console\Commands\CoinbasePriceCommand;
 use App\Console\Commands\DailyGoalsReportCommand;
 use App\Console\Commands\ImportantNotificationEdgar;
 use App\Console\Commands\MorningEdgarMessageCommand;
@@ -25,7 +27,9 @@ class Kernel extends ConsoleKernel
         MorningEdgarMessageCommand::class,
         ImportantNotificationEdgar::class,
         AdminCoinBaseCommand::class,
-        CoinbasPriceCommand::class,
+        CoinbasePriceCommand::class,
+        CoinbaseFeesCommand::class,
+        CheckCoinbaseApiStatusCommand::class,
     ];
 
     /**
@@ -37,7 +41,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('coinbase:price:update')->everyMinute();
-        
+        $schedule->command('coinbase:api:status')->everyMinute();
+
         // server monitoring
         $schedule->command('monitor:run')->daily()->at('10:00');
         $schedule->command('monitor:run HttpPing')->hourly();

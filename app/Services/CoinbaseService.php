@@ -202,6 +202,29 @@ class CoinbaseService extends OAuthService
         }
     }
 
+    public static function fees(){
+        $client = self::connectWithAPI();
+
+        $account = $client->getAccounts()[3];
+
+        $lastFees = null;
+
+        $nativeCurrency = $account->getNativeBalance()->getCurrency();
+
+        for ($price = 2; $price < 76; $price++){
+            $buy = new Buy();
+            $buy->setAmount(new Money($price, $nativeCurrency));
+            $client->createAccountBuy($account, $buy, [Param::COMMIT => false]);
+            $feesValue = floatval($buy->getFees()[0]->getAmount()->getAmount());
+
+            if ($lastFees == null || $lastFees !== $feesValue){
+                echo "$price $nativeCurrency : $feesValue $nativeCurrency" . PHP_EOL;
+                $lastFees = $feesValue;
+            }
+        }
+
+    }
+
     public function getAccountTotalSellPrice(Client $client, Account $account){
         if (floatval($account->getBalance()->getAmount()) > 0){
             $sell = new Sell([
