@@ -6,6 +6,7 @@ use App\Jobs\UpdateCoinbasePriceJob;
 use App\Notifications\MessengerNotification;
 use App\Services\CoinbaseService;
 use App\User;
+use Carbon\Carbon;
 use Coinbase\Wallet\Exception\ServiceUnavailableException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
@@ -35,8 +36,6 @@ class CoinbasePriceCommand extends Command
         parent::__construct();
     }
 
-    const CACHE_KEY = 'coinbase-api-status';
-
     /**
      * Execute the console command.
      *
@@ -45,5 +44,8 @@ class CoinbasePriceCommand extends Command
     public function handle()
     {
         dispatch(new UpdateCoinbasePriceJob());
+        dispatch(new UpdateCoinbasePriceJob())->delay(Carbon::now()->addSeconds(20));
+        dispatch(new UpdateCoinbasePriceJob())->delay(Carbon::now()->addSeconds(40));
+
     }
 }
