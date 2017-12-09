@@ -69,3 +69,7 @@ Route::resource('budgets', 'BudgetController');
 Route::get('money-values/24h/{currency}', 'MoneyValueController@twentyFourHourValues')
     ->name('money_values.24h')
     ->middleware('auth');
+
+Horizon::auth(function ($request) {
+    return $request->user()->isAdmin();
+});
