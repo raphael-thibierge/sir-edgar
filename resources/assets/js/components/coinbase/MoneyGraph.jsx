@@ -35,7 +35,7 @@ export default class MoneyGraph extends React.Component {
         let startDate = new Date();
         startDate.setSeconds(0);
         switch (this.state.period) {
-            case '15m': startDate.setMinutes(startDate.getMinutes()-10); break;
+            case '30min': startDate.setMinutes(startDate.getMinutes()-30); break;
             case '1h': startDate.setHours(startDate.getHours()-1); break;
             case '3h': startDate.setHours(startDate.getHours()-3); break;
             case '6h': startDate.setHours(startDate.getHours()-6); break;
@@ -109,6 +109,10 @@ export default class MoneyGraph extends React.Component {
                 <div className="row">
                     <div className="col-xs-12">
                         <FormGroup>
+                            <Radio inline checked={this.state.period == '30min'} onChange={() => {this.setState({period: '30min'})}}>
+                                30min
+                            </Radio>
+                            {' '}
                             <Radio inline checked={this.state.period == '1h'} onChange={() => {this.setState({period: '1h'})}}>
                                 1h
                             </Radio>
