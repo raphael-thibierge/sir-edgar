@@ -21,7 +21,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        DailyGoalsReportCommand::class,
+        /*DailyGoalsReportCommand::class,
         CheckRemindersCommand::class,
         DailyGoalsReportCommand::class,
         MorningEdgarMessageCommand::class,
@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         AdminCoinBaseCommand::class,
         CoinbasePriceCommand::class,
         CoinbaseFeesCommand::class,
-        CoinbaseCheckApiStatusCommand::class,
+        CoinbaseCheckApiStatusCommand::class,*/
     ];
 
     /**
@@ -40,8 +40,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+
         $schedule->command('coinbase:price:update')->everyMinute();
         $schedule->command('coinbase:api:status')->everyMinute();
+
+        $schedule->command('horizon:snapshot')->everyFiveMinutes();
 
         // server monitoring
         $schedule->command('monitor:run')->daily()->at('10:00');
@@ -84,5 +87,6 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         require base_path('routes/console.php');
+        $this->load(__DIR__.'/Commands');
     }
 }
