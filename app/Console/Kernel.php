@@ -3,7 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\AdminCoinBaseCommand;
-use App\Console\Commands\CheckCoinbaseApiStatusCommand;
+use App\Console\Commands\CoinbaseCheckApiStatusCommand;
 use App\Console\Commands\CheckRemindersCommand;
 use App\Console\Commands\CoinbaseFeesCommand;
 use App\Console\Commands\CoinbasePriceCommand;
@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         AdminCoinBaseCommand::class,
         CoinbasePriceCommand::class,
         CoinbaseFeesCommand::class,
-        CheckCoinbaseApiStatusCommand::class,
+        CoinbaseCheckApiStatusCommand::class,
     ];
 
     /**
