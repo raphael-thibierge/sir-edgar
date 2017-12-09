@@ -44,9 +44,8 @@ class CoinbasePriceCommand extends Command
     public function handle()
     {
         dispatch(new UpdateCoinbasePriceJob());
-        dispatch(new UpdateCoinbasePriceJob())->delay(Carbon::now()->addSeconds(15));
-        dispatch(new UpdateCoinbasePriceJob())->delay(Carbon::now()->addSeconds(30));
-        dispatch(new UpdateCoinbasePriceJob())->delay(Carbon::now()->addSeconds(45));
+        dispatch(new UpdateCoinbasePriceJob())->delay(Carbon::now()->addSeconds(20));
+        dispatch(new UpdateCoinbasePriceJob())->delay(Carbon::now()->addSeconds(40));
 
     }
 }
