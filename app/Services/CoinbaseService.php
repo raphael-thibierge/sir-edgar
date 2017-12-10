@@ -109,7 +109,7 @@ class CoinbaseService extends OAuthService
             }
 
             self::printLine("=============================" . PHP_EOL, $console);
-            self::printLine($name . PHP_EOL, $console);
+            self::printLine("Wallet    : " . name . PHP_EOL, $console);
             self::printLine("Balance   : " . $balance . ' ' . $currency . PHP_EOL, $console);
             //echo "Value     : " . $nativeCurrencyBalance . ' ' . $nativeCurrency . PHP_EOL;
 
@@ -122,9 +122,9 @@ class CoinbaseService extends OAuthService
             $spotPrice = floatval($client->getSpotPrice($currency . '-' . $nativeCurrency)->getAmount());
             $buyPrice = floatval($client->getBuyPrice($currency . '-' . $nativeCurrency)->getAmount());
 
-            self::printLine($currency . ' spot  : ' . $spotPrice . ' ' . $nativeCurrency . PHP_EOL, $console);
-            self::printLine($currency . ' buy   : ' . $buyPrice . ' ' . $nativeCurrency . PHP_EOL, $console);
-            self::printLine($currency . ' sell  : ' . $sellPrice . ' ' . $nativeCurrency . PHP_EOL, $console);
+            //self::printLine($currency . ' spot  : ' . $spotPrice . ' ' . $nativeCurrency . PHP_EOL, $console);
+            //self::printLine($currency . ' buy   : ' . $buyPrice . ' ' . $nativeCurrency . PHP_EOL, $console);
+            //self::printLine($currency . ' sell  : ' . $sellPrice . ' ' . $nativeCurrency . PHP_EOL, $console);
 
             //echo PHP_EOL;
             //echo "---------------------------" . PHP_EOL;
