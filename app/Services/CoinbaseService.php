@@ -96,6 +96,9 @@ class CoinbaseService extends OAuthService
 
         $accounts = $client->getAccounts();
 
+        $totalNativeBalance = 0.0;
+        $totalNativeBuys= 0.0;
+
         foreach ($accounts as $account){
             $name = $account->getName();
 
@@ -103,6 +106,7 @@ class CoinbaseService extends OAuthService
             $currency = $account->getCurrency();
             $nativeCurrency = $account->getNativeBalance()->getCurrency();
             $nativeCurrencyBalance = floatval($account->getNativeBalance()->getAmount());
+            $totalNativeBalance += $nativeCurrencyBalance;
 
             if ($currency === $nativeCurrency){
                 continue;
@@ -145,12 +149,8 @@ class CoinbaseService extends OAuthService
 
                 $totalBuy += floatval($transaction->getNativeAmount()->getAmount());
             }
+            $totalNativeBuys += $totalBuy;
 
-            //self::printLine(PHP_EOL, $console);
-            //self::printLine("---------------------------" . PHP_EOL, $console);
-            //self::printLine('Total' .  PHP_EOL, $console);
-            //self::printLine("---------------------------" . PHP_EOL, $console);
-            //echo "Balance : " . $balance . ' ' . $currency . PHP_EOL;
             self::printLine('Buys : ' . $totalBuy . ' ' . $nativeCurrency . PHP_EOL, $console);
             self::printLine('Now  : ' . $nativeCurrencyBalance . ' ' . $nativeCurrency . PHP_EOL, $console);
             $gains = floatval($nativeCurrencyBalance) - $totalBuy;
@@ -166,8 +166,11 @@ class CoinbaseService extends OAuthService
                 self::printLine('Sell now (fees included)' .  PHP_EOL, $console);
                 self::printLine("---------------------------" . PHP_EOL, $console);
 
-                $sell = new Sell(['bitcoinAmount' => $balance]);
 
+                //dd($balance);
+
+                $sell = new Sell();
+                $sell->setAmount(new Money($balance, $currency));
                 $client->createAccountSell($account, $sell, [Param::COMMIT => false]);
                 $sellTotal = $sell->getTotal()->getAmount();
                 $realGain = $sellTotal - $totalBuy;
@@ -203,7 +206,15 @@ class CoinbaseService extends OAuthService
                 self::printLine("   ==> " . (($buyUnderSpot-$buyPrice)/$buyPrice)*100 . ' %'. PHP_EOL, $console);
             }
             self::printLine(PHP_EOL, $console);
+
         }
+        self::printLine(PHP_EOL, $console);
+        self::printLine("=============================" . PHP_EOL, $console);
+        self::printLine("---------------------------" . PHP_EOL, $console);
+        self::printLine('Total' .  PHP_EOL, $console);
+        self::printLine("---------------------------" . PHP_EOL, $console);
+        self::printLine('Buys : ' . $totalNativeBuys . ' ' . $nativeCurrency . PHP_EOL, $console);
+        self::printLine('Now  : ' . $totalNativeBalance . ' ' . $nativeCurrency . PHP_EOL, $console);
     }
 
     public static function fees(){

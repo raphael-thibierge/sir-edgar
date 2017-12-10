@@ -33,6 +33,7 @@ class OAuthConnection extends Model
     }
 
     public function tokenHasExpired(): bool {
+        return true;
         $expiration_date = new Carbon();
         $expiration_date->timestamp = $this->token_expiration;
         return Carbon::now()->greaterThanOrEqualTo($expiration_date);

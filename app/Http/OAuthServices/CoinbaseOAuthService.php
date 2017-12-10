@@ -105,10 +105,9 @@ class CoinbaseOAuthService extends OAuthService
         $grant = new RefreshToken();
         $token_object = $provider->getAccessToken($grant, ['refresh_token' => $this->oAuthConnection->refresh_token]);
 
-
         $this->oAuthConnection->update([
-            'access_token' => $token_object->access_token,
-            'refresh_token' => $token_object->refresh_token,
+            'access_token' => $token_object->accessToken,
+            'refresh_token' => $token_object->refreshToken,
             'token_expiration' => $token_object->expires,
         ]);
     }
