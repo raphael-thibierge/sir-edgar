@@ -18,10 +18,13 @@
         git pull
     @endif
 
-    composer install
+    composer install --optimize-autoloader
 
     php artisan migrate --force
 
+    php artisan config:cache
+
     php artisan up
+
 
 @endtask
