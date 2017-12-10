@@ -45,7 +45,7 @@ export default class ProjectRoot extends React.Component {
         this.request();
         $.get('/financial-data')
             .catch(error => {
-                alert('Failed to load app...');
+                alert(error.statusText);
                 console.error(error);
             })
             .then(responseJSON => {
@@ -120,7 +120,7 @@ export default class ProjectRoot extends React.Component {
             cache: false,
             method: 'GET',
             success: this.onSuccess.bind(this),
-            error: (error) => {console.error(error.message); alert(error)},
+            error: (error) => {console.error(error); alert(error.statusText)},
         });
     }
 

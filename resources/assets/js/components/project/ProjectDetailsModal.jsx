@@ -74,7 +74,7 @@ export default class ProjectDetailsModal extends React.Component{
                 }
 
             },
-            error: (error) => {console.error(error.message); alert(error)},
+            error: (error) => {console.error(error); alert(error.statusText)},
         });
 
         console.log(request);

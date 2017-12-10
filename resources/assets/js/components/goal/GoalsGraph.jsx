@@ -163,7 +163,7 @@ export default class GoalsGraph extends React.Component{
      * @param response
      */
     onError(response) {
-        alert('error');
+        alert(error.statusText);
         console.error(response);
     }
 
