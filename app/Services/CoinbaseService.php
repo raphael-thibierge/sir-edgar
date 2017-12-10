@@ -109,7 +109,7 @@ class CoinbaseService extends OAuthService
             }
 
             self::printLine("=============================" . PHP_EOL, $console);
-            self::printLine("Wallet    : " . name . PHP_EOL, $console);
+            self::printLine("Wallet    : " . $name . PHP_EOL, $console);
             self::printLine("Balance   : " . $balance . ' ' . $currency . PHP_EOL, $console);
             //echo "Value     : " . $nativeCurrencyBalance . ' ' . $nativeCurrency . PHP_EOL;
 
