@@ -67,8 +67,8 @@ class CoinbaseService extends OAuthService
 
     public static function connectWithAPI(){
 
-        $apiKey = env('COINBASE_API_KEY');
-        $apiSecret = env('COINBASE_API_SECRET');
+        $apiKey = config('services.coinbase.key');
+        $apiSecret = config('services.coinbase.secret');
 
         $configuration = Configuration::apiKey($apiKey, $apiSecret);
         $client = Client::create($configuration);

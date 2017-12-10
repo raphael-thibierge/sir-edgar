@@ -52,6 +52,7 @@ return [
 
         'facebook_token' => env('FACEBOOK_TOKEN'),
         'facebook_app_secret' => env('FACEBOOK_APP_SECRET'), // Optional - this is used to verify incoming API calls,
+        'facebook_verification' => env('FACEBOOK_VERIFICATION'), // Optional - this is used to verify incoming API calls,
 
         'wechat_app_id' => 'YOUR-WECHAT-APP-ID',
         'wechat_app_key' => 'YOUR-WECHAT-APP-KEY',

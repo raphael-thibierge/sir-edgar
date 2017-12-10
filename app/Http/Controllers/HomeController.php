@@ -54,8 +54,8 @@ class HomeController extends Controller
         return $this->successResponse([
             'user'=> Auth::user(),
             'pusher' => [
-                'key' => env('PUSHER_APP_KEY'),
-                'cluster' => env('PUSHER_CLUSTER'),
+                'key' => config('broadcasting.connections.pusher.key'),
+                'cluster' => config('broadcasting.connections.pusher.options.cluster'),
             ]
         ]);
     }

@@ -18,7 +18,7 @@ class VerifyBotMan
     {
 
         if ($request->input('hub_mode') === 'subscribe'
-            && $request->input('hub_verify_token') === env('FACEBOOK_VERIFICATION'))
+            && $request->input('hub_verify_token') === config('services.botman.facebook_verification'))
         {
             return response($request->input('hub_challenge'), 200);
         }

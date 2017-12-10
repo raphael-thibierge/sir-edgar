@@ -45,9 +45,9 @@ class BotManController extends Controller
         // Create BotMan instance
         $config = [
             'facebook' => [
-                'token' => env('FACEBOOK_TOKEN'),
-                'app_secret' => env('FACEBOOK_APP_SECRET'),
-                'verification' => env('FACEBOOK_VERIFICATION'),
+                'token' => config('services.botman.facebook_token'),
+                'app_secret' => config('services.botman.facebook_app_secret'),
+                'verification' => config('services.botman.facebook_verification'),
             ]
         ];
 
@@ -99,7 +99,7 @@ class BotManController extends Controller
                         ->subtitle('Link your Sir Edgar account')
                         ->addButton(
                             ElementButton::create('Login')
-                                ->url(env('APP_URL') . '/botman/authorize')
+                                ->url(config('app.url') . '/botman/authorize')
                                 ->type('account_link')
                         )
                 ])

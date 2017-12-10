@@ -35,7 +35,7 @@
 
                         <p>Last updated: October 02, 2017</p>
 
-                        <p>{{ config('app.name') }} ("us", "we", or "our") operates the {{ env('APP_URL', 'https://www.sir-edgar.com') }} (the "Service").</p>
+                        <p>{{ config('app.name') }} ("us", "we", or "our") operates the {{ config('app.url') }} (the "Service").</p>
 
                         <p>This page informs you of our policies regarding the collection, use and disclosure of Personal Information when you use our Service.</p>
 
@@ -94,7 +94,7 @@
 
                         <p>If you have any questions about this Privacy Policy, please contact us.</p>                            </div>
 
-                        <p>{{ env('MAIL_FROM_ADDRESS', 'support@sir-edgar.com') }}</p>
+                        <p>{{ config('mail.from.address') }}</p>
 
                 </div>
             </div>
@@ -105,7 +105,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    Privacy Policy of {{ env('APP_URL', 'https://www.sir-edgar.com website') }}
+                    Privacy Policy of {{ config('app.url') }}
                 </div>
             </div>
         </div>
