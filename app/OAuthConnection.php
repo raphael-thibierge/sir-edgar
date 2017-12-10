@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 
@@ -32,7 +33,9 @@ class OAuthConnection extends Model
     }
 
     public function tokenHasExpired(): bool {
-        return false;
+        $expiration_date = new Carbon();
+        $expiration_date->timestamp = $this->token_expiration;
+        return Carbon::now()->greaterThanOrEqualTo($expiration_date);
     }
 
 }

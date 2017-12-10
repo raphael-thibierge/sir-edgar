@@ -7,6 +7,7 @@ use App\User;
 use Coinbase\Wallet\Client;
 use Coinbase\Wallet\Configuration;
 use Illuminate\Http\Request;
+use League\OAuth2\Client\Grant\RefreshToken;
 use Openclerk\OAuth2\Client\Provider\Coinbase;
 
 /**
@@ -99,7 +100,17 @@ class CoinbaseOAuthService extends OAuthService
 
     public function refreshToken(): void
     {
-        // TODO: Implement refreshToken() method.
+        $provider = $this->getProvider();
+
+        $grant = new RefreshToken();
+        $token_object = $provider->getAccessToken($grant, ['refresh_token' => $this->oAuthConnection->refresh_token]);
+
+
+        $this->oAuthConnection->update([
+            'access_token' => $token_object->access_token,
+            'refresh_token' => $token_object->refresh_token,
+            'token_expiration' => $token_object->expires,
+        ]);
     }
 
     public function createOAuthConnection(Request $request): bool
@@ -130,6 +141,10 @@ class CoinbaseOAuthService extends OAuthService
 
         if ($this->oAuthConnection === null){
             return null;
+        }
+
+        if ($this->oAuthConnection->tokenHasExpired()){
+            $this->refreshToken();
         }
 
         // with a refresh token
