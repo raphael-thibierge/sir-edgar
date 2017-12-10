@@ -113,13 +113,13 @@ class CoinbaseService extends OAuthService
             self::printLine("Balance   : " . $balance . ' ' . $currency . PHP_EOL, $console);
             //echo "Value     : " . $nativeCurrencyBalance . ' ' . $nativeCurrency . PHP_EOL;
 
-            self::printLine(PHP_EOL, $console);
-            self::printLine("---------------------------" . PHP_EOL, $console);
-            self::printLine("Prices" . PHP_EOL, $console);
-            self::printLine("---------------------------" . PHP_EOL, $console);
+            //self::printLine(PHP_EOL, $console);
+            //self::printLine("---------------------------" . PHP_EOL, $console);
+            //self::printLine("Prices" . PHP_EOL, $console);
+            //self::printLine("---------------------------" . PHP_EOL, $console);
 
-            $sellPrice = floatval($client->getSellPrice($currency . '-' . $nativeCurrency)->getAmount());
-            $spotPrice = floatval($client->getSpotPrice($currency . '-' . $nativeCurrency)->getAmount());
+            //$sellPrice = floatval($client->getSellPrice($currency . '-' . $nativeCurrency)->getAmount());
+            //$spotPrice = floatval($client->getSpotPrice($currency . '-' . $nativeCurrency)->getAmount());
             $buyPrice = floatval($client->getBuyPrice($currency . '-' . $nativeCurrency)->getAmount());
 
             //self::printLine($currency . ' spot  : ' . $spotPrice . ' ' . $nativeCurrency . PHP_EOL, $console);
@@ -146,10 +146,10 @@ class CoinbaseService extends OAuthService
                 $totalBuy += floatval($transaction->getNativeAmount()->getAmount());
             }
 
-            self::printLine(PHP_EOL, $console);
-            self::printLine("---------------------------" . PHP_EOL, $console);
-            self::printLine('Total' .  PHP_EOL, $console);
-            self::printLine("---------------------------" . PHP_EOL, $console);
+            //self::printLine(PHP_EOL, $console);
+            //self::printLine("---------------------------" . PHP_EOL, $console);
+            //self::printLine('Total' .  PHP_EOL, $console);
+            //self::printLine("---------------------------" . PHP_EOL, $console);
             //echo "Balance : " . $balance . ' ' . $currency . PHP_EOL;
             self::printLine('Buys : ' . $totalBuy . ' ' . $nativeCurrency . PHP_EOL, $console);
             self::printLine('Now  : ' . $nativeCurrencyBalance . ' ' . $nativeCurrency . PHP_EOL, $console);
