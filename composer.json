@@ -17,6 +17,7 @@
         "laravel/framework": "5.5.*",
         "laravel/horizon": "^1.0",
         "laravel/tinker": "~1.0",
+        "openclerk/coinbase-oauth2": "^0.1.0",
         "pusher/pusher-php-server": "~3.0",
         "sentry/sentry-laravel": "^0.7.0"
     },

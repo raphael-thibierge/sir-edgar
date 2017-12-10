@@ -9,6 +9,8 @@
 namespace App\Services;
 
 
+use App\OAuthConnection;
+use App\User;
 use Coinbase\Wallet\Client;
 use Coinbase\Wallet\Configuration;
 use Coinbase\Wallet\Enum\Param;
@@ -84,13 +86,15 @@ class CoinbaseService extends OAuthService
     }
 
 
+    public static function printLine(string $line, $console = true){
+        if (!$console)
+            $line = str_replace(PHP_EOL, "<br>", $line);
+        echo $line;
+    }
 
-    public static function consoleDisplay(){
-
-        $client = self::connectWithAPI();
+    public static function consoleDisplay($client, $console = true){
 
         $accounts = $client->getAccounts();
-
 
         foreach ($accounts as $account){
             $name = $account->getName();
@@ -104,23 +108,23 @@ class CoinbaseService extends OAuthService
                 continue;
             }
 
-            echo "=============================" . PHP_EOL;
-            echo $name . PHP_EOL;
-            echo "Balance   : " . $balance . ' ' . $currency . PHP_EOL;
+            self::printLine("=============================" . PHP_EOL, $console);
+            self::printLine($name . PHP_EOL, $console);
+            self::printLine("Balance   : " . $balance . ' ' . $currency . PHP_EOL, $console);
             //echo "Value     : " . $nativeCurrencyBalance . ' ' . $nativeCurrency . PHP_EOL;
 
-            echo PHP_EOL;
-            echo "---------------------------" . PHP_EOL;
-            echo "Prices" . PHP_EOL;
-            echo "---------------------------" . PHP_EOL;
+            self::printLine(PHP_EOL, $console);
+            self::printLine("---------------------------" . PHP_EOL, $console);
+            self::printLine("Prices" . PHP_EOL, $console);
+            self::printLine("---------------------------" . PHP_EOL, $console);
 
             $sellPrice = floatval($client->getSellPrice($currency . '-' . $nativeCurrency)->getAmount());
             $spotPrice = floatval($client->getSpotPrice($currency . '-' . $nativeCurrency)->getAmount());
             $buyPrice = floatval($client->getBuyPrice($currency . '-' . $nativeCurrency)->getAmount());
 
-            echo $currency . ' spot  : ' . $spotPrice . ' ' . $nativeCurrency . PHP_EOL;
-            echo $currency . ' buy   : ' . $buyPrice . ' ' . $nativeCurrency . PHP_EOL;
-            echo $currency . ' sell  : ' . $sellPrice . ' ' . $nativeCurrency . PHP_EOL;
+            self::printLine($currency . ' spot  : ' . $spotPrice . ' ' . $nativeCurrency . PHP_EOL, $console);
+            self::printLine($currency . ' buy   : ' . $buyPrice . ' ' . $nativeCurrency . PHP_EOL, $console);
+            self::printLine($currency . ' sell  : ' . $sellPrice . ' ' . $nativeCurrency . PHP_EOL, $console);
 
             //echo PHP_EOL;
             //echo "---------------------------" . PHP_EOL;
@@ -142,25 +146,25 @@ class CoinbaseService extends OAuthService
                 $totalBuy += floatval($transaction->getNativeAmount()->getAmount());
             }
 
-            echo PHP_EOL;
-            echo "---------------------------" . PHP_EOL;
-            echo 'Total' .  PHP_EOL;
-            echo "---------------------------" . PHP_EOL;
+            self::printLine(PHP_EOL, $console);
+            self::printLine("---------------------------" . PHP_EOL, $console);
+            self::printLine('Total' .  PHP_EOL, $console);
+            self::printLine("---------------------------" . PHP_EOL, $console);
             //echo "Balance : " . $balance . ' ' . $currency . PHP_EOL;
-            echo 'Buys : ' . $totalBuy . ' ' . $nativeCurrency . PHP_EOL;
-            echo 'Now  : ' . $nativeCurrencyBalance . ' ' . $nativeCurrency . PHP_EOL;
+            self::printLine('Buys : ' . $totalBuy . ' ' . $nativeCurrency . PHP_EOL, $console);
+            self::printLine('Now  : ' . $nativeCurrencyBalance . ' ' . $nativeCurrency . PHP_EOL, $console);
             $gains = floatval($nativeCurrencyBalance) - $totalBuy;
             $p = $totalBuy == 0 ? 0 : ($gains/$totalBuy)*100;
 
-            echo "  ==> " . $gains  . ' ' . $nativeCurrency . PHP_EOL;
-            echo "  ==> " . $p . ' %' . PHP_EOL;
+            self::printLine("  ==> " . $gains  . ' ' . $nativeCurrency . PHP_EOL, $console);
+            self::printLine("  ==> " . $p . ' %' . PHP_EOL, $console);
 
             if ($balance > 0){
 
-                echo PHP_EOL;
-                echo "---------------------------" . PHP_EOL;
-                echo 'Sell now (fees included)' .  PHP_EOL;
-                echo "---------------------------" . PHP_EOL;
+                self::printLine(PHP_EOL, $console);
+                self::printLine("---------------------------" . PHP_EOL, $console);
+                self::printLine('Sell now (fees included)' .  PHP_EOL, $console);
+                self::printLine("---------------------------" . PHP_EOL, $console);
 
                 $sell = new Sell(['bitcoinAmount' => $balance]);
 
@@ -168,14 +172,14 @@ class CoinbaseService extends OAuthService
                 $sellTotal = $sell->getTotal()->getAmount();
                 $realGain = $sellTotal - $totalBuy;
 
-                echo "Price : " . $sellTotal . ' ' . $nativeCurrency . PHP_EOL;
-                echo "   ==>  " . $realGain . ' ' . $nativeCurrency . PHP_EOL;
-                echo "   ==>  " . ($sellTotal - $totalBuy)/$totalBuy*100 . ' %' . PHP_EOL;
+                self::printLine("Price : " . $sellTotal . ' ' . $nativeCurrency . PHP_EOL, $console);
+                self::printLine("   ==>  " . $realGain . ' ' . $nativeCurrency . PHP_EOL, $console);
+                self::printLine("   ==>  " . ($sellTotal - $totalBuy)/$totalBuy*100 . ' %' . PHP_EOL, $console);
 
-                echo PHP_EOL;
-                echo "---------------------------" . PHP_EOL;
-                echo 'Buy later (fees included)' .  PHP_EOL;
-                echo "---------------------------" . PHP_EOL;
+                self::printLine(PHP_EOL, $console);
+                self::printLine("---------------------------" . PHP_EOL, $console);
+                self::printLine('Buy later (fees included)' .  PHP_EOL, $console);
+                self::printLine("---------------------------" . PHP_EOL, $console);
 
                 // set amount
                 $buy = new Buy();
@@ -192,13 +196,13 @@ class CoinbaseService extends OAuthService
                 $buyUnder = ($sellTotal - $feesValue) / $balance ;
                 $buyUnderSpot = $buyUnder*0.99;
 
-                echo "BTC prices" . PHP_EOL;
-                echo "Buy  < " . $buyUnder . ' ' . $nativeCurrency . PHP_EOL;
-                echo "Spot < " . $buyUnderSpot . ' ' . $nativeCurrency . PHP_EOL;
-                echo "   ==> " . ($buyUnderSpot-$buyPrice) . ' EUR'. PHP_EOL;
-                echo "   ==> " . (($buyUnderSpot-$buyPrice)/$buyPrice)*100 . ' %'. PHP_EOL;
+                self::printLine("BTC prices" . PHP_EOL, $console);
+                self::printLine("Buy  < " . $buyUnder . ' ' . $nativeCurrency . PHP_EOL, $console);
+                self::printLine("Spot < " . $buyUnderSpot . ' ' . $nativeCurrency . PHP_EOL, $console);
+                self::printLine("   ==> " . ($buyUnderSpot-$buyPrice) . ' EUR'. PHP_EOL, $console);
+                self::printLine("   ==> " . (($buyUnderSpot-$buyPrice)/$buyPrice)*100 . ' %'. PHP_EOL, $console);
             }
-            echo PHP_EOL;
+            self::printLine(PHP_EOL, $console);
         }
     }
 

@@ -120,6 +120,14 @@ export default class PriceRoot extends React.Component{
 
                     <div className="row">
                         <div className="col-xs-12">
+                            <a href="./coinbase" target="_blank" className="btn btn-primary">
+                                Check basic account stats
+                            </a>
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-xs-12">
                             <PanelGroup>
                                 {this.state.BTC_values !== null ? (
                                     <MoneyGraph

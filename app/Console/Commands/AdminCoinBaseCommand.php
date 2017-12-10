@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Services\CoinbaseService;
+use App\User;
 use Illuminate\Console\Command;
 
 class AdminCoinBaseCommand extends Command
@@ -37,6 +38,6 @@ class AdminCoinBaseCommand extends Command
      */
     public function handle()
     {
-        CoinbaseService::consoleDisplay();
+        CoinbaseService::consoleDisplay(CoinbaseService::connectWithAPI());
     }
 }

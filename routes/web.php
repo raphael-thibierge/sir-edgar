@@ -73,3 +73,11 @@ Route::get('money-values/24h/{currency}', 'MoneyValueController@twentyFourHourVa
 Horizon::auth(function ($request) {
     return $request->user()->isAdmin();
 });
+
+
+Route::prefix('oauth/{service}/')->group(function (){
+    Route::get('authorize', 'OAuthConnectionController@oAuthAuthorize')->name('oauth.authorize');
+    Route::get('callback', 'OAuthConnectionController@oAuthAuthorizeCallback')->name('oauth.callback');
+});
+
+Route::get('coinbase', 'CoinbaseController@basicStats');
