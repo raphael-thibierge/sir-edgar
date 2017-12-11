@@ -13,10 +13,10 @@ class MoneyValueController extends Controller
 
     public function twentyFourHourValues(string $currency){
 
-        //$user = Auth::user();
+        $user = Auth::user();
 
-        $values = MoneyValue:://where('created_at', '>=', Carbon::now($user->timezone)->subHours(24))
-            where('currency', strtoupper($currency))
+        $values = MoneyValue::where('created_at', '>=', Carbon::now($user->timezone)->subDays(7))
+            ->where('currency', strtoupper($currency))
             ->get();
 
         return $this->successResponse([
