@@ -21,7 +21,6 @@ class   User extends \Jenssegers\Mongodb\Auth\User
 {
     use Notifiable;
 
-
     const DEFAULT_ATTRIBUTES = [
         'admin' => false,
         'daily_score_goal' => 5,

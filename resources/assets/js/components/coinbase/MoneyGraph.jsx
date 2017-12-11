@@ -20,7 +20,8 @@ export default class MoneyGraph extends React.Component {
             display_sell: false,
             display_spot: true,
             period: '6h',
-            log_scale: true,
+            log_scale: false,
+            y_zero: false,
         };
     }
 
@@ -70,10 +71,14 @@ export default class MoneyGraph extends React.Component {
                 format: 'hh:mm:ss',
             },
             vAxis: {
-                logScale: this.state.log_scale
+                logScale: this.state.log_scale,
             },
             legend: true,
         };
+
+        if (this.state.y_zero){
+            options.vAxis.minValue = 0;
+        }
 
         let columns = [
             {
@@ -134,6 +139,9 @@ export default class MoneyGraph extends React.Component {
                             </Radio>
                             <Checkbox inline checked={this.state.log_scale} onChange={this.setState.bind(this, {log_scale: !this.state.log_scale})} style={{marginLeft: 15}}>
                                 Logarithmic scale
+                            </Checkbox>
+                            <Checkbox inline checked={this.state.y_zero} onChange={this.setState.bind(this, {y_zero: !this.state.y_zero})} style={{marginLeft: 15}}>
+                                Y = 0
                             </Checkbox>
                         </FormGroup>
                     </div>
