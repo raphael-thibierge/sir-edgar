@@ -1,7 +1,7 @@
 import React from 'react';
 import { Chart } from 'react-google-charts';
 import Tools from '../Tools';
-import {Checkbox, FormGroup, Radio, Panel} from 'react-bootstrap';
+import {Checkbox, FormGroup, Radio, Panel, Button} from 'react-bootstrap';
 
 export default class MoneyGraph extends React.Component {
     constructor(props) {
@@ -22,7 +22,22 @@ export default class MoneyGraph extends React.Component {
             period: '6h',
             log_scale: false,
             y_zero: false,
+            previous_data: 0,
         };
+    }
+
+    next(e){
+        console.log("heheh");
+        this.setState({
+            previous_data: this.state.previous_data-1
+        });
+    }
+
+    previous(e){
+        console.log("vouvuo");
+        this.setState({
+            previous_data: this.state.previous_data+1
+        });
     }
 
     render() {
@@ -35,13 +50,18 @@ export default class MoneyGraph extends React.Component {
         let rows = [];
         let startDate = new Date();
         startDate.setSeconds(0);
-        switch (this.state.period) {
-            case '30min': startDate.setMinutes(startDate.getMinutes()-30); break;
-            case '1h': startDate.setHours(startDate.getHours()-1); break;
-            case '3h': startDate.setHours(startDate.getHours()-3); break;
-            case '6h': startDate.setHours(startDate.getHours()-6); break;
-            case '12h': startDate.setHours(startDate.getHours()-12); break;
-            case '24h': startDate.setHours(startDate.getHours()-24); break;
+        console.log(this.state.previous_data);
+        for (let i = 0 ; i<= this.state.previous_data; i++){
+            console.log('yoo');
+            switch (this.state.period) {
+                case '15min': startDate.setMinutes(startDate.getMinutes()-15); break;
+                case '30min': startDate.setMinutes(startDate.getMinutes()-30); break;
+                case '1h': startDate.setHours(startDate.getHours()-1); break;
+                case '3h': startDate.setHours(startDate.getHours()-3); break;
+                case '6h': startDate.setHours(startDate.getHours()-6); break;
+                case '12h': startDate.setHours(startDate.getHours()-12); break;
+                case '24h': startDate.setHours(startDate.getHours()-24); break;
+            }
         }
 
         this.props.moneyValues.forEach((value) => {
@@ -114,6 +134,9 @@ export default class MoneyGraph extends React.Component {
                 <div className="row">
                     <div className="col-xs-12">
                         <FormGroup>
+                            <Radio inline checked={this.state.period == '15min'} onChange={() => {this.setState({period: '15min'})}}>
+                                15min
+                            </Radio>
                             <Radio inline checked={this.state.period == '30min'} onChange={() => {this.setState({period: '30min'})}}>
                                 30min
                             </Radio>
@@ -182,6 +205,19 @@ export default class MoneyGraph extends React.Component {
                         </div>
                     </div>
                 </div>
+                <div className="row">
+                    <div className="col-xs-3">
+                        <Button onClick={this.previous.bind(this)} disabled={Tools.dateFormatWithOffset(this.props.moneyValues[1].created_at) > startDate}>
+                            Previous
+                        </Button>
+                    </div>
+                    <div className="col-xs-3 col-xs-offset-6 text-right">
+                        <Button onClick={this.next.bind(this)} disabled={this.state.previous_data <= 0}>
+                            Next
+                        </Button>
+                    </div>
+                </div>
+
             </Panel>
         );
     }

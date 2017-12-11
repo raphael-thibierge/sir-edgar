@@ -129,13 +129,16 @@ export default class PriceRoot extends React.Component{
                     <div className="row">
                         <div className="col-xs-12">
                             <PanelGroup>
+                                {this.state.BTC_values === null ? (
+                                    (<p>Loading graphs</p>)
+                                ) : null}
                                 {this.state.BTC_values !== null ? (
                                     <MoneyGraph
                                         title={"Bitcoin"}
                                         currency="BTC"
                                         moneyValues={this.state.BTC_values}
                                     />
-                                ): <p>Loading Bitcoin graph</p>}
+                                ): null}
 
                                 {this.state.BTC_values !== null ? (
                                     <MoneyGraph
@@ -143,7 +146,7 @@ export default class PriceRoot extends React.Component{
                                         currency="ETH"
                                         moneyValues={this.state.ETH_values}
                                     />
-                                ): <p>Loading Ethereum graph</p>}
+                                ): null}
 
                                 {this.state.BTC_values !== null ? (
                                     <MoneyGraph
@@ -151,7 +154,7 @@ export default class PriceRoot extends React.Component{
                                         currency="LTC"
                                         moneyValues={this.state.LTC_values}
                                     />
-                                ): <p>Loading Litcoin graph</p>}
+                                ): null}
                             </PanelGroup>
                         </div>
                     </div>
