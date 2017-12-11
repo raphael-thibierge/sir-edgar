@@ -13,6 +13,7 @@ class VerifyCsrfToken extends BaseVerifier
      */
     protected $except = [
         'botman',
-        'botman/*'
+        'botman/*',
+        'dialogflow/*'
     ];
 }

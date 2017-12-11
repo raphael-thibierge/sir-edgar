@@ -27,14 +27,12 @@ export default class MoneyGraph extends React.Component {
     }
 
     next(e){
-        console.log("heheh");
         this.setState({
             previous_data: this.state.previous_data-1
         });
     }
 
     previous(e){
-        console.log("vouvuo");
         this.setState({
             previous_data: this.state.previous_data+1
         });
@@ -53,7 +51,6 @@ export default class MoneyGraph extends React.Component {
         let stopDate = startDate;
         for (let i = 0 ; i<= this.state.previous_data; i++){
             stopDate = new Date(startDate);
-            console.log('yoo');
             switch (this.state.period) {
                 case '15min': startDate.setMinutes(startDate.getMinutes()-15); break;
                 case '30min': startDate.setMinutes(startDate.getMinutes()-30); break;
@@ -67,10 +64,6 @@ export default class MoneyGraph extends React.Component {
                 case '1m': startDate.setDate(startDate.getDate()-31); break;
             }
         }
-
-
-        console.log(startDate);
-        console.log(stopDate);
 
         this.props.moneyValues.forEach((value) => {
             const created_at = Tools.dateFormatWithOffset(value.created_at);
