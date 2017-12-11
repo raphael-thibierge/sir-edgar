@@ -15,7 +15,7 @@ class MoneyValueController extends Controller
 
         $user = Auth::user();
 
-        $values = MoneyValue::where('created_at', '>=', Carbon::now($user->timezone)->subDays(7))
+        $values = MoneyValue::where('created_at', '>=', Carbon::now($user->timezone)->subDays(3))
             ->where('currency', strtoupper($currency))
             ->get();
 

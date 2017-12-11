@@ -62,6 +62,7 @@ export default class MoneyGraph extends React.Component {
                 case '6h': startDate.setHours(startDate.getHours()-6); break;
                 case '12h': startDate.setHours(startDate.getHours()-12); break;
                 case '24h': startDate.setHours(startDate.getHours()-24); break;
+                case '3j': startDate.setDate(startDate.getDate()-3); break;
                 case '1w': startDate.setDate(startDate.getDate()-7); break;
                 case '1m': startDate.setDate(startDate.getDate()-31); break;
             }
@@ -175,9 +176,9 @@ export default class MoneyGraph extends React.Component {
                             >24h</Radio>
                             <Radio
                                 inline
-                                checked={this.state.period == '1w'}
-                                onChange={() => {this.setState({period: '1w', previous_data: 0})}}
-                            >1w</Radio>
+                                checked={this.state.period == '3j'}
+                                onChange={() => {this.setState({period: '3j', previous_data: 0})}}
+                            >3j</Radio>
                             <Checkbox inline checked={this.state.log_scale} onChange={this.setState.bind(this, {log_scale: !this.state.log_scale, y_zero:false })} style={{marginLeft: 15}}>
                                 Logarithmic scale
                             </Checkbox>
