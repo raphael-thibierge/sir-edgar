@@ -63,6 +63,7 @@ export default class MoneyGraph extends React.Component {
                 case '12h': startDate.setHours(startDate.getHours()-12); break;
                 case '24h': startDate.setHours(startDate.getHours()-24); break;
                 case '1w': startDate.setDate(startDate.getDate()-7); break;
+                case '1m': startDate.setDate(startDate.getDate()-31); break;
             }
         }
 
