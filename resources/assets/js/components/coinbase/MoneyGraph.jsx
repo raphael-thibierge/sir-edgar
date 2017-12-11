@@ -137,10 +137,10 @@ export default class MoneyGraph extends React.Component {
                             <Radio inline checked={this.state.period == '24h'} onChange={() => {this.setState({period: '24h'})}}>
                                 24h
                             </Radio>
-                            <Checkbox inline checked={this.state.log_scale} onChange={this.setState.bind(this, {log_scale: !this.state.log_scale})} style={{marginLeft: 15}}>
+                            <Checkbox inline checked={this.state.log_scale} onChange={this.setState.bind(this, {log_scale: !this.state.log_scale, y_zero:false })} style={{marginLeft: 15}}>
                                 Logarithmic scale
                             </Checkbox>
-                            <Checkbox inline checked={this.state.y_zero} onChange={this.setState.bind(this, {y_zero: !this.state.y_zero})} style={{marginLeft: 15}}>
+                            <Checkbox inline checked={this.state.y_zero} onChange={this.setState.bind(this, {y_zero: !this.state.y_zero, log_scale: false})} style={{marginLeft: 15}}>
                                 Y = 0
                             </Checkbox>
                         </FormGroup>
