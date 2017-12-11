@@ -23,8 +23,6 @@ export default class PriceRoot extends React.Component{
         }
     }
 
-
-
     pusher(){
         if (window.Echo) {
             this.setState({
