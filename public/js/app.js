@@ -80484,7 +80484,7 @@ var MoneyGraph = function (_React$Component) {
 
             var rows = [];
             var startDate = new Date();
-            startDate.setSeconds(0);
+            //startDate.setSeconds(0);
             var stopDate = startDate;
             for (var i = 0; i <= this.state.previous_data; i++) {
                 stopDate = new Date(startDate);
@@ -80514,8 +80514,8 @@ var MoneyGraph = function (_React$Component) {
 
             console.log(new Date());
             console.log(startDate);
-            console.log(endDate);
-            console.log(endDate < new Date());
+            console.log(stopDate);
+            console.log(stopDate < new Date());
 
             this.props.moneyValues.forEach(function (value) {
                 var created_at = __WEBPACK_IMPORTED_MODULE_2__Tools___default.a.dateFormatWithOffset(value.created_at);

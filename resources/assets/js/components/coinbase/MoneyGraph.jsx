@@ -47,7 +47,7 @@ export default class MoneyGraph extends React.Component {
 
         let rows = [];
         let startDate = new Date();
-        startDate.setSeconds(0);
+        //startDate.setSeconds(0);
         let stopDate = startDate;
         for (let i = 0 ; i<= this.state.previous_data; i++){
             stopDate = new Date(startDate);
@@ -67,8 +67,8 @@ export default class MoneyGraph extends React.Component {
 
         console.log(new Date());
         console.log(startDate);
-        console.log(endDate);
-        console.log(endDate < new Date());
+        console.log(stopDate);
+        console.log(stopDate < new Date());
 
         this.props.moneyValues.forEach((value) => {
             const created_at = Tools.dateFormatWithOffset(value.created_at);
