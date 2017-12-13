@@ -7,6 +7,7 @@
     <div class="row">
         <div id="app-productivity" class="col-xs-12">
             <img src="/images/logo.png" alt="" class="img-responsive img-circle img-rounded img-thumbnail">
+            <input type="hidden" value="React not loaded">
         </div>
     </div>
 </div>

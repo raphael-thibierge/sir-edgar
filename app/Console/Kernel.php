@@ -2,8 +2,13 @@
 
 namespace App\Console;
 
+use App\Console\Commands\AdminCoinBaseCommand;
+use App\Console\Commands\CoinbaseCheckApiStatusCommand;
 use App\Console\Commands\CheckRemindersCommand;
+use App\Console\Commands\CoinbaseFeesCommand;
+use App\Console\Commands\CoinbasePriceCommand;
 use App\Console\Commands\DailyGoalsReportCommand;
+use App\Console\Commands\ImportantNotificationEdgar;
 use App\Console\Commands\MorningEdgarMessageCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -16,10 +21,15 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        DailyGoalsReportCommand::class,
+        /*DailyGoalsReportCommand::class,
         CheckRemindersCommand::class,
         DailyGoalsReportCommand::class,
         MorningEdgarMessageCommand::class,
+        ImportantNotificationEdgar::class,
+        AdminCoinBaseCommand::class,
+        CoinbasePriceCommand::class,
+        CoinbaseFeesCommand::class,
+        CoinbaseCheckApiStatusCommand::class,*/
     ];
 
     /**
@@ -30,6 +40,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+
+        $schedule->command('coinbase:price:update')->everyMinute();
+        $schedule->command('coinbase:api:status')->everyMinute();
+
+        $schedule->command('horizon:snapshot')->everyFiveMinutes();
 
         // server monitoring
         $schedule->command('monitor:run')->daily()->at('10:00');
@@ -49,15 +64,18 @@ class Kernel extends ConsoleKernel
             ->everyMinute();
 
         // raphael
-        $schedule->command('user:morningMessage first' )
+        $schedule->command('user:morningMessage first')
             ->timezone('America/Toronto')
-            ->dailyAt('05:00');
+            ->dailyAt('08:30');
 
 
         // arthur
         $schedule->command('user:morningMessage 59ca9b30b2530a3d1345003e')
             ->timezone('America/Toronto')
             ->dailyAt('08:30');
+
+
+        $schedule->command('goals:important:messenger')->hourly();
 
     }
 
@@ -69,5 +87,6 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         require base_path('routes/console.php');
+        $this->load(__DIR__.'/Commands');
     }
 }

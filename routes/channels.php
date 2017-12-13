@@ -14,3 +14,7 @@
 Broadcast::channel('App.User.{id}', function ($user, $id) {
     return $user->id === $id;
 });
+
+Broadcast::channel('coinbase', function ($user) {
+    return true;
+});

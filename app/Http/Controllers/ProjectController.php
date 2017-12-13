@@ -42,6 +42,7 @@ class ProjectController extends Controller
 
         $project = Auth::user()->projects()->create([
             "title" => $request->get('title'),
+            'is_archived' => false,
         ]);
 
         // by default goals is null, so must be init before sending it to UI
@@ -73,19 +74,16 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
+
         $this->validate($request, [
-            'title' => 'string'
+            'title' => 'required|string',
+            'is_archived' => 'required|string|in:true,false'
         ]);
 
-        $updates = [];
-
-        if ($request->has('title')){
-            $updates['title'] = $request->get('title');
-        }
-
-        if (count($updates) > 0){
-            $project->update($updates);
-        }
+        $project->update([
+            'title' => $request->get('title'),
+            'is_archived' => $request->get('is_archived') == 'true' ? true : false,
+        ]);
 
         return $this->successResponse([
             'project' => $project

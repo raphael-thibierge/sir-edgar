@@ -61,6 +61,12 @@ const Tools = {
         );
     },
 
+    dateFormatWithOffset(dateAsString){
+        let date = this.dateFormater(dateAsString);
+        date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+        return date;
+    },
+
 
 };
 

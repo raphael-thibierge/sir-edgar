@@ -1,6 +1,7 @@
 import React from 'react';
 import GoalList from '../goal/GoalList';
 import AjaxEditableValue from '../generic/AjaxEditableValue';
+import ProjectDetailsModal from './ProjectDetailsModal';
 import PropTypes from 'prop-types';
 /**
  * Main component managing goals
@@ -26,9 +27,9 @@ export default class ProjectRender extends React.Component{
         return {};
     }
 
-    editTitle(title){
-        if (typeof this.props.onTitleChange === 'function'){
-            this.props.onTitleChange(title, this.props.project._id)
+    editProject(project){
+        if (typeof this.props.editProject === 'function'){
+            this.props.editProject(project)
         }
     }
 
@@ -40,6 +41,7 @@ export default class ProjectRender extends React.Component{
     render() {
 
         const project = this.props.project;
+        console.log(project);
 
         return (
             <div className="row">
@@ -49,13 +51,12 @@ export default class ProjectRender extends React.Component{
                         <div className="col-xs-12">
                             <h1 className="page-header productivity-page-header">
                                 {typeof project.routes !== "undefined" ?
-                                    <AjaxEditableValue
-                                        value={this.props.project.title}
-                                        ajaxURI={project.routes.update}
-                                        inputName="title"
-                                        method="PUT"
-                                        onSuccess={this.editTitle.bind(this)}
-                                    /> : this.props.project.title
+
+                                    <ProjectDetailsModal
+                                        project={project}
+                                        onProjectUpdate={this.editProject.bind(this)}
+                                    />
+                                     : project.title
                                 }
                             </h1>
                         </div>

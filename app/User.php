@@ -135,6 +135,14 @@ class   User extends \Jenssegers\Mongodb\Auth\User
         return $this->financialTransactions()->where('type', FinancialTransaction::EXPENSE);
     }
 
+    public function oAuthConnections(): HasMany{
+        return $this->hasMany('App\OAuthConnection');
+    }
+
+    public function getOAuthConnection(string $service): ?OAuthConnection {
+        return $this->oAuthConnections()->where('service', $service)->first();
+    }
+
     /**
      * User's admin state
      *
@@ -143,7 +151,6 @@ class   User extends \Jenssegers\Mongodb\Auth\User
     public function isAdmin(): bool {
         return $this->admin != null ? $this->admin : false;
     }
-
 
     /**
      * User's current score

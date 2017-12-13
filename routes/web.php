@@ -65,3 +65,19 @@ Route::get('/financial-data', 'HomeController@financialData')->middleware('auth'
 Route::get('/finance', 'HomeController@finance')->middleware('auth')->name('finance');
 
 Route::resource('budgets', 'BudgetController');
+
+Route::get('money-values/24h/{currency}', 'MoneyValueController@twentyFourHourValues')
+    ->name('money_values.24h')
+    ->middleware('auth');
+
+Horizon::auth(function ($request) {
+    return $request->user()->isAdmin();
+});
+
+
+Route::prefix('oauth/{service}/')->group(function (){
+    Route::get('authorize', 'OAuthConnectionController@oAuthAuthorize')->name('oauth.authorize');
+    Route::get('callback', 'OAuthConnectionController@oAuthAuthorizeCallback')->name('oauth.callback');
+});
+
+Route::get('coinbase', 'CoinbaseController@basicStats');

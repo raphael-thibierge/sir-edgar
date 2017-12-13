@@ -16,7 +16,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/react-day-picker.css') }}" rel="stylesheet">
 
-    @if(env('APP_ENV') === 'production')
+    @if(config('app.env') === 'production')
     <!-- Google analytics -->
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -28,14 +28,7 @@
         ga('send', 'pageview');
 
     </script>
-    <!-- Google AdSense -->
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({
-            google_ad_client: "ca-pub-6757486619789376",
-            enable_page_level_ads: true
-        });
-    </script>
+
     @endif
     <style>
         .react-calendar-heatmap .color-scale-0 { fill: #ebedf0;}
@@ -116,7 +109,8 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script type="text/javascript">
-        window.token = "{{ csrf_token() }}"
+        window.token = "{{ csrf_token() }}";
+        window._token = "{{ csrf_token() }}";
     </script>
     <script src="{{ asset('js/app.js') }}"></script>
 

@@ -1,8 +1,5 @@
 import React from 'react';
-
-import PropTypes from 'prop-types';
 import SvgIcon from 'react-icons-kit';
-import { ic_aspect_ratio } from 'react-icons-kit/md/ic_aspect_ratio';
 import {
     ic_business,
     ic_create_new_folder,
@@ -15,8 +12,11 @@ import {
     ic_attach_money,
 } from 'react-icons-kit/md';
 
-import {SideNav, Nav, NavText, NavIcon} from 'react-sidenav';
+import {
+    bitcoin
+} from 'react-icons-kit/fa';
 
+import {SideNav, Nav, NavText, NavIcon} from 'react-sidenav';
 
 const NavMain = {
     stats: { title: 'Stats', icon: ic_equalizer},
@@ -24,8 +24,6 @@ const NavMain = {
     all_goals: { title: 'All goals', icon: ic_list},
     new_project: { title: 'New project', icon:ic_create_new_folder},
 };
-
-
 
 const SeparatorTitleContainer = (props)=>
     <div style={{fontSize: '14px',color: '#AAA',margin: '10px 12p',padding: '4px 12px 2px'}}>
@@ -43,8 +41,6 @@ const SeparatorTitle = props => {
 };
 
 export default class ResponsiveSideBar extends React.Component{
-
-
 
     render(){
         return (
@@ -71,11 +67,11 @@ export default class ResponsiveSideBar extends React.Component{
                     <NavText>Projects</NavText>
                     <NavIcon><SvgIcon size={20} icon={ic_folder_special}/></NavIcon>
 
-                    {this.props.projects.map(project =>
+                    {this.props.projects.map(project => !project.is_archived ?
                         <Nav key={project._id} id={project._id}>
                             <NavIcon><SvgIcon size={20} icon={ic_folder}/></NavIcon>
                             <NavText>{project.title}</NavText>
-                        </Nav>
+                        </Nav> : null
                     )}
                 </Nav>
                 <br/>
@@ -91,6 +87,11 @@ export default class ResponsiveSideBar extends React.Component{
                 <Nav id="expenses">
                     <NavIcon><SvgIcon size={20} icon={ic_attach_money}/></NavIcon>
                     <NavText>Expenses</NavText>
+                </Nav>
+
+                <Nav id="coinbase">
+                    <NavIcon><SvgIcon size={20} icon={bitcoin}/></NavIcon>
+                    <NavText>Coinbase</NavText>
                 </Nav>
 
             </SideNav>

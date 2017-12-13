@@ -238,7 +238,6 @@ return [
          */
         'Sentry' => Sentry\SentryLaravel\SentryFacade::class,
         'BotMan' => \BotMan\BotMan\BotMan::class,
-
     ],
 
 ];

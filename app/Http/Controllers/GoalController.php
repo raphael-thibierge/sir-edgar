@@ -102,6 +102,10 @@ class GoalController extends Controller
 
         $updates = [];
 
+        if (($score = $request->get('score')) !== null){
+            $updates ['score'] = (int)$score;
+        }
+
         if (($due_date = $request->get('due_date')) !== null){
             $updates ['due_date'] = new Carbon($due_date);
         } else {

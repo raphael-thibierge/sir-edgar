@@ -19,7 +19,7 @@ export default class FinanceRoot extends React.Component {
 
         $.get('/financial-data')
             .catch(error => {
-                alert('Failed to load app...');
+                alert(error.statusText);
                 console.error(error);
             })
             .then(responseJSON => {

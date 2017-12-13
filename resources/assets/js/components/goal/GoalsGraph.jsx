@@ -40,7 +40,7 @@ export default class GoalsGraph extends React.Component{
             cache: false,
             method: 'GET',
             success: this.onSuccess.bind(this),
-            error: this.onError.bind(),
+            error: this.onError.bind(this),
         });
     }
 
@@ -163,7 +163,7 @@ export default class GoalsGraph extends React.Component{
      * @param response
      */
     onError(response) {
-        alert('error');
+        alert(error.statusText);
         console.error(response);
     }
 
@@ -247,11 +247,12 @@ export default class GoalsGraph extends React.Component{
             },
         };
 
+        let startDate = new Date();
+        startDate.setMonth(startDate.getMonth()-12);
+
         return (
             <div className="row">
                 <div className="col-xs-12">
-
-
 
                     <div className="row">
                         <div className="col-xs-12">
@@ -267,7 +268,7 @@ export default class GoalsGraph extends React.Component{
                                     <CalendarHeatmap
                                         values={this.state.calendarData}
                                         tooltipDataAttrs={{ 'data-toggle': 'tooltip' }}
-                                        numDays={365}
+                                        startDate={startDate}
                                         titleForValue={(value) => {
                                             if (!value) {
                                                 return '';

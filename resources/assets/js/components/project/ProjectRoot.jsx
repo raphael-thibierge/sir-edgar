@@ -7,6 +7,7 @@ import ResponsiveSideBar from '../generic/ResponsiveSideBar.jsx';
 import NewProjectRoot from '../project/NewProjectRoot.jsx';
 import BudgetRoot from '../budget/BudgetRoot';
 import ExpenseRoot from '../expense/ExpenseRoot';
+import PriceRoot from '../coinbase/PriceRoot';
 
 /**
  * Main component managing goals
@@ -44,7 +45,7 @@ export default class ProjectRoot extends React.Component {
         this.request();
         $.get('/financial-data')
             .catch(error => {
-                alert('Failed to load app...');
+                alert(error.statusText);
                 console.error(error);
             })
             .then(responseJSON => {
@@ -119,7 +120,7 @@ export default class ProjectRoot extends React.Component {
             cache: false,
             method: 'GET',
             success: this.onSuccess.bind(this),
-            error: (error) => {console.error(error.message); alert(error)},
+            error: (error) => {console.error(error); alert(error.statusText)},
         });
     }
 
@@ -303,7 +304,7 @@ export default class ProjectRoot extends React.Component {
                     return <ProjectRender
                         project={project}
                         createGoal={this.addGoal.bind(this)}
-                        onTitleChange={this.editProjectTitle.bind(this)}
+                        editProject={this.editProject.bind(this)}
                     />;
                     break;
 
@@ -377,24 +378,28 @@ export default class ProjectRoot extends React.Component {
                 />;
                 break;
 
+            case 'coinbase':
+                return <PriceRoot/>;
+                break;
+
             default:
                 return null;
         }
     }
 
 
-    editProjectTitle(title, project_id){
+    editProject(projectEdited){
 
         let projects = this.state.projects;
 
-        let project = projects[this.projectMap[project_id]];
-
-        project.title = title;
-
-        projects[this.projectMap[project_id]] = project;
+        let project = projects[this.projectMap[projectEdited._id]];
+        project.title = projectEdited.title;
+        project.is_archived = projectEdited.is_archived;
+        projects[this.projectMap[project._id]] = project;
 
         this.setState({
-            projects: projects
+            projects: projects,
+            view: project.is_archived ? 'stats' : 'projects/' + project._id
         });
     }
 
@@ -420,7 +425,7 @@ export default class ProjectRoot extends React.Component {
 
                 <div className="col-xs-12 col-sm-9">
 
-                    {this.state.view !== 'expenses' && this.state.view !== 'budgets' ? (
+                    {this.state.view !== 'expenses' && this.state.view !== 'budgets'  && this.state.view !== 'coinbase' ? (
                         <ScoreGoal/>
                     ): null}
 

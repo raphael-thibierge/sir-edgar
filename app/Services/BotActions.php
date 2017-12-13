@@ -229,7 +229,8 @@ class BotActions
         $projectTitle = $botMessage->getParameter('project');
         // create project
         $project = $botMessage->user->projects()->create([
-            'title' => $projectTitle
+            'title' => $projectTitle,
+            'is_archived' => false,
         ]);
         // build response
         $botMessage->buildTextResponse("Project \"$project->title\" created" );
