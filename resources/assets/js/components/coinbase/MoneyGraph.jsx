@@ -65,6 +65,11 @@ export default class MoneyGraph extends React.Component {
             }
         }
 
+        console.log(new Date());
+        console.log(startDate);
+        console.log(endDate);
+        console.log(endDate < new Date());
+
         this.props.moneyValues.forEach((value) => {
             const created_at = Tools.dateFormatWithOffset(value.created_at);
 

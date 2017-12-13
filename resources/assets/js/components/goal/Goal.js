@@ -101,9 +101,9 @@ export default class Goal {
         });
     }
 
-    onError(response) {
+    onError(error) {
         alert(error.statusText);
-        console.error(response);
+        console.error(error);
     }
 
     update(title, score){
