@@ -1,7 +1,7 @@
 import React from 'react';
 import { Chart } from 'react-google-charts';
 import Tools from '../Tools';
-import {Checkbox, FormGroup, Radio, Panel} from 'react-bootstrap';
+import {Checkbox, FormGroup, Radio, Panel, Button} from 'react-bootstrap';
 
 export default class MoneyGraph extends React.Component {
     constructor(props) {
@@ -20,8 +20,22 @@ export default class MoneyGraph extends React.Component {
             display_sell: false,
             display_spot: true,
             period: '6h',
-            log_scale: true,
+            log_scale: false,
+            y_zero: false,
+            previous_data: 0,
         };
+    }
+
+    next(e){
+        this.setState({
+            previous_data: this.state.previous_data-1
+        });
+    }
+
+    previous(e){
+        this.setState({
+            previous_data: this.state.previous_data+1
+        });
     }
 
     render() {
@@ -33,20 +47,33 @@ export default class MoneyGraph extends React.Component {
 
         let rows = [];
         let startDate = new Date();
-        startDate.setSeconds(0);
-        switch (this.state.period) {
-            case '30min': startDate.setMinutes(startDate.getMinutes()-30); break;
-            case '1h': startDate.setHours(startDate.getHours()-1); break;
-            case '3h': startDate.setHours(startDate.getHours()-3); break;
-            case '6h': startDate.setHours(startDate.getHours()-6); break;
-            case '12h': startDate.setHours(startDate.getHours()-12); break;
-            case '24h': startDate.setHours(startDate.getHours()-24); break;
+        //startDate.setSeconds(0);
+        let stopDate = startDate;
+        for (let i = 0 ; i<= this.state.previous_data; i++){
+            stopDate = new Date(startDate);
+            switch (this.state.period) {
+                case '15min': startDate.setMinutes(startDate.getMinutes()-15); break;
+                case '30min': startDate.setMinutes(startDate.getMinutes()-30); break;
+                case '1h': startDate.setHours(startDate.getHours()-1); break;
+                case '3h': startDate.setHours(startDate.getHours()-3); break;
+                case '6h': startDate.setHours(startDate.getHours()-6); break;
+                case '12h': startDate.setHours(startDate.getHours()-12); break;
+                case '24h': startDate.setHours(startDate.getHours()-24); break;
+                case '3j': startDate.setDate(startDate.getDate()-3); break;
+                case '1w': startDate.setDate(startDate.getDate()-7); break;
+                case '1m': startDate.setDate(startDate.getDate()-31); break;
+            }
         }
+
+        console.log(new Date());
+        console.log(startDate);
+        console.log(stopDate);
+        console.log(stopDate < new Date());
 
         this.props.moneyValues.forEach((value) => {
             const created_at = Tools.dateFormatWithOffset(value.created_at);
 
-            if (created_at < startDate) return;
+            if (created_at < startDate || created_at > stopDate) return;
 
             let row = [Tools.dateFormatWithOffset(value.created_at)];
 
@@ -70,10 +97,14 @@ export default class MoneyGraph extends React.Component {
                 format: 'hh:mm:ss',
             },
             vAxis: {
-                logScale: this.state.log_scale
+                logScale: this.state.log_scale,
             },
             legend: true,
         };
+
+        if (this.state.y_zero){
+            options.vAxis.minValue = 0;
+        }
 
         let columns = [
             {
@@ -103,37 +134,54 @@ export default class MoneyGraph extends React.Component {
             });
         }
 
+        console.log(rows);
+
         return (
             <Panel header={<h2>{this.props.title}</h2>}>
 
                 <div className="row">
                     <div className="col-xs-12">
                         <FormGroup>
-                            <Radio inline checked={this.state.period == '30min'} onChange={() => {this.setState({period: '30min'})}}>
-                                30min
-                            </Radio>
-                            {' '}
-                            <Radio inline checked={this.state.period == '1h'} onChange={() => {this.setState({period: '1h'})}}>
-                                1h
-                            </Radio>
-                            {' '}
-                            <Radio inline checked={this.state.period == '3h'} onChange={() => {this.setState({period: '3h'})}}>
-                                3h
-                            </Radio>
-                            {' '}
-                            <Radio inline checked={this.state.period == '6h'} onChange={() => {this.setState({period: '6h'})}}>
-                                6h
-                            </Radio>
-                            {' '}
-                            <Radio inline checked={this.state.period == '12h'} onChange={() => {this.setState({period: '12h'})}}>
-                                12h
-                            </Radio>
-                            {' '}
-                            <Radio inline checked={this.state.period == '24h'} onChange={() => {this.setState({period: '24h'})}}>
-                                24h
-                            </Radio>
-                            <Checkbox inline checked={this.state.log_scale} onChange={this.setState.bind(this, {log_scale: !this.state.log_scale})} style={{marginLeft: 15}}>
+                            <Radio
+                                inline
+                                checked={this.state.period == '30min'}
+                                onChange={() => {this.setState({period: '30min', previous_data: 0})}}
+                            >30min</Radio>{' '}
+                            <Radio
+                                inline
+                                checked={this.state.period == '1h'}
+                                onChange={() => {this.setState({period: '1h', previous_data: 0})}}
+                            >1h</Radio>{' '}
+                            <Radio
+                                inline
+                                checked={this.state.period == '3h'}
+                                onChange={() => {this.setState({period: '3h', previous_data: 0})}}
+                            >3h</Radio>{' '}
+                            <Radio
+                                inline
+                                checked={this.state.period == '6h'}
+                                onChange={() => {this.setState({period: '6h', previous_data: 0})}}
+                            >6h</Radio>{' '}
+                            <Radio
+                                inline
+                                checked={this.state.period == '12h'}
+                                onChange={() => {this.setState({period: '12h', previous_data: 0})}}
+                            >12h</Radio>{' '}
+                            <Radio
+                                inline
+                                checked={this.state.period == '24h'}
+                                onChange={() => {this.setState({period: '24h', previous_data: 0})}}
+                            >24h</Radio>
+                            <Radio
+                                inline
+                                checked={this.state.period == '3j'}
+                                onChange={() => {this.setState({period: '3j', previous_data: 0})}}
+                            >3j</Radio>
+                            <Checkbox inline checked={this.state.log_scale} onChange={this.setState.bind(this, {log_scale: !this.state.log_scale, y_zero:false })} style={{marginLeft: 15}}>
                                 Logarithmic scale
+                            </Checkbox>
+                            <Checkbox inline checked={this.state.y_zero} onChange={this.setState.bind(this, {y_zero: !this.state.y_zero, log_scale: false})} style={{marginLeft: 15}}>
+                                Y = 0
                             </Checkbox>
                         </FormGroup>
                     </div>
@@ -174,6 +222,19 @@ export default class MoneyGraph extends React.Component {
                         </div>
                     </div>
                 </div>
+                <div className="row">
+                    <div className="col-xs-3">
+                        <Button onClick={this.previous.bind(this)} disabled={Tools.dateFormatWithOffset(this.props.moneyValues[1].created_at) > startDate}>
+                            Previous
+                        </Button>
+                    </div>
+                    <div className="col-xs-3 col-xs-offset-6 text-right">
+                        <Button onClick={this.next.bind(this)} disabled={this.state.previous_data <= 0}>
+                            Next
+                        </Button>
+                    </div>
+                </div>
+
             </Panel>
         );
     }

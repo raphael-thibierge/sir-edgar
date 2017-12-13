@@ -23,8 +23,6 @@ export default class PriceRoot extends React.Component{
         }
     }
 
-
-
     pusher(){
         if (window.Echo) {
             this.setState({
@@ -129,6 +127,9 @@ export default class PriceRoot extends React.Component{
                     <div className="row">
                         <div className="col-xs-12">
                             <PanelGroup>
+                                {this.state.BTC_values === null ? (
+                                    (<p>Loading graphs</p>)
+                                ) : null}
                                 {this.state.BTC_values !== null ? (
                                     <MoneyGraph
                                         title={"Bitcoin"}

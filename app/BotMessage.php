@@ -20,8 +20,6 @@ class BotMessage extends Model
 
     protected $fillable = ['request', 'user_id', 'response'];
 
-
-
     public static function createFromRequest(Request $request): BotMessage{
 
         $message = BotMessage::create([
