@@ -38,7 +38,7 @@ class UpdateCoinbasePriceJob implements ShouldQueue
 
         $native_currency = 'EUR';
 
-        foreach (['BTC', 'ETH', 'LTC'] as $cryptoCurrency){
+        foreach (['BTC', 'ETH', 'LTC', 'BCH'] as $cryptoCurrency){
 
             $conversion = $cryptoCurrency . '-' . $native_currency;
 
