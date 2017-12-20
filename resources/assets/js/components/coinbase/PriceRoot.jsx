@@ -20,6 +20,7 @@ export default class PriceRoot extends React.Component{
             BTC_values: null,
             ETH_values: null,
             LTC_values: null,
+            BCH_values: null,
         }
     }
 
@@ -46,12 +47,18 @@ export default class PriceRoot extends React.Component{
                         ETH_values.push(e.data.ETH);
                     }
 
+                    let BCH_values = this.state.BCH_values;
+                    if ( BCH_values !== null){
+                        BCH_values.push(e.data.BCH);
+                    }
+
                     this.setState({
                         data: e.data,
                         pusher: true,
                         BTC_values: BTC_values,
                         ETH_values: ETH_values,
                         LTC_values: LTC_values,
+                        BCH_values: BCH_values,
                     });
                 }.bind(this));
         }
@@ -98,6 +105,19 @@ export default class PriceRoot extends React.Component{
             },
             error: (error) => {console.error(error); alert(error.statusText)},
         });
+        const bch_request = $.ajax({
+            url: './money-values/24h/LTC',
+            cache: false,
+            method: 'GET',
+            success: (response) => {
+                if (response && response.status === 'success'){
+                    this.setState({
+                        BCH_values: response.data.values,
+                    });
+                }
+            },
+            error: (error) => {console.error(error); alert(error.statusText)},
+        });
     }
 
     render(){
@@ -138,7 +158,7 @@ export default class PriceRoot extends React.Component{
                                     />
                                 ): null}
 
-                                {this.state.BTC_values !== null ? (
+                                {this.state.ETH_values !== null ? (
                                     <MoneyGraph
                                         title={"Ethereum"}
                                         currency="ETH"
@@ -146,11 +166,19 @@ export default class PriceRoot extends React.Component{
                                     />
                                 ): null}
 
-                                {this.state.BTC_values !== null ? (
+                                {this.state.LTC_values !== null ? (
                                     <MoneyGraph
                                         title={"Litecoin"}
                                         currency="LTC"
                                         moneyValues={this.state.LTC_values}
+                                    />
+                                ): null}
+
+                                {this.state.BCH_values !== null ? (
+                                    <MoneyGraph
+                                        title={"Bitcoin Cash"}
+                                        currency="BCH"
+                                        moneyValues={this.state.BCH_values}
                                     />
                                 ): null}
                             </PanelGroup>
