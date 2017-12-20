@@ -106,7 +106,7 @@ export default class PriceRoot extends React.Component{
             error: (error) => {console.error(error); alert(error.statusText)},
         });
         const bch_request = $.ajax({
-            url: './money-values/24h/LTC',
+            url: './money-values/24h/BCH',
             cache: false,
             method: 'GET',
             success: (response) => {
