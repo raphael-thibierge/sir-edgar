@@ -17,7 +17,7 @@ use Jenssegers\Mongodb\Relations\HasMany;
  * @property mixed projects
  * @property Collection budgets
  */
-class   User extends \Jenssegers\Mongodb\Auth\User
+class User extends \Jenssegers\Mongodb\Auth\User
 {
     use Notifiable;
 

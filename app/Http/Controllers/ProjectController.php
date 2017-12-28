@@ -21,7 +21,10 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Auth::user()->projects()->with('goals')->get();
+        $projects = Auth::user()->projects()
+            ->orderBy('title', 'ASC')
+            ->with('goals')
+            ->get();
 
         return $this->successResponse([
             'projects' => $projects,

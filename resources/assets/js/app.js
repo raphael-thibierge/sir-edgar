@@ -36,6 +36,13 @@ if (window.app){
             );
             break;
 
+        case 'user':
+            ReactDOM.render(
+                React.createElement(AppRoot, {app: 'user'}),
+                document.getElementById('app-user')
+            );
+            break;
+
     }
 }
 

@@ -6,8 +6,9 @@ window.pusher = require('pusher-js');
 
 import ProjectRoot from './components/project/ProjectRoot.jsx';
 import FinanceRoot from './components/financial/FinanceRoot';
+import UserRoot from './components/user/UserRoot';
 
-export default class AppRoot extends React.Component {
+export default class    AppRoot extends React.Component {
 
     constructor(props) {
         super(props);
@@ -55,7 +56,6 @@ export default class AppRoot extends React.Component {
         }
     }
 
-
     render(){
 
         if (this.state.loading === false || this.state.user === null){
@@ -79,6 +79,14 @@ export default class AppRoot extends React.Component {
                 <FinanceRoot user={this.state.user}/>
             );
         }
+
+        if (this.props.app == 'user'){
+            return (
+                <UserRoot user={this.state.user}/>
+            );
+        }
+
+
 
     }
 
