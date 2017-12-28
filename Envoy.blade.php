@@ -6,8 +6,6 @@
 
     cd ProductivityApp/
 
-    php artisan horizon:terminate
-
     php artisan down
 
     @if ($branch)
@@ -23,6 +21,10 @@
     php artisan migrate --force
 
     php artisan config:cache
+
+    pho artisan route:cache
+
+    php artisan horizon:terminate
 
     php artisan up
 

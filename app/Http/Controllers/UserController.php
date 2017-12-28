@@ -98,16 +98,14 @@ class UserController extends Controller
 
         $user->update([
                 'timezone' => $request->get('timezone'),
-                'email_daily_report' => (bool)$request->get('email_daily_report'),
-                'email_weekly_report' => (bool)$request->get('email_weekly_report'),
+                'email_daily_report' => $request->get('email_daily_report') == 'true',
+                'email_weekly_report' => $request->get('email_weekly_report') == 'true',
         ]);
 
         return $this->successResponse([
             'user' => $user,
             'timezone' => $request->get('timezone'),
-            'sd' => (bool)$request->get('email_daily_report')
         ]);
-
     }
 
     public function updateDailyScoreGoal(Request $request){
