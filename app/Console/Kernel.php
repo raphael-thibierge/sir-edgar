@@ -41,7 +41,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
-        $schedule->command('coinbase:price:update')->everyMinute();
+        //$schedule->command('coinbase:price:update')->everyMinute();
         $schedule->command('coinbase:api:status')->everyMinute();
 
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
