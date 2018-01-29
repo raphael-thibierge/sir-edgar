@@ -22,7 +22,7 @@
 
     php artisan config:cache
 
-    pho artisan route:cache
+    php artisan route:cache
 
     php artisan horizon:terminate
 
