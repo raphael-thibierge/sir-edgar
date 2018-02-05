@@ -3,12 +3,11 @@ import {Image} from 'react-bootstrap';
 import Echo from "laravel-echo";
 
 window.pusher = require('pusher-js');
-
 import ProjectRoot from './components/project/ProjectRoot.jsx';
 import FinanceRoot from './components/financial/FinanceRoot';
 import UserRoot from './components/user/UserRoot';
 
-export default class    AppRoot extends React.Component {
+export default class AppRoot extends React.Component {
 
     constructor(props) {
         super(props);

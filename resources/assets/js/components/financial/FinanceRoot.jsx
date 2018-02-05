@@ -114,10 +114,14 @@ export default class FinanceRoot extends React.Component {
                         </Tab>
 
                         <Tab eventKey={2} title="Expenses">
-                            <br/>
-                            <ExpenseRoot
-                                expenses={this.state.expenses}
-                            />
+                            <div className="row">
+                                <div className="col-xs-12">
+                                    <ExpenseRoot
+                                        expenses={this.state.expenses}
+                                    />
+                                </div>
+                            </div>
+
                         </Tab>
                     </Tabs>
                 </div>

@@ -20,7 +20,7 @@ export default class ExpenseTable extends React.Component {
                             </thead>
                             <tbody>
                                 {this.props.expenses.reverse().map((expense) => (
-                                    <tr key={expense._id}>
+                                    <tr key={expense._id} className={expense.type === 'entrance' ? 'success' : 'danger'}>
                                         <td>{expense.price}</td>
                                         <td>{expense.currency}</td>
                                         <td>{expense.title}</td>

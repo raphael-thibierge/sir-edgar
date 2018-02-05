@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\FinancialTransaction;
 use App\User;
+use Carbon\Carbon;
+use Coinbase\Wallet\Resource\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,9 +20,11 @@ class FinancialTransactionController extends Controller
     {
         $user = Auth::user();
 
-        $expense = $user->financialTransactions()->where('type', FinancialTransaction::EXPENSE)->get();
+        $financialTransactions = $user->financialTransactions()->get();
 
-        return view('expenses.index', ['expenses' => $expense]);
+        return $this->successResponse([
+            'transactions' => $financialTransactions
+        ]);
 
     }
 
@@ -40,16 +44,6 @@ class FinancialTransactionController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -57,7 +51,36 @@ class FinancialTransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'title'         => 'required|string',
+            'description'   => 'present|string|nullable',
+            'tags'          => 'present|array|nullable',
+            'price'        => 'required|numeric',
+            'currency'      => 'required|string',
+            'created_at'    => 'present|date'
+        ]);
+
+        $user = Auth::user();
+
+        $data = [];
+        foreach ($request->request->keys() as $key){
+            if (($value = $request->get($key)) !== null && $key !== '_token'){
+
+                switch ($key){
+                    case 'price': $value = (float)$value; break;
+                    case 'created_at': $value = new Carbon($value, $user->timezone); break;
+                    default: break;
+                }
+
+                $data [$key] = $value;
+            }
+        }
+
+        $transaction = $user->financialTransactions()->create($data);
+
+        return $this->successResponse([
+            'transaction' => $transaction
+        ]);
     }
 
     /**
@@ -68,18 +91,9 @@ class FinancialTransactionController extends Controller
      */
     public function show(FinancialTransaction $financialTransaction)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\FinancialTransaction  $financialTransaction
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(FinancialTransaction $financialTransaction)
-    {
-        //
+        return $this->successResponse([
+            'transaction' => $financialTransaction
+        ]);
     }
 
     /**
@@ -102,6 +116,7 @@ class FinancialTransactionController extends Controller
      */
     public function destroy(FinancialTransaction $financialTransaction)
     {
-        //
+        $financialTransaction->delete();
+        return $this->successResponse();
     }
 }

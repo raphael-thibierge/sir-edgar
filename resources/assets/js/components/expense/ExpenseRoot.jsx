@@ -2,7 +2,7 @@ import React from 'react';
 import ExpenseTable from './ExpenseTable';
 import DayPicker from 'react-day-picker';
 import Tools from '../Tools'
-
+import CreateFinancialTransactionModal from "../financial/CreateFinancialTransactionModal";
 import {Glyphicon} from 'react-bootstrap';
 
 export default class ExpenseRoot extends React.Component {
@@ -12,17 +12,38 @@ export default class ExpenseRoot extends React.Component {
         this.state = {
             start_date: null,
             end_date: null,
+            transactions: [],
         }
 
     }
 
-    componentDidMount(){
+    onSave(transaction){
+        let transactions = this.state.transactions;
+        transactions.push(transaction);
+        this.setState({transactions: transactions});
+    }
 
+    componentDidMount(){
+        $.get('/financial-transactions')
+            .catch(error => {
+                alert(error.statusText);
+                console.error(error);
+            })
+            .then(responseJSON => {
+                if (responseJSON.status === 'success'){
+                    // get response data
+                    const data = responseJSON.data;
+
+                    this.setState({
+                        loaded: true,
+                        transactions: data.transactions,
+                    });
+                }
+            });
     }
 
     filter(){
-        console.log(this.state.start_date);
-        return this.props.expenses.filter((expense) => {
+        return this.state.transactions.filter((expense) => {
 
             // expense created at
             var expense_date = Tools.dateFormater(expense.created_at);
@@ -49,7 +70,7 @@ export default class ExpenseRoot extends React.Component {
 
     render(){
 
-        const expenses = this.filter();
+        const transactions = this.filter();
 
         return (
             <div className="row">
@@ -69,7 +90,16 @@ export default class ExpenseRoot extends React.Component {
                             </div>
                         </div>
                     </div>
-                    {this.props.expenses.length > 0 ? (
+
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <CreateFinancialTransactionModal
+                                onSave={this.onSave.bind(this)}
+                            />
+                        </div>
+                    </div>
+
+                    {this.state.transactions.length > 0 ? (
                         <div className="row text-center">
                             <div className="col-xs-6">
                                 <DayPicker
@@ -94,7 +124,7 @@ export default class ExpenseRoot extends React.Component {
                                 />
                             </div>
 
-                            <ExpenseTable expenses={expenses}/>
+                            <ExpenseTable expenses={transactions}/>
                         </div>
                     ): null}
                 </div>
