@@ -2,12 +2,11 @@ import React from 'react';
 import {FormControl, FormGroup, ControlLabel, Button, Modal, Glyphicon, Badge } from 'react-bootstrap';
 import DayPicker from 'react-day-picker';
 import Datetime from 'react-datetime';
-import GoalRender from './GoalRender';
 
 /**
  * React component managing goal input
  */
-export default class GoalsDetailsModal extends React.Component{
+export default class CreateFinancialTransactionModal extends React.Component{
 
     constructor(props){
         super(props);
@@ -31,37 +30,26 @@ export default class GoalsDetailsModal extends React.Component{
      * @returns {{title: string, score: number}}
      */
     getInitialState() {
+
+        const date = new Date();
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
+
         return {
             display: false,
-            due_date: null,
-            estimated_time:null,
-            time_spent:null,
-            priority:null,
-            notes: null,
-            title: '',
-            score: 1,
-            is_completed: false,
+            title: null,
+            description: null,
+            type: 'expense',
+            tags: null,
+            currency: 'CAD',
+            price: 0.0,
+            created_at: date,
 
         };
     }
 
     componentDidMount(){
-
-        const goal = this.props.goal;
-
-        const diff = Math.floor((new Date() - goal.created_at ) / 1000);
-
-        this.setState({
-            title: goal.title,
-            due_date: goal.due_date !== null ? new Date(goal.due_date) : null,
-            estimated_time: goal.estimated_time,
-            time_spent: goal.time_spent,
-            priority: goal.priority,
-            notes: goal.notes,
-            display: diff < 3,
-            score: goal.score,
-            is_completed: goal.is_completed
-        })
 
     }
 
@@ -77,20 +65,50 @@ export default class GoalsDetailsModal extends React.Component{
         }
     }
 
-    onSave(){
-        this.props.goal.updateDetails(
-            this.state.title,
-            this.state.score,
-            this.state.due_date,
-            this.state.estimated_time,
-            this.state.time_spent,
-            this.state.priority,
-            this.state.notes,
-        );
+    onError(err){
+        console.error(err.responseJSON);
+        alert('Saving transaction failed !')
+    }
 
-        this.setState({
-            display: false
+    onSave(){
+
+        const tags = this.state.tags !== null && this.state.tags !== '' ?
+            this.state.tags.split(' ').filter(tag => tag !== null && tag !== '' && tag !== ' ') : null;
+        const data = {
+            _token: window._token,
+            title: this.state.title,
+            description: this.state.description,
+            type: this.state.type,
+            currency: this.state.currency,
+            price: this.state.price,
+            tags: tags,
+            created_at: this.state.created_at,
+        };
+
+        console.log(data)
+
+        const request = $.ajax({
+            url: '/financial-transactions',
+            cache: false,
+            method: 'POST',
+            data: data,
+            // when server return success
+            success: function (response) {
+                // check status
+                if (response.status && response.status === 'success'){
+
+                    if (typeof this.props.onSave === 'function'){
+                        this.props.onSave(response.data.transaction)
+                    }
+
+                    this.setState(this.getInitialState());
+                } else {
+                    this.onError(response);
+                }
+            }.bind(this), // bind is used to call method in this component
+            error: this.onError.bind(this),
         });
+
     }
 
 
@@ -103,14 +121,11 @@ export default class GoalsDetailsModal extends React.Component{
     render() {
 
 
-        const from = this.state.from;
-        const to = this.state.to;
-
         return (
             <span className="text-left" style={{marginLeft : '5px', marginRight:'10px'}} >
-                <a onClick={() => {this.setState({display: true})}}>
-                    {this.state.title}
-                </a>
+                <Button onClick={() => {this.setState({display: true})}}>
+                    New transaction
+                </Button>
                 <Modal
                     aria-labelledby="contained-modal-title-lg"
                     show={this.state.display}
@@ -118,20 +133,29 @@ export default class GoalsDetailsModal extends React.Component{
                 >
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title-lg">
-                            <strong>
-                                <GoalRender goal={this.state}/>
-                            </strong>
+                            New transaction
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
 
                         <FormGroup>
-                            <ControlLabel>Goal</ControlLabel>
+                            <ControlLabel>Title</ControlLabel>
                             <FormControl
                                 componentClass='input'
                                 value={this.state.title}
-                                placeholder="Your goal title"
+                                placeholder="Transaction title"
                                 onChange={(e) => {this.setState({ title: e.target.value })}}
+                                onKeyPress={this.handleKeyPress.bind(this)}
+                            />
+                        </FormGroup>
+
+                        <FormGroup>
+                            <ControlLabel>Tags</ControlLabel>
+                            <FormControl
+                                componentClass='input'
+                                value={this.state.tags}
+                                placeholder="tags"
+                                onChange={(e) => {this.setState({ tags: e.target.value })}}
                                 onKeyPress={this.handleKeyPress.bind(this)}
                             />
                         </FormGroup>
@@ -139,87 +163,67 @@ export default class GoalsDetailsModal extends React.Component{
                         <FormGroup>
                             <div className="row">
                                 <div className="col-xs-6">
-                                    <ControlLabel>Score</ControlLabel>
+                                    <ControlLabel>Amount</ControlLabel>
                                     <FormControl
                                         componentClass='input'
                                         type="number"
                                         min={0}
-                                        max={5}
-                                        value={this.state.score}
-                                        placeholder=""
-                                        onChange={(e) => {this.setState({ score: e.target.value })}}
+                                        value={this.state.price}
+                                        onChange={(e) => {this.setState({ price: e.target.value })}}
                                         onKeyPress={this.handleKeyPress.bind(this)}
                                     />
                                 </div>
 
                                 <div className="col-xs-6">
-                                    <ControlLabel>Priority</ControlLabel>
+                                    <ControlLabel>Currency</ControlLabel>
                                     <FormControl
                                         componentClass='input'
-                                        type="number"
-                                        value={this.state.priority}
-                                        min={0}
-                                        max={3}
-                                        placeholder=""
-                                        onChange={(e) => {this.setState({ priority: e.target.value })}}
+                                        type="text"
+                                        value={this.state.currency}
+                                        placeholder="Currency"
+                                        onChange={(e) => {this.setState({ currency: e.target.value })}}
                                         onKeyPress={this.handleKeyPress.bind(this)}
                                     />
                                 </div>
                             </div>
                         </FormGroup>
-
                         <FormGroup>
                             <div className="row">
                                 <div className="col-xs-6">
-                                    <ControlLabel>Estimated time (min)</ControlLabel>
+                                    <ControlLabel>Type</ControlLabel>
                                     <FormControl
-                                        componentClass='input'
-                                        type="number"
-                                        min={0}
-                                        value={this.state.estimated_time}
-                                        placeholder=""
-                                        onChange={(e) => {this.setState({ estimated_time: e.target.value })}}
+                                        componentClass='select'
+                                        options={['expense', 'entrance']}
+                                        value={this.state.type}
+                                        placeholder="Currency"
+                                        onChange={(e) => {this.setState({ type: e.target.value })}}
                                         onKeyPress={this.handleKeyPress.bind(this)}
-                                    />
+                                    >
+                                        <option value="expense" selected>expense</option>
+                                        <option value="entrance">entrance</option>
+                                    </FormControl>
                                 </div>
-
                                 <div className="col-xs-6">
-                                    <ControlLabel>Time spent (min)</ControlLabel>
-                                    <FormControl
-                                        componentClass='input'
-                                        type="number"
-                                        min={0}
-                                        value={this.state.time_spent}
-                                        placeholder=""
-                                        onChange={(e) => {this.setState({ time_spent: e.target.value })}}
-                                        onKeyPress={this.handleKeyPress.bind(this)}
+                                    <ControlLabel>Date</ControlLabel><br/>
+                                    <Datetime
+                                        onChange={(day) => {this.setState({created_at: day && day !== '' ? day.toDate(): null})}}
+                                        value={this.state.created_at}
                                     />
                                 </div>
+
                             </div>
-
                         </FormGroup>
 
                         <FormGroup>
-                            <ControlLabel>Due Date</ControlLabel><br/>
-                            <Datetime
-                                onChange={(day) => {this.setState({due_date: day && day !== '' ? day.toDate(): null})}}
-                                value={this.state.due_date}
-                            />
-                        </FormGroup>
-
-
-
-                        <FormGroup>
-                            <ControlLabel>Notes</ControlLabel>
+                            <ControlLabel>Description</ControlLabel>
                             <FormControl
                                 componentClass="textarea"
                                 placeholder="textarea"
-                                onChange={(e) => {this.setState({ notes: e.target.value })}}
-                                value={this.state.notes}
+                                onChange={(e) => {this.setState({ description: e.target.value })}}
+                                value={this.state.description}
                                 rows={5}
                             />
                         </FormGroup>
-
 
                     </Modal.Body>
                     <Modal.Footer>

@@ -31,10 +31,15 @@ class FinancialTransaction extends Model
         'tags',
         'currency',
         'price',
+        'created_at'
     ];
 
     protected $dates = [
         'created_at'
+    ];
+
+    protected $casts = [
+        'price' => 'float'
     ];
 
     /**

@@ -15,7 +15,7 @@ Route::view('/', 'welcome');
 
 Auth::routes();
 
-Route::view('home', 'home')->name('home');
+Route::view('home', 'home')->name('home')->middleware('auth');
 Route::view('privacy-policy', 'policy')->name('privacy.policy ');
 Route::view('about', 'about')->name('about');
 
@@ -54,7 +54,6 @@ Route::get('/bot/requests/{botMessage}/', 'BotController@show')->name('dailogflo
 //Route::get('/dialogflow/webhooks/{webhook}', 'DialogflowController@show')->name('dailogflow.webhooks.show');
 
 
-Route::get('/expenses', 'FinancialTransactionController@index')->name('expense')->middleware('auth');
 Route::get('/expenses/tag/{tag}', 'FinancialTransactionController@byTag')->name('expense')->middleware('auth');
 
 Route::get('/financial-data', 'HomeController@financialData')->middleware('auth');
@@ -86,4 +85,5 @@ Route::apiResources([
     'projects' => 'ProjectController',
     'goals' => 'GoalController',
     'budgets' => 'BudgetController',
+    'financial-transactions' => 'FinancialTransactionController',
 ]);
