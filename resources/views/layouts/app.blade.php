@@ -13,8 +13,8 @@
 
 
     <!-- Styles -->
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/react-day-picker.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('css/react-day-picker.css') }}" rel="stylesheet" type="text/css">
 
     @if(config('app.env') === 'production')
     <!-- Google analytics -->
