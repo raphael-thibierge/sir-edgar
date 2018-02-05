@@ -61,7 +61,7 @@ export default class AppRoot extends React.Component {
             return (
                 <div className="row">
                     <div className="col-xs-12">
-                        <Image src="/images/logo.png" rounded circle responsive thumbnail/>
+                        <Image src="/images/logo-min.png" rounded circle responsive thumbnail/>
                     </div>
                 </div>
             );

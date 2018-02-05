@@ -77,7 +77,7 @@
                 <br>
         <div class="col-md-8 col-md-offset-2">
             <div class="thumbnail">
-                <img src="{{ asset('images/screenshot.png') }}" alt="Sir Edgar dashboard screenshot" style="width: 100%">
+                <img src="{{ asset('images/screenshot-min.png') }}" alt="Sir Edgar dashboard screenshot" style="width: 100%">
             </div>
 
         </div>

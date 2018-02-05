@@ -6,7 +6,7 @@
 <div class="container">
     <div class="row">
         <div id="app-finance" class="col-xs-12">
-            <img src="/images/logo.png" alt="" class="img-responsive img-circle img-rounded img-thumbnail">
+            <img src="/images/logo-min.png" alt="" class="img-responsive img-circle img-rounded img-thumbnail">
         </div>
     </div>
 </div>
