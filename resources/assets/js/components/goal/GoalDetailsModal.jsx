@@ -133,6 +133,7 @@ export default class GoalsDetailsModal extends React.Component{
                                 placeholder="Your goal title"
                                 onChange={(e) => {this.setState({ title: e.target.value })}}
                                 onKeyPress={this.handleKeyPress.bind(this)}
+                                autoFocus
                             />
                         </FormGroup>
 

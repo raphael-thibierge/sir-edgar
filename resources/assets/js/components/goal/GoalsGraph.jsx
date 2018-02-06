@@ -3,6 +3,7 @@ import {Chart} from 'react-google-charts';
 import PropTypes from 'prop-types';
 import {Glyphicon, Popover, OverlayTrigger, Panel, PanelGroup} from 'react-bootstrap';
 import CalendarHeatmap from 'react-calendar-heatmap';
+import CompletedGoalsStatsPannel from '../stats/CompletedGoalsStatsPannel';
 
 export default class GoalsGraph extends React.Component{
 
@@ -29,7 +30,6 @@ export default class GoalsGraph extends React.Component{
     componentDidMount() {
         this.request();
     }
-
 
     /**
      * AJAX request to get goals from server
@@ -259,11 +259,13 @@ export default class GoalsGraph extends React.Component{
                             <h1 className="page-header productivity-page-header">Stats <small>Best score : {this.state.scoreMax}</small></h1>
                         </div>
                     </div>
-                    <br/>
 
                     <div className="row">
                         <div className="col-xs-12">
                             <PanelGroup>
+
+                                <CompletedGoalsStatsPannel/>
+
                                 <Panel header={<h2>Daily score over year</h2>} footer={<small>Lines ordered by day of the week</small>}>
                                     <CalendarHeatmap
                                         values={this.state.calendarData}

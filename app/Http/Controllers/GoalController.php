@@ -289,6 +289,24 @@ class GoalController extends Controller
         ]);
     }
 
+    public function completedStats(){
+        $user = Auth::user();
+
+        $oneWeekAgo = Carbon::now($user->timezone)->subWeek(1);
+        $oneMonthAgo = Carbon::now($user->timezone)->subMonths(1);
+
+        $total = $user->completedGoals()->count();
+        $totalThisWeek = $user->completedGoals()->where('created_at', '>=', $oneWeekAgo)->count();
+        $totalThisMonth = $user->completedGoals()->where('created_at', '>=', $oneMonthAgo)->count();
+
+
+        return $this->successResponse([
+            'totalScore' => $total,
+            'weekScore' => $totalThisWeek,
+            'monthScore' => $totalThisMonth
+        ]);
+    }
+
 
 
 }

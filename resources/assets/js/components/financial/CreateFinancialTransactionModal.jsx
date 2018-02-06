@@ -146,6 +146,7 @@ export default class CreateFinancialTransactionModal extends React.Component{
                                 placeholder="Transaction title"
                                 onChange={(e) => {this.setState({ title: e.target.value })}}
                                 onKeyPress={this.handleKeyPress.bind(this)}
+                                autoFocus
                             />
                         </FormGroup>
 

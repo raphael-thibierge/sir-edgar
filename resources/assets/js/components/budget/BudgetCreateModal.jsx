@@ -111,6 +111,7 @@ export default class BudgetCreateModal extends React.Component {
                                         value={this.state.name}
                                         placeholder="Name"
                                         onChange={(e) => {this.setState({ name: e.target.value })}}
+                                        autoFocus
                                     />
                                 </FormGroup>
 

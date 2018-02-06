@@ -85,6 +85,10 @@ class User extends \Jenssegers\Mongodb\Auth\User
         return $this->hasMany('App\Goal');
     }
 
+    public function completedGoals(): HasMany{
+        return $this->goals()->whereNotNull('completed_at');
+    }
+
     /**
      * Goals ending today, depending from user's timezone
      *
