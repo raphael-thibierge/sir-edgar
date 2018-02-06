@@ -264,8 +264,6 @@ export default class GoalsGraph extends React.Component{
                         <div className="col-xs-12">
                             <PanelGroup>
 
-                                <CompletedGoalsStatsPannel/>
-
                                 <Panel header={<h2>Daily score over year</h2>} footer={<small>Lines ordered by day of the week</small>}>
                                     <CalendarHeatmap
                                         values={this.state.calendarData}
@@ -316,6 +314,7 @@ export default class GoalsGraph extends React.Component{
                                         }}
                                     />
                                 </Panel>
+                                <CompletedGoalsStatsPannel/>
                                 <Panel header={<h2>Project scores per day</h2>} style={{paddingTop: -10}}>
                                     <Chart
                                         chartType="ColumnChart"

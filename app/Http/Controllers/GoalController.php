@@ -292,18 +292,32 @@ class GoalController extends Controller
     public function completedStats(){
         $user = Auth::user();
 
-        $oneWeekAgo = Carbon::now($user->timezone)->subWeek(1);
-        $oneMonthAgo = Carbon::now($user->timezone)->subMonths(1);
+        $oneWeekAgo = Carbon::today($user->timezone)->subWeeks(1);
+        $oneMonthAgo = Carbon::today($user->timezone)->subMonths(1);
+        $today = Carbon::today($user->timezone);
 
-        $total = $user->completedGoals()->count();
-        $totalThisWeek = $user->completedGoals()->where('created_at', '>=', $oneWeekAgo)->count();
-        $totalThisMonth = $user->completedGoals()->where('created_at', '>=', $oneMonthAgo)->count();
+        $total = $user->completedGoals();
+        $thisDay = $user->goals()->where('completed_at', '>=', $total);
+        $thisWeek = $user->goals()->where('completed_at', '>=', $oneWeekAgo);
+        $thisMonth = $user->goals()->where('completed_at', '>=', $oneMonthAgo);
+        $todo = $user->goals()->whereNull('completed_at');
 
 
         return $this->successResponse([
-            'totalScore' => $total,
-            'weekScore' => $totalThisWeek,
-            'monthScore' => $totalThisMonth
+            'goals' => [
+                'today' => $thisDay->count(),
+                'total' => $total->count(),
+                'week' => $thisWeek->count(),
+                'month' => $thisMonth->count(),
+                'todo' => $todo->count()
+            ],
+            'score' => [
+                'today' => $thisDay->sum('score'),
+                'total' => $total->sum('score'),
+                'week' => $thisWeek->sum('score'),
+                'month' => $thisMonth->sum('score'),
+                'todo' => $todo->sum('score')
+            ]
         ]);
     }
 
