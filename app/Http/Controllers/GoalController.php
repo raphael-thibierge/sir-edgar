@@ -297,7 +297,7 @@ class GoalController extends Controller
         $today = Carbon::today($user->timezone);
 
         $total = $user->completedGoals();
-        $thisDay = $user->goals()->where('completed_at', '>=', $total);
+        $thisDay = $user->goals()->where('completed_at', '>=', $today);
         $thisWeek = $user->goals()->where('completed_at', '>=', $oneWeekAgo);
         $thisMonth = $user->goals()->where('completed_at', '>=', $oneMonthAgo);
         $todo = $user->goals()->whereNull('completed_at');
