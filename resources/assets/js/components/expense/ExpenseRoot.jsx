@@ -1,16 +1,22 @@
 import React from 'react';
 import ExpenseTable from './ExpenseTable';
-import DayPicker from 'react-day-picker';
 import Tools from '../Tools'
 import CreateFinancialTransactionModal from "../financial/CreateFinancialTransactionModal";
-import {Glyphicon} from 'react-bootstrap';
+import {Glyphicon, FormGroup} from 'react-bootstrap';
+import Datetime from 'react-datetime';
 
 export default class ExpenseRoot extends React.Component {
 
     constructor(props) {
         super(props);
+        let startDate = new Date();
+        startDate.setSeconds(0);
+        startDate.setMinutes(0);
+        startDate.setHours(0);
+        startDate.setMonth(startDate.getMonth() -1);
+
         this.state = {
-            start_date: null,
+            start_date: startDate,
             end_date: null,
             transactions: [],
         }
@@ -23,6 +29,22 @@ export default class ExpenseRoot extends React.Component {
         this.setState({transactions: transactions});
     }
 
+    onUpdate(transaction){
+        let transactions = this.state.transactions;
+
+        for (let i = 0; i < transactions.length; i++){
+
+            if (transactions[i]._id === transaction._id){
+                transactions[i] = transaction;
+            }
+        }
+
+        this.setState({
+            transactions: transactions
+        });
+
+    }
+
     componentDidMount(){
         $.get('/financial-transactions')
             .catch(error => {
@@ -32,11 +54,28 @@ export default class ExpenseRoot extends React.Component {
             .then(responseJSON => {
                 if (responseJSON.status === 'success'){
                     // get response data
-                    const data = responseJSON.data;
+                    const transactions = responseJSON.data.transactions;
+
+                    function totalTransactions() {
+                        let total = 0;
+                        for ( let i = 0, _len = this.length; i < _len; i++ ) {
+
+                            console.log(this[i]);
+                            if (this[i].type === 'entrance'){
+                                total += this[i].price;
+                            } else if (this[i].type === 'expense'){
+                                total -= this[i].price;
+                            }
+
+                        }
+                        return parseFloat(total.toFixed(2));
+                    }
+
+                    transactions.__proto__.totalTransactions = totalTransactions;
 
                     this.setState({
                         loaded: true,
-                        transactions: data.transactions,
+                        transactions: transactions,
                     });
                 }
             });
@@ -93,38 +132,38 @@ export default class ExpenseRoot extends React.Component {
 
                     <div className="row">
                         <div className="col-xs-12">
-                            <CreateFinancialTransactionModal
-                                onSave={this.onSave.bind(this)}
-                            />
+                            <FormGroup>
+                                <CreateFinancialTransactionModal
+                                    onSave={this.onSave.bind(this)}
+                                />
+                            </FormGroup>
                         </div>
                     </div>
 
                     {this.state.transactions.length > 0 ? (
                         <div className="row text-center">
                             <div className="col-xs-6">
-                                <DayPicker
-                                    title="Start"
-                                    modifiersStyles={{marginLeft: 0}}
-                                    selectedDays={[this.state.start_date]}
-                                    onDayClick={(day) => {this.setState({start_date: day})}}
-                                    firstDayOfWeek={1}
-                                    numberOfMonths={1}
-                                    fixedWeeks
-                                />
+                                <FormGroup>
+                                    <Datetime
+                                        onChange={(day) => {this.setState({start_date: day && day !== '' ? day.toDate(): null})}}
+                                        value={this.state.start_date}
+                                    />
+                                </FormGroup>
                             </div>
 
                             <div className="col-xs-6">
-                                <DayPicker
-                                    modifiersStyles={{marginRight: 0}}
-                                    selectedDays={[this.state.end_date]}
-                                    onDayClick={(day) => {this.setState({end_date: day})}}
-                                    firstDayOfWeek={1}
-                                    numberOfMonths={1}
-                                    fixedWeeks
-                                />
+                                <FormGroup>
+                                    <Datetime
+                                        onChange={(day) => {this.setState({end_date: day && day !== '' ? day.toDate(): null})}}
+                                        value={this.state.end_date}
+                                    />
+                                </FormGroup>
                             </div>
 
-                            <ExpenseTable expenses={transactions}/>
+                            <ExpenseTable
+                                expenses={transactions}
+                                onUpdate={this.onUpdate.bind(this)}
+                            />
                         </div>
                     ): null}
                 </div>

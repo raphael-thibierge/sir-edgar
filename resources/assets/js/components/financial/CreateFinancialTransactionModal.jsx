@@ -1,6 +1,5 @@
 import React from 'react';
 import {FormControl, FormGroup, ControlLabel, Button, Modal, Glyphicon, Badge } from 'react-bootstrap';
-import DayPicker from 'react-day-picker';
 import Datetime from 'react-datetime';
 
 /**
@@ -11,17 +10,8 @@ export default class CreateFinancialTransactionModal extends React.Component{
     constructor(props){
         super(props);
         this.state = this.getInitialState();
-    }
 
-    /**
-     * Define required component's properties
-     */
-    //propTypes= {
-        /**
-         * Method to call when the new goal has been send to server successfully
-         */
-      //  goal: React.PropTypes.object.isRequired,
-   // }
+    }
 
     /**
      * Return component initial state
@@ -37,6 +27,7 @@ export default class CreateFinancialTransactionModal extends React.Component{
         date.setSeconds(0);
 
         return {
+            _id: null,
             display: false,
             title: null,
             description: null,
@@ -50,7 +41,20 @@ export default class CreateFinancialTransactionModal extends React.Component{
     }
 
     componentDidMount(){
-
+        if (this.expenseExists()){
+            const expense = this.props.expense;
+            this.setState({
+                _id: expense._id,
+                test: true,
+                title: expense.title,
+                description: expense.description ? expense.description : '',
+                type: expense.type,
+                tags: Array.isArray(expense.tags) ? expense.tags.join(' ') : '',
+                currency: expense.currency,
+                price: expense.price,
+                created_at: expense.created_at,
+            });
+        }
     }
 
     /**
@@ -70,14 +74,20 @@ export default class CreateFinancialTransactionModal extends React.Component{
         alert('Saving transaction failed !')
     }
 
+    expenseExists(){
+        return typeof this.props.expense !== 'undefined';
+    }
+
     onSave(){
+
 
         const tags = this.state.tags !== null && this.state.tags !== '' ?
             this.state.tags.split(' ').filter(tag => tag !== null && tag !== '' && tag !== ' ') : null;
         const data = {
+            _method: this.expenseExists() ? 'PUT' : 'POST',
             _token: window._token,
             title: this.state.title,
-            description: this.state.description,
+            description: this.state.description !== '' ? this.state.description : null,
             type: this.state.type,
             currency: this.state.currency,
             price: this.state.price,
@@ -85,10 +95,11 @@ export default class CreateFinancialTransactionModal extends React.Component{
             created_at: this.state.created_at,
         };
 
-        console.log(data)
+
+        const uri = '/financial-transactions' + (this.expenseExists() ? ('/' + this.state._id) : '' );
 
         const request = $.ajax({
-            url: '/financial-transactions',
+            url: uri,
             cache: false,
             method: 'POST',
             data: data,
@@ -101,7 +112,12 @@ export default class CreateFinancialTransactionModal extends React.Component{
                         this.props.onSave(response.data.transaction)
                     }
 
-                    this.setState(this.getInitialState());
+                    if (this.expenseExists()){
+                        this.setState({display: false});
+                    } else {
+                        this.setState(this.getInitialState());
+                    }
+
                 } else {
                     this.onError(response);
                 }
@@ -123,9 +139,15 @@ export default class CreateFinancialTransactionModal extends React.Component{
 
         return (
             <span className="text-left" style={{marginLeft : '5px', marginRight:'10px'}} >
-                <Button onClick={() => {this.setState({display: true})}}>
-                    New transaction
-                </Button>
+                {!this.expenseExists() ?
+                    <Button onClick={() => {this.setState({display: true})}}>
+                        New transaction
+                    </Button>
+                    :
+                    <Button bsSize={'xs'} onClick={() => {this.setState({display: true})}}>
+                        <Glyphicon glyph={'pencil'}/>
+                    </Button>
+                }
                 <Modal
                     aria-labelledby="contained-modal-title-lg"
                     show={this.state.display}

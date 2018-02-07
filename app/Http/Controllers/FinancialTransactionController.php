@@ -105,7 +105,20 @@ class FinancialTransactionController extends Controller
      */
     public function update(Request $request, FinancialTransaction $financialTransaction)
     {
-        //
+        $this->validate($request, [
+            'title'         => 'required|string',
+            'description'   => 'present|string|nullable',
+            'tags'          => 'present|array|nullable',
+            'price'        => 'required|numeric',
+            'currency'      => 'required|string',
+            'created_at'    => 'present|date'
+        ]);
+
+        $financialTransaction->update($request->all());
+
+        return $this->successResponse([
+            'transaction' => $financialTransaction
+        ]);
     }
 
     /**
