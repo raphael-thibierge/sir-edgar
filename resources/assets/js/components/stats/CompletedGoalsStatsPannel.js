@@ -122,22 +122,22 @@ export default class CompletedGoalsStatsPannel extends React.Component{
                                     <td>{this.state.score.today}</td>
                                 </tr>
                                 <tr>
-                                    <td>This week</td>
+                                    <td>Last 7 days</td>
                                     <td>{this.state.goals.week}</td>
                                     <td>{this.state.score.week}</td>
                                 </tr>
                                 <tr>
-                                    <td>This month</td>
+                                    <td>Last 30 days</td>
                                     <td>{this.state.goals.month}</td>
                                     <td>{this.state.score.month}</td>
                                 </tr>
                                 <tr>
-                                    <td>Total</td>
+                                    <td>From beginning</td>
                                     <td>{this.state.goals.total}</td>
                                     <td>{this.state.score.total}</td>
                                 </tr>
                                 <tr>
-                                    <td>Todo</td>
+                                    <td>Next to achive</td>
                                     <td>{this.state.goals.todo}</td>
                                     <td>{this.state.score.todo}</td>
                                 </tr>
