@@ -11,7 +11,7 @@ export default class FinanceRoot extends React.Component {
             loaded: false,
             budgets: [],
             expenses: [],
-            tab: 1,
+            tab: 2,
         };
     }
 

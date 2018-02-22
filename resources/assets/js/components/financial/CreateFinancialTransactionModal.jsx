@@ -21,11 +21,8 @@ export default class CreateFinancialTransactionModal extends React.Component{
      */
     getInitialState() {
 
-        const date = new Date();
-        date.setHours(0);
-        date.setMinutes(0);
+        let date = new Date();
         date.setSeconds(0);
-
         return {
             _id: null,
             display: false,

@@ -60,7 +60,6 @@ export default class ExpenseRoot extends React.Component {
                         let total = 0;
                         for ( let i = 0, _len = this.length; i < _len; i++ ) {
 
-                            console.log(this[i]);
                             if (this[i].type === 'entrance'){
                                 total += this[i].price;
                             } else if (this[i].type === 'expense'){
@@ -135,15 +134,6 @@ export default class ExpenseRoot extends React.Component {
 
                     <div className="row">
                         <div className="col-xs-12">
-                            <div className="alert alert-info">
-                                <p><Glyphicon glyph="info-sign"/> When spending money, <strong>ask edgar on messenger</strong> to save it :</p>
-                                <p><em>"Add a new expense of 10.2 CAD #lunch at #restaurant with #friends"</em></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="row">
-                        <div className="col-xs-12">
                             <FormGroup>
                                 <CreateFinancialTransactionModal
                                     onSave={this.onSave.bind(this)}
@@ -178,6 +168,16 @@ export default class ExpenseRoot extends React.Component {
                             />
                         </div>
                     ): null}
+
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <div className="alert alert-info">
+                                <p><Glyphicon glyph="info-sign"/> When spending money, <strong>ask edgar on messenger</strong> to save it for you :</p>
+                                <p><em>"Add a new expense of 10.2 CAD #lunch at #restaurant with #friends"</em></p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         );
