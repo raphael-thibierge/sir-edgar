@@ -21,15 +21,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        /*DailyGoalsReportCommand::class,
-        CheckRemindersCommand::class,
-        DailyGoalsReportCommand::class,
-        MorningEdgarMessageCommand::class,
-        ImportantNotificationEdgar::class,
-        AdminCoinBaseCommand::class,
-        CoinbasePriceCommand::class,
-        CoinbaseFeesCommand::class,
-        CoinbaseCheckApiStatusCommand::class,*/
+
     ];
 
     /**
@@ -47,8 +39,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
 
         // server monitoring
-        $schedule->command('monitor:run')->daily()->at('10:00');
-        $schedule->command('monitor:run HttpPing')->hourly();
+        //$schedule->command('monitor:run')->daily()->at('10:00');
+        //$schedule->command('monitor:run HttpPing')->hourly();
 
         foreach (timezone_identifiers_list() as $timezone){
            // $schedule->command('report:goals:daily')
