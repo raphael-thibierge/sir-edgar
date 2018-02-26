@@ -84,7 +84,7 @@ export default class ExpenseRoot extends React.Component {
         let transactions = this.state.transactions.filter((expense) => {
 
             // expense created at
-            var expense_date = Tools.dateFormater(expense.created_at);
+            let expense_date = Tools.dateFormater(expense.date);
             expense_date.setMinutes(expense_date.getMinutes() - expense_date.getTimezoneOffset());
 
             if (this.state.start_date !== null){
@@ -106,9 +106,9 @@ export default class ExpenseRoot extends React.Component {
         });
 
         transactions = transactions.sort(function (transactionA, transactionB) {
-            if (Tools.dateFormater(transactionA.created_at) > Tools.dateFormater(transactionB.created_at)){
+            if (Tools.dateFormater(transactionA.date) > Tools.dateFormater(transactionB.date)){
                 return 1;
-            } else if (Tools.dateFormater(transactionA.created_at) < Tools.dateFormater(transactionB.created_at)){
+            } else if (Tools.dateFormater(transactionA.date) < Tools.dateFormater(transactionB.date)){
                 return -1;
             }
             return 0;

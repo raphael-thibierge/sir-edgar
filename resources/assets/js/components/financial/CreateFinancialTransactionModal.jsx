@@ -1,6 +1,7 @@
 import React from 'react';
 import {FormControl, FormGroup, ControlLabel, Button, Modal, Glyphicon, Badge } from 'react-bootstrap';
 import Datetime from 'react-datetime';
+import Tool from '../Tools';
 
 /**
  * React component managing goal input
@@ -32,7 +33,7 @@ export default class CreateFinancialTransactionModal extends React.Component{
             tags: null,
             currency: 'CAD',
             price: 0.0,
-            created_at: date,
+            date: date,
 
         };
     }
@@ -49,7 +50,7 @@ export default class CreateFinancialTransactionModal extends React.Component{
                 tags: Array.isArray(expense.tags) ? expense.tags.join(' ') : '',
                 currency: expense.currency,
                 price: expense.price,
-                created_at: expense.created_at,
+                date: expense.date ? Tool.dateFormatWithOffset(expense.date) : null,
             });
         }
     }
@@ -89,7 +90,7 @@ export default class CreateFinancialTransactionModal extends React.Component{
             currency: this.state.currency,
             price: this.state.price,
             tags: tags,
-            created_at: this.state.created_at,
+            date: this.state.date,
         };
 
 
@@ -226,8 +227,8 @@ export default class CreateFinancialTransactionModal extends React.Component{
                                 <div className="col-xs-6">
                                     <ControlLabel>Date</ControlLabel><br/>
                                     <Datetime
-                                        onChange={(day) => {this.setState({created_at: day && day !== '' ? day.toDate(): null})}}
-                                        value={this.state.created_at}
+                                        onChange={(day) => {this.setState({date: day && day !== '' ? day.toDate(): null})}}
+                                        value={this.state.date}
                                     />
                                 </div>
 

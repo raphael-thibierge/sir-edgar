@@ -55,9 +55,9 @@ class FinancialTransactionController extends Controller
             'title'         => 'required|string',
             'description'   => 'present|string|nullable',
             'tags'          => 'present|array|nullable',
-            'price'        => 'required|numeric',
+            'price'         => 'required|numeric',
             'currency'      => 'required|string',
-            'created_at'    => 'present|date'
+            'date'    => 'present|date'
         ]);
 
         $user = Auth::user();
@@ -68,7 +68,10 @@ class FinancialTransactionController extends Controller
 
                 switch ($key){
                     case 'price': $value = (float)$value; break;
-                    case 'created_at': $value = new Carbon($value, $user->timezone); break;
+                    case 'date':
+                        $value = new Carbon($value);
+                        $value->subHours($value->getOffset()/3600);
+                        break;
                     default: break;
                 }
 
@@ -109,12 +112,28 @@ class FinancialTransactionController extends Controller
             'title'         => 'required|string',
             'description'   => 'present|string|nullable',
             'tags'          => 'present|array|nullable',
-            'price'        => 'required|numeric',
+            'price'         => 'required|numeric',
             'currency'      => 'required|string',
-            'created_at'    => 'present|date'
+            'date'          => 'present|date'
         ]);
 
-        $financialTransaction->update($request->all());
+        $data = [];
+        foreach ($request->request->keys() as $key){
+            if (($value = $request->get($key)) !== null && $key !== '_token'){
+
+                switch ($key){
+                    case 'price': $value = (float)$value; break;
+                    case 'date':
+                        $value = new Carbon($value);
+                        break;
+                    default: break;
+                }
+
+                $data [$key] = $value;
+            }
+        }
+
+        $financialTransaction->update($data);
 
         return $this->successResponse([
             'transaction' => $financialTransaction

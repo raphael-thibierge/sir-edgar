@@ -19,11 +19,12 @@ export default class ExpenseTable extends React.Component {
         let previous = null;
         this.props.expenses.reverse().forEach((expense) => {
 
-            let date = Tools.dateFormater(expense.created_at);
+            let date = Tools.dateFormater(expense.date);
+            console.log(date);
+            console.log(expense.title);
 
             if (previous === null || date.toLocaleDateString() !== previous.toLocaleDateString()){
 
-                console.log(date);
                 expensesRended.push(
                     <tr key={date.toTimeString()} className="active">
                         <td colSpan={3}>
@@ -51,7 +52,7 @@ export default class ExpenseTable extends React.Component {
                     <td>{expense.title}</td>
                     <td>{expense.price}</td>
                     <td>{expense.currency}</td>
-                    <td>{Tools.dateFormatWithOffset(expense.created_at).toLocaleTimeString()}</td>
+                    <td>{Tools.dateFormatWithOffset(expense.date).toLocaleTimeString()}</td>
                     <td>
                         <CreateFinancialTransactionModal
                             expense={expense}
