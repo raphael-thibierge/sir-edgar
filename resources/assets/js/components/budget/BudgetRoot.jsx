@@ -9,7 +9,71 @@ export default class BudgetRoot extends React.Component {
         super(props);
         this.state = {
             display: false,
+            loaded: false,
+            budgets: [],
         }
+    }
+
+    componentDidMount(){
+
+        $.get('/budgets')
+            .catch(error => {
+                alert(error.statusText);
+                console.error('Fail to load financial data ');
+            })
+            .then(responseJSON => {
+                if (responseJSON.status === 'success'){
+                    // get response data
+                    const data = responseJSON.data;
+
+                    this.setState({
+                        loaded: true,
+                        budgets: data.budgets,
+                    });
+                }
+            });
+    }
+
+    onBudgetCreated(budget){
+        let budgets = this.state.budgets;
+        budgets.push(budget);
+        this.setState({
+            budgets: budgets
+        });
+    }
+
+    onBudgetDeleted(budgetId){
+
+        let budgets = [];
+
+        this.state.budgets.forEach((budget) => {
+            if (budget._id !== budgetId){
+                budgets.push(budget);
+            }
+        });
+
+        this.setState({
+            budgets: budgets
+        });
+
+    }
+
+    onBudgetEdited(budgetEdited){
+
+        let budgets = [];
+
+        this.state.budgets.forEach((budget) => {
+            if (budget._id === budgetEdited._id){
+                budgets.push(budgetEdited);
+            } else {
+                budgets.push(budget);
+            }
+        });
+
+        this.setState({
+            budgets: budgets
+        });
+
     }
 
     render(){
@@ -42,19 +106,19 @@ export default class BudgetRoot extends React.Component {
 
                     <div className="row">
                         <div className="col-xs-12">
-                            <BudgetCreateModal onCreate={this.props.onCreate}/>
+                            <BudgetCreateModal onCreate={this.onBudgetCreated.bind(this)}/>
                         </div>
                     </div>
                     <br/>
                     <div className="row">
                         <div className="col-xs-12">
                             <PanelGroup>
-                            {this.props.budgets.map((budget) => (
+                            {this.state.budgets.map((budget) => (
                                 <Budget
                                     key={budget._id}
                                     budget={budget}
-                                    onDelete={this.props.onDelete}
-                                    onEdit={this.props.onEdit}
+                                    onDelete={this.onBudgetDeleted.bind(this)}
+                                    onEdit={this.onBudgetEdited.bind(this)}
                                 />
                             ))}
                             </PanelGroup>

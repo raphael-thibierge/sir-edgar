@@ -18,16 +18,6 @@ class HomeController extends Controller
         $this->middleware('auth', ['only' => ['index', 'initialAppRequest']]);
     }
 
-    public function financialData(){
-        $user = Auth::user();
-        $budgets = $user->budgets;
-        $expenses = $user->expenses;
-        return $this->successResponse([
-            'expenses' => $expenses,
-            'budgets' => $budgets,
-        ]);
-    }
-
     public function initialAppRequest(){
         return $this->successResponse([
             'user'=> User::with('oAuthConnections')->find(Auth::user()->id),

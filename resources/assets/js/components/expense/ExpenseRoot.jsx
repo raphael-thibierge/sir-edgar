@@ -25,14 +25,21 @@ export default class ExpenseRoot extends React.Component {
 
     onSave(transaction){
         let transactions = this.state.transactions;
+        transaction.date = Tools.dateFormatWithOffset(transaction.date);
         transactions.push(transaction);
         this.setState({transactions: transactions});
     }
 
     onUpdate(transaction){
+
+        transaction.date = Tools.dateFormatWithOffset(transaction.date);
+
         let transactions = this.state.transactions;
 
         for (let i = 0; i < transactions.length; i++){
+
+
+
 
             if (transactions[i]._id === transaction._id){
                 transactions[i] = transaction;
@@ -74,7 +81,10 @@ export default class ExpenseRoot extends React.Component {
 
                     this.setState({
                         loaded: true,
-                        transactions: transactions,
+                        transactions: transactions.map((expense) => {
+                            expense.date = Tools.dateFormatWithOffset(expense.date);
+                            return expense;
+                        }),
                     });
                 }
             });
@@ -84,8 +94,7 @@ export default class ExpenseRoot extends React.Component {
         let transactions = this.state.transactions.filter((expense) => {
 
             // expense created at
-            let expense_date = Tools.dateFormater(expense.date);
-            expense_date.setMinutes(expense_date.getMinutes() - expense_date.getTimezoneOffset());
+            let expense_date = expense.date;
 
             if (this.state.start_date !== null){
                 const start = new Date(this.state.start_date);
@@ -106,9 +115,9 @@ export default class ExpenseRoot extends React.Component {
         });
 
         transactions = transactions.sort(function (transactionA, transactionB) {
-            if (Tools.dateFormater(transactionA.date) > Tools.dateFormater(transactionB.date)){
+            if (transactionA.date > transactionB.date){
                 return 1;
-            } else if (Tools.dateFormater(transactionA.date) < Tools.dateFormater(transactionB.date)){
+            } else if (transactionA.date < transactionB.date){
                 return -1;
             }
             return 0;

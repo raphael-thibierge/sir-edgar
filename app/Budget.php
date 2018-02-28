@@ -32,6 +32,7 @@ class Budget extends Model
     protected $appends = [
         'total',
         'progress',
+        'expenses'
     ];
 
     protected $fillable = [
@@ -52,6 +53,8 @@ class Budget extends Model
     public function user(){
         return $this->belongsTo('App\User');
     }
+
+
 
     public function expenses(){
 
@@ -79,6 +82,10 @@ class Budget extends Model
 
     public function getTotalAttribute(){
         return $this->expenses()->sum('price');
+    }
+
+    public function getExpensesAttribute(){
+        return $this->expenses()->get();
     }
 
     public function getProgressAttribute(){

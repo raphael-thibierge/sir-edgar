@@ -21,16 +21,9 @@ class BudgetController extends Controller
      */
     public function index()
     {
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
+        return $this->successResponse([
+            'budgets' => Auth::user()->budgets,
+        ]);
     }
 
     /**
@@ -76,17 +69,6 @@ class BudgetController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Budget $budget)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Budget  $budget
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Budget $budget)
     {
         //
     }

@@ -57,10 +57,7 @@ Route::get('/bot/requests/{botMessage}/', 'BotController@show')->name('dailogflo
 
 Route::get('/expenses/tag/{tag}', 'FinancialTransactionController@byTag')->name('expense')->middleware('auth');
 
-Route::get('/financial-data', 'HomeController@financialData')->middleware('auth');
 Route::view('finance', 'finance')->middleware('auth')->name('finance');
-
-
 
 Route::get('money-values/24h/{currency}', 'MoneyValueController@twentyFourHourValues')
     ->name('money_values.24h')

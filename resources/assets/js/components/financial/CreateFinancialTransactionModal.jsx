@@ -50,7 +50,7 @@ export default class CreateFinancialTransactionModal extends React.Component{
                 tags: Array.isArray(expense.tags) ? expense.tags.join(' ') : '',
                 currency: expense.currency,
                 price: expense.price,
-                date: expense.date ? Tool.dateFormatWithOffset(expense.date) : null,
+                date: expense.date ? expense.date : null,
             });
         }
     }

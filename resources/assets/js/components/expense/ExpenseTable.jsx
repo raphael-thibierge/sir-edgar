@@ -14,8 +14,8 @@ export default class ExpenseTable extends React.Component {
     dateLineRender(date, total){
 
         const style = {
-            borderTop: '50px solid transparent',
-            backgroundClip: 'padding-box'
+            //borderTop: '30px solid transparent',
+            //backgroundClip: 'padding-box'
         };
 
         return (
@@ -49,8 +49,7 @@ export default class ExpenseTable extends React.Component {
         let total  = 0;
 
         this.props.expenses.forEach((expense) => {
-            let date = Tools.dateFormater(expense.date);
-            console.log(date);
+            let date = expense.date;
 
             if (previous === null){
                 previous = date;
@@ -77,7 +76,7 @@ export default class ExpenseTable extends React.Component {
                     <td>{expense.title}</td>
                     <td>{expense.price}</td>
                     <td>{expense.currency}</td>
-                    <td>{Tools.dateFormater(expense.date).toLocaleTimeString()}</td>
+                    <td>{expense.date.toLocaleTimeString()}</td>
                     <td>
                         <CreateFinancialTransactionModal
                             expense={expense}

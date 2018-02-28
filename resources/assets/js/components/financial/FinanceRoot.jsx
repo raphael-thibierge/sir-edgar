@@ -8,40 +8,8 @@ export default class FinanceRoot extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loaded: false,
-            budgets: [],
-            expenses: [],
-            tab: 2,
+            tab: 1,
         };
-    }
-
-    componentDidMount(){
-
-        $.get('/financial-data')
-            .catch(error => {
-                alert(error.statusText);
-                console.error(error);
-            })
-            .then(responseJSON => {
-                if (responseJSON.status === 'success'){
-                    // get response data
-                    const data = responseJSON.data;
-
-                    this.setState({
-                        loaded: true,
-                        budgets: data.budgets,
-                        expenses: data.expenses,
-                    });
-                }
-            });
-    }
-
-    onBudgetCreated(budget){
-        let budgets = this.state.budgets;
-        budgets.push(budget);
-        this.setState({
-            budgets: budgets
-        });
     }
 
     handleSelect(eventKey) {
@@ -49,40 +17,6 @@ export default class FinanceRoot extends React.Component {
         this.setState({
             tab: eventKey
         });
-    }
-
-    onBudgetDeleted(budgetId){
-
-        let budgets = [];
-
-        this.state.budgets.forEach((budget) => {
-            if (budget._id !== budgetId){
-                budgets.push(budget);
-            }
-        });
-
-        this.setState({
-            budgets: budgets
-        });
-
-    }
-
-    onBudgetEdited(budgetEdited){
-
-        let budgets = [];
-
-        this.state.budgets.forEach((budget) => {
-            if (budget._id === budgetEdited._id){
-                budgets.push(budgetEdited);
-            } else {
-                budgets.push(budget);
-            }
-        });
-
-        this.setState({
-            budgets: budgets
-        });
-
     }
 
 
@@ -104,21 +38,13 @@ export default class FinanceRoot extends React.Component {
                     <Tabs activeKey={this.state.tab} onSelect={this.handleSelect.bind(this)}  id="page-tabs" justified>
                         <Tab eventKey={1} title="Budgets">
                             <br/>
-                            <BudgetRoot
-                                hide
-                                budgets={this.state.budgets}
-                                onCreate={this.onBudgetCreated.bind(this)}
-                                onDelete={this.onBudgetDeleted.bind(this)}
-                                onEdit={this.onBudgetEdited.bind(this)}
-                            />
+                            <BudgetRoot />
                         </Tab>
 
                         <Tab eventKey={2} title="Expenses">
                             <div className="row">
                                 <div className="col-xs-12">
-                                    <ExpenseRoot
-                                        expenses={this.state.expenses}
-                                    />
+                                    <ExpenseRoot />
                                 </div>
                             </div>
 
