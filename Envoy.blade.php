@@ -4,7 +4,7 @@
 
 @task('deploy', ['on' => ['web']])
 
-    cd ProductivityApp/
+    cd sir-edgar/
 
     php artisan down
 
