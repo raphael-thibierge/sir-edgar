@@ -19,7 +19,7 @@
         "laravel/tinker": "~1.0",
         "openclerk/coinbase-oauth2": "^0.1.0",
         "pusher/pusher-php-server": "~3.0",
-        "sentry/sentry-laravel": "^0.7.0"
+        "sentry/sentry-laravel": "^0.8.0"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

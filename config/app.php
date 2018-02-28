@@ -163,13 +163,8 @@ return [
         /*
          * Manually added
          */
-        Jenssegers\Mongodb\MongodbServiceProvider::class,
-        Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
-        BotMan\BotMan\BotManServiceProvider::class,
-
         // server monitoring
         //EricMakesStuff\ServerMonitor\ServerMonitorServiceProvider::class,
-
     ],
 
     /*
@@ -218,11 +213,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        /*
-         * Manually added
-         */
-        //'Sentry' => Sentry\SentryLaravel\SentryFacade::class,
-        //'BotMan' => \BotMan\BotMan\BotMan::class,
     ],
 
 ];
