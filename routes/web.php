@@ -66,10 +66,6 @@ Route::get('money-values/24h/{currency}', 'MoneyValueController@twentyFourHourVa
     ->name('money_values.24h')
     ->middleware('auth');
 
-Horizon::auth(function ($request) {
-    return $request->user()->isAdmin();
-});
-
 
 Route::prefix('oauth/{service}/')->group(function (){
     Route::get('authorize', 'OAuthConnectionController@oAuthAuthorize')->name('oauth.authorize');
