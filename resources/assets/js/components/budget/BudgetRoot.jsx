@@ -15,7 +15,6 @@ export default class BudgetRoot extends React.Component {
     }
 
     componentDidMount(){
-
         $.get('/budgets')
             .catch(error => {
                 alert(error.statusText);
@@ -89,23 +88,6 @@ export default class BudgetRoot extends React.Component {
 
                     <div className="row">
                         <div className="col-xs-12">
-                            <div className="alert alert-info">
-                                <p>
-                                    <Glyphicon glyph="info-sign"/> <strong>Track your budgets</strong>,
-                                    <ul>
-                                        <li>Use #tags in your expense name</li>
-                                        <li>Create budget with one or many tags</li>
-                                        <li>No tags in budget will consider all expenses</li>
-                                    </ul>
-                                </p>
-                                <p>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="row">
-                        <div className="col-xs-12">
                             <BudgetCreateModal onCreate={this.onBudgetCreated.bind(this)}/>
                         </div>
                     </div>
@@ -124,9 +106,25 @@ export default class BudgetRoot extends React.Component {
                             </PanelGroup>
                         </div>
                     </div>
+
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <div className="alert alert-info">
+                                <p>
+                                    <Glyphicon glyph="info-sign"/> <strong>Track your budgets</strong>,
+                                    <ul>
+                                        <li>Use #tags in your expense name</li>
+                                        <li>Create budget with one or many tags</li>
+                                        <li>No tags in budget will consider all expenses</li>
+                                    </ul>
+                                </p>
+                                <p>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
     }
-
 }
