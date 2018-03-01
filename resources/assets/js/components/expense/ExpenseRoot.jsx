@@ -38,9 +38,6 @@ export default class ExpenseRoot extends React.Component {
 
         for (let i = 0; i < transactions.length; i++){
 
-
-
-
             if (transactions[i]._id === transaction._id){
                 transactions[i] = transaction;
             }

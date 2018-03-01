@@ -8,7 +8,7 @@ export default class FinanceRoot extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tab: 1,
+            tab: 2,
         };
     }
 

@@ -19,7 +19,7 @@ export default class ExpenseTable extends React.Component {
         };
 
         return (
-            <tr key={date.toTimeString()} className="active" style={style}>
+            <tr key={date.toISOString()} className="active" style={style}>
                 <td >
                     <h4>
                         {Tools.getDaysOfWeek()[date.getDay()]}
@@ -55,12 +55,6 @@ export default class ExpenseTable extends React.Component {
                 previous = date;
             }
 
-            if (expense.type === 'expense'){
-                total -= expense.price;
-            } else {
-                total += expense.price;
-            }
-
             if (date.toLocaleDateString() !== previous.toLocaleDateString()){
 
                 expensesRended.push(this.dateLineRender(previous, total));
@@ -68,6 +62,12 @@ export default class ExpenseTable extends React.Component {
                 // reset daily total expense
                 previous = date;
                 total = 0;
+            }
+
+            if (expense.type === 'expense'){
+                total -= expense.price;
+            } else {
+                total += expense.price;
             }
 
 
