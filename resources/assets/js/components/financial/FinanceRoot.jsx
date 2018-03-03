@@ -2,6 +2,7 @@ import React from 'react';
 import {Image, Tabs, Tab} from 'react-bootstrap';
 import ExpenseRoot from "../expense/ExpenseRoot";
 import BudgetRoot from "../budget/BudgetRoot";
+import TagFrequencyChart from  '../expense/TagFrequencyChart';
 
 export default class FinanceRoot extends React.Component {
 
@@ -35,6 +36,8 @@ export default class FinanceRoot extends React.Component {
         return (
             <div className="row">
                 <div className="col-xs-12">
+
+
                     <Tabs activeKey={this.state.tab} onSelect={this.handleSelect.bind(this)}  id="page-tabs" justified>
                         <Tab eventKey={1} title="Budgets">
                             <br/>

@@ -84,3 +84,4 @@ Route::apiResources([
 ]);
 
 Route::get('expenses-graph-data', 'FinancialTransactionController@tagsAndLinkedTagsFromExpenses')->middleware('auth');
+Route::get('tag-frequency', 'FinancialTransactionController@expensesFrequency')->middleware('auth');

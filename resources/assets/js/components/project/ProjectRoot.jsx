@@ -9,6 +9,7 @@ import BudgetRoot from '../budget/BudgetRoot';
 import ExpenseRoot from '../expense/ExpenseRoot';
 const Network = require('../Network/Network.jsx');
 import PriceRoot from '../coinbase/PriceRoot';
+import TagFrequencyChart from '../expense/TagFrequencyChart';
 
 /**
  * Main component managing goals
@@ -305,6 +306,10 @@ export default class ProjectRoot extends React.Component {
                 return <Network route={'/expenses-graph-data'}/>;
                 break;
 
+            case 'tags_frequency':
+                return <TagFrequencyChart/>;
+                break;
+
             case 'coinbase':
                 return <PriceRoot/>;
                 break;
@@ -352,7 +357,7 @@ export default class ProjectRoot extends React.Component {
 
                 <div className="col-xs-12 col-sm-9">
 
-                    {this.state.view !== 'expenses' && this.state.view !== 'budgets'  && this.state.view !== 'coinbase' && this.state.view !== 'expense_stats' ? (
+                    {this.state.view !== 'expenses' && this.state.view !== 'budgets'  && this.state.view !== 'coinbase' && this.state.view !== 'expense_stats'  && this.state.view !== 'tags_frequency'? (
                         <ScoreGoal/>
                     ): null}
 

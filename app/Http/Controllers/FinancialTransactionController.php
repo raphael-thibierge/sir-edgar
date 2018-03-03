@@ -244,4 +244,27 @@ class FinancialTransactionController extends Controller
 
     }
 
+    public function expensesFrequency(Request $request){
+        $tag = explode(' ', $request->get('tag'));
+
+        $tagsFrequency = FinancialTransaction::raw(function ($collection) use ($tag) {
+            return $collection->aggregate([
+                ['$match' => ['tags' => [ '$in' => $tag], 'type' => 'expense']],
+                ['$group' => [
+                    '_id' => ['week' => ['$week' => '$date'], 'year' => ['$year' => '$date']],
+                    'occurrence' => ['$sum' => 1],
+                    'price' => ['$sum' => '$price'],
+                ]],
+                ['$sort' => ['_id.year' => 1, '_id.week' => 1]]
+            ]);
+        })->toArray();
+
+        return $this->successResponse([
+            'tag' => $tag,
+            'frequencies' => $tagsFrequency
+        ]);
+
+    }
+
+
 }
