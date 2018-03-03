@@ -3,14 +3,17 @@
 @section('description', config('app.name', 'Sir Edgar') . ' dashboard. Start boosting your productivity here !')
 
 @section('content')
-<div class="container">
+
     <div class="row">
-        <div id="app-finance" class="col-xs-12">
-            <img src="/images/logo-min.png" alt="" class="img-responsive img-circle img-rounded img-thumbnail">
+        <div class="col-xs-12">
+            <div id="network">
+                <p>loading..</p>
+            </div>
         </div>
     </div>
-</div>
+
+
 <script>
-    window.app = 'finance'
+    window.app = 'network'
 </script>
 @endsection

@@ -59,6 +59,7 @@ Route::get('/expenses/tag/{tag}', 'FinancialTransactionController@byTag')->name(
 
 Route::view('finance', 'finance')->middleware('auth')->name('finance');
 
+
 Route::get('money-values/24h/{currency}', 'MoneyValueController@twentyFourHourValues')
     ->name('money_values.24h')
     ->middleware('auth');
@@ -82,5 +83,4 @@ Route::apiResources([
     'financial-transactions' => 'FinancialTransactionController',
 ]);
 
-Route::get('test', 'HomeController@test');
-Route::get('test2', 'HomeController@tagsAndLinkedTagsFromExpenses');
+Route::get('expenses-graph-data', 'FinancialTransactionController@tagsAndLinkedTagsFromExpenses')->middleware('auth');
