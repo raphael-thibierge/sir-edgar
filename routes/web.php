@@ -81,3 +81,6 @@ Route::apiResources([
     'budgets' => 'BudgetController',
     'financial-transactions' => 'FinancialTransactionController',
 ]);
+
+Route::get('test', 'HomeController@test');
+Route::get('test2', 'HomeController@tagsAndLinkedTagsFromExpenses');
