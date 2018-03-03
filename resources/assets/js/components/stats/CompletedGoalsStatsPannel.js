@@ -137,7 +137,7 @@ export default class CompletedGoalsStatsPannel extends React.Component{
                                     <td>{this.state.score.total}</td>
                                 </tr>
                                 <tr>
-                                    <td>Next to achive</td>
+                                    <td>Next to achieve</td>
                                     <td>{this.state.goals.todo}</td>
                                     <td>{this.state.score.todo}</td>
                                 </tr>
