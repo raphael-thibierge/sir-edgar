@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\FinancialTransaction;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -26,5 +27,28 @@ class HomeController extends Controller
                 'cluster' => config('broadcasting.connections.pusher.options.cluster'),
             ]
         ]);
+    }
+
+    public function linkedTags($initialTag){
+
+        $linkedTags = FinancialTransaction::whereRaw(['tags' => $initialTag])->pluck('tags')->collapse()->unique();
+
+        $linkedTagsWithWeigth = [];
+
+        foreach ($linkedTags as $tag){
+            if ($tag !== $initialTag)
+            $linkedTagsWithWeigth[$tag] = FinancialTransaction::whereRaw(['tags' => $tag])->count();
+        }
+
+        return $linkedTagsWithWeigth;
+
+    }
+
+
+
+    public function test(){
+
+
+
     }
 }

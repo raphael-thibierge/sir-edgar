@@ -7,6 +7,7 @@ import ResponsiveSideBar from '../generic/ResponsiveSideBar.jsx';
 import NewProjectRoot from '../project/NewProjectRoot.jsx';
 import BudgetRoot from '../budget/BudgetRoot';
 import ExpenseRoot from '../expense/ExpenseRoot';
+const Network = require('../Network/Network.jsx');
 import PriceRoot from '../coinbase/PriceRoot';
 
 /**
@@ -300,6 +301,10 @@ export default class ProjectRoot extends React.Component {
                 return <ExpenseRoot/>;
                 break;
 
+            case 'expense_stats':
+                return <Network route={'/expenses-graph-data'}/>;
+                break;
+
             case 'coinbase':
                 return <PriceRoot/>;
                 break;
@@ -347,7 +352,7 @@ export default class ProjectRoot extends React.Component {
 
                 <div className="col-xs-12 col-sm-9">
 
-                    {this.state.view !== 'expenses' && this.state.view !== 'budgets'  && this.state.view !== 'coinbase' ? (
+                    {this.state.view !== 'expenses' && this.state.view !== 'budgets'  && this.state.view !== 'coinbase' && this.state.view !== 'expense_stats' ? (
                         <ScoreGoal/>
                     ): null}
 

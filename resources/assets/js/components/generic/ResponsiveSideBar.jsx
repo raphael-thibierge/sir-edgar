@@ -79,6 +79,11 @@ export default class ResponsiveSideBar extends React.Component{
                     <div>Finance</div>
                 </SeparatorTitle>
 
+                <Nav key={'expense_stats'} id={'expense_stats'}>
+                    <NavIcon><SvgIcon size={20} icon={ic_equalizer}/></NavIcon>
+                    <NavText>Expenses graphe</NavText>
+                </Nav>
+
                 <Nav id="budgets">
                     <NavIcon><SvgIcon size={20} icon={ic_work}/></NavIcon>
                     <NavText>Budgets</NavText>
@@ -87,11 +92,6 @@ export default class ResponsiveSideBar extends React.Component{
                 <Nav id="expenses">
                     <NavIcon><SvgIcon size={20} icon={ic_attach_money}/></NavIcon>
                     <NavText>Expenses</NavText>
-                </Nav>
-
-                <Nav id="coinbase">
-                    <NavIcon><SvgIcon size={20} icon={bitcoin}/></NavIcon>
-                    <NavText>Coinbase</NavText>
                 </Nav>
 
             </SideNav>
