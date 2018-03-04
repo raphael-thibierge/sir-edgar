@@ -204,7 +204,7 @@ class FinancialTransactionController extends Controller
                 'label' => $tagSlug,
                 'color' => 'blue',
                 'radius' => 15,
-                'size' => 20  + ($tag['price']/20),
+                'size' => 15  + ($tag['price']/10),
                 'occurence' => $tag['occurrence'],
                 'mass' => 1+(2/($tag['occurrence'])),
                 'font' => [
