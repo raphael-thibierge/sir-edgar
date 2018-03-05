@@ -2,8 +2,6 @@ import React from 'react';
 import {} from 'react-bootstrap';
 import CreateFinancialTransactionModal from "../financial/CreateFinancialTransactionModal";
 import Tools from '../Tools';
-import ExpensesTagsNetwork from './ExpensesTagsNetwork';
-
 
 export default class ExpenseTable extends React.Component {
 
@@ -100,7 +98,6 @@ export default class ExpenseTable extends React.Component {
             <div className="row">
                 <div className="col-xs-12">
                     <div className="table-responsive">
-                        <ExpensesTagsNetwork/>
                         <table className="table">
                             <tbody>
                                 {expensesRended.reverse()}

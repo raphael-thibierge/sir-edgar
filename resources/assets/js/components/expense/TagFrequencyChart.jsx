@@ -34,29 +34,59 @@ export default class TagFrequencyChart extends React.Component {
             .then(responseJSON => {
                 if (responseJSON.status === 'success'){
 
+                    // https://stackoverflow.com/questions/16590500/javascript-calculate-date-from-week-number
+                    function getDateOfISOWeek(w, y) {
+                        let simple = new Date(y, 0, 1 + (w - 1) * 7);
+                        let dow = simple.getDay();
+                        let ISOweekStart = simple;
+                        if (dow <= 4)
+                            ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+                        else
+                            ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+                        return ISOweekStart;
+                    }
+
+                    let frequencies = [];
+
+                    let totalPrice  = 0;
+                    let totalOccurence  = 0;
+
+
+                    if (responseJSON.data.frequencies.length > 0){
+                        let firstFrenquency = responseJSON.data.frequencies[0];
+                        let previous = getDateOfISOWeek(firstFrenquency._id.week, firstFrenquency._id.year);
+
+                        responseJSON.data.frequencies.forEach(frequency => {
+
+                            let date = getDateOfISOWeek(frequency._id.week, frequency._id.year);
+
+                            while (previous < date){
+                                frequencies.push([new Date(previous), 0, 0]);
+                                previous.setDate(previous.getDate()+7);
+                            }
+
+
+                            previous.setDate(previous.getDate()+7);
+                            //previous = date;
+
+                            frequencies.push([
+                                date,
+                                frequency.occurrence,
+                                frequency.price,
+                            ]);
+                        });
+
+                    }
+
+
+
+
                     this.setState({
                         loaded: true,
                         tag: responseJSON.data.tag,
-                        frequencies: responseJSON.data.frequencies.map(frequency => {
-
-                            // https://stackoverflow.com/questions/16590500/javascript-calculate-date-from-week-number
-                            function getDateOfISOWeek(w, y) {
-                                let simple = new Date(y, 0, 1 + (w - 1) * 7);
-                                let dow = simple.getDay();
-                                let ISOweekStart = simple;
-                                if (dow <= 4)
-                                    ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
-                                else
-                                    ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
-                                return ISOweekStart;
-                            }
-
-                            return[
-                                getDateOfISOWeek(frequency._id.week, frequency._id.year),
-                                frequency.occurrence,
-                                frequency.price,
-                            ];
-                        }),
+                        frequencies: frequencies,
+                        averagePrice: frequencies.length > 0 ? frequencies.sum(2)/frequencies.length : 0,
+                        averageOccurrence: frequencies.length > 0 ? frequencies.sum(1)/frequencies.length : 0,
                     });
                 }
             });
