@@ -76,6 +76,14 @@ export default class TagFrequencyChart extends React.Component {
                             ]);
                         });
 
+                        let today = new Date();
+                        today.setDate(today.getDate()-today.getDay()+1);
+
+                        while (previous < today){
+                            frequencies.push([new Date(previous), 0, 0]);
+                            previous.setDate(previous.getDate()+7);
+                        }
+
                     }
 
 
@@ -176,7 +184,9 @@ export default class TagFrequencyChart extends React.Component {
                             />
                         </div>
                     </div>
-                    : null}
+                : this.state.tag === '' ? null :
+                    <div className="alert alert-danger">Not any expenses found with this tag(s)</div>
+                }
 
                 </div>
             </div>
