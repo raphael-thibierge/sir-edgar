@@ -16,6 +16,7 @@ use Jenssegers\Mongodb\Relations\HasMany;
  * @property int daily_score_goal
  * @property mixed projects
  * @property Collection budgets
+ * @property Collection expenses
  */
 class User extends \Jenssegers\Mongodb\Auth\User
 {

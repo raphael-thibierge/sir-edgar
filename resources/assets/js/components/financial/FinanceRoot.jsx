@@ -48,7 +48,6 @@ export default class FinanceRoot extends React.Component {
                                     <ExpenseRoot />
                                 </div>
                             </div>
-
                         </Tab>
                     </Tabs>
                 </div>

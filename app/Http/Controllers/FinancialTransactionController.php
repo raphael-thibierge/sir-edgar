@@ -249,9 +249,13 @@ class FinancialTransactionController extends Controller
 
         $tagsFrequency = FinancialTransaction::raw(function ($collection) use ($tag) {
             return $collection->aggregate([
-                ['$match' => ['tags' => [ '$in' => $tag], 'type' => 'expense']],
+                ['$match' => [
+                    'tags' => [ '$in' => $tag],
+                    'type' => 'expense',
+                    'user_id' => Auth::user()->id,
+                ]],
                 ['$group' => [
-                    '_id' => ['week' => ['$week' => '$date'], 'year' => ['$year' => '$date']],
+                    '_id' => ['week' => ['$isoWeek' => '$date'], 'year' => ['$isoWeekYear' => '$date']],
                     'occurrence' => ['$sum' => 1],
                     'price' => ['$sum' => '$price'],
                 ]],
@@ -263,8 +267,5 @@ class FinancialTransactionController extends Controller
             'tag' => $tag,
             'frequencies' => $tagsFrequency
         ]);
-
     }
-
-
 }
