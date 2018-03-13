@@ -44,6 +44,8 @@ class GoalController extends Controller
      */
     public function store(Request $request)
     {
+        //$this->authorize('create', Goal::class);
+
         $this->validate($request, [
             'title' => 'required',
             'score' => 'required|integer|max:5',
@@ -66,18 +68,21 @@ class GoalController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param Goal $goal
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Goal $goal)
     {
+        $this->authorize($goal);
+
         $this->validate($request, [
             'title' => 'string',
             'score' => 'integer|max:5',
         ]);
 
-        $goal =  Auth::user()->goals()->find($id)->update([
+        $goal->update([
             "title" => $request->get('title'),
             "score" => (int)$request->get('score'),
         ]);
@@ -86,15 +91,18 @@ class GoalController extends Controller
             'goal'  => $goal
         ]);
     }
+
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param Goal $goal
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
-    public function updateDetails(Request $request, $id)
+    public function updateDetails(Request $request, Goal $goal)
     {
+        $this->authorize('update', $goal);
 
         $this->validate($request, [
             'due_date' => 'present',
@@ -132,9 +140,7 @@ class GoalController extends Controller
             $updates ['notes'] = $due_date;
         }
 
-
-        $goal =  Auth::user()->goals()->find($id)->update($updates);
-
+        $goal->update($updates);
 
         return $this->successResponse([
             'goal'  => $goal,
@@ -150,6 +156,8 @@ class GoalController extends Controller
      */
     public function destroy(Goal $goal)
     {
+        $this->authorize($goal);
+
         if ($goal->getIsCompletedAttribute()){
             broadcast(new GoalDeleted($goal));
         }
@@ -165,6 +173,7 @@ class GoalController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function complete(Request $request, Goal $goal){
+        $this->authorize('update', $goal);
         $goal->setCompletedAndSave();
         return $this->successResponse();
     }
@@ -228,6 +237,7 @@ class GoalController extends Controller
 
 
     public function reComplete(Goal $goal){
+        $this->authorize('update', $goal);
 
         if ($goal->getIsCompletedAttribute() == true){
 
@@ -247,6 +257,7 @@ class GoalController extends Controller
     }
 
     public function setToday(Request $request, Goal $goal){
+        $this->authorize('update', $goal);
 
         $this->validate($request, [
             'today' => 'required|in:true,false'

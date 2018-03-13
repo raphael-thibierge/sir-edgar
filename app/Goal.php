@@ -17,6 +17,7 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  * @property Project project
  * @property int score
  * @property User user
+ * @property string user_id
  */
 class Goal extends Model
 {
