@@ -162,7 +162,7 @@ class FinancialTransactionController extends Controller
                     '$group' => [
                         '_id' => '$tags',
                         'price' => ['$sum' => '$price'],
-                        'occurrence' => ['$sum' => 1,],
+                        'occurrence' => ['$sum' => 1]
                     ]
                 ],[
                     '$graphLookup' => [
@@ -182,8 +182,6 @@ class FinancialTransactionController extends Controller
                 ]
             ]);
         })->toArray();
-
-
 
         $nodes = [];
         $arrows = [];
