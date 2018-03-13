@@ -34,6 +34,8 @@ class BudgetController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Budget::class);
+
         $user = Auth::user();
 
         $this->validate($request, [
@@ -70,7 +72,7 @@ class BudgetController extends Controller
      */
     public function show(Budget $budget)
     {
-        //
+        $this->authorize($budget);
     }
 
     /**
@@ -82,6 +84,7 @@ class BudgetController extends Controller
      */
     public function update(Request $request, Budget $budget)
     {
+        $this->authorize($budget);
         $budget->update($request->all());
         return $this->successResponse();
     }
@@ -94,6 +97,7 @@ class BudgetController extends Controller
      */
     public function destroy(Budget $budget)
     {
+        $this->authorize($budget);
         $budget->delete();
         return $this->successResponse();
     }
