@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Conversations;
-
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Conversation;
+use BotMan\BotMan\Messages\Conversations\Conversation;
+use BotMan\BotMan\Messages\Incoming\Answer;
 
 /**
  * Created by PhpStorm.

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Coinbase\Wallet\Resource\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class FinancialTransactionController extends Controller
 {
@@ -29,21 +30,6 @@ class FinancialTransactionController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function byTag($tag)
-    {
-        $user = Auth::user();
-
-        $expense = $user->financialTransactions()->where('tags', '=', $tag)->get();
-
-        return view('expenses.index', ['expenses' => $expense]);
-
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -51,6 +37,7 @@ class FinancialTransactionController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', FinancialTransaction::class);
         $this->validate($request, [
             'title'         => 'required|string',
             'description'   => 'present|string|nullable',
@@ -94,6 +81,8 @@ class FinancialTransactionController extends Controller
      */
     public function show(FinancialTransaction $financialTransaction)
     {
+        $this->authorize($financialTransaction);
+
         return $this->successResponse([
             'transaction' => $financialTransaction
         ]);
@@ -108,6 +97,8 @@ class FinancialTransactionController extends Controller
      */
     public function update(Request $request, FinancialTransaction $financialTransaction)
     {
+        $this->authorize($financialTransaction);
+
         $this->validate($request, [
             'title'         => 'required|string',
             'description'   => 'present|string|nullable',
@@ -135,6 +126,7 @@ class FinancialTransactionController extends Controller
 
         $financialTransaction->update($data);
 
+
         return $this->successResponse([
             'transaction' => $financialTransaction
         ]);
@@ -148,6 +140,8 @@ class FinancialTransactionController extends Controller
      */
     public function destroy(FinancialTransaction $financialTransaction)
     {
+        $this->authorize($financialTransaction);
+
         $financialTransaction->delete();
         return $this->successResponse();
     }

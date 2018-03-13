@@ -11,6 +11,7 @@ $factory->define(App\FinancialTransaction::class, function (Faker $faker) {
         'description' => $faker->text,
         'type' => 'expense',
         'currency' => 'CAD',
+        'tags' => $faker->randomElements(['a', 'b', 'c', 'd'], 2)
     ];
 });
 

@@ -14,6 +14,7 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  * @property array|mixed tags
  * @property string title
  * @property Carbon created_at
+ * @property string user_id
  */
 class FinancialTransaction extends Model
 {

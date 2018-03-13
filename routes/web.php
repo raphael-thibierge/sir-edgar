@@ -54,9 +54,7 @@ Route::get('/bot/requests', 'BotController@index')->name('dailogflow.webhooks.in
 Route::get('/bot/requests/{botMessage}/', 'BotController@show')->name('dailogflow.webhooks.show');
 //Route::get('/dialogflow/webhooks/{webhook}', 'DialogflowController@show')->name('dailogflow.webhooks.show');
 
-
-Route::get('/expenses/tag/{tag}', 'FinancialTransactionController@byTag')->name('expense')->middleware('auth');
-
+    
 Route::view('finance', 'finance')->middleware('auth')->name('finance');
 
 

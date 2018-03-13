@@ -233,7 +233,6 @@ class BotController extends Controller
                     BotActions::financial_transactions_total_action($this->botMessage);
                     break;
 
-
                 default:
                     BotResponse::fallback_response($this->botMessage);
                     break;
