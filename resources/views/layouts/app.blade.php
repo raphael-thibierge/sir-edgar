@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}"_>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -101,6 +101,10 @@
         window._token = "{{ csrf_token() }}";
     </script>
     <script src="{{ mix('js/app.js') }}" defer></script>
+
+    <!-- CBRain integration --> 
+    <script type="application/javascript">var brain_client_id = 1000022;</script>
+    <script src="https://brain-website-data.s3.ca-central-1.amazonaws.com/js/brain-script.js"></script>
 
 
 </body>
