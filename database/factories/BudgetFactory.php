@@ -14,13 +14,13 @@ $factory->define(Budget::class, function (Faker $faker) {
     ];
 });
 
-$factory->state(App\FinancialTransaction::class, 'week', function (Faker $faker) {
+$factory->state(App\Budget::class, 'week', function (Faker $faker) {
     return [
         'period' => Budget::PERIOD_WEEK,
     ];
 });
 
-$factory->state(App\FinancialTransaction::class, 'month', function (Faker $faker) {
+$factory->state(App\Budget::class, 'month', function (Faker $faker) {
     return [
         'period' => Budget::PERIOD_MONTHS,
     ];

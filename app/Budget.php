@@ -71,8 +71,8 @@ class Budget extends Model
             where('user_id', $this->user_id)
             ->where('type', FinancialTransaction::EXPENSE)
             ->where('currency', $this->currency)
-            ->where('created_at', '>=', $startDate)
-            ->where('created_at', '<', $endDate);
+            ->where('date', '>=', $startDate)
+            ->where('date', '<', $endDate);
 
         if (isset($this->tags) && count($this->tags) > 0){
             $query->whereRaw(['tags' => ['$in' => $this->tags]]);
