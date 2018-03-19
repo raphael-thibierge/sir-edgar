@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "name": "Sir Edgar",
+    "description": "Personal virtual assistant ",
+    "keywords": ["assistant", "bot", "productivity"],
     "license": "MIT",
     "type": "project",
     "require": {
