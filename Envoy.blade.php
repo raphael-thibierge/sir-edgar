@@ -4,9 +4,7 @@
 
 @task('deploy', ['on' => ['web']])
 
-    cd ProductivityApp/
-
-    php artisan horizon:terminate
+    cd sir-edgar/
 
     php artisan down
 
@@ -23,6 +21,10 @@
     php artisan migrate --force
 
     php artisan config:cache
+
+    php artisan route:cache
+
+    php artisan horizon:terminate
 
     php artisan up
 

@@ -7,7 +7,9 @@ import ResponsiveSideBar from '../generic/ResponsiveSideBar.jsx';
 import NewProjectRoot from '../project/NewProjectRoot.jsx';
 import BudgetRoot from '../budget/BudgetRoot';
 import ExpenseRoot from '../expense/ExpenseRoot';
+const Network = require('../Network/Network.jsx');
 import PriceRoot from '../coinbase/PriceRoot';
+import TagFrequencyChart from '../expense/TagFrequencyChart';
 
 /**
  * Main component managing goals
@@ -29,8 +31,6 @@ export default class ProjectRoot extends React.Component {
     getInitialState(){
         return {
             projects: [],
-            budgets: [],
-            expenses: [],
             newProjectCollapseOpen: false,
             newProjectTitle: '',
             view: 'stats',
@@ -43,72 +43,6 @@ export default class ProjectRoot extends React.Component {
      */
     componentDidMount(){
         this.request();
-        $.get('/financial-data')
-            .catch(error => {
-                alert(error.statusText);
-                console.error(error);
-            })
-            .then(responseJSON => {
-                if (responseJSON.status === 'success'){
-                    // get response data
-                    const data = responseJSON.data;
-
-                    this.setState({
-                        loaded: true,
-                        budgets: data.budgets,
-                        expenses: data.expenses,
-                    });
-                }
-            });
-    }
-
-    onBudgetCreated(budget){
-        let budgets = this.state.budgets;
-        budgets.push(budget);
-        this.setState({
-            budgets: budgets
-        });
-    }
-
-    handleSelect(eventKey) {
-        event.preventDefault();
-        this.setState({
-            tab: eventKey
-        });
-    }
-
-    onBudgetDeleted(budgetId){
-
-        let budgets = [];
-
-        this.state.budgets.forEach((budget) => {
-            if (budget._id !== budgetId){
-                budgets.push(budget);
-            }
-        });
-
-        this.setState({
-            budgets: budgets
-        });
-
-    }
-
-    onBudgetEdited(budgetEdited){
-
-        let budgets = [];
-
-        this.state.budgets.forEach((budget) => {
-            if (budget._id === budgetEdited._id){
-                budgets.push(budgetEdited);
-            } else {
-                budgets.push(budget);
-            }
-        });
-
-        this.setState({
-            budgets: budgets
-        });
-
     }
 
     /**
@@ -123,8 +57,6 @@ export default class ProjectRoot extends React.Component {
             error: (error) => {console.error(error); alert(error.statusText)},
         });
     }
-
-
 
     /**
      * AJAX goal loading success method that store returned goals in component state
@@ -363,19 +295,19 @@ export default class ProjectRoot extends React.Component {
                 break;
 
             case 'budgets':
-                return <BudgetRoot
-                    hide
-                    budgets={this.state.budgets}
-                    onCreate={this.onBudgetCreated.bind(this)}
-                    onDelete={this.onBudgetDeleted.bind(this)}
-                    onEdit={this.onBudgetEdited.bind(this)}
-                />;
+                return <BudgetRoot/>;
                 break;
 
             case 'expenses':
-                return <ExpenseRoot
-                    expenses={this.state.expenses}
-                />;
+                return <ExpenseRoot/>;
+                break;
+
+            case 'expense_stats':
+                return <Network route={'/expenses-graph-data'}/>;
+                break;
+
+            case 'tags_frequency':
+                return <TagFrequencyChart/>;
                 break;
 
             case 'coinbase':
@@ -425,7 +357,7 @@ export default class ProjectRoot extends React.Component {
 
                 <div className="col-xs-12 col-sm-9">
 
-                    {this.state.view !== 'expenses' && this.state.view !== 'budgets'  && this.state.view !== 'coinbase' ? (
+                    {this.state.view !== 'expenses' && this.state.view !== 'budgets'  && this.state.view !== 'coinbase' && this.state.view !== 'expense_stats'  && this.state.view !== 'tags_frequency'? (
                         <ScoreGoal/>
                     ): null}
 

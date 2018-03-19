@@ -1,7 +1,7 @@
 // get react from dependencies
 const React = require('react');
 const ReactDOM = require('react-dom');
-
+const Network = require('./components/Network/Network.jsx');
 import AppRoot from './AppRoot';
 
 import 'react-datetime/css/react-datetime.css';
@@ -33,6 +33,20 @@ if (window.app){
             ReactDOM.render(
                 React.createElement(AppRoot, {app: 'productivity'}),
                 document.getElementById('app-productivity')
+            );
+            break;
+
+        case 'user':
+            ReactDOM.render(
+                React.createElement(AppRoot, {app: 'user'}),
+                document.getElementById('app-user')
+            );
+            break;
+
+        case 'network':
+            ReactDOM.render(
+                React.createElement(Network, {route: '/test2'}),
+                document.getElementById('network')
             );
             break;
 

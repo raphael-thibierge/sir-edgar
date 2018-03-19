@@ -21,16 +21,9 @@ class BudgetController extends Controller
      */
     public function index()
     {
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
+        return $this->successResponse([
+            'budgets' => Auth::user()->budgets,
+        ]);
     }
 
     /**
@@ -41,6 +34,8 @@ class BudgetController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Budget::class);
+
         $user = Auth::user();
 
         $this->validate($request, [
@@ -77,18 +72,7 @@ class BudgetController extends Controller
      */
     public function show(Budget $budget)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Budget  $budget
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Budget $budget)
-    {
-        //
+        $this->authorize($budget);
     }
 
     /**
@@ -100,6 +84,7 @@ class BudgetController extends Controller
      */
     public function update(Request $request, Budget $budget)
     {
+        $this->authorize($budget);
         $budget->update($request->all());
         return $this->successResponse();
     }
@@ -112,6 +97,7 @@ class BudgetController extends Controller
      */
     public function destroy(Budget $budget)
     {
+        $this->authorize($budget);
         $budget->delete();
         return $this->successResponse();
     }

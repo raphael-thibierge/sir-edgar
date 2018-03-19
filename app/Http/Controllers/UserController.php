@@ -18,7 +18,16 @@ class UserController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('admin')->only(['index', 'destroy']);
+    }
 
+    /**
+     *
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function getApiUser(Request $request){
+        return $request->user();
     }
 
     /**
@@ -76,6 +85,27 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
 
+    }
+
+    public function accountSettingsUpdate(Request $request){
+        $this->validate($request, [
+            'timezone' => 'required|string',
+            'email_daily_report' => 'required',
+            'email_weekly_report' => 'required',
+        ]);
+
+        $user = Auth::user();
+
+        $user->update([
+                'timezone' => $request->get('timezone'),
+                'email_daily_report' => $request->get('email_daily_report') == 'true',
+                'email_weekly_report' => $request->get('email_weekly_report') == 'true',
+        ]);
+
+        return $this->successResponse([
+            'user' => $user,
+            'timezone' => $request->get('timezone'),
+        ]);
     }
 
     public function updateDailyScoreGoal(Request $request){

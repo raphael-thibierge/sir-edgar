@@ -134,14 +134,15 @@ class BotController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function dialogflow(Request $request){
-        $this->request = $request;
+        $this->botMessage = BotMessage::createFromRequest($request);
+
         event(new PusherDebugEvent([
             'method' => 'DialogflowController@dialogflow1',
             'request' => $request->toArray(),
         ]));
 
-        $this->botMessage= BotMessage::createFromRequest($request);
 
+        $this->request = $request;
 
         $this->getUserFromFacebook();
 
@@ -152,6 +153,7 @@ class BotController extends Controller
         }
 
         $responseData = null;
+
         try {
             switch ($action) {
 
@@ -231,7 +233,6 @@ class BotController extends Controller
                     BotActions::financial_transactions_total_action($this->botMessage);
                     break;
 
-
                 default:
                     BotResponse::fallback_response($this->botMessage);
                     break;
@@ -243,8 +244,6 @@ class BotController extends Controller
         } catch (GoalNameNotFound $exception){
             $this->botMessage->buildTextResponse($exception->getNiceMessage());
         }
-
-        $this->botMessage->save();
 
         return response()->json($this->botMessage->response);
     }

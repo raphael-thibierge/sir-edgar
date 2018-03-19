@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Budget;
 use App\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +22,10 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Auth::user()->projects()->with('goals')->get();
+        $projects = Auth::user()->projects()
+            ->orderBy('title', 'ASC')
+            ->with('goals')
+            ->get();
 
         return $this->successResponse([
             'projects' => $projects,
@@ -36,6 +40,7 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Project::class);
         $this->validate($request, [
             'title' => 'required',
         ]);
@@ -62,7 +67,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+        $this->authorize($project);
     }
 
     /**
@@ -74,6 +79,7 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
+        $this->authorize($project);
 
         $this->validate($request, [
             'title' => 'required|string',
@@ -99,6 +105,6 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $this->authorize($project);
     }
 }

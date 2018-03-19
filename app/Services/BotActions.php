@@ -312,6 +312,7 @@ class BotActions
             'currency'  => strtoupper($unitCurrency['currency']),
             'price'     => (float)$unitCurrency['amount'],
             'type'      => $type,
+            'date'      => Carbon::now($botMessage->user->timezone)
         ]);
         $expense->tagsEdit();
 
@@ -341,8 +342,8 @@ class BotActions
 
         $total = $botMessage->user->financialTransactions()
             ->where('type', $type)
-            ->where('created_at', '>=', $startDate)
-            ->where('created_at', '<', $stopDate)
+            ->where('date', '>=', $startDate)
+            ->where('date', '<', $stopDate)
             ->sum('price');
 
         $action = $type === FinancialTransaction::EXPENSE ? 'spent' : (

@@ -22,7 +22,8 @@ class BotMessage extends Model
 
     public static function createFromRequest(Request $request): BotMessage{
 
-        $message = BotMessage::create([
+        // new bot message but will never be stored in database
+        $message = new BotMessage([
             'request' => $request->toArray()
         ]);
 

@@ -93,6 +93,7 @@ export default class AjaxEditableValue extends React.Component {
                         placeholder=""
                         onChange={(e) => {this.setState({ value: e.target.value })}}
                         onKeyPress={this.handleKeyPress.bind(this)}
+                        autoFocus
                     />
                 </div>
 

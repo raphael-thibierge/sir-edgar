@@ -1,32 +1,97 @@
 import React from 'react';
 import ExpenseTable from './ExpenseTable';
-import DayPicker from 'react-day-picker';
 import Tools from '../Tools'
-
-import {Glyphicon} from 'react-bootstrap';
+import CreateFinancialTransactionModal from "../financial/CreateFinancialTransactionModal";
+import {Glyphicon, FormGroup} from 'react-bootstrap';
+import Datetime from 'react-datetime';
 
 export default class ExpenseRoot extends React.Component {
 
     constructor(props) {
         super(props);
+        let startDate = new Date();
+        startDate.setSeconds(0);
+        startDate.setMinutes(0);
+        startDate.setHours(0);
+        startDate.setMonth(startDate.getMonth() -1);
+
         this.state = {
-            start_date: null,
+            start_date: startDate,
             end_date: null,
+            transactions: [],
         }
 
     }
 
-    componentDidMount(){
+    onSave(transaction){
+        let transactions = this.state.transactions;
+        transaction.date = Tools.dateFormatWithOffset(transaction.date);
+        transactions.push(transaction);
+        this.setState({transactions: transactions});
+    }
+
+    onUpdate(transaction){
+
+        transaction.date = Tools.dateFormatWithOffset(transaction.date);
+
+        let transactions = this.state.transactions;
+
+        for (let i = 0; i < transactions.length; i++){
+
+            if (transactions[i]._id === transaction._id){
+                transactions[i] = transaction;
+            }
+        }
+
+        this.setState({
+            transactions: transactions
+        });
 
     }
 
+    componentDidMount(){
+        $.get('/financial-transactions')
+            .catch(error => {
+                alert(error.statusText);
+                console.error(error);
+            })
+            .then(responseJSON => {
+                if (responseJSON.status === 'success'){
+                    // get response data
+                    const transactions = responseJSON.data.transactions;
+
+                    function totalTransactions() {
+                        let total = 0;
+                        for ( let i = 0, _len = this.length; i < _len; i++ ) {
+
+                            if (this[i].type === 'entrance'){
+                                total += this[i].price;
+                            } else if (this[i].type === 'expense'){
+                                total -= this[i].price;
+                            }
+
+                        }
+                        return parseFloat(total.toFixed(2));
+                    }
+
+                    transactions.__proto__.totalTransactions = totalTransactions;
+
+                    this.setState({
+                        loaded: true,
+                        transactions: transactions.map((expense) => {
+                            expense.date = Tools.dateFormatWithOffset(expense.date);
+                            return expense;
+                        }),
+                    });
+                }
+            });
+    }
+
     filter(){
-        console.log(this.state.start_date);
-        return this.props.expenses.filter((expense) => {
+        let transactions = this.state.transactions.filter((expense) => {
 
             // expense created at
-            var expense_date = Tools.dateFormater(expense.created_at);
-            expense_date.setMinutes(expense_date.getMinutes() - expense_date.getTimezoneOffset());
+            let expense_date = expense.date;
 
             if (this.state.start_date !== null){
                 const start = new Date(this.state.start_date);
@@ -45,11 +110,23 @@ export default class ExpenseRoot extends React.Component {
             }
             return true;
         });
+
+        transactions = transactions.sort(function (transactionA, transactionB) {
+            if (transactionA.date > transactionB.date){
+                return 1;
+            } else if (transactionA.date < transactionB.date){
+                return -1;
+            }
+            return 0;
+        });
+
+        return transactions;
+
     }
 
     render(){
 
-        const expenses = this.filter();
+        const transactions = this.filter();
 
         return (
             <div className="row">
@@ -63,40 +140,50 @@ export default class ExpenseRoot extends React.Component {
 
                     <div className="row">
                         <div className="col-xs-12">
+                            <FormGroup>
+                                <CreateFinancialTransactionModal
+                                    onSave={this.onSave.bind(this)}
+                                />
+                            </FormGroup>
+                        </div>
+                    </div>
+
+                    {this.state.transactions.length > 0 ? (
+                        <div className="row text-center">
+                            <div className="col-xs-6">
+                                <FormGroup>
+                                    <Datetime
+                                        onChange={(day) => {this.setState({start_date: day && day !== '' ? day.toDate(): null})}}
+                                        value={this.state.start_date}
+                                    />
+                                </FormGroup>
+                            </div>
+
+                            <div className="col-xs-6">
+                                <FormGroup>
+                                    <Datetime
+                                        onChange={(day) => {this.setState({end_date: day && day !== '' ? day.toDate(): null})}}
+                                        value={this.state.end_date}
+                                    />
+                                </FormGroup>
+                            </div>
+
+                            <ExpenseTable
+                                expenses={transactions}
+                                onUpdate={this.onUpdate.bind(this)}
+                            />
+                        </div>
+                    ): null}
+
+                    <div className="row">
+                        <div className="col-xs-12">
                             <div className="alert alert-info">
-                                <p><Glyphicon glyph="info-sign"/> When spending money, <strong>ask edgar on messenger</strong> to save it :</p>
+                                <p><Glyphicon glyph="info-sign"/> When spending money, <strong>ask edgar on messenger</strong> to save it for you :</p>
                                 <p><em>"Add a new expense of 10.2 CAD #lunch at #restaurant with #friends"</em></p>
                             </div>
                         </div>
                     </div>
-                    {this.props.expenses.length > 0 ? (
-                        <div className="row text-center">
-                            <div className="col-xs-6">
-                                <DayPicker
-                                    title="Start"
-                                    modifiersStyles={{marginLeft: 0}}
-                                    selectedDays={[this.state.start_date]}
-                                    onDayClick={(day) => {this.setState({start_date: day})}}
-                                    firstDayOfWeek={1}
-                                    numberOfMonths={1}
-                                    fixedWeeks
-                                />
-                            </div>
 
-                            <div className="col-xs-6">
-                                <DayPicker
-                                    modifiersStyles={{marginRight: 0}}
-                                    selectedDays={[this.state.end_date]}
-                                    onDayClick={(day) => {this.setState({end_date: day})}}
-                                    firstDayOfWeek={1}
-                                    numberOfMonths={1}
-                                    fixedWeeks
-                                />
-                            </div>
-
-                            <ExpenseTable expenses={expenses}/>
-                        </div>
-                    ): null}
                 </div>
             </div>
         );

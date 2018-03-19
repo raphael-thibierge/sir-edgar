@@ -20,5 +20,17 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
+        'timezone' => $faker->timezone,
+        'daily_score_goal' => 5,
+        'email_daily_report' => $faker->boolean,
+        'email_weekly_report' => $faker->boolean,
+        'morning_report' => $faker->boolean,
+        'admin' => false,
+    ];
+});
+
+$factory->state(App\FinancialTransaction::class, 'admin', function ($faker) {
+    return [
+        'admin' => 'true',
     ];
 });

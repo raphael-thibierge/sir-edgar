@@ -3,6 +3,7 @@
 namespace App;
 
 
+use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 
@@ -12,6 +13,8 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  * @property mixed currency
  * @property array|mixed tags
  * @property string title
+ * @property Carbon created_at
+ * @property string user_id
  */
 class FinancialTransaction extends Model
 {
@@ -31,10 +34,17 @@ class FinancialTransaction extends Model
         'tags',
         'currency',
         'price',
+        'date',
     ];
 
     protected $dates = [
-        'created_at'
+        'date',
+        'created_at',
+        'updated_at',
+    ];
+
+    protected $casts = [
+        'price' => 'float'
     ];
 
     /**

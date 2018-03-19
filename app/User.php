@@ -16,8 +16,9 @@ use Jenssegers\Mongodb\Relations\HasMany;
  * @property int daily_score_goal
  * @property mixed projects
  * @property Collection budgets
+ * @property Collection expenses
  */
-class   User extends \Jenssegers\Mongodb\Auth\User
+class User extends \Jenssegers\Mongodb\Auth\User
 {
     use Notifiable;
 
@@ -83,6 +84,10 @@ class   User extends \Jenssegers\Mongodb\Auth\User
      */
     public function goals() : HasMany{
         return $this->hasMany('App\Goal');
+    }
+
+    public function completedGoals(): HasMany{
+        return $this->goals()->whereNotNull('completed_at');
     }
 
     /**

@@ -28,7 +28,12 @@ class OAuthConnection extends Model
         'user_data',
     ];
 
-    public function user(): BelongsTo{
+    protected $hidden = [
+        'access_token',
+        'refresh_token',
+    ];
+    
+    public function user(): BelongsTo {
         return $this->belongsTo('App\User');
     }
 
