@@ -1,11 +1,11 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "name": "Sir Edgar",
+    "description": "Personal virtual assistant ",
+    "keywords": ["assistant", "bot", "productivity"],
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=5.6.4",
+        "php": ">=7.1",
         "botman/botman": "2.0.*",
         "botman/driver-facebook": "^1.1",
         "coinbase/coinbase": "^2.5",
