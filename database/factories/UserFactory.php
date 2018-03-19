@@ -29,8 +29,8 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->state(App\FinancialTransaction::class, 'admin', function ($faker) {
+$factory->state(App\User::class, 'admin', function ($faker) {
     return [
-        'admin' => 'true',
+        'admin' => true,
     ];
 });

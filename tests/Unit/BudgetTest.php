@@ -33,7 +33,37 @@ class BudgetTest extends TestCase
      *
      * @return void
      */
-    public function testAddExpense()
+    public function testWeeklyBudgetWithoutExpenseToString()
+    {
+        $user = factory(User::class)->create();
+        $budget = factory(Budget::class)->states('week')->make([
+            'user_id' => $user->id
+        ]);
+
+        self::assertEquals("a budget /week : 0% --> 0 CAD", $budget->toString());
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testMonthlyBudgetWithoutExpenseToString()
+    {
+        $user = factory(User::class)->create();
+        $budget = factory(Budget::class)->states('month')->make([
+            'user_id' => $user->id
+        ]);
+
+        self::assertEquals("a budget /month : 0% --> 0 CAD", $budget->toString());
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testBudgetToStringWithTotal()
     {
         $user = factory(User::class)->create();
         $budget = factory(Budget::class)->make([
@@ -44,6 +74,51 @@ class BudgetTest extends TestCase
 
         $expense = factory(FinancialTransaction::class)->states('expense', 'now')->create([
             'user_id' => $user->id
+        ]);
+
+        self::assertEquals("a budget /{$budget->period} : 0% --> {$budget->getTotalAttribute()} {$budget->currency}", $budget->toString());
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testAddExpenseWithoutTags()
+    {
+        $user = factory(User::class)->create();
+        $budget = factory(Budget::class)->make([
+            'user_id' => $user->id
+        ]);
+
+        $budget = $user->budgets()->create($budget->toArray());
+
+        $expense = factory(FinancialTransaction::class)->states('expense', 'now')->create([
+            'user_id' => $user->id
+        ]);
+
+        self::assertCount(1, $budget->expenses()->get());
+        self::assertEquals($expense->price, $budget->getTotalAttribute());
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testAddExpenseWithTag()
+    {
+        $user = factory(User::class)->create();
+        $budget = factory(Budget::class)->make([
+            'user_id' => $user->id,
+            'tags' => ['test']
+        ]);
+
+        $budget = $user->budgets()->create($budget->toArray());
+
+        $expense = factory(FinancialTransaction::class)->states('expense', 'now')->create([
+            'user_id' => $user->id,
+            'tags' => ['test']
         ]);
 
         self::assertCount(1, $budget->expenses()->get());

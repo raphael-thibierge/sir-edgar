@@ -76,12 +76,22 @@ return [
                 'connection' => 'redis',
                 'queue' => ['default'],
                 'balance' => 'simple',
-                'processes' => 10,
+                'processes' => 3,
                 'tries' => 3,
             ],
         ],
 
         'local' => [
+            'supervisor-1' => [
+                'connection' => 'redis',
+                'queue' => ['default'],
+                'balance' => 'simple',
+                'processes' => 3,
+                'tries' => 3,
+            ],
+        ],
+
+        'testing' => [
             'supervisor-1' => [
                 'connection' => 'redis',
                 'queue' => ['default'],
