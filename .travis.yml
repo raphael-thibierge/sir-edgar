@@ -1,0 +1,15 @@
+language: php
+php:
+  - '7.1'
+
+install:
+  - composer install
+
+services:
+  - mongodb
+
+env:
+  - DB_CONNECTION=mongodb
+  - DB_HOST=127.0.0.1
+  - DB_PORT=27017
+  - APP_ENV=testing
