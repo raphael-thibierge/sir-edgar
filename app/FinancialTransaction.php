@@ -73,14 +73,16 @@ class FinancialTransaction extends Model
 
         $words = explode(' ', strtolower($this->title));
 
-         foreach ($words as $word){
-             if (!empty($word) && strpos($word, '#') === 0){
-                 $tags []= trim($word, '#');
-             }
+        foreach ($words as $word){
+            if (!empty($word) && strpos($word, '#') === 0){
+                $tag = trim($word, '#');
+                if (!in_array($tag, $tags)){
+                    $tags []= $tag;
+                }
+            }
         }
 
         $this->tags = $tags;
         $this->title = str_replace('#' , '', $this->title);
-
     }
 }
