@@ -4,18 +4,16 @@ php:
 
 install:
   - composer install
+  - cp .env.example .env
+  - php artisan key:generate
 
 services:
   - mongodb
+  - redis-server
 
 env:
-  - DB_CONNECTION=mongodb
-  - DB_HOST=127.0.0.1
-  - DB_PORT=27017
-  - APP_ENV=testing
+  global:
+    - APP_ENV=testing
 
-before_script:
-  - wget http://pecl.php.net/get/mongo-1.2.10.tgz
-  - tar -xzf mongo-1.2.10.tgz
-  - sh -c "cd mongo-1.2.10 && phpize && ./configure && sudo make install"
-  - echo "extension=mongo.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+before_install:
+  - pecl -q install mongodb && echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
