@@ -17,3 +17,6 @@ env:
 
 before_install:
   - pecl -q install mongodb && echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+
+before_script:
+  - php artisan key:generate
