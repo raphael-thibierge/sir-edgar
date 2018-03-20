@@ -13,7 +13,6 @@ class BudgetController extends Controller
         $this->middleware('auth');
     }
 
-
     /**
      * Display a listing of the resource.
      *
@@ -73,6 +72,9 @@ class BudgetController extends Controller
     public function show(Budget $budget)
     {
         $this->authorize($budget);
+        return $this->successResponse([
+            'budget' => $budget
+        ]);
     }
 
     /**
