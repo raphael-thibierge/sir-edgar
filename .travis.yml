@@ -13,12 +13,13 @@ services:
 env:
   global:
     - APP_ENV=testing
+    - APP_KEY=SomeRandomString
     - DB_CONNECTION=mongodb
     - DB_HOST=127.0.0.1
     - DB_PORT=27017
     - QUEUE_DRIVER=redis
     - REDIS_HOST= 127.0.0.1
     - REDIS_PORT=6379
-
+  
 before_install:
   - pecl -q install mongodb && echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
