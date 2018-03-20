@@ -4,7 +4,6 @@ php:
 
 install:
   - composer install
-  - php artisan key:generate
 
 services:
   - mongodb
@@ -20,6 +19,6 @@ env:
     - QUEUE_DRIVER=redis
     - REDIS_HOST= 127.0.0.1
     - REDIS_PORT=6379
-  
+
 before_install:
   - pecl -q install mongodb && echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
