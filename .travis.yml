@@ -15,5 +15,5 @@ env:
     - DB_PORT=27017
     - APP_ENV=testing
 
-before_script:
-  - apt-get install php7.1-mongo
+before_install:
+  - apt-get install -y php7.1-mongo
