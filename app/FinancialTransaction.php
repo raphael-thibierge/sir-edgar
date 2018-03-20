@@ -70,19 +70,17 @@ class FinancialTransaction extends Model
     public function tagsEdit()
     {
         $tags = [];
-        $titlesFormatted = [];
-        $titlesParts = explode('#', strtolower($this->title));
 
-         foreach ($titlesParts as $part){
+        $words = explode(' ', strtolower($this->title));
 
-             if (!empty($part)){
-                 $titlesFormatted []= $part;
-                $partPiece = explode(' ', $part);
-                $tags []= $partPiece[0];
+         foreach ($words as $word){
+             if (!empty($word) && strpos($word, '#') === 0){
+                 $tags []= trim($word, '#');
              }
         }
+
         $this->tags = $tags;
-        $this->title = implode($titlesFormatted, '');
+        $this->title = str_replace('#' , '', $this->title);
 
     }
 }

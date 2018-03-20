@@ -40,3 +40,10 @@ $factory->state(App\FinancialTransaction::class, 'entrance', function (Faker $fa
         'type' => 'entrance',
     ];
 });
+
+$factory->state(App\FinancialTransaction::class, 'no-tags', function (Faker $faker) {
+    return [
+        'tags' => [],
+    ];
+});
+
