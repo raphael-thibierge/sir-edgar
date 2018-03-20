@@ -16,5 +16,4 @@ env:
     - APP_ENV=testing
 
 before_script:
-  - pecl install mongodb
-  - echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+  - pecl -q install mongo && echo "extension=mongo.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
