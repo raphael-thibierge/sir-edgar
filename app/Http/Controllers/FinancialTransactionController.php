@@ -57,7 +57,6 @@ class FinancialTransactionController extends Controller
                     case 'price': $value = (float)$value; break;
                     case 'date':
                         $value = new Carbon($value);
-                        $value->subHours($value->getOffset()/3600);
                         break;
                     default: break;
                 }
