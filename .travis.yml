@@ -32,8 +32,3 @@ before_deploy:
   - chmod 600 deploy_rsa
   - ssh-add deploy_rsa
   - rm deploy_rsa
-
-
-deploy:
-  - provider: script
-      script: envoy run deploy
