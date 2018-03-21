@@ -41,7 +41,7 @@ before_deploy:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: envoy run deploy
+    script: touch test  
     on:
       branch:
         - master
