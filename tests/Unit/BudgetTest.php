@@ -73,7 +73,7 @@ class BudgetTest extends TestCase
             'user_id' => $user->id
         ]);
 
-        self::assertEquals("a budget /week : {$budget->getProgressAttribute()}% --> 0 CAD", $budget->toString());
+        self::assertEquals("a budget /week : 0% --> 0 CAD", $budget->toString());
     }
 
     /**
