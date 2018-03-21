@@ -36,7 +36,7 @@ before_deploy:
   - chmod 600 deploy_rsa
   - ssh-add deploy_rsa
   - ssh-keyscan www.sir-edgar.com
-  - ssh-keyscan -F www.sir-edgar.com >> $HOME/.ssh/known_hosts
+  - ssh-keyscan -F www.sir-edgar.com >> /home/travis/.ssh/known_hosts
   - export PATH="/home/travis/.composer/vendor/bin:$PATH"
   - composer global require laravel/envoy
 
