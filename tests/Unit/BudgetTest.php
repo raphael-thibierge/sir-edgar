@@ -110,7 +110,7 @@ class BudgetTest extends TestCase
             ''
         ]);
 
-        self::assertEquals("a budget /{$budget->period} : 0% --> {$budget->getTotalAttribute()} {$budget->currency}", $budget->toString());
+        self::assertEquals("a budget /{$budget->period} : {$budget->getProgressAttribute()}% --> {$budget->getTotalAttribute()} {$budget->currency}", $budget->toString());
     }
 
     /**
