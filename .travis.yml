@@ -25,3 +25,10 @@ before_install:
 addons:
   ssh_known_hosts:
     - sir-edgar.com
+
+deploy:
+  - provider: script
+      skip_cleanup: true
+      script: envoy run deploy
+      on:
+        branch: master
