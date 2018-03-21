@@ -28,6 +28,39 @@ class BudgetTest extends TestCase
         self::assertCount(1, $user->budgets);
     }
 
+    public function testAmountIsZeroWithoutExpense(){
+        $user = factory(User::class)->create();
+        $budget = factory(Budget::class)->make([
+            'user_id' => $user->id,
+            'amount' => 0,
+        ]);
+
+        $this->assertEquals(-1, $budget->getProgressAttribute());
+    }
+
+    public function testAmountIsZeroWithExpense(){
+        $user = factory(User::class)->create();
+        $budget = factory(Budget::class)->make([
+            'user_id' => $user->id,
+            'amount' => 0,
+            'tags' => ['test']
+        ]);
+
+        // create expense
+        factory(FinancialTransaction::class)->states('expense', 'now')->create([
+            'user_id' => $user->id,
+            'tags' => ['test']
+        ]);
+
+        $this->assertEquals(-1, $budget->getProgressAttribute());
+    }
+
+    public function toTest(){
+        // todo user can not create budget with amount = 0
+        // todo test progress !!!!!!
+        // todo create expense of another user and tcheck progress / expense
+    }
+
     /**
      * A basic test example.
      *
@@ -40,7 +73,7 @@ class BudgetTest extends TestCase
             'user_id' => $user->id
         ]);
 
-        self::assertEquals("a budget /week : 0% --> 0 CAD", $budget->toString());
+        self::assertEquals("a budget /week : {$budget->getProgressAttribute()}% --> 0 CAD", $budget->toString());
     }
 
     /**
@@ -67,13 +100,14 @@ class BudgetTest extends TestCase
     {
         $user = factory(User::class)->create();
         $budget = factory(Budget::class)->make([
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
 
         $budget = $user->budgets()->create($budget->toArray());
 
         $expense = factory(FinancialTransaction::class)->states('expense', 'now')->create([
-            'user_id' => $user->id
+            'user_id' => $user->id,
+            ''
         ]);
 
         self::assertEquals("a budget /{$budget->period} : 0% --> {$budget->getTotalAttribute()} {$budget->currency}", $budget->toString());
@@ -171,7 +205,6 @@ class BudgetTest extends TestCase
         $expense->update([
             'date' => \Carbon\Carbon::now()->startOfMonth()->subDays(1)
         ]);
-
 
         self::assertCount(0, $budget->expenses()->get());
         self::assertEquals(0, $budget->getTotalAttribute());
