@@ -18,7 +18,7 @@ services:
 
 addons:
   ssh_known_hosts:
-    - www.sir-edgar.com
+    - 35.159.7.41
 
 env:
   global:
