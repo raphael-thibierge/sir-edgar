@@ -37,7 +37,6 @@ before_deploy:
 after_deploy:
   - rm deploy_rsa
 
-
 deploy:
   - provider: script
     skip_cleanup: true
