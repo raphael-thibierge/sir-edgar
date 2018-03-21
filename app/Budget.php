@@ -89,7 +89,7 @@ class Budget extends Model
     }
 
     public function getProgressAttribute(){
-        return (int)(($this->getTotalAttribute() / $this->amount ) * 100 );
+        return $this->amount === 0 ? -1 : (int)(($this->getTotalAttribute() / $this->amount ) * 100 );
     }
 
     public function toString(): string {

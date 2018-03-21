@@ -63,7 +63,7 @@ class FinancialTransaction extends Model
             }
         }
 
-        return $this->type . ' : ' . $this->price . $this->currency . ' ' . $tags;
+        return $this->type . ' : ' . $this->price . ' ' . $this->currency . ' ' . $tags;
     }
 
 

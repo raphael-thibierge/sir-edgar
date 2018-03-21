@@ -192,4 +192,35 @@ class FinancialTransactionResourceTest extends TestCase
         $response
             ->assertStatus(403);
     }
+
+    public function testExpenseTransactionToString(){
+        $transaction = factory(FinancialTransaction::class)->make([
+            'title' => 'a expense',
+            'price' => 2.05,
+            'currency' => 'EUR',
+            'tags' => ['tag1', 'tag2'],
+            'type' => 'expense'
+        ]);
+
+        $this->assertEquals('expense : 2.05 EUR #tag1#tag2', $transaction->toString());
+    }
+
+    public function testEntranceTransactionToString(){
+        $transaction = factory(FinancialTransaction::class)->make([
+            'title' => 'a entrance',
+            'price' => 2.05,
+            'currency' => 'EUR',
+            'tags' => ['tag1', 'tag2'],
+            'type' => 'entrance'
+        ]);
+
+        $this->assertEquals('entrance : 2.05 EUR #tag1#tag2', $transaction->toString());
+    }
+
+    public function testTransactionUserRelationShip(){
+        $transaction = factory(FinancialTransaction::class)->make();
+        $transaction = $this->user->financialTransactions()->create($transaction->toArray());
+        $this->assertEquals($this->user->id, $transaction->user->id);
+    }
+
 }
