@@ -26,10 +26,6 @@ env:
 before_install:
   - pecl -q install mongodb && echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
 
-addons:
-  ssh_known_hosts:
-    - sir-edgar.com
-
 before_deploy:
   - openssl aes-256-cbc -K $encrypted_e1ea4e0d88f8_key -iv $encrypted_e1ea4e0d88f8_iv -in deploy_rsa.enc -out deploy_rsa -d
   - eval "$(ssh-agent -s)"
