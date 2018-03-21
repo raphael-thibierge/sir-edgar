@@ -11,6 +11,10 @@ services:
   - mongodb
   - redis-server
 
+addons:
+  ssh_known_hosts:
+    - sir-edgar.com
+
 env:
   global:
     - APP_ENV=testing
@@ -34,9 +38,3 @@ deploy:
       script: envoy run deploy
       on:
         branch: master
-
-  - provider: script
-      skip_cleanup: true
-      script: envoy run deploy
-      on:
-        branch: develop
