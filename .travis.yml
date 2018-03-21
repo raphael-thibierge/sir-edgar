@@ -17,15 +17,13 @@ services:
   - redis-server
 
 addons:
-  ssh_known_hosts: www.sir-edgar.com
+  ssh_known_hosts: sir-edgar.com
 
 env:
   global:
     - APP_ENV=testing
 
 before_install:
-  - ssh-keyscan www.sir-edgar.com
-  - ssh-keyscan -F www.sir-edgar.com >> /home/travis/.ssh/known_hosts
   - pecl -q install mongodb && echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
 
 addons:
