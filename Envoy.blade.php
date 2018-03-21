@@ -1,6 +1,6 @@
 
 
-@servers(['web' => 'ubuntu@35.159.7.41'])
+@servers(['web' => 'ubuntu@www.sir-edgar.com'])
 
 @task('deploy', ['on' => ['web']])
 

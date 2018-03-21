@@ -8,7 +8,6 @@ branches:
     - develop
 
 install:
-  - echo $DEPLOY_HOST >> $HOME/.ssh/known_hosts
   - composer install
   - cp .env.example .env
   - php artisan key:generate
@@ -36,6 +35,8 @@ before_deploy:
   - eval "$(ssh-agent -s)"
   - chmod 600 deploy_rsa
   - ssh-add deploy_rsa
+  - ssh-keyscan www.sir-edgar.com
+  - ssh-keyscan -F www.sir-edgar.com >> $HOME/.ssh/known_hosts
   - export PATH="/home/travis/.composer/vendor/bin:$PATH"
   - composer global require laravel/envoy
 
