@@ -186,7 +186,7 @@ export default class TagFrequencyChart extends React.Component {
                                     },
 
                                 }}
-                                graph_id="TagFrequencyChart"
+                                graph_id={"TagFrequencyChart_"+this.state.inputValue.replace(' ', '_')}
                                 width="100%"
                                 height={typeof this.props.height ? this.props.height : "400px"}
                                 legend_toggle
