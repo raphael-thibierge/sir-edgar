@@ -2,7 +2,6 @@ import React from 'react';
 import { Chart } from 'react-google-charts';
 import { FormGroup, FormControl, Label, Button} from 'react-bootstrap';
 
-
 export default class TagFrequencyChart extends React.Component {
 
     constructor(props){
@@ -15,7 +14,16 @@ export default class TagFrequencyChart extends React.Component {
         };
     }
 
+    hasTagProps(){
+        return typeof this.props.tags === 'string';
+    }
+
     componentDidMount(){
+        if (this.hasTagProps()){
+            this.setState({
+                inputValue: this.props.tags
+            }, this.request.bind(this))
+        }
     }
 
     request(){
@@ -86,9 +94,6 @@ export default class TagFrequencyChart extends React.Component {
 
                     }
 
-
-
-
                     this.setState({
                         loaded: true,
                         tag: responseJSON.data.tag,
@@ -122,35 +127,39 @@ export default class TagFrequencyChart extends React.Component {
             return <p>Loading...</p>
         }
 
-
         return (
             <div className="row">
                 <div className="col-xs-12">
 
-                    <div className="row">
-                        <div className="col-xs-10">
+                    {!this.hasTagProps() ?
 
-                            <FormGroup>
-                                <FormControl
-                                    type={'text'}
-                                    placeholder={'Tag to track'}
-                                    ref={'input'}
-                                    value={this.state.inputValue}
-                                    onChange={((e) => {this.setState({inputValue: e.target.value})}).bind(this)}
-                                    onKeyPress={this.handleKeyPress.bind(this)}
-                                />
-                            </FormGroup>
+                        <div className="row">
+                            <div className="col-xs-10">
 
+                                <FormGroup>
+                                    <FormControl
+                                        type={'text'}
+                                        placeholder={'Tag to track'}
+                                        ref={'input'}
+                                        value={this.state.inputValue}
+                                        onChange={((e) => {
+                                            this.setState({inputValue: e.target.value})
+                                        }).bind(this)}
+                                        onKeyPress={this.handleKeyPress.bind(this)}
+                                    />
+                                </FormGroup>
+
+                            </div>
+                            <div className="col-xs-2">
+                                <FormGroup>
+                                    <Button
+                                        bsColor={'success'}
+                                        onClick={this.onLoadButtonClick.bind(this)}
+                                    >Load !</Button>
+                                </FormGroup>
+                            </div>
                         </div>
-                        <div className="col-xs-2">
-                            <FormGroup>
-                                <Button
-                                    bsColor={'success'}
-                                    onClick={this.onLoadButtonClick.bind(this)}
-                                >Load !</Button>
-                            </FormGroup>
-                        </div>
-                    </div>
+                    : null}
 
                     {this.state.frequencies.length > 0 ?
 
@@ -179,7 +188,7 @@ export default class TagFrequencyChart extends React.Component {
                                 }}
                                 graph_id="TagFrequencyChart"
                                 width="100%"
-                                height="400px"
+                                height={typeof this.props.height ? this.props.height : "400px"}
                                 legend_toggle
                             />
                         </div>

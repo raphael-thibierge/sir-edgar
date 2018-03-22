@@ -2,6 +2,7 @@ import React from 'react';
 import {ProgressBar, Panel} from 'react-bootstrap';
 import BudgetEditModal from './BudgetEditModal'
 import Tools from '../Tools';
+import TagFrequencyChart from '../expense/TagFrequencyChart';
 
 export default class Budget extends React.Component {
 
@@ -13,7 +14,6 @@ export default class Budget extends React.Component {
     }
 
     render(){
-
 
         const progress = Math.floor((this.props.budget.total/this.props.budget.amount)*100);
 
@@ -102,6 +102,16 @@ export default class Budget extends React.Component {
                     </div>
                 </div>
 
+                <div className="row">
+                    <div className="col-xs-12">
+                        <TagFrequencyChart
+                            tags={Array.isArray(this.props.budget.tags) ?
+                                this.props.budget.tags.join(' ') : this.props.budget.tags }
+                            height={'110px'}
+                        />
+                    </div>
+                </div>
+
                 {this.props.budget.expenses.length >0 ?
                 <div className="row">
                     <div className="col-xs-12">
@@ -122,6 +132,7 @@ export default class Budget extends React.Component {
                         </ul>
                         : null}
                     </div>
+
                 </div>
                 : null}
             </Panel>
