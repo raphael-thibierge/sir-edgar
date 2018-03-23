@@ -5,7 +5,6 @@ namespace App;
 use App\Events\GoalCompleted;
 use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Jenssegers\Mongodb\Query\Builder;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 
 /**
@@ -111,12 +110,12 @@ class Goal extends Model
     }
 
 
-    public static function searchByTitle(string $title): Builder{
+    public static function searchByTitle(string $title){
         return Goal::where('title', 'like', $title);
     }
 
     public function toString(){
-        return $this->title . "($this->score) ";
+        return $this->title . " ($this->score)";
     }
 
 }
