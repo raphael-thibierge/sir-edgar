@@ -24,8 +24,7 @@ env:
     - APP_ENV=testing
 
 before_install:
-  - sudo apt-get install php7.1-gd
-  - pecl -q install mongodb && echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+  - source install-php71.sh
 
 before_deploy:
   - openssl aes-256-cbc -K $encrypted_e1ea4e0d88f8_key -iv $encrypted_e1ea4e0d88f8_iv -in deploy_rsa.enc -out deploy_rsa -d
