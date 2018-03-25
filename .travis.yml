@@ -30,6 +30,7 @@ before_install:
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C
   - sudo apt-get update
   - sudo apt-get install -y php7.1-gd php7.1-mongodb
+  - phpenv version-name
   - echo "extension = mongodb.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 before_deploy:
