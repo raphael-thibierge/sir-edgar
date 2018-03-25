@@ -1,3 +1,7 @@
+# export missing locale
+export LC_ALL="UTF-8"
+
+# install repository
 sudo apt-get install software-properties-common
 
 # add php7 repository
