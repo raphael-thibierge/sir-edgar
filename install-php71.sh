@@ -4,7 +4,7 @@ sudo apt-get install software-properties-common
 sudo add-apt-repository ppa:ondrej/php -y
 
 #if probleme with GPG key not founf :
-#sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys <KEY>
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C
 
 sudo apt-get update
 
