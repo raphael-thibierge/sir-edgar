@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\FinancialTransactionExport;
 use App\FinancialTransaction;
 use App\User;
 use Carbon\Carbon;
@@ -9,6 +10,7 @@ use Coinbase\Wallet\Resource\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FinancialTransactionController extends Controller
 {
@@ -258,5 +260,10 @@ class FinancialTransactionController extends Controller
             'tag' => $tag,
             'frequencies' => $tagsFrequency
         ]);
+    }
+
+    public function download(){
+
+        return (new FinancialTransactionExport(Auth::user()))->forMonth(3, 2018)->download('transactions.xlsx');
     }
 }

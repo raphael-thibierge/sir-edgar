@@ -73,6 +73,8 @@ Route::get('coinbase', 'CoinbaseController@basicStats');
 Route::view('account', 'user')->name('account');
 Route::post('account/update', 'UserController@accountSettingsUpdate')->name('account.update')->middleware('auth');
 
+Route::get('financial-transactions/download', 'FinancialTransactionController@download')->middleware('auth');
+Route::get('budget/download', 'FinancialTransactionController@download')->middleware('auth');
 Route::apiResources([
     'users' => 'UserController',
     'projects' => 'ProjectController',
