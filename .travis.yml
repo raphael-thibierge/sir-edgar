@@ -24,7 +24,7 @@ env:
     - APP_ENV=testing
 
 before_install:
-  - apt-get install php7.1-gd
+  - sudo apt-get install php7.1-gd
   - pecl -q install mongodb && echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
 
 before_deploy:
