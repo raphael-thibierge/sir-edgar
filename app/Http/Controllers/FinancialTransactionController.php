@@ -262,21 +262,30 @@ class FinancialTransactionController extends Controller
         ]);
     }
 
+    /**
+     * Download user's all financial transactions or for specific month
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
     public function download(Request $request){
-
         $this->authorize('download', FinancialTransaction::class);
 
+        // validate query string parameters if exists
         $this->validate($request, [
             'month' => 'numeric|max:12|min:1|nullable',
             'year' => 'numeric|min:2000|nullable',
         ]);
 
+        // create excel export
+        $export = new FinancialTransactionExport(Auth::user());
+
+        // apply month if presents in query string request
         if ($request->has('month') && $request->has('year')){
-            return (new FinancialTransactionExport(Auth::user()))
-                ->forMonth((int)$request->get('month'), (int)$request->get('year'))
-                ->download('transactions.xlsx');
+            $export->forMonth((int)$request->get('month'), (int)$request->get('year'));
         }
 
-        return (new FinancialTransactionExport(Auth::user()))->download('transactions.xlsx');
+        // download file
+        return $export->download('transactions.xlsx');
     }
 }
