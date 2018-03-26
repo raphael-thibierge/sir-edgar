@@ -56,4 +56,8 @@ class FinancialTransactionPolicy
     {
         return $user->id === $financialTransaction->user_id;
     }
+
+    public function download(User $user){
+        return true;
+    }
 }

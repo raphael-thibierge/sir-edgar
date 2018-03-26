@@ -262,8 +262,21 @@ class FinancialTransactionController extends Controller
         ]);
     }
 
-    public function download(){
+    public function download(Request $request){
 
-        return (new FinancialTransactionExport(Auth::user()))->forMonth(3, 2018)->download('transactions.xlsx');
+        $this->authorize('download', FinancialTransaction::class);
+
+        $this->validate($request, [
+            'month' => 'numeric|max:12|min:1|nullable',
+            'year' => 'numeric|min:2000|nullable',
+        ]);
+
+        if ($request->has('month') && $request->has('year')){
+            return (new FinancialTransactionExport(Auth::user()))
+                ->forMonth((int)$request->get('month'), (int)$request->get('year'))
+                ->download('transactions.xlsx');
+        }
+
+        return (new FinancialTransactionExport(Auth::user()))->download('transactions.xlsx');
     }
 }
