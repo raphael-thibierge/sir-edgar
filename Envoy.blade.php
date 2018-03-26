@@ -16,7 +16,7 @@
         git pull
     @endif
 
-    composer install --optimize-autoloader
+    composer install
 
     php artisan migrate --force
 
