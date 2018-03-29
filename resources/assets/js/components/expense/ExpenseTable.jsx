@@ -54,6 +54,9 @@ export default class ExpenseTable extends React.Component {
         let previous = null;
         let total  = 0;
 
+        let previousHour = new Date();
+        previousHour.setHours(previousHour.getHours() -1 );
+
         this.props.expenses.forEach((expense) => {
             let date = expense.date;
 
@@ -76,9 +79,8 @@ export default class ExpenseTable extends React.Component {
                 total += expense.price;
             }
 
-
             expensesRended.push(
-                <tr key={expense._id} className={expense.type === 'entrance' ? 'success' : null}>
+                <tr key={expense._id} className={expense.type === 'entrance' ? 'success' : expense.created_at > previousHour ? 'info' :  null}>
                     <td>{expense.title}</td>
                     <td>{expense.price}</td>
                     <td>{expense.currency}</td>
