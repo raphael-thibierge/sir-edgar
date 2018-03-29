@@ -43,12 +43,4 @@ class HomeController extends Controller
         return $linkedTagsWithWeigth;
 
     }
-
-
-
-    public function test(){
-
-
-
-    }
 }

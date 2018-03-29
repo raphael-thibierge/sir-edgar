@@ -22,7 +22,15 @@ export default class TagFrequencyChart extends React.Component {
         if (this.hasTagProps()){
             this.setState({
                 inputValue: this.props.tags
-            }, this.request.bind(this))
+            }, this.request.bind(this));
+        }
+    }
+
+    componentWillReceiveProps(nextProps){
+        if (nextProps.tags !== this.state.inputValue){
+            this.setState({
+                inputValue: this.props.tags
+            }, this.request.bind(this));
         }
     }
 

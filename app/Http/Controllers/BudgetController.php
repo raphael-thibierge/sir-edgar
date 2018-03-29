@@ -73,7 +73,7 @@ class BudgetController extends Controller
     {
         $this->authorize($budget);
         return $this->successResponse([
-            'budget' => $budget
+            'budget' => Budget::findOrFail($budget->id)
         ]);
     }
 
@@ -88,7 +88,9 @@ class BudgetController extends Controller
     {
         $this->authorize($budget);
         $budget->update($request->all());
-        return $this->successResponse();
+        return $this->successResponse([
+            'budget' => $budget
+        ]);
     }
 
     /**
