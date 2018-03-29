@@ -53,7 +53,7 @@ export default class BudgetEditModal extends React.Component {
             if (responseJSON.status === 'success') {
                 // get response data
                 if (typeof this.props.onEdit === 'function'){
-                    this.props.onEdit(this.state);
+                    this.props.onEdit(responseJSON.data.budget);
                 }
                 this.setState({
                     error: false,

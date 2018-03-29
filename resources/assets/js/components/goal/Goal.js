@@ -44,10 +44,6 @@ export default class Goal {
         });
     }
 
-    sendUpdate(){
-
-    }
-
     updateView(){
         if (typeof this.forceUpdate === 'function'){
             this.forceUpdate();

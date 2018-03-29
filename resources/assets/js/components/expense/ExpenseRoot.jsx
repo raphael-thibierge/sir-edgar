@@ -23,9 +23,40 @@ export default class ExpenseRoot extends React.Component {
 
     }
 
+    onDelete(deletedTransaction){
+
+        $.ajax({
+            url: '/financial-transactions/' + deletedTransaction._id,
+            cache: false,
+            method: 'POST',
+            datatype: 'json',
+            data: {
+                _method: 'DELETE',
+                _token: window.token,
+            },
+            success: function (response) {
+                if (response.status && response.status === 'success') {
+                    this.setState({
+                        transactions: this.state.transactions.filter(
+                            transaction => deletedTransaction._id !== transaction._id
+                        )
+                    });
+                }
+
+            }.bind(this),
+            error: function () {
+                alert('Deleting expense failed ! Please retry later.')
+            },
+        });
+
+
+    }
+
     onSave(transaction){
         let transactions = this.state.transactions;
         transaction.date = Tools.dateFormatWithOffset(transaction.date);
+        transaction.created_at = Tools.dateFormatWithOffset(transaction.created_at);
+        transaction.updated_at = Tools.dateFormatWithOffset(transaction.updated_at);
         transactions.push(transaction);
         this.setState({transactions: transactions});
     }
@@ -80,6 +111,8 @@ export default class ExpenseRoot extends React.Component {
                         loaded: true,
                         transactions: transactions.map((expense) => {
                             expense.date = Tools.dateFormatWithOffset(expense.date);
+                            expense.created_at= Tools.dateFormatWithOffset(expense.created_at);
+                            expense.updated_at= Tools.dateFormatWithOffset(expense.updated_at);
                             return expense;
                         }),
                     });
@@ -171,6 +204,7 @@ export default class ExpenseRoot extends React.Component {
                             <ExpenseTable
                                 expenses={transactions}
                                 onUpdate={this.onUpdate.bind(this)}
+                                onDelete={this.onDelete.bind(this)}
                             />
                         </div>
                     ): null}

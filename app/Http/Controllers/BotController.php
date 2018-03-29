@@ -68,11 +68,6 @@ class BotController extends Controller
         ];
     }
 
-    private function findParameter(string $parameter){
-        return $this->botMessage->getParameter($parameter);
-    }
-
-
     private function findProject(){
 
         $projectName = $this->botMessage->getParameter('project');
@@ -86,26 +81,6 @@ class BotController extends Controller
             ->first();
 
         return $project;
-    }
-
-
-    private function show_project_action(){
-
-
-        $project = $this->findProject();
-
-        if ($project === null) {
-            $responseData = $this->buildSimpleTextResponseData('Project not found');
-        } else {
-
-
-            $goals = $project->goals()->select(['title', 'score', 'completed_at'])
-                ->whereNull('completed_at')->get();
-
-            $responseData = $this->goalListAsString($goals);
-        }
-
-        return $responseData;
     }
 
     private function ask_login_action(){

@@ -1,5 +1,5 @@
 import React from 'react';
-import {} from 'react-bootstrap';
+import {Button, Glyphicon} from 'react-bootstrap';
 import CreateFinancialTransactionModal from "../financial/CreateFinancialTransactionModal";
 import Tools from '../Tools';
 
@@ -8,6 +8,12 @@ export default class ExpenseTable extends React.Component {
     onUpdate(transaction){
         if (typeof this.props.onUpdate === 'function'){
             this.props.onUpdate(transaction);
+        }
+    }
+
+    onDelete(transaction){
+        if (typeof this.props.onDelete === 'function'){
+            this.props.onDelete(transaction);
         }
     }
 
@@ -48,6 +54,9 @@ export default class ExpenseTable extends React.Component {
         let previous = null;
         let total  = 0;
 
+        let previousHour = new Date();
+        previousHour.setHours(previousHour.getHours() -1 );
+
         this.props.expenses.forEach((expense) => {
             let date = expense.date;
 
@@ -70,9 +79,8 @@ export default class ExpenseTable extends React.Component {
                 total += expense.price;
             }
 
-
             expensesRended.push(
-                <tr key={expense._id} className={expense.type === 'entrance' ? 'success' : null}>
+                <tr key={expense._id} className={expense.type === 'entrance' ? 'success' : expense.created_at > previousHour ? 'info' :  null}>
                     <td>{expense.title}</td>
                     <td>{expense.price}</td>
                     <td>{expense.currency}</td>
@@ -82,6 +90,10 @@ export default class ExpenseTable extends React.Component {
                             expense={expense}
                             onSave={this.onUpdate.bind(this)}
                         />
+                        <Button bsSize={'xs'} bsStyle={'danger'} onClick={this.onDelete.bind(this, expense)}>
+                            <Glyphicon glyph={'trash'}/>
+                        </Button>
+
                     </td>
                     <td>{Array.isArray(expense.tags) ? expense.tags.join(', ') : expense.tags}</td>
                 </tr>
