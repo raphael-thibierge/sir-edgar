@@ -1,5 +1,5 @@
 import React from 'react';
-import {} from 'react-bootstrap';
+import {Button, Glyphicon} from 'react-bootstrap';
 import CreateFinancialTransactionModal from "../financial/CreateFinancialTransactionModal";
 import Tools from '../Tools';
 
@@ -8,6 +8,12 @@ export default class ExpenseTable extends React.Component {
     onUpdate(transaction){
         if (typeof this.props.onUpdate === 'function'){
             this.props.onUpdate(transaction);
+        }
+    }
+
+    onDelete(transaction){
+        if (typeof this.props.onDelete === 'function'){
+            this.props.onDelete(transaction);
         }
     }
 
@@ -82,6 +88,10 @@ export default class ExpenseTable extends React.Component {
                             expense={expense}
                             onSave={this.onUpdate.bind(this)}
                         />
+                        <Button bsSize={'xs'} bsStyle={'danger'} onClick={this.onDelete.bind(this, expense)}>
+                            <Glyphicon glyph={'trash'}/>
+                        </Button>
+
                     </td>
                     <td>{Array.isArray(expense.tags) ? expense.tags.join(', ') : expense.tags}</td>
                 </tr>

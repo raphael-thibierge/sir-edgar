@@ -23,6 +23,35 @@ export default class ExpenseRoot extends React.Component {
 
     }
 
+    onDelete(deletedTransaction){
+
+        $.ajax({
+            url: '/financial-transactions/' + deletedTransaction._id,
+            cache: false,
+            method: 'POST',
+            datatype: 'json',
+            data: {
+                _method: 'DELETE',
+                _token: window.token,
+            },
+            success: function (response) {
+                if (response.status && response.status === 'success') {
+                    this.setState({
+                        transactions: this.state.transactions.filter(
+                            transaction => deletedTransaction._id !== transaction._id
+                        )
+                    });
+                }
+
+            }.bind(this),
+            error: function () {
+                alert('Deleting expense failed ! Please retry later.')
+            },
+        });
+
+
+    }
+
     onSave(transaction){
         let transactions = this.state.transactions;
         transaction.date = Tools.dateFormatWithOffset(transaction.date);
@@ -171,6 +200,7 @@ export default class ExpenseRoot extends React.Component {
                             <ExpenseTable
                                 expenses={transactions}
                                 onUpdate={this.onUpdate.bind(this)}
+                                onDelete={this.onDelete.bind(this)}
                             />
                         </div>
                     ): null}

@@ -162,9 +162,9 @@ export default class GoalsGraph extends React.Component{
      * alert user when an ajax request failed
      * @param response
      */
-    onError(response) {
+    onError(error) {
         alert(error.statusText);
-        console.error(response);
+        console.error(error.statusText);
     }
 
 
@@ -182,7 +182,6 @@ export default class GoalsGraph extends React.Component{
     }
 
     deleteGoal(goal){
-        console.log(goal);
         if (goal && goal.is_completed){
             let data = this.state.googleChartData;
 
