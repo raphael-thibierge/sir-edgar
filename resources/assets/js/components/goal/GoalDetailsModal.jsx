@@ -15,16 +15,6 @@ export default class GoalsDetailsModal extends React.Component{
     }
 
     /**
-     * Define required component's properties
-     */
-    //propTypes= {
-        /**
-         * Method to call when the new goal has been send to server successfully
-         */
-      //  goal: React.PropTypes.object.isRequired,
-   // }
-
-    /**
      * Return component initial state
      * Called when mounting component
      *
@@ -41,7 +31,6 @@ export default class GoalsDetailsModal extends React.Component{
             title: '',
             score: 1,
             is_completed: false,
-
         };
     }
 
@@ -232,3 +221,13 @@ export default class GoalsDetailsModal extends React.Component{
         )
     }
 };
+
+/**
+ * Define required component's properties
+ */
+GoalsDetailsModal.propTypes= {
+    /**
+     * Method to call when the new goal has been send to server successfully
+     */
+    goal: React.PropTypes.object.isRequired,
+}

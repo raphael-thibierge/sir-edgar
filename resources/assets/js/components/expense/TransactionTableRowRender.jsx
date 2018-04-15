@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 export default class TransactionTableRowRender extends React.Component {
     render() {
         const transaction = this.props.transaction;
+        let previousHour = new Date();
+        previousHour.setHours(previousHour.getHours() -1 );
         return (
             <tr key={transaction._id}
                 className={transaction.type === 'entrance' ? 'success' : transaction.updated_at > previousHour ? 'info' : null}>
@@ -16,9 +18,9 @@ export default class TransactionTableRowRender extends React.Component {
                 <td>
                     <CreateFinancialTransactionModal
                         expense={transaction}
-                        onSave={this.onUpdate.bind(this)}
+                        onSave={this.props.onUpdate}
                     />
-                    <Button bsSize={'xs'} bsStyle={'danger'} onClick={this.onDelete.bind(this, transaction)}>
+                    <Button bsSize={'xs'} bsStyle={'danger'} onClick={this.props.onDelete}>
                         <Glyphicon glyph={'trash'}/>
                     </Button>
 
@@ -30,5 +32,7 @@ export default class TransactionTableRowRender extends React.Component {
 }
 
 TransactionTableRowRender.propTypes = {
-    transaction: PropTypes.object
+    transaction: PropTypes.object.isRequired,
+    onUpdate: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired,
 };

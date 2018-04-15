@@ -55,9 +55,6 @@ export default class ExpenseTable extends React.Component {
         let previous = null;
         let total  = 0;
 
-        let previousHour = new Date();
-        previousHour.setHours(previousHour.getHours() -1 );
-
         this.props.expenses.forEach((transaction) => {
             let date = transaction.date;
 
@@ -80,7 +77,11 @@ export default class ExpenseTable extends React.Component {
                 total += transaction.price;
             }
 
-            expensesRended.push(<TransactionTableRowRender transaction={transaction}/>);
+            expensesRended.push(<TransactionTableRowRender
+                transaction={transaction}
+                onDelete={this.onDelete.bind(this, transaction)}
+                onUpdate={this.onUpdate.bind(this)}
+            />);
 
 
         });
