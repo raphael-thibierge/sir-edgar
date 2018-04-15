@@ -42,7 +42,7 @@ return [
             'password' => env('DB_PASSWORD'),
             'key'      => env('APP_KEY'),
             'options'  => [
-                'database' => env('DB_DATABASE') // sets the authentication database required by mongo 3
+                'database' => env('DB_DATABASE_AUTH', env('DB_DATABASE')) // sets the authentication database required by mongo 3
             ]
         ],
 
