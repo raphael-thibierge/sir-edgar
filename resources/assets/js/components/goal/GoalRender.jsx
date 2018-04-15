@@ -104,16 +104,26 @@ export default class GoalRender extends React.Component{
 
     dueDateRender(){
         const goal = this.props.goal;
-        return typeof goal.due_date !== 'undefined' && goal.due_date !== null ? (
-            <strong style={{marginLeft: 10}} className="text-right">
-                <em className={
-                    goal.due_date.toISOString().slice(0,10) === (new Date()).toISOString().slice(0,10)
-                    || goal.due_date < new Date()
-                        ? "text-danger" : ""} >
-                    {goal.due_date.toISOString().slice(0,10)}
-                </em>
-            </strong>
-        ) : null
+
+        const due_date = goal.due_date;
+
+        if( typeof due_date !== 'undefined' && goal.due_date !== null ) {
+
+            let day = new Date();
+
+            if (due_date.getDate()  )
+
+            return (
+                <strong style={{marginLeft: 10}} className="text-right">
+                    <em className={
+                        due_date.toISOString().slice(0, 10) === (new Date()).toISOString().slice(0, 10)
+                        || due_date < new Date()
+                            ? "text-danger" : ""}>
+                        {due_date.toISOString().slice(0, 10)}
+                    </em>
+                </strong>
+            );
+        };
     }
 
     estimatedTimeRender(){

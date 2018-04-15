@@ -30,9 +30,7 @@ class GoalCompleted implements ShouldBroadcast
     public function __construct(Goal $goal)
     {
         $this->goal = $goal;
-        $this
-            ->sendProgressOverMessenger();
-
+        $this->sendProgressOverMessenger();
     }
 
     public function sendProgressOverMessenger(){
