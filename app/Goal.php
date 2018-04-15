@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Events\GoalCompleted;
+use App\Events\GoalCreated;
+use App\Events\GoalDeleted;
 use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsTo;
@@ -78,6 +80,16 @@ class Goal extends Model
     ];
 
     /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'created' => GoalCreated::class,
+        'deleted' => GoalDeleted::class,
+    ];
+
+    /**
      * @return BelongsTo
      */
     public function user(): BelongsTo {
@@ -108,7 +120,6 @@ class Goal extends Model
         $this->save();
         broadcast(new GoalCompleted($this));
     }
-
 
     public static function searchByTitle(string $title){
         return Goal::where('title', 'like', $title);

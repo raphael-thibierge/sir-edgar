@@ -13,7 +13,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class GoalDeleted implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, InteractsWithSockets;
 
     /**
      * @var Goal
@@ -48,7 +48,7 @@ class GoalDeleted implements ShouldBroadcast
         return [
             'goal' => [
                 '_id' => $this->goal->id,
-                'score' => $this->goal->score,
+                'score' => $this->goal->completed_at !== null ? $this->goal->score : 0,
             ]
         ];
     }
