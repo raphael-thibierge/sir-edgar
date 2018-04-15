@@ -2,6 +2,7 @@ import React from 'react';
 import {Button, Glyphicon} from 'react-bootstrap';
 import CreateFinancialTransactionModal from "../financial/CreateFinancialTransactionModal";
 import Tools from '../Tools';
+import TransactionTableRowRender from './TransactionTableRowRender';
 
 export default class ExpenseTable extends React.Component {
 
@@ -57,8 +58,8 @@ export default class ExpenseTable extends React.Component {
         let previousHour = new Date();
         previousHour.setHours(previousHour.getHours() -1 );
 
-        this.props.expenses.forEach((expense) => {
-            let date = expense.date;
+        this.props.expenses.forEach((transaction) => {
+            let date = transaction.date;
 
             if (previous === null){
                 previous = date;
@@ -73,31 +74,13 @@ export default class ExpenseTable extends React.Component {
                 total = 0;
             }
 
-            if (expense.type === 'expense'){
-                total -= expense.price;
+            if (transaction.type === 'expense'){
+                total -= transaction.price;
             } else {
-                total += expense.price;
+                total += transaction.price;
             }
 
-            expensesRended.push(
-                <tr key={expense._id} className={expense.type === 'entrance' ? 'success' : expense.updated_at > previousHour ? 'info' :  null}>
-                    <td>{expense.title}</td>
-                    <td>{expense.price}</td>
-                    <td>{expense.currency}</td>
-                    <td>{expense.date.toLocaleTimeString()}</td>
-                    <td>
-                        <CreateFinancialTransactionModal
-                            expense={expense}
-                            onSave={this.onUpdate.bind(this)}
-                        />
-                        <Button bsSize={'xs'} bsStyle={'danger'} onClick={this.onDelete.bind(this, expense)}>
-                            <Glyphicon glyph={'trash'}/>
-                        </Button>
-
-                    </td>
-                    <td>{Array.isArray(expense.tags) ? expense.tags.join(', ') : expense.tags}</td>
-                </tr>
-            );
+            expensesRended.push(<TransactionTableRowRender transaction={transaction}/>);
 
 
         });
