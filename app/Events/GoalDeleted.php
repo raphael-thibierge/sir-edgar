@@ -48,7 +48,7 @@ class GoalDeleted implements ShouldBroadcast
         return [
             'goal' => [
                 '_id' => $this->goal->id,
-                'score' => $this->goal->completed_at !== null ? $this->goal->score : 0,
+                'score' => isset($this->goal->completed_at) && $this->goal->completed_at !== null ? $this->goal->score : 0,
             ]
         ];
     }
