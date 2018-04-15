@@ -54,23 +54,25 @@ export default class ExpenseRoot extends React.Component {
 
     onSave(transaction){
         let transactions = this.state.transactions;
-        transaction.date = Tools.dateFormatWithOffset(transaction.date);
-        transaction.created_at = Tools.dateFormatWithOffset(transaction.created_at);
-        transaction.updated_at = Tools.dateFormatWithOffset(transaction.updated_at);
-        transactions.push(transaction);
+        transactions.push(ExpenseRoot.formatTransactionDates(transaction));
         this.setState({transactions: transactions});
     }
 
-    onUpdate(transaction){
-
+    static formatTransactionDates(transaction){
         transaction.date = Tools.dateFormatWithOffset(transaction.date);
+        transaction.created_at = Tools.dateFormatWithOffset(transaction.created_at);
+        transaction.updated_at = Tools.dateFormatWithOffset(transaction.updated_at);
+        return transaction;
+    }
+
+    onUpdate(transaction){
 
         let transactions = this.state.transactions;
 
         for (let i = 0; i < transactions.length; i++){
 
             if (transactions[i]._id === transaction._id){
-                transactions[i] = transaction;
+                transactions[i] = ExpenseRoot.formatTransactionDates(transaction);
             }
         }
 
@@ -109,12 +111,7 @@ export default class ExpenseRoot extends React.Component {
 
                     this.setState({
                         loaded: true,
-                        transactions: transactions.map((expense) => {
-                            expense.date = Tools.dateFormatWithOffset(expense.date);
-                            expense.created_at= Tools.dateFormatWithOffset(expense.created_at);
-                            expense.updated_at= Tools.dateFormatWithOffset(expense.updated_at);
-                            return expense;
-                        }),
+                        transactions: transactions.map(ExpenseRoot.formatTransactionDates),
                     });
                 }
             });

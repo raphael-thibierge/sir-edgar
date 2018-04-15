@@ -80,7 +80,7 @@ export default class ExpenseTable extends React.Component {
             }
 
             expensesRended.push(
-                <tr key={expense._id} className={expense.type === 'entrance' ? 'success' : expense.created_at > previousHour ? 'info' :  null}>
+                <tr key={expense._id} className={expense.type === 'entrance' ? 'success' : expense.updated_at > previousHour ? 'info' :  null}>
                     <td>{expense.title}</td>
                     <td>{expense.price}</td>
                     <td>{expense.currency}</td>
