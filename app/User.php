@@ -25,7 +25,7 @@ class User extends \Jenssegers\Mongodb\Auth\User
     const DEFAULT_ATTRIBUTES = [
         'admin' => false,
         'daily_score_goal' => 5,
-        'timezone' => 'Europe/Paris',
+        'timezone' => 'UTC',
         'email_daily_report' => false,
         'email_weekly_report' => false,
         'morning_report' => false,
