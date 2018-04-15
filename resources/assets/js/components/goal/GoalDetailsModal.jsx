@@ -82,7 +82,9 @@ export default class GoalsDetailsModal extends React.Component{
         });
     }
 
-
+    onCancel(){
+        this.componentDidMount()
+    }
 
     /**
      * Render component's HTML code
@@ -213,7 +215,7 @@ export default class GoalsDetailsModal extends React.Component{
 
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={()=> {this.setState({display: false})}}>Cancel</Button>
+                        <Button onClick={this.onCancel.bind(this)}>Cancel</Button>
                         <Button bsStyle="success" onClick={this.onSave.bind(this)}>Save</Button>
                     </Modal.Footer>
                 </Modal>
