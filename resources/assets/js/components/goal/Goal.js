@@ -24,19 +24,14 @@ export default class Goal {
     }
 
     fillData(goalData){
-        const TIMEZONE_OFFSET = new Date().getTimezoneOffset();
-
-        const MS_PER_MINUTES = 60000;
-
         Object.keys(goalData).forEach((key) => {
 
             if (key === 'due_date' || key === 'created_at' || key === 'completed_at'){
 
                 const value = goalData[key];
                 if (typeof value !== "undefined" && value !== null){
-                    this[key] = new Date (Tools.dateFormater(value) - TIMEZONE_OFFSET*MS_PER_MINUTES);
+                    this[key] = Tools.dateFormatWithOffset(value);
                 }
-
 
             } else {
                 this[key] = goalData[key];
