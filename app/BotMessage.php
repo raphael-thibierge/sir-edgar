@@ -3,6 +3,7 @@
 namespace App;
 
 
+use App\Events\PusherDebugEvent;
 use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsTo;
@@ -27,6 +28,7 @@ class BotMessage extends Model
             'request' => $request->toArray()
         ]);
 
+        //return $message;
         $senderId = $message->getSender()['id'];
 
         $user = User::where('facebook_sending_id', $senderId)->first();
@@ -50,7 +52,7 @@ class BotMessage extends Model
     }
 
     public function getOriginalRequest(){
-        return $this->request['originalRequest'];
+        return $this->request['originalDetectIntentRequest'];
     }
 
     public function getSource(){
@@ -58,11 +60,11 @@ class BotMessage extends Model
     }
 
     public function getSender(){
-        return $this->getOriginalRequest()['data']['sender'];
+        return $this->getOriginalRequest()['payload']['sender'];
     }
 
     private function getResult(){
-        return $this->request['result'];
+        return $this->request['queryResult'];
     }
 
     public function getAction(){
@@ -79,20 +81,21 @@ class BotMessage extends Model
 
     public function buildTextResponse(string $text){
         $this->response = [
-            'speech' => $text,
-            'displayText' => $text,
+            'fulfillmentText' => $text,
         ];
     }
 
     public function buildEventResponse(string $event, array $parameters = []){
         $this->response = $parameters === [] ? [
-            "followupEvent" => [
+            "followupEventInput" => [
                 "name" => $event,
+                "languageCode" => "en"
             ]
         ] : [
-            "followupEvent" => [
+            "followupEventInput" => [
                 "name" => $event,
-                "data" => $parameters
+                "parameters" => $parameters,
+                "languageCode" => "en"
             ]
         ];
     }
