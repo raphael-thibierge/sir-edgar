@@ -260,4 +260,12 @@ class User extends \Jenssegers\Mongodb\Auth\User
         return isset($this->facebook_sending_id) && !empty($this->facebook_sending_id) && $this->facebook_sending_id !== null;
     }
 
+    public static function demoUser(): User{
+        $demoUserAttributes = self::DEFAULT_ATTRIBUTES;
+        $demoUserAttributes['name'] = 'Demo User';
+        $demoUserAttributes['email'] = 'demo@sir-edgar.com';
+
+        return self::firstOrCreate($demoUserAttributes);
+    }
+
 }

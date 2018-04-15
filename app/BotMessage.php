@@ -4,6 +4,7 @@ namespace App;
 
 
 use App\Events\PusherDebugEvent;
+use function GuzzleHttp\default_ca_bundle;
 use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsTo;
@@ -28,18 +29,7 @@ class BotMessage extends Model
             'request' => $request->toArray()
         ]);
 
-        //return $message;
-        $senderId = $message->getSender()['id'];
-
-        $user = User::where('facebook_sending_id', $senderId)->first();
-
-        if ($user === null){
-            $user = User::newUser([
-                'facebook_sending_id' => $senderId
-            ]);
-        }
-
-        $message->user()->associate($user);
+        $message->associateUser();
 
         return $message;
     }
@@ -51,16 +41,65 @@ class BotMessage extends Model
         return $this->belongsTo('App\User');
     }
 
+
+    private function associateUser(){
+
+        // associate user
+        $user = null;
+        switch ($this->getSource()){
+            case 'google':
+                $user = User::first();
+                break;
+
+            case 'facebook':
+                $user = User::where('facebook_sending_id', $this->getFacebookSenderId())->first();
+                if ($user == null){
+                    $user = User::demoUser();
+                }
+                break;
+
+            case 'telegram':
+                $user = User::first();
+                break;
+
+            case 'web_demo':
+                $user = User::demoUser();
+                break;
+
+            default:
+                $user = User::demoUser();
+                break;
+        }
+
+        $this->user()->associate($user);
+    }
+
     public function getOriginalRequest(){
         return $this->request['originalDetectIntentRequest'];
     }
 
     public function getSource(){
-        return $this->getOriginalRequest()['source'];
+        $originalIntentRequest = $this->getOriginalRequest();
+
+        // facebook and google
+        if (isset($originalIntentRequest['source']) && !empty(isset($originalIntentRequest['source']))) {
+            return $originalIntentRequest['source'];
+        }
+
+        // telegram
+        else if (isset($originalIntentRequest['payload']['source']) && !empty(isset($originalIntentRequest['payload']['source']))){
+            return $originalIntentRequest['payload']['source'];
+        }
+
+        return 'web_demo';
     }
 
-    public function getSender(){
-        return $this->getOriginalRequest()['payload']['sender'];
+    public function getFacebookSender(){
+        return $this->getOriginalRequest()['payload']['data']['sender'];
+    }
+
+    public function getFacebookSenderId(){
+        return $this->getFacebookSender()['id'];
     }
 
     private function getResult(){
