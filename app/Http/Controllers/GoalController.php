@@ -139,6 +139,10 @@ class GoalController extends Controller
             $updates ['notes'] = $due_date;
         }
 
+        if (($today = $request->get('today')) !== null){
+            $updates ['today'] = $due_date;
+        }
+
         $goal->update($updates);
 
         return $this->successResponse([

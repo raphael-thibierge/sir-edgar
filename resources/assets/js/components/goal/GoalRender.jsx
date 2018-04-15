@@ -29,6 +29,7 @@ export default class GoalRender extends React.Component{
                     onClick={typeof this.props.goal.remove === 'function' ? this.props.goal.remove: null}
                     bsSize="xs"
                     bsStyle="danger"
+                    disabled={typeof this.props.goal.remove !== 'function'}
                 ><Glyphicon glyph="trash"/></Button>
             </span>
         )
@@ -42,6 +43,7 @@ export default class GoalRender extends React.Component{
                         ? this.props.goal.setCompleted.bind(this.props.goal): null}
                     bsSize="xs"
                     bsStyle="success"
+                    disabled={typeof this.props.goal.setCompleted !== 'function'}
                 ><Glyphicon glyph="ok"/></Button>
             </span>
         )
@@ -67,7 +69,7 @@ export default class GoalRender extends React.Component{
             (
                 <GoalDetailsModal goal={this.props.goal}/>
             ) : (
-                <a style={{marginLeft: 5}}>{this.props.goal.title}</a>
+                <a style={{marginLeft: 5, cursor: 'not-allowed'}}>{this.props.goal.title}</a>
             );
     }
 

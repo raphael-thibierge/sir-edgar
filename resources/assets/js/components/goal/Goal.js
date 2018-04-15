@@ -82,7 +82,7 @@ export default class Goal {
                 console.log(response);
                 // check status
                 if (response.status && response.status === 'success'){
-                    this.today = !this.today;
+                    this.today = response.data.goal.today;
                     this.updateView();
                 } else {
                     this.onError(response);
@@ -133,7 +133,7 @@ export default class Goal {
 
     }
 
-    updateDetails(title, score, due_date, estimated_time, time_spent, priority, notes){
+    updateDetails(title, score, due_date, estimated_time, time_spent, priority, notes, today){
 
         const request = $.ajax({
             url: this.routes.update_details,
@@ -151,6 +151,7 @@ export default class Goal {
                 notes: notes,
                 title: title,
                 score: score,
+                today: today,
 
             },
             // when server return success
@@ -164,6 +165,7 @@ export default class Goal {
                     this.notes = notes;
                     this.title = title;
                     this.score = score;
+                    this.today = today;
 
                     this.updateView();
                 } else {

@@ -50,9 +50,14 @@ export default class GoalsDetailsModal extends React.Component{
             notes: goal.notes,
             display: diff < 3,
             score: goal.score,
-            is_completed: goal.is_completed
-        })
-
+            is_completed: goal.is_completed,
+            today: goal.today,
+            setToday: function () {
+                this.setState({
+                    today: !this.state.today
+                })
+            }.bind(this)
+        });
     }
 
     /**
@@ -76,6 +81,7 @@ export default class GoalsDetailsModal extends React.Component{
             this.state.time_spent,
             this.state.priority,
             this.state.notes,
+            this.state.today,
         );
 
         this.setState({
