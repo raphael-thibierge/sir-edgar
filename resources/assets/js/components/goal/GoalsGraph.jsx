@@ -334,7 +334,7 @@ export default class GoalsGraph extends React.Component{
         )
     }
 };
-/*
+
 GoalsGraph.propTypes = {
     projectCurrentNumber: PropTypes.number.isRequired
-};*/
+};

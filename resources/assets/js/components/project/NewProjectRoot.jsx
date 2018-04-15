@@ -105,8 +105,8 @@ export default class NewProjectRoot extends React.Component{
     }
 };
 
-/*
+
 NewProjectRoot.propTypes = {
     onNewProjectClick: PropTypes.func.isRequired,
     projectCurrentNumber: PropTypes.number.isRequired
-};*/
+};

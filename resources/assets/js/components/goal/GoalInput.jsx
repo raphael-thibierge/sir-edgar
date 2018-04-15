@@ -1,5 +1,6 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
+import GoalRender from './GoalRender';
 import {
     FormGroup,
     FormControl,
@@ -13,8 +14,6 @@ import {
 } from 'react-bootstrap';
 
 
-import GoalDetailsModal from './GoalDetailsModal';
-import GoalRender from './GoalRender';
 
 /**
  *
@@ -26,16 +25,6 @@ export default class GoalInput extends React.Component{
         super(props);
         this.state = this.getInitialState();
     }
-
-    /**
-     * Define required component's properties
-     */
-   // propTypes: {
-        /**
-         * Method to call when the new goal has been send to server successfully
-         */
-     //   goal: React.PropTypes.object.isRequired,
-    //},
 
     /**
      * Return component initial state
@@ -203,4 +192,14 @@ export default class GoalInput extends React.Component{
     render() {
         return this.state.editMode === true ? this.editModeRender() : <GoalRender goal={this.props.goal}/>;
     }
+};
+
+/**
+ * Define required component's properties
+ */
+GoalInput.propTypes = {
+/**
+ * Method to call when the new goal has been send to server successfully
+ */
+   goal: PropTypes.object.isRequired,
 };

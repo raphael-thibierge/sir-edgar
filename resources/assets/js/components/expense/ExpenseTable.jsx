@@ -1,6 +1,4 @@
 import React from 'react';
-import {Button, Glyphicon} from 'react-bootstrap';
-import CreateFinancialTransactionModal from "../financial/CreateFinancialTransactionModal";
 import Tools from '../Tools';
 import TransactionTableRowRender from './TransactionTableRowRender';
 

@@ -3,6 +3,7 @@ import {FormControl, FormGroup, ControlLabel, Button, Modal, Glyphicon, Badge } 
 import DayPicker from 'react-day-picker';
 import Datetime from 'react-datetime';
 import GoalRender from './GoalRender';
+import PropTypes from 'prop-types';
 
 /**
  * React component managing goal input
@@ -231,5 +232,5 @@ GoalsDetailsModal.propTypes= {
     /**
      * Method to call when the new goal has been send to server successfully
      */
-    goal: React.PropTypes.object.isRequired,
+    goal: PropTypes.object.isRequired,
 }
