@@ -18,6 +18,7 @@
         "laravel/horizon": "^1.2",
         "laravel/tinker": "~1.0",
         "maatwebsite/excel": "^3.0",
+        "moeen-basra/laravel-passport-mongodb": "^4.0",
         "openclerk/coinbase-oauth2": "^0.1.0",
         "pusher/pusher-php-server": "~3.0",
         "sentry/sentry-laravel": "^0.8.0"

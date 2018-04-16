@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Relations\HasMany;
+use MoeenBasra\LaravelPassportMongoDB\HasApiTokens;
 
 /**
  * @property string name
@@ -20,7 +21,7 @@ use Jenssegers\Mongodb\Relations\HasMany;
  */
 class User extends \Jenssegers\Mongodb\Auth\User
 {
-    use Notifiable;
+    use Notifiable, HasApiTokens;
 
     const DEFAULT_ATTRIBUTES = [
         'admin' => false,

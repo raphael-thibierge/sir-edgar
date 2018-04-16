@@ -13,6 +13,7 @@ use App\Project;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Laravel\Horizon\Horizon;
+use MoeenBasra\LaravelPassportMongoDB\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -42,5 +43,9 @@ class AuthServiceProvider extends ServiceProvider
         Horizon::auth(function ($request) {
             return $request->user() !== null && $request->user()->isAdmin();
         });
+
+
+        // Passport
+        Passport::routes();
     }
 }
