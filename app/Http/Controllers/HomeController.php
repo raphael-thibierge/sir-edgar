@@ -21,7 +21,7 @@ class HomeController extends Controller
 
     public function initialAppRequest(){
         return $this->successResponse([
-            'user'=> User::with('oAuthConnections')->find(Auth::user()->id),
+            'user'=> User::find(Auth::user()->id),
             'pusher' => [
                 'key' => config('broadcasting.connections.pusher.key'),
                 'cluster' => config('broadcasting.connections.pusher.options.cluster'),
