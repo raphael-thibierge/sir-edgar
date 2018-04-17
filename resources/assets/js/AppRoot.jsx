@@ -29,7 +29,7 @@ export default class AppRoot extends React.Component {
                     // get response data
                     const data = responseJSON.data;
 
-                    window.user_id = data.user._id;
+                    window.user_id = data.user.id;
 
                     window.Echo = new Echo({
                         broadcaster: 'pusher',
