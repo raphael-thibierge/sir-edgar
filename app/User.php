@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\HybridRelations;
-use MoeenBasra\LaravelPassportMongoDB\HasApiTokens;
+use Laravel\Passport\HasApiTokens;
 
 /**
  * @property string name

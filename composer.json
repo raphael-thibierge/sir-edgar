@@ -9,6 +9,7 @@
         "botman/botman": "^2.3",
         "botman/driver-facebook": "^1.6",
         "coinbase/coinbase": "^2.5",
+        "doctrine/dbal": "^2.7",
         "ericmakesstuff/laravel-server-monitor": "^1.2",
         "fideloper/proxy": "~4.0",
         "guzzlehttp/guzzle": "^6.3",
@@ -16,9 +17,9 @@
         "laravel/envoy": "^1.3",
         "laravel/framework": "5.6.*",
         "laravel/horizon": "^1.2",
+        "laravel/passport": "^6.0",
         "laravel/tinker": "~1.0",
         "maatwebsite/excel": "^3.0",
-        "moeen-basra/laravel-passport-mongodb": "^4.0",
         "openclerk/coinbase-oauth2": "^0.1.0",
         "pusher/pusher-php-server": "~3.0",
         "sentry/sentry-laravel": "^0.8.0"

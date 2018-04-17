@@ -13,7 +13,7 @@ use App\Project;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Laravel\Horizon\Horizon;
-use MoeenBasra\LaravelPassportMongoDB\Passport;
+use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
