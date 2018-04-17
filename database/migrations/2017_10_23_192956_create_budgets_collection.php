@@ -13,7 +13,7 @@ class CreateBudgetsCollection extends Migration
      */
     public function up()
     {
-        Schema::create('budgets', function (Blueprint $table){
+        Schema::connection('mongodb')->create('budgets', function (Blueprint $table){
             $table->increments('_id');
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ class CreateBudgetsCollection extends Migration
      */
     public function down()
     {
-        Schema::drop('budgets');
+        Schema::connection('mongodb')->drop('budgets');
     }
 }

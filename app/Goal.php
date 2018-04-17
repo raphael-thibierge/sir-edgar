@@ -27,6 +27,8 @@ class Goal extends Model
     const TYPE_REMINDER = 'reminder';
     const TYPE_DEFAULT = Goal::TYPE_GOAL;
 
+    protected $connection = 'mongodb';
+
     /**
      * Mongo collection
      * @var string
@@ -92,7 +94,7 @@ class Goal extends Model
     /**
      * @return BelongsTo
      */
-    public function user(): BelongsTo {
+    public function user() : \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo('App\User');
     }
 

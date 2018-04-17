@@ -12,6 +12,7 @@ use Jenssegers\Mongodb\Relations\HasMany;
  */
 class Project extends Model
 {
+    protected $connection = 'mongodb';
 
     /**
      * @var string
@@ -50,12 +51,12 @@ class Project extends Model
 
     /**
      * Project's user
-     *
-     * @return BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user(): BelongsTo {
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo('App\User');
     }
+
 
     /**
      * Project's goals

@@ -16,6 +16,8 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  */
 class BotMessage extends Model
 {
+    protected $connection = 'mongodb';
+
     protected $collection = 'dialogflow_webhooks';
 
     protected $primaryKey = '_id';
@@ -37,7 +39,7 @@ class BotMessage extends Model
     /**
      * @return BelongsTo
      */
-    public function user(): BelongsTo {
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo('App\User');
     }
 

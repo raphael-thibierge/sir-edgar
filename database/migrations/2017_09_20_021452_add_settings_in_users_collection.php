@@ -14,14 +14,16 @@ class AddSettingsInUsersCollection extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('timezone')->default('Europe/Paris');
+        Schema::connection('pgsql')->table('users', function (Blueprint $table) {
+            $table->string('timezone')->default('UTC');
             $table->boolean('email_daily_report')->default(true);
             $table->boolean('email_weekly_report')->default(true);
+            $table->boolean('morning_report')->default(false);
         });
 
+
         User::whereNull('timezone')->update([
-            'timezone' => 'Europe/Paris',
+            'timezone' => 'UTC',
         ]);
         User::whereNull('email_daily_report')->update([
             'email_daily_report' => true
@@ -29,6 +31,7 @@ class AddSettingsInUsersCollection extends Migration
         User::whereNull('email_weekly_report')->update([
             'email_weekly_report' => true
         ]);
+
     }
 
     /**
@@ -38,10 +41,11 @@ class AddSettingsInUsersCollection extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::connection('pgsql')->table('users', function (Blueprint $table) {
             $table->dropColumn('timezone');
             $table->dropColumn('email_daily_report');
             $table->dropColumn('email_weekly_report');
+            $table->dropColumn('morning_report');
         });
     }
 }

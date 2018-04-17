@@ -5,7 +5,6 @@ namespace App;
 
 use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Jenssegers\Mongodb\Relations\BelongsTo;
 
 /**
  * @property string type
@@ -23,6 +22,8 @@ class FinancialTransaction extends Model
     const SAVING = "saving";
 
     protected $primaryKey = '_id';
+
+    protected $connection = 'mongodb';
 
     protected $collection = 'financial_transactions';
 
@@ -50,7 +51,7 @@ class FinancialTransaction extends Model
     /**
      * @return BelongsTo
      */
-    public function user(): BelongsTo {
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo('App\User');
     }
 
