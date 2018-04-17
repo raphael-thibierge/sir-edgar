@@ -12,7 +12,7 @@
 */
 
 Broadcast::channel('App.User.{id}', function ($user, $id) {
-    return $user->id === $id;
+    return $user->id == (int)$id;
 });
 
 Broadcast::channel('coinbase', function ($user) {
