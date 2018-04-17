@@ -19,6 +19,18 @@ class ConvertUserFromMongoToSQLSeeder extends Seeder
             $oldUserId = $user['_id']->__toString();
             unset($user['_id']);
 
+            // remove wrong users
+            if (!isset($user['email']) || empty($user['email'])){
+                // remove user's data
+                \App\Project::where('user_id', $oldUserId)->delete();
+                \App\Goal::where('user_id', $oldUserId)->delete();
+                \App\FinancialTransaction::where('user_id', $oldUserId)->delete();
+                \App\Budget::where('user_id', $oldUserId)->delete();
+                \App\OAuthConnection::where('user_id', $oldUserId)->delete();
+                \App\BotMessage::where('user_id', $oldUserId)->delete();
+                return;
+            }
+
             // transform created_at date
             $user['created_at'] = \Carbon\Carbon::createFromTimestamp(
                 ((int)$user['created_at']->__toString())/1000, 'America/Toronto'
