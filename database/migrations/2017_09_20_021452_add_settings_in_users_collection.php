@@ -20,18 +20,6 @@ class AddSettingsInUsersCollection extends Migration
             $table->boolean('email_weekly_report')->default(true);
             $table->boolean('morning_report')->default(false);
         });
-
-
-        User::whereNull('timezone')->update([
-            'timezone' => 'UTC',
-        ]);
-        User::whereNull('email_daily_report')->update([
-            'email_daily_report' => true
-        ]);
-        User::whereNull('email_weekly_report')->update([
-            'email_weekly_report' => true
-        ]);
-
     }
 
     /**

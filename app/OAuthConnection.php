@@ -27,6 +27,7 @@ class OAuthConnection extends Model
         'token_expiration',
         'service',
         'user_data',
+        'user_id'
     ];
 
     protected $hidden = [

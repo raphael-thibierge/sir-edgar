@@ -17,10 +17,6 @@ class CreateDateFieldInFinancialTransactionsCollection extends Migration
         Schema::connection('mongodb')->table('financial_transactions', function (Blueprint $collection){
             $collection->dateTime('date');
         });
-
-        /*FinancialTransaction::all()->each(function(FinancialTransaction $transaction){
-            $transaction->update(['date' => $transaction->created_at]);
-        });*/
     }
 
     /**

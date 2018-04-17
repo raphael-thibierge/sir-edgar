@@ -17,9 +17,6 @@ class AddFieldTodayInGoalsCollection extends Migration
         Schema::connection('mongodb')->table('goals', function (Blueprint $table) {
             $table->boolean('today')->default(false);
         });
-
-        // run in tinker
-        //Goal::whereNull('today')->update(['today' => false]);
     }
 
     /**
