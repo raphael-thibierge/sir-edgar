@@ -4,7 +4,6 @@ namespace App;
 
 use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Jenssegers\Mongodb\Relations\BelongsTo;
 
 /**
  * Class OAuthConnection
@@ -18,6 +17,8 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  */
 class OAuthConnection extends Model
 {
+    protected $connection = 'mongodb';
+
     protected $collection = 'o_auth_connections';
 
     protected $fillable = [
@@ -26,6 +27,7 @@ class OAuthConnection extends Model
         'token_expiration',
         'service',
         'user_data',
+        'user_id'
     ];
 
     protected $hidden = [
@@ -33,7 +35,7 @@ class OAuthConnection extends Model
         'refresh_token',
     ];
     
-    public function user(): BelongsTo {
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo('App\User');
     }
 

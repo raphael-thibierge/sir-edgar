@@ -13,7 +13,7 @@ class CreateGoalsCollection extends Migration
      */
     public function up()
     {
-        Schema::create('goals', function (Blueprint $table) {
+        Schema::connection('mongodb')->create('goals', function (Blueprint $table) {
             $table->increments('_id');
             $table->string('title');
             $table->integer('score')->unsigned();
@@ -34,6 +34,6 @@ class CreateGoalsCollection extends Migration
      */
     public function down()
     {
-        Schema::drop('goals');
+        Schema::connection('mongodb')->drop('goals');
     }
 }

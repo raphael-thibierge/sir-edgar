@@ -20,6 +20,8 @@ class Budget extends Model
     const PERIOD_WEEK = 'week';
     const PERIOD_MONTHS = 'month';
 
+    protected $connection = 'mongodb';
+
     protected $collection = 'budgets';
 
     protected $primaryKey = '_id';
@@ -50,7 +52,7 @@ class Budget extends Model
     ];
 
 
-    public function user(){
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo('App\User');
     }
 

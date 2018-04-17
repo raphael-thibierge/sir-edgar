@@ -3,6 +3,8 @@
 namespace App;
 
 
+use App\Events\PusherDebugEvent;
+use function GuzzleHttp\default_ca_bundle;
 use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsTo;
@@ -14,6 +16,8 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  */
 class BotMessage extends Model
 {
+    protected $connection = 'mongodb';
+
     protected $collection = 'dialogflow_webhooks';
 
     protected $primaryKey = '_id';
@@ -27,17 +31,7 @@ class BotMessage extends Model
             'request' => $request->toArray()
         ]);
 
-        $senderId = $message->getSender()['id'];
-
-        $user = User::where('facebook_sending_id', $senderId)->first();
-
-        if ($user === null){
-            $user = User::newUser([
-                'facebook_sending_id' => $senderId
-            ]);
-        }
-
-        $message->user()->associate($user);
+        $message->associateUser();
 
         return $message;
     }
@@ -45,24 +39,73 @@ class BotMessage extends Model
     /**
      * @return BelongsTo
      */
-    public function user(): BelongsTo {
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo('App\User');
     }
 
+
+    private function associateUser(){
+
+        // associate user
+        $user = null;
+        switch ($this->getSource()){
+            case 'google':
+                $user = User::first();
+                break;
+
+            case 'facebook':
+                $user = User::where('facebook_sending_id', $this->getFacebookSenderId())->first();
+                if ($user == null){
+                    $user = User::demoUser();
+                }
+                break;
+
+            case 'telegram':
+                $user = User::first();
+                break;
+
+            case 'web_demo':
+                $user = User::demoUser();
+                break;
+
+            default:
+                $user = User::demoUser();
+                break;
+        }
+
+        $this->user()->associate($user);
+    }
+
     public function getOriginalRequest(){
-        return $this->request['originalRequest'];
+        return $this->request['originalDetectIntentRequest'];
     }
 
     public function getSource(){
-        return $this->getOriginalRequest()['source'];
+        $originalIntentRequest = $this->getOriginalRequest();
+
+        // facebook and google
+        if (isset($originalIntentRequest['source']) && !empty(isset($originalIntentRequest['source']))) {
+            return $originalIntentRequest['source'];
+        }
+
+        // telegram
+        else if (isset($originalIntentRequest['payload']['source']) && !empty(isset($originalIntentRequest['payload']['source']))){
+            return $originalIntentRequest['payload']['source'];
+        }
+
+        return 'web_demo';
     }
 
-    public function getSender(){
-        return $this->getOriginalRequest()['data']['sender'];
+    public function getFacebookSender(){
+        return $this->getOriginalRequest()['payload']['data']['sender'];
+    }
+
+    public function getFacebookSenderId(){
+        return $this->getFacebookSender()['id'];
     }
 
     private function getResult(){
-        return $this->request['result'];
+        return $this->request['queryResult'];
     }
 
     public function getAction(){
@@ -79,20 +122,21 @@ class BotMessage extends Model
 
     public function buildTextResponse(string $text){
         $this->response = [
-            'speech' => $text,
-            'displayText' => $text,
+            'fulfillmentText' => $text,
         ];
     }
 
     public function buildEventResponse(string $event, array $parameters = []){
         $this->response = $parameters === [] ? [
-            "followupEvent" => [
+            "followupEventInput" => [
                 "name" => $event,
+                "languageCode" => "en"
             ]
         ] : [
-            "followupEvent" => [
+            "followupEventInput" => [
                 "name" => $event,
-                "data" => $parameters
+                "parameters" => $parameters,
+                "languageCode" => "en"
             ]
         ];
     }

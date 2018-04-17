@@ -13,7 +13,7 @@ class CreateDialogflowWebhoolCollection extends Migration
      */
     public function up()
     {
-        Schema::create('dialogflow_webhooks', function (Blueprint $table) {
+        Schema::connection('mongodb')->create('dialogflow_webhooks', function (Blueprint $table) {
             $table->increments('_id');
             $table->json('request');
             $table->bigInteger('user_id');
@@ -29,6 +29,6 @@ class CreateDialogflowWebhoolCollection extends Migration
      */
     public function down()
     {
-        Schema::drop('dialogflow_webhooks');
+        Schema::connection('mongodb')->drop('dialogflow_webhooks');
     }
 }

@@ -14,6 +14,8 @@ use Jenssegers\Mongodb\Eloquent\Model;
  */
 class MoneyValue extends Model
 {
+    protected $connection = 'mongodb';
+
     protected $collection = 'money_values';
 
     protected $primaryKey = '_id';

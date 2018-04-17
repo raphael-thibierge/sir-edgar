@@ -84,7 +84,7 @@ class BotController extends Controller
     }
 
     private function ask_login_action(){
-        $senderId = $this->botMessage->getSender()['id'];
+        $senderId = $this->botMessage->getFacebookSender()['id'];
 
         if ($this->userInDB !== null){
             $this->botMessage->buildTextResponse('Your account is already linked.');
@@ -131,6 +131,16 @@ class BotController extends Controller
 
         try {
             switch ($action) {
+
+                case 'source.find': {
+                    $this->botMessage->buildTextResponse('Source is ' . $this->botMessage->getSource());
+                    break;
+                }
+
+                case 'name.find': {
+                    $this->botMessage->buildTextResponse('Your name is ' . $this->botMessage->user->name);
+                    break;
+                }
 
                 case 'add_goal_action':
                     BotActions::goal_create_action($this->botMessage);
