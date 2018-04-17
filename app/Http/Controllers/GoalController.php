@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\GoalCreated;
 use App\Events\GoalDeleted;
+use App\Events\PusherDebugEvent;
 use App\Goal;
 use App\User;
 use Carbon\Carbon;
@@ -44,6 +45,8 @@ class GoalController extends Controller
      */
     public function store(Request $request)
     {
+        //$this->authorize('create', Goal::class);
+
         $this->validate($request, [
             'title' => 'required',
             'score' => 'required|integer|max:5',
@@ -56,8 +59,6 @@ class GoalController extends Controller
             "score" => (int)$request->get('score'),
         ]);
 
-        broadcast(new GoalCreated($goal));
-
         return $this->successResponse([
             'goal'  => $goal
         ]);
@@ -66,18 +67,21 @@ class GoalController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param Goal $goal
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Goal $goal)
     {
+        $this->authorize($goal);
+
         $this->validate($request, [
             'title' => 'string',
             'score' => 'integer|max:5',
         ]);
 
-        $goal =  Auth::user()->goals()->find($id)->update([
+        $goal->update([
             "title" => $request->get('title'),
             "score" => (int)$request->get('score'),
         ]);
@@ -86,15 +90,18 @@ class GoalController extends Controller
             'goal'  => $goal
         ]);
     }
+
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param Goal $goal
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
-    public function updateDetails(Request $request, $id)
+    public function updateDetails(Request $request, Goal $goal)
     {
+        $this->authorize('update', $goal);
 
         $this->validate($request, [
             'due_date' => 'present',
@@ -132,9 +139,11 @@ class GoalController extends Controller
             $updates ['notes'] = $due_date;
         }
 
+        if (($today = $request->get('today')) !== null){
+            $updates ['today'] = $due_date;
+        }
 
-        $goal =  Auth::user()->goals()->find($id)->update($updates);
-
+        $goal->update($updates);
 
         return $this->successResponse([
             'goal'  => $goal,
@@ -150,9 +159,7 @@ class GoalController extends Controller
      */
     public function destroy(Goal $goal)
     {
-        if ($goal->getIsCompletedAttribute()){
-            broadcast(new GoalDeleted($goal));
-        }
+        $this->authorize($goal);
         $goal->delete();
         return $this->successResponse();
     }
@@ -165,6 +172,7 @@ class GoalController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function complete(Request $request, Goal $goal){
+        $this->authorize('update', $goal);
         $goal->setCompletedAndSave();
         return $this->successResponse();
     }
@@ -224,10 +232,8 @@ class GoalController extends Controller
         ]);
     }
 
-
-
-
     public function reComplete(Goal $goal){
+        $this->authorize('update', $goal);
 
         if ($goal->getIsCompletedAttribute() == true){
 
@@ -247,6 +253,7 @@ class GoalController extends Controller
     }
 
     public function setToday(Request $request, Goal $goal){
+        $this->authorize('update', $goal);
 
         $this->validate($request, [
             'today' => 'required|in:true,false'
@@ -286,6 +293,38 @@ class GoalController extends Controller
 
         return $this->successResponse([
             'score' => $score
+        ]);
+    }
+
+    public function completedStats(){
+        $user = Auth::user();
+
+        $oneWeekAgo = Carbon::today($user->timezone)->subWeeks(1);
+        $oneMonthAgo = Carbon::today($user->timezone)->subMonths(1);
+        $today = Carbon::today($user->timezone);
+
+        $total = $user->completedGoals();
+        $thisDay = $user->goals()->where('completed_at', '>=', $today);
+        $thisWeek = $user->goals()->where('completed_at', '>=', $oneWeekAgo);
+        $thisMonth = $user->goals()->where('completed_at', '>=', $oneMonthAgo);
+        $todo = $user->goals()->whereNull('completed_at');
+
+
+        return $this->successResponse([
+            'goals' => [
+                'today' => $thisDay->count(),
+                'total' => $total->count(),
+                'week' => $thisWeek->count(),
+                'month' => $thisMonth->count(),
+                'todo' => $todo->count()
+            ],
+            'score' => [
+                'today' => $thisDay->sum('score'),
+                'total' => $total->sum('score'),
+                'week' => $thisWeek->sum('score'),
+                'month' => $thisMonth->sum('score'),
+                'todo' => $todo->sum('score')
+            ]
         ]);
     }
 

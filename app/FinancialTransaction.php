@@ -3,8 +3,8 @@
 namespace App;
 
 
+use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Jenssegers\Mongodb\Relations\BelongsTo;
 
 /**
  * @property string type
@@ -12,6 +12,8 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  * @property mixed currency
  * @property array|mixed tags
  * @property string title
+ * @property Carbon created_at
+ * @property string user_id
  */
 class FinancialTransaction extends Model
 {
@@ -20,6 +22,8 @@ class FinancialTransaction extends Model
     const SAVING = "saving";
 
     protected $primaryKey = '_id';
+
+    protected $connection = 'mongodb';
 
     protected $collection = 'financial_transactions';
 
@@ -31,16 +35,23 @@ class FinancialTransaction extends Model
         'tags',
         'currency',
         'price',
+        'date',
     ];
 
     protected $dates = [
-        'created_at'
+        'date',
+        'created_at',
+        'updated_at',
+    ];
+
+    protected $casts = [
+        'price' => 'float'
     ];
 
     /**
      * @return BelongsTo
      */
-    public function user(): BelongsTo {
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo('App\User');
     }
 
@@ -53,26 +64,26 @@ class FinancialTransaction extends Model
             }
         }
 
-        return $this->type . ' : ' . $this->price . $this->currency . ' ' . $tags;
+        return $this->type . ' : ' . $this->price . ' ' . $this->currency . ' ' . $tags;
     }
 
 
     public function tagsEdit()
     {
         $tags = [];
-        $titlesFormatted = [];
-        $titlesParts = explode('#', strtolower($this->title));
 
-         foreach ($titlesParts as $part){
+        $words = explode(' ', strtolower($this->title));
 
-             if (!empty($part)){
-                 $titlesFormatted []= $part;
-                $partPiece = explode(' ', $part);
-                $tags []= $partPiece[0];
-             }
+        foreach ($words as $word){
+            if (!empty($word) && strpos($word, '#') === 0){
+                $tag = trim($word, '#');
+                if (!in_array($tag, $tags)){
+                    $tags []= $tag;
+                }
+            }
         }
-        $this->tags = $tags;
-        $this->title = implode($titlesFormatted, '');
 
+        $this->tags = $tags;
+        $this->title = str_replace('#' , '', $this->title);
     }
 }

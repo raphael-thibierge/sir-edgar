@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}"_>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,23 +13,11 @@
 
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/react-day-picker.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('css/react-day-picker.css') }}" rel="stylesheet" type="text/css">
 
-    @if(config('app.env') === 'production')
-    <!-- Google analytics -->
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    @include('google-analytics-script')
 
-        ga('create', 'UA-106873842-1', 'auto');
-        ga('send', 'pageview');
-
-    </script>
-
-    @endif
     <style>
         .react-calendar-heatmap .color-scale-0 { fill: #ebedf0;}
         .react-calendar-heatmap .color-scale-1 { fill: #d6e685;}
@@ -81,6 +69,7 @@
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
+                                    <li><a href="{{ route('account') }}">Account</a></li>
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
@@ -104,25 +93,20 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
 
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous" defer></script>
     <script type="text/javascript">
-        window.token = "{{ csrf_token() }}";
         window._token = "{{ csrf_token() }}";
     </script>
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}" defer></script>
 
-
-    <script src="//cdn.headwayapp.co/widget.js"></script>
-    <script>
-        var config = {
-            selector: ".change_log", // CSS selector where to inject the badge
-            account: "xGMR2J", // your account ID,
-        };
-        //Headway.init(config);
-    </script>
+    @if(config('app.env') === 'production')
+    <!-- CBRain integration --> 
+    <script type="application/javascript">var brain_client_id = 1000022;</script>
+    <script src="https://brain-website-data.s3.ca-central-1.amazonaws.com/js/brain-script.js"></script>
+    @endif
 
 </body>
 <footer>

@@ -3,9 +3,9 @@ import {Image} from 'react-bootstrap';
 import Echo from "laravel-echo";
 
 window.pusher = require('pusher-js');
-
 import ProjectRoot from './components/project/ProjectRoot.jsx';
 import FinanceRoot from './components/financial/FinanceRoot';
+import UserRoot from './components/user/UserRoot';
 
 export default class AppRoot extends React.Component {
 
@@ -55,14 +55,13 @@ export default class AppRoot extends React.Component {
         }
     }
 
-
     render(){
 
         if (this.state.loading === false || this.state.user === null){
             return (
                 <div className="row">
                     <div className="col-xs-12">
-                        <Image src="/images/logo.png" rounded circle responsive thumbnail/>
+                        <Image src="/images/logo-min.png" rounded circle responsive thumbnail/>
                     </div>
                 </div>
             );
@@ -79,6 +78,14 @@ export default class AppRoot extends React.Component {
                 <FinanceRoot user={this.state.user}/>
             );
         }
+
+        if (this.props.app == 'user'){
+            return (
+                <UserRoot user={this.state.user}/>
+            );
+        }
+
+
 
     }
 

@@ -24,7 +24,6 @@ export default class AjaxEditableValue extends React.Component {
 
     }
 
-
     validate(){
         if (this.props.ajaxURI ){
 
@@ -93,6 +92,7 @@ export default class AjaxEditableValue extends React.Component {
                         placeholder=""
                         onChange={(e) => {this.setState({ value: e.target.value })}}
                         onKeyPress={this.handleKeyPress.bind(this)}
+                        autoFocus
                     />
                 </div>
 
@@ -132,7 +132,7 @@ export default class AjaxEditableValue extends React.Component {
     }
 };
 
-/*
+
 AjaxEditableValue.propTypes = {
     onSuccess: PropTypes.func,
     ajaxURI: PropTypes.string,
@@ -145,6 +145,4 @@ AjaxEditableValue.propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
     method: PropTypes.oneOf(['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
-
-
-}; */
+};

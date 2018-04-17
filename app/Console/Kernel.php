@@ -21,15 +21,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        /*DailyGoalsReportCommand::class,
-        CheckRemindersCommand::class,
-        DailyGoalsReportCommand::class,
-        MorningEdgarMessageCommand::class,
-        ImportantNotificationEdgar::class,
-        AdminCoinBaseCommand::class,
-        CoinbasePriceCommand::class,
-        CoinbaseFeesCommand::class,
-        CoinbaseCheckApiStatusCommand::class,*/
+
     ];
 
     /**
@@ -41,14 +33,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
-        $schedule->command('coinbase:price:update')->everyMinute();
+        //$schedule->command('coinbase:price:update')->everyMinute();
         $schedule->command('coinbase:api:status')->everyMinute();
 
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
-
-        // server monitoring
-        $schedule->command('monitor:run')->daily()->at('10:00');
-        $schedule->command('monitor:run HttpPing')->hourly();
 
         foreach (timezone_identifiers_list() as $timezone){
            // $schedule->command('report:goals:daily')
@@ -58,6 +46,10 @@ class Kernel extends ConsoleKernel
             $schedule->command('goals:check ' . $timezone)
                 ->timezone($timezone)
                 ->dailyAt(8);
+
+            $schedule->command('goals:due-date:important ' . $timezone)
+                ->timezone($timezone)
+                ->dailyAt(0);
         }
 
         $schedule->command('reminders:check')
@@ -75,7 +67,7 @@ class Kernel extends ConsoleKernel
             ->dailyAt('08:30');
 
 
-        $schedule->command('goals:important:messenger')->hourly();
+        //$schedule->command('goals:important:messenger')->hourly();
 
     }
 

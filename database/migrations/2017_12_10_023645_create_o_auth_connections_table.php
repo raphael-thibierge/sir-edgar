@@ -13,7 +13,7 @@ class CreateOAuthConnectionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('o_auth_connections', function (Blueprint $table) {
+        Schema::connection('mongodb')->create('o_auth_connections', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ class CreateOAuthConnectionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('o_auth_connections');
+        Schema::connection('mongodb')->dropIfExists('o_auth_connections');
     }
 }

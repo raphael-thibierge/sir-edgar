@@ -13,7 +13,7 @@ class CreateProjectsCollection extends Migration
      */
     public function up()
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::connection('mongodb')->create('projects', function (Blueprint $table) {
             $table->increments('_id');
             $table->string('title');
             $table->bigInteger('user_id');
@@ -31,6 +31,6 @@ class CreateProjectsCollection extends Migration
      */
     public function down()
     {
-        Schema::drop('projects');
+        Schema::connection('mongodb')->drop('projects');
     }
 }

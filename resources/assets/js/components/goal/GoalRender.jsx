@@ -29,6 +29,7 @@ export default class GoalRender extends React.Component{
                     onClick={typeof this.props.goal.remove === 'function' ? this.props.goal.remove: null}
                     bsSize="xs"
                     bsStyle="danger"
+                    disabled={typeof this.props.goal.remove !== 'function'}
                 ><Glyphicon glyph="trash"/></Button>
             </span>
         )
@@ -42,6 +43,7 @@ export default class GoalRender extends React.Component{
                         ? this.props.goal.setCompleted.bind(this.props.goal): null}
                     bsSize="xs"
                     bsStyle="success"
+                    disabled={typeof this.props.goal.setCompleted !== 'function'}
                 ><Glyphicon glyph="ok"/></Button>
             </span>
         )
@@ -67,7 +69,7 @@ export default class GoalRender extends React.Component{
             (
                 <GoalDetailsModal goal={this.props.goal}/>
             ) : (
-                <a style={{marginLeft: 5}}>{this.props.goal.title}</a>
+                <a style={{marginLeft: 5, cursor: 'not-allowed'}}>{this.props.goal.title}</a>
             );
     }
 
@@ -102,16 +104,26 @@ export default class GoalRender extends React.Component{
 
     dueDateRender(){
         const goal = this.props.goal;
-        return typeof goal.due_date !== 'undefined' && goal.due_date !== null ? (
-            <strong style={{marginLeft: 10}} className="text-right">
-                <em className={
-                    goal.due_date.toISOString().slice(0,10) === (new Date()).toISOString().slice(0,10)
-                    || goal.due_date < new Date()
-                        ? "text-danger" : ""} >
-                    {goal.due_date.toISOString().slice(0,10)}
-                </em>
-            </strong>
-        ) : null
+
+        const due_date = goal.due_date;
+
+        if( typeof due_date !== 'undefined' && goal.due_date !== null ) {
+
+            let day = new Date();
+
+            if (due_date.getDate()  )
+
+            return (
+                <strong style={{marginLeft: 10}} className="text-right">
+                    <em className={
+                        due_date.toISOString().slice(0, 10) === (new Date()).toISOString().slice(0, 10)
+                        || due_date < new Date()
+                            ? "text-danger" : ""}>
+                        {due_date.toISOString().slice(0, 10)}
+                    </em>
+                </strong>
+            );
+        };
     }
 
     estimatedTimeRender(){

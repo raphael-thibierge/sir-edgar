@@ -13,7 +13,7 @@ class AddGoalsDetailsInGoalsCollection extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::connection('mongodb')->table('goals', function (Blueprint $table) {
             $table->dateTime('start_time_tracker')->nullable();
             $table->dateTime('end_time_tracker')->nullable();
             $table->date('due_date')->nullable();
@@ -31,7 +31,7 @@ class AddGoalsDetailsInGoalsCollection extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::connection('mongodb')->table('goals', function (Blueprint $table) {
             $table->dropColumn('start_time_tracker');
             $table->dropColumn('end_time_tracker');
             $table->dropColumn('due_date');

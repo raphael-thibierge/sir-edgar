@@ -3,9 +3,10 @@
 namespace App;
 
 use App\Events\GoalCompleted;
+use App\Events\GoalCreated;
+use App\Events\GoalDeleted;
 use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Jenssegers\Mongodb\Query\Builder;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 
 /**
@@ -17,6 +18,7 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  * @property Project project
  * @property int score
  * @property User user
+ * @property string user_id
  */
 class Goal extends Model
 {
@@ -24,6 +26,8 @@ class Goal extends Model
     const TYPE_NOTE = 'note';
     const TYPE_REMINDER = 'reminder';
     const TYPE_DEFAULT = Goal::TYPE_GOAL;
+
+    protected $connection = 'mongodb';
 
     /**
      * Mongo collection
@@ -78,9 +82,19 @@ class Goal extends Model
     ];
 
     /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'created' => GoalCreated::class,
+        'deleted' => GoalDeleted::class,
+    ];
+
+    /**
      * @return BelongsTo
      */
-    public function user(): BelongsTo {
+    public function user() : \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo('App\User');
     }
 
@@ -109,13 +123,12 @@ class Goal extends Model
         broadcast(new GoalCompleted($this));
     }
 
-
-    public static function searchByTitle(string $title): Builder{
+    public static function searchByTitle(string $title){
         return Goal::where('title', 'like', $title);
     }
 
     public function toString(){
-        return $this->title . "($this->score) ";
+        return $this->title . " ($this->score)";
     }
 
 }

@@ -160,8 +160,10 @@ class BotActions
     {
         $goals = $botMessage->user->goals()
             ->whereNull('completed_at')
-            ->where('today', true)->get();
-        BotResponse::display_goal_list_response($goals, $botMessage);
+            ->where('today', true)
+            ->with('project')
+            ->get();
+        BotResponse::display_goal_list_response($goals, $botMessage, true);
     }
 
     /**
@@ -312,6 +314,7 @@ class BotActions
             'currency'  => strtoupper($unitCurrency['currency']),
             'price'     => (float)$unitCurrency['amount'],
             'type'      => $type,
+            'date'      => Carbon::now($botMessage->user->timezone)
         ]);
         $expense->tagsEdit();
 
@@ -341,8 +344,8 @@ class BotActions
 
         $total = $botMessage->user->financialTransactions()
             ->where('type', $type)
-            ->where('created_at', '>=', $startDate)
-            ->where('created_at', '<', $stopDate)
+            ->where('date', '>=', $startDate)
+            ->where('date', '<', $stopDate)
             ->sum('price');
 
         $action = $type === FinancialTransaction::EXPENSE ? 'spent' : (

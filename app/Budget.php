@@ -20,6 +20,8 @@ class Budget extends Model
     const PERIOD_WEEK = 'week';
     const PERIOD_MONTHS = 'month';
 
+    protected $connection = 'mongodb';
+
     protected $collection = 'budgets';
 
     protected $primaryKey = '_id';
@@ -32,6 +34,7 @@ class Budget extends Model
     protected $appends = [
         'total',
         'progress',
+        'expenses'
     ];
 
     protected $fillable = [
@@ -49,9 +52,11 @@ class Budget extends Model
     ];
 
 
-    public function user(){
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo('App\User');
     }
+
+
 
     public function expenses(){
 
@@ -68,8 +73,8 @@ class Budget extends Model
             where('user_id', $this->user_id)
             ->where('type', FinancialTransaction::EXPENSE)
             ->where('currency', $this->currency)
-            ->where('created_at', '>=', $startDate)
-            ->where('created_at', '<', $endDate);
+            ->where('date', '>=', $startDate)
+            ->where('date', '<', $endDate);
 
         if (isset($this->tags) && count($this->tags) > 0){
             $query->whereRaw(['tags' => ['$in' => $this->tags]]);
@@ -81,8 +86,12 @@ class Budget extends Model
         return $this->expenses()->sum('price');
     }
 
+    public function getExpensesAttribute(){
+        return $this->expenses()->get();
+    }
+
     public function getProgressAttribute(){
-        return (int)(($this->getTotalAttribute() / $this->amount ) * 100 );
+        return $this->amount === 0 ? -1 : (int)(($this->getTotalAttribute() / $this->amount ) * 100 );
     }
 
     public function toString(): string {

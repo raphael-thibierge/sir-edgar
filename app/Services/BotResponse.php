@@ -62,9 +62,9 @@ class BotResponse
      * @param Collection $goals
      * @param BotMessage $botMessage
      */
-    public static function display_goal_list_response(Collection $goals, BotMessage &$botMessage){
+    public static function display_goal_list_response(Collection $goals, BotMessage &$botMessage, bool $projectName = false){
         $goalList = [];
-        $goals->each(function (Goal $goal, $key) use(&$goalList, $botMessage)
+        $goals->each(function (Goal $goal, $key) use(&$goalList, $botMessage, $projectName)
         {
             $dueDate = '';
             if ($goal->due_date !== null){
@@ -73,7 +73,7 @@ class BotResponse
                 $dueDate = ' at ' . $date;
             }
 
-            $goalList []= "- $goal->title ($goal->score)"
+            $goalList []= "- " . ($projectName ? $goal->project->title . ' :' : '') .  " $goal->title ($goal->score)"
                 . $dueDate;
         });
 

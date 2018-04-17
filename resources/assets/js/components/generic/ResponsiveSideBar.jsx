@@ -12,11 +12,8 @@ import {
     ic_attach_money,
 } from 'react-icons-kit/md';
 
-import {
-    bitcoin
-} from 'react-icons-kit/fa';
-
 import {SideNav, Nav, NavText, NavIcon} from 'react-sidenav';
+import PropTypes from 'prop-types';
 
 const NavMain = {
     stats: { title: 'Stats', icon: ic_equalizer},
@@ -79,6 +76,16 @@ export default class ResponsiveSideBar extends React.Component{
                     <div>Finance</div>
                 </SeparatorTitle>
 
+                <Nav key={'expense_stats'} id={'expense_stats'}>
+                    <NavIcon><SvgIcon size={20} icon={ic_equalizer}/></NavIcon>
+                    <NavText>Expenses graph</NavText>
+                </Nav>
+
+                <Nav id="tags_frequency">
+                    <NavIcon><SvgIcon size={20} icon={ic_equalizer}/></NavIcon>
+                    <NavText>Tags frequency</NavText>
+                </Nav>
+
                 <Nav id="budgets">
                     <NavIcon><SvgIcon size={20} icon={ic_work}/></NavIcon>
                     <NavText>Budgets</NavText>
@@ -89,20 +96,14 @@ export default class ResponsiveSideBar extends React.Component{
                     <NavText>Expenses</NavText>
                 </Nav>
 
-                <Nav id="coinbase">
-                    <NavIcon><SvgIcon size={20} icon={bitcoin}/></NavIcon>
-                    <NavText>Coinbase</NavText>
-                </Nav>
 
             </SideNav>
         )
     }
 };
-/*
+
 ResponsiveSideBar.propTypes = {
     projects: PropTypes.array.isRequired,
     onItemSelection: PropTypes.func.isRequired,
     selected: PropTypes.string.isRequired
-
-
-};*/
+};

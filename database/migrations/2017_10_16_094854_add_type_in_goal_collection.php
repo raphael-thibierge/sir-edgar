@@ -13,11 +13,11 @@ class AddTypeInGoalCollection extends Migration
      */
     public function up()
     {
-        Schema::table('goals', function (Blueprint $table) {
+        Schema::connection('mongodb')->table('goals', function (Blueprint $table) {
             $table->string('type')->default('goal');
         });
 
-        \App\Goal::whereNull('type')->update(['type' => 'goal']);
+        //\App\Goal::whereNull('type')->update(['type' => 'goal']);
     }
 
     /**
@@ -27,7 +27,7 @@ class AddTypeInGoalCollection extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::connection('mongodb')->table('goals', function (Blueprint $table) {
             $table->dropColumn('type');
         });
     }

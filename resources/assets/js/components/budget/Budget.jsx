@@ -1,10 +1,19 @@
 import React from 'react';
 import {ProgressBar, Panel} from 'react-bootstrap';
 import BudgetEditModal from './BudgetEditModal'
+import Tools from '../Tools';
+import TagFrequencyChart from '../expense/TagFrequencyChart';
 
 export default class Budget extends React.Component {
-    render(){
 
+    constructor(props){
+        super(props);
+        this.state = {
+            showExpenses: false,
+        }
+    }
+
+    render(){
 
         const progress = Math.floor((this.props.budget.total/this.props.budget.amount)*100);
 
@@ -68,7 +77,7 @@ export default class Budget extends React.Component {
 
                     <div className="col-xs-4">
                         <span style={{marginLeft: 5}}>
-                            {this.props.budget.total}
+                            {Math.round(this.props.budget.total*100)/100}
                             <small> {this.props.budget.currency}</small>
                         </span>
                     </div>
@@ -82,7 +91,7 @@ export default class Budget extends React.Component {
                     </div>
                     <div className="col-xs-4 text-right">
                         <span style={{marginRight: 5}}>
-                            {this.props.budget.amount}
+                            {Math.floor(this.props.budget.amount*100/100)}
                             <small> {this.props.budget.currency}</small>
                         </span>
                     </div>
@@ -92,6 +101,40 @@ export default class Budget extends React.Component {
                         {progressBar}
                     </div>
                 </div>
+
+                <div className="row">
+                    <div className="col-xs-12">
+                        <TagFrequencyChart
+                            tags={Array.isArray(this.props.budget.tags) ?
+                                this.props.budget.tags.join(' ') : this.props.budget.tags }
+                            height={'110px'}
+                        />
+                    </div>
+                </div>
+
+                {this.props.budget.expenses.length >0 ?
+                <div className="row">
+                    <div className="col-xs-12">
+                        <a onClick={this.setState.bind(this, {showExpenses: !this.state.showExpenses})}>
+                            {this.state.showExpenses ?
+                                'Hide expenses...' :
+                                'Show expenses...'
+                            }
+                        </a>
+                        {this.state.showExpenses ?
+                        <ul>
+                            {this.props.budget.expenses.map(expense => (
+                                <li>
+                                    {Tools.dateFormatWithOffset(expense.date).toLocaleDateString()} : {' '}
+                                    {expense.title}, {expense.price} {expense.currency}
+                                </li>
+                            ))}
+                        </ul>
+                        : null}
+                    </div>
+
+                </div>
+                : null}
             </Panel>
         );
     }

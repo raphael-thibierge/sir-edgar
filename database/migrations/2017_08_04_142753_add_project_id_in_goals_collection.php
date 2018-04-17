@@ -13,7 +13,7 @@ class AddProjectIdInGoalsCollection extends Migration
      */
     public function up()
     {
-        Schema::table('goals', function (Blueprint $table) {
+        Schema::connection('mongodb')->table('goals', function (Blueprint $table) {
             $table->bigInteger('project_id')->nullable();
             $table->foreign('project_id')
                 ->references('_id')
@@ -29,7 +29,7 @@ class AddProjectIdInGoalsCollection extends Migration
      */
     public function down()
     {
-        Schema::table('goals', function (Blueprint $table) {
+        Schema::connection('mongodb')->table('goals', function (Blueprint $table) {
             $table->dropForeign('project_id');
             $table->dropColumn('project_id');
         });

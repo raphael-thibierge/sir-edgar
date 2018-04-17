@@ -1,12 +1,10 @@
 
 
-@servers(['web' => 'ubuntu@www.sir-edgar.com'])
+@servers(['web' => 'ubuntu@sir-edgar.com'])
 
 @task('deploy', ['on' => ['web']])
 
-    cd ProductivityApp/
-
-    php artisan horizon:terminate
+    cd sir-edgar/
 
     php artisan down
 
@@ -18,11 +16,15 @@
         git pull
     @endif
 
-    composer install --optimize-autoloader
+    composer install
 
     php artisan migrate --force
 
     php artisan config:cache
+
+    php artisan route:cache
+
+    php artisan horizon:terminate
 
     php artisan up
 
