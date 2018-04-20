@@ -96,8 +96,16 @@ class BotMessage extends Model
         return 'web_demo';
     }
 
-    public function getFacebookSender(){
-        return $this->getOriginalRequest()['payload']['data']['sender'];
+    public function getFacebookSender(): array {
+
+        $originalRequest = $this->getOriginalRequest()['payload'];
+        if (isset($originalRequest['sender'])) {
+            return $originalRequest['sender'];
+        } else if (isset($originalRequest['data']['sender'])){
+            return $originalRequest['data']['sender'];
+        }
+
+        return ['id' => ['']];
     }
 
     public function getFacebookSenderId(){
