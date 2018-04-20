@@ -23,23 +23,56 @@ export default class ExpenseRoot extends React.Component {
 
     }
 
+    onDelete(deletedTransaction){
+
+        $.ajax({
+            url: '/financial-transactions/' + deletedTransaction._id,
+            cache: false,
+            method: 'POST',
+            datatype: 'json',
+            data: {
+                _method: 'DELETE',
+                _token: window.token,
+            },
+            success: function (response) {
+                if (response.status && response.status === 'success') {
+                    this.setState({
+                        transactions: this.state.transactions.filter(
+                            transaction => deletedTransaction._id !== transaction._id
+                        )
+                    });
+                }
+
+            }.bind(this),
+            error: function () {
+                alert('Deleting expense failed ! Please retry later.')
+            },
+        });
+
+
+    }
+
     onSave(transaction){
         let transactions = this.state.transactions;
-        transaction.date = Tools.dateFormatWithOffset(transaction.date);
-        transactions.push(transaction);
+        transactions.push(ExpenseRoot.formatTransactionDates(transaction));
         this.setState({transactions: transactions});
     }
 
-    onUpdate(transaction){
-
+    static formatTransactionDates(transaction){
         transaction.date = Tools.dateFormatWithOffset(transaction.date);
+        transaction.created_at = Tools.dateFormatWithOffset(transaction.created_at);
+        transaction.updated_at = Tools.dateFormatWithOffset(transaction.updated_at);
+        return transaction;
+    }
+
+    onUpdate(transaction){
 
         let transactions = this.state.transactions;
 
         for (let i = 0; i < transactions.length; i++){
 
             if (transactions[i]._id === transaction._id){
-                transactions[i] = transaction;
+                transactions[i] = ExpenseRoot.formatTransactionDates(transaction);
             }
         }
 
@@ -78,10 +111,7 @@ export default class ExpenseRoot extends React.Component {
 
                     this.setState({
                         loaded: true,
-                        transactions: transactions.map((expense) => {
-                            expense.date = Tools.dateFormatWithOffset(expense.date);
-                            return expense;
-                        }),
+                        transactions: transactions.map(ExpenseRoot.formatTransactionDates),
                     });
                 }
             });
@@ -171,6 +201,7 @@ export default class ExpenseRoot extends React.Component {
                             <ExpenseTable
                                 expenses={transactions}
                                 onUpdate={this.onUpdate.bind(this)}
+                                onDelete={this.onDelete.bind(this)}
                             />
                         </div>
                     ): null}

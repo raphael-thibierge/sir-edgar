@@ -71,12 +71,12 @@ export default class GoalsGraph extends React.Component{
             const projects_names = Object.values(projects);
 
             // build header with the list of project name
-            let header = ['Day'];
-            header = header.concat(projects_names);
-            header.push({ role: 'annotation' });
+            let header = [{label: 'Day', type: 'date'}];
+            header = header.concat(projects_names.map((name) => {return {label: name, type: 'number'}}));
+            header.push({ label: 'total', role: 'annotation', type: 'number'});
 
             // start filling data, with header as first line
-            let data = [header];
+            let data = [];
 
 
             // get first date of scores
@@ -96,7 +96,7 @@ export default class GoalsGraph extends React.Component{
                 const dateAsString = date.toISOString().slice(0,10);
 
                 // first column is the date
-                let line = [dateAsString];
+                let line = [new Date(dateAsString)];
 
                 let total = 0;
                 let projectScores = [];
@@ -124,7 +124,7 @@ export default class GoalsGraph extends React.Component{
                         line.push(0);
                     }
                 }
-                line.push(total > 0? total : "");
+                line.push(total > 0? total : null);
 
                 calendatData.push({date: dateAsString, count: total, projects: projectScores});
 
@@ -154,6 +154,7 @@ export default class GoalsGraph extends React.Component{
                 scoreMax: scoreMax,
                 projects: projects,
                 projectIds: projects_ids,
+                columns: header,
             });
         }
     }
@@ -162,9 +163,9 @@ export default class GoalsGraph extends React.Component{
      * alert user when an ajax request failed
      * @param response
      */
-    onError(response) {
+    onError(error) {
         alert(error.statusText);
-        console.error(response);
+        console.error(error.statusText);
     }
 
 
@@ -182,7 +183,6 @@ export default class GoalsGraph extends React.Component{
     }
 
     deleteGoal(goal){
-        console.log(goal);
         if (goal && goal.is_completed){
             let data = this.state.googleChartData;
 
@@ -249,6 +249,10 @@ export default class GoalsGraph extends React.Component{
 
         let startDate = new Date();
         startDate.setMonth(startDate.getMonth()-12);
+
+        let column = [
+            {label: 'day', type: 'date'},
+        ];
 
         return (
             <div className="row">
@@ -318,7 +322,8 @@ export default class GoalsGraph extends React.Component{
                                 <Panel header={<h2>Project scores per day</h2>} style={{paddingTop: -10}}>
                                     <Chart
                                         chartType="ColumnChart"
-                                        data={this.state.googleChartData}
+                                        rows={this.state.googleChartData}
+                                        columns={this.state.columns}
                                         options={options}
                                         graph_id="ScatterChart_material"
                                         width="100%"
@@ -335,7 +340,7 @@ export default class GoalsGraph extends React.Component{
         )
     }
 };
-/*
+
 GoalsGraph.propTypes = {
     projectCurrentNumber: PropTypes.number.isRequired
-};*/
+};

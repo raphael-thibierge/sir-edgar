@@ -6,12 +6,16 @@ namespace App;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use Jenssegers\Mongodb\Relations\HasMany;
+use Laravel\Scout\Searchable;
 
 /**
  * @property string user_id
  */
 class Project extends Model
 {
+    use Searchable;
+
+    protected $connection = 'mongodb';
 
     /**
      * @var string
@@ -50,12 +54,12 @@ class Project extends Model
 
     /**
      * Project's user
-     *
-     * @return BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user(): BelongsTo {
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo('App\User');
     }
+
 
     /**
      * Project's goals

@@ -12,11 +12,8 @@ import {
     ic_attach_money,
 } from 'react-icons-kit/md';
 
-import {
-    bitcoin
-} from 'react-icons-kit/fa';
-
 import {SideNav, Nav, NavText, NavIcon} from 'react-sidenav';
+import PropTypes from 'prop-types';
 
 const NavMain = {
     stats: { title: 'Stats', icon: ic_equalizer},
@@ -104,11 +101,9 @@ export default class ResponsiveSideBar extends React.Component{
         )
     }
 };
-/*
+
 ResponsiveSideBar.propTypes = {
     projects: PropTypes.array.isRequired,
     onItemSelection: PropTypes.func.isRequired,
     selected: PropTypes.string.isRequired
-
-
-};*/
+};

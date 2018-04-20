@@ -3,9 +3,12 @@
 namespace App;
 
 use App\Events\GoalCompleted;
+use App\Events\GoalCreated;
+use App\Events\GoalDeleted;
 use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsTo;
+use Laravel\Scout\Searchable;
 
 /**
  * @property Carbon completed_at
@@ -20,10 +23,14 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  */
 class Goal extends Model
 {
+    use Searchable;
+
     const TYPE_GOAL = 'goal';
     const TYPE_NOTE = 'note';
     const TYPE_REMINDER = 'reminder';
     const TYPE_DEFAULT = Goal::TYPE_GOAL;
+
+    protected $connection = 'mongodb';
 
     /**
      * Mongo collection
@@ -78,9 +85,19 @@ class Goal extends Model
     ];
 
     /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'created' => GoalCreated::class,
+        'deleted' => GoalDeleted::class,
+    ];
+
+    /**
      * @return BelongsTo
      */
-    public function user(): BelongsTo {
+    public function user() : \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo('App\User');
     }
 
@@ -108,7 +125,6 @@ class Goal extends Model
         $this->save();
         broadcast(new GoalCompleted($this));
     }
-
 
     public static function searchByTitle(string $title){
         return Goal::where('title', 'like', $title);

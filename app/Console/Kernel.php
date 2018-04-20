@@ -38,10 +38,6 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
 
-        // server monitoring
-        //$schedule->command('monitor:run')->daily()->at('10:00');
-        //$schedule->command('monitor:run HttpPing')->hourly();
-
         foreach (timezone_identifiers_list() as $timezone){
            // $schedule->command('report:goals:daily')
             //    ->timezone($timezone)
@@ -50,6 +46,10 @@ class Kernel extends ConsoleKernel
             $schedule->command('goals:check ' . $timezone)
                 ->timezone($timezone)
                 ->dailyAt(8);
+
+            $schedule->command('goals:due-date:important ' . $timezone)
+                ->timezone($timezone)
+                ->dailyAt(0);
         }
 
         $schedule->command('reminders:check')

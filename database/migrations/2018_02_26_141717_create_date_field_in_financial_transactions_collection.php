@@ -14,12 +14,8 @@ class CreateDateFieldInFinancialTransactionsCollection extends Migration
      */
     public function up()
     {
-        Schema::table('financial_transactions', function (Blueprint $collection){
+        Schema::connection('mongodb')->table('financial_transactions', function (Blueprint $collection){
             $collection->dateTime('date');
-        });
-
-        FinancialTransaction::all()->each(function(FinancialTransaction $transaction){
-            $transaction->update(['date' => $transaction->created_at]);
         });
     }
 
@@ -30,7 +26,7 @@ class CreateDateFieldInFinancialTransactionsCollection extends Migration
      */
     public function down()
     {
-        Schema::table('financial_transactions', function (Blueprint $collection){
+        Schema::connection('mongodb')->table('financial_transactions', function (Blueprint $collection){
             $collection->dropColumn('date');
         });
     }

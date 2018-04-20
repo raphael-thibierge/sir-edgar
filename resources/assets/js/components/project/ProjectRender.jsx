@@ -1,6 +1,5 @@
 import React from 'react';
 import GoalList from '../goal/GoalList';
-import AjaxEditableValue from '../generic/AjaxEditableValue';
 import ProjectDetailsModal from './ProjectDetailsModal';
 import PropTypes from 'prop-types';
 /**
@@ -8,10 +7,6 @@ import PropTypes from 'prop-types';
  */
 export default class ProjectRender extends React.Component{
 
-     /* propTypes:{
-        project: PropTypes.object.isRequired,
-        onTitleChange: PropTypes.func,
-    },*/
 
     constructor(props){
         super(props);
@@ -78,4 +73,9 @@ export default class ProjectRender extends React.Component{
         );
     }
 
+};
+
+ProjectRender.propTypes = {
+    project: PropTypes.object.isRequired,
+    onTitleChange: PropTypes.func,
 };

@@ -68,11 +68,6 @@ class BotController extends Controller
         ];
     }
 
-    private function findParameter(string $parameter){
-        return $this->botMessage->getParameter($parameter);
-    }
-
-
     private function findProject(){
 
         $projectName = $this->botMessage->getParameter('project');
@@ -88,28 +83,8 @@ class BotController extends Controller
         return $project;
     }
 
-
-    private function show_project_action(){
-
-
-        $project = $this->findProject();
-
-        if ($project === null) {
-            $responseData = $this->buildSimpleTextResponseData('Project not found');
-        } else {
-
-
-            $goals = $project->goals()->select(['title', 'score', 'completed_at'])
-                ->whereNull('completed_at')->get();
-
-            $responseData = $this->goalListAsString($goals);
-        }
-
-        return $responseData;
-    }
-
     private function ask_login_action(){
-        $senderId = $this->botMessage->getSender()['id'];
+        $senderId = $this->botMessage->getFacebookSender()['id'];
 
         if ($this->userInDB !== null){
             $this->botMessage->buildTextResponse('Your account is already linked.');
@@ -156,6 +131,16 @@ class BotController extends Controller
 
         try {
             switch ($action) {
+
+                case 'source.find': {
+                    $this->botMessage->buildTextResponse('Source is ' . $this->botMessage->getSource());
+                    break;
+                }
+
+                case 'name.find': {
+                    $this->botMessage->buildTextResponse('Your name is ' . $this->botMessage->user->name);
+                    break;
+                }
 
                 case 'add_goal_action':
                     BotActions::goal_create_action($this->botMessage);

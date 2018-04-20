@@ -14,11 +14,9 @@ class AddScoreGoalInUserCollection extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::connection('pgsql')->table('users', function (Blueprint $table) {
             $table->integer('daily_score_goal')->unsigned()->default(5);
         });
-
-        User::whereNull('daily_score_goal')->update(['daily_score_goal' => 5]);
     }
 
     /**
@@ -28,7 +26,7 @@ class AddScoreGoalInUserCollection extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::connection('pgsql')->table('users', function (Blueprint $table) {
             $table->dropColumn('daily_score_goal');
         });
     }

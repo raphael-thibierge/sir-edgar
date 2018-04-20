@@ -1,7 +1,6 @@
 import React from 'react';
 import {FormControl, FormGroup, ControlLabel, Button, Modal, Glyphicon, Badge } from 'react-bootstrap';
 import Datetime from 'react-datetime';
-import Tool from '../Tools';
 
 /**
  * React component managing goal input

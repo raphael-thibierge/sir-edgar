@@ -13,7 +13,7 @@ class CreateMoneyValuesCollection extends Migration
      */
     public function up()
     {
-        Schema::create('money_values', function (Blueprint $table){
+        Schema::connection('mongodb')->create('money_values', function (Blueprint $table){
             $table->increments('_id');
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ class CreateMoneyValuesCollection extends Migration
      */
     public function down()
     {
-        Schema::drop('money_values');
+        Schema::connection('mongodb')->drop('money_values');
     }
 }

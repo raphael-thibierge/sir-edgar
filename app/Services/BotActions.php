@@ -160,8 +160,10 @@ class BotActions
     {
         $goals = $botMessage->user->goals()
             ->whereNull('completed_at')
-            ->where('today', true)->get();
-        BotResponse::display_goal_list_response($goals, $botMessage);
+            ->where('today', true)
+            ->with('project')
+            ->get();
+        BotResponse::display_goal_list_response($goals, $botMessage, true);
     }
 
     /**

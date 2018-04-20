@@ -75,6 +75,7 @@ Route::post('account/update', 'UserController@accountSettingsUpdate')->name('acc
 
 Route::get('financial-transactions/download', 'FinancialTransactionController@download')->middleware('auth');
 Route::get('budget/download', 'FinancialTransactionController@download')->middleware('auth');
+
 Route::apiResources([
     'users' => 'UserController',
     'projects' => 'ProjectController',

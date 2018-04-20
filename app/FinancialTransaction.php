@@ -28,6 +28,8 @@ class FinancialTransaction extends Model
 
     protected $primaryKey = '_id';
 
+    protected $connection = 'mongodb';
+
     protected $collection = 'financial_transactions';
 
     protected $fillable = [
@@ -54,7 +56,7 @@ class FinancialTransaction extends Model
     /**
      * @return BelongsTo
      */
-    public function user(): BelongsTo {
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo('App\User');
     }
 

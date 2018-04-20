@@ -3,9 +3,12 @@
 namespace App;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Collection;
-use Jenssegers\Mongodb\Relations\HasMany;
+use Jenssegers\Mongodb\Eloquent\HybridRelations;
+use Laravel\Passport\HasApiTokens;
 
 /**
  * @property string name
@@ -18,14 +21,18 @@ use Jenssegers\Mongodb\Relations\HasMany;
  * @property Collection budgets
  * @property Collection expenses
  */
-class User extends \Jenssegers\Mongodb\Auth\User
+class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HybridRelations, HasApiTokens;
+
+    protected $connection = 'pgsql';
+
+    //protected $primaryKey = 'id';
 
     const DEFAULT_ATTRIBUTES = [
         'admin' => false,
         'daily_score_goal' => 5,
-        'timezone' => 'Europe/Paris',
+        'timezone' => 'UTC',
         'email_daily_report' => false,
         'email_weekly_report' => false,
         'morning_report' => false,
@@ -82,11 +89,11 @@ class User extends \Jenssegers\Mongodb\Auth\User
      * User's goals
      * @return HasMany
      */
-    public function goals() : HasMany{
+    public function goals(){
         return $this->hasMany('App\Goal');
     }
 
-    public function completedGoals(): HasMany{
+    public function completedGoals(){
         return $this->goals()->whereNotNull('completed_at');
     }
 
@@ -95,7 +102,7 @@ class User extends \Jenssegers\Mongodb\Auth\User
      *
      * @return HasMany
      */
-    public function goalsEndingToday(): HasMany{
+    public function goalsEndingToday(){
         return $this->goals()
             ->whereNull('completed_at')
             ->whereNotNull('due_date')
@@ -107,7 +114,7 @@ class User extends \Jenssegers\Mongodb\Auth\User
      * User's goals
      * @return HasMany
      */
-    public function financialTransactions() : HasMany{
+    public function financialTransactions(){
         return $this->hasMany('App\FinancialTransaction');
     }
 
@@ -116,7 +123,7 @@ class User extends \Jenssegers\Mongodb\Auth\User
      *
      * @return HasMany
      */
-    public function yesterday_goals() : HasMany{
+    public function yesterday_goals(){
         return $this->goals()
             ->where('completed_at', '>=', Carbon::yesterday($this->timezone))
             ->where('completed_at', '<', Carbon::today($this->timezone));
@@ -127,19 +134,19 @@ class User extends \Jenssegers\Mongodb\Auth\User
      *
      * @return HasMany
      */
-    public function projects() : HasMany{
+    public function projects(){
         return $this->hasMany('App\Project');
     }
 
-    public function budgets(): HasMany{
+    public function budgets(){
         return $this->hasMany('App\Budget');
     }
 
-    public function expenses(): HasMany{
+    public function expenses(){
         return $this->financialTransactions()->where('type', FinancialTransaction::EXPENSE);
     }
 
-    public function oAuthConnections(): HasMany{
+    public function oAuthConnections(){
         return $this->hasMany('App\OAuthConnection');
     }
 
@@ -193,7 +200,7 @@ class User extends \Jenssegers\Mongodb\Auth\User
      * @internal param User $user
      * @internal param string $projecName
      */
-    public function searchUserProjectsByName(string $projectName): HasMany{
+    public function searchUserProjectsByName(string $projectName){
 
         $projectNameLowerCase = strtolower($projectName);
         $projectNameFirstUpperCase = ucfirst($projectName);
@@ -210,7 +217,7 @@ class User extends \Jenssegers\Mongodb\Auth\User
      * @internal param User $user
      * @internal param string $projecName
      */
-    public function searchUserGoalsByName(string $goalName): HasMany{
+    public function searchUserGoalsByName(string $goalName){
 
         $projectNameLowerCase = strtolower($goalName);
         $projectNameFirstUpperCase = ucfirst($goalName);
@@ -258,6 +265,14 @@ class User extends \Jenssegers\Mongodb\Auth\User
 
     public function hasMessenger(): bool {
         return isset($this->facebook_sending_id) && !empty($this->facebook_sending_id) && $this->facebook_sending_id !== null;
+    }
+
+    public static function demoUser(): User{
+        $demoUserAttributes = self::DEFAULT_ATTRIBUTES;
+        $demoUserAttributes['name'] = 'Demo User';
+        $demoUserAttributes['email'] = 'demo@sir-edgar.com';
+
+        return self::firstOrCreate($demoUserAttributes);
     }
 
 }

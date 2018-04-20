@@ -1,5 +1,5 @@
-const React = require('react');
-
+import React from 'react';
+import PropTypes from 'prop-types';
 import {ListGroup, ListGroupItem,Button,Badge,Glyphicon } from 'react-bootstrap';
 
 import GoalInput from './GoalInput.jsx';
@@ -12,11 +12,7 @@ export default class GoalList extends React.Component{
         super(props);
     }
 
-    /*propTypes: {
-        goals: React.PropTypes.array.isRequired,
-        createGoal: React.PropTypes.func,
-        project_id: React.PropTypes.string.isRequired,
-    },*/
+
 
 
 
@@ -130,4 +126,10 @@ export default class GoalList extends React.Component{
             </div>
         );
     }
+};
+
+GoalList.propTypes = {
+    goals: PropTypes.array.isRequired,
+    createGoal: PropTypes.func,
+    project_id: PropTypes.string.isRequired,
 };

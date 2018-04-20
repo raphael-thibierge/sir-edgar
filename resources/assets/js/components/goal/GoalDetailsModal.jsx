@@ -3,6 +3,7 @@ import {FormControl, FormGroup, ControlLabel, Button, Modal, Glyphicon, Badge } 
 import DayPicker from 'react-day-picker';
 import Datetime from 'react-datetime';
 import GoalRender from './GoalRender';
+import PropTypes from 'prop-types';
 
 /**
  * React component managing goal input
@@ -13,16 +14,6 @@ export default class GoalsDetailsModal extends React.Component{
         super(props);
         this.state = this.getInitialState();
     }
-
-    /**
-     * Define required component's properties
-     */
-    //propTypes= {
-        /**
-         * Method to call when the new goal has been send to server successfully
-         */
-      //  goal: React.PropTypes.object.isRequired,
-   // }
 
     /**
      * Return component initial state
@@ -41,7 +32,6 @@ export default class GoalsDetailsModal extends React.Component{
             title: '',
             score: 1,
             is_completed: false,
-
         };
     }
 
@@ -60,9 +50,14 @@ export default class GoalsDetailsModal extends React.Component{
             notes: goal.notes,
             display: diff < 3,
             score: goal.score,
-            is_completed: goal.is_completed
-        })
-
+            is_completed: goal.is_completed,
+            today: goal.today,
+            setToday: function () {
+                this.setState({
+                    today: !this.state.today
+                })
+            }.bind(this)
+        });
     }
 
     /**
@@ -86,6 +81,7 @@ export default class GoalsDetailsModal extends React.Component{
             this.state.time_spent,
             this.state.priority,
             this.state.notes,
+            this.state.today,
         );
 
         this.setState({
@@ -93,7 +89,9 @@ export default class GoalsDetailsModal extends React.Component{
         });
     }
 
-
+    onCancel(){
+        this.componentDidMount()
+    }
 
     /**
      * Render component's HTML code
@@ -224,7 +222,7 @@ export default class GoalsDetailsModal extends React.Component{
 
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={()=> {this.setState({display: false})}}>Cancel</Button>
+                        <Button onClick={this.onCancel.bind(this)}>Cancel</Button>
                         <Button bsStyle="success" onClick={this.onSave.bind(this)}>Save</Button>
                     </Modal.Footer>
                 </Modal>
@@ -232,3 +230,13 @@ export default class GoalsDetailsModal extends React.Component{
         )
     }
 };
+
+/**
+ * Define required component's properties
+ */
+GoalsDetailsModal.propTypes= {
+    /**
+     * Method to call when the new goal has been send to server successfully
+     */
+    goal: PropTypes.object.isRequired,
+}

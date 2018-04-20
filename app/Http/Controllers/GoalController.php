@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\GoalCreated;
 use App\Events\GoalDeleted;
+use App\Events\PusherDebugEvent;
 use App\Goal;
 use App\User;
 use Carbon\Carbon;
@@ -57,8 +58,6 @@ class GoalController extends Controller
             "title" => $request->get('title'),
             "score" => (int)$request->get('score'),
         ]);
-
-        broadcast(new GoalCreated($goal));
 
         return $this->successResponse([
             'goal'  => $goal
@@ -140,6 +139,10 @@ class GoalController extends Controller
             $updates ['notes'] = $due_date;
         }
 
+        if (($today = $request->get('today')) !== null){
+            $updates ['today'] = $due_date;
+        }
+
         $goal->update($updates);
 
         return $this->successResponse([
@@ -157,10 +160,6 @@ class GoalController extends Controller
     public function destroy(Goal $goal)
     {
         $this->authorize($goal);
-
-        if ($goal->getIsCompletedAttribute()){
-            broadcast(new GoalDeleted($goal));
-        }
         $goal->delete();
         return $this->successResponse();
     }
@@ -232,9 +231,6 @@ class GoalController extends Controller
             'firstDate' => $user->created_at->toDateString(),
         ]);
     }
-
-
-
 
     public function reComplete(Goal $goal){
         $this->authorize('update', $goal);

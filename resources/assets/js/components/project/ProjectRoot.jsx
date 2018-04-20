@@ -209,7 +209,13 @@ export default class ProjectRoot extends React.Component {
 
                     this.setState({
                         view: project._id,
-                        projects: projects,
+                        projects: projects.sort((a, b) => {
+                            if (a.title > b.title)
+                                return 1;
+                            else if (a.title < b.title)
+                                return -1;
+                            return 0;
+                        }),
                         newProjectCollapseOpen: false,
                         newProjectTitle: '',
                     });

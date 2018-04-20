@@ -13,7 +13,7 @@ class CreateFinancialTransactionCollection extends Migration
      */
     public function up()
     {
-        Schema::create('financial_transactions', function (Blueprint $table) {
+        Schema::connection('mongodb')->create('financial_transactions', function (Blueprint $table) {
             $table->increments('_id');
             $table->string('title')->nullable();
             $table->float('price');
@@ -35,6 +35,6 @@ class CreateFinancialTransactionCollection extends Migration
      */
     public function down()
     {
-        Schema::drop('financial_transactions');
+        Schema::connection('mongodb')->drop('financial_transactions');
     }
 }

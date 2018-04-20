@@ -1,13 +1,18 @@
 import React from 'react';
-import {} from 'react-bootstrap';
-import CreateFinancialTransactionModal from "../financial/CreateFinancialTransactionModal";
 import Tools from '../Tools';
+import TransactionTableRowRender from './TransactionTableRowRender';
 
 export default class ExpenseTable extends React.Component {
 
     onUpdate(transaction){
         if (typeof this.props.onUpdate === 'function'){
             this.props.onUpdate(transaction);
+        }
+    }
+
+    onDelete(transaction){
+        if (typeof this.props.onDelete === 'function'){
+            this.props.onDelete(transaction);
         }
     }
 
@@ -48,8 +53,8 @@ export default class ExpenseTable extends React.Component {
         let previous = null;
         let total  = 0;
 
-        this.props.expenses.forEach((expense) => {
-            let date = expense.date;
+        this.props.expenses.forEach((transaction) => {
+            let date = transaction.date;
 
             if (previous === null){
                 previous = date;
@@ -64,28 +69,17 @@ export default class ExpenseTable extends React.Component {
                 total = 0;
             }
 
-            if (expense.type === 'expense'){
-                total -= expense.price;
+            if (transaction.type === 'expense'){
+                total -= transaction.price;
             } else {
-                total += expense.price;
+                total += transaction.price;
             }
 
-
-            expensesRended.push(
-                <tr key={expense._id} className={expense.type === 'entrance' ? 'success' : null}>
-                    <td>{expense.title}</td>
-                    <td>{expense.price}</td>
-                    <td>{expense.currency}</td>
-                    <td>{expense.date.toLocaleTimeString()}</td>
-                    <td>
-                        <CreateFinancialTransactionModal
-                            expense={expense}
-                            onSave={this.onUpdate.bind(this)}
-                        />
-                    </td>
-                    <td>{Array.isArray(expense.tags) ? expense.tags.join(', ') : expense.tags}</td>
-                </tr>
-            );
+            expensesRended.push(<TransactionTableRowRender
+                transaction={transaction}
+                onDelete={this.onDelete.bind(this, transaction)}
+                onUpdate={this.onUpdate.bind(this)}
+            />);
 
 
         });

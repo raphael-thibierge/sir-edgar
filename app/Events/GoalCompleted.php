@@ -30,9 +30,7 @@ class GoalCompleted implements ShouldBroadcast
     public function __construct(Goal $goal)
     {
         $this->goal = $goal;
-        $this
-            ->sendProgressOverMessenger();
-
+        $this->sendProgressOverMessenger();
     }
 
     public function sendProgressOverMessenger(){
@@ -48,7 +46,7 @@ class GoalCompleted implements ShouldBroadcast
             if ($userScore < $intent) {
             // send message for 50% progress
                 if ($userScore >= ($intent / 2) && $userScore - $goalScore < $intent / 2) {
-                    $this->goal->user->notify(new MessengerNotification("You achive $progress%, continue like this!"));
+                    $this->goal->user->notify(new MessengerNotification("You achieve $progress%, continue like this!"));
                 }
             } else if ($userScore - $goalScore < $intent) {
             // send message for 100% progress
