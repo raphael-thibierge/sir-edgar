@@ -143,6 +143,7 @@ class Goal extends Model
     {
         $array = $this->toArray();
         unset($array['routes']);
+        unset($array['notes']);
         return $array;
     }
 
