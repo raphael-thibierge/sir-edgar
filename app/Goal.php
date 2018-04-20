@@ -134,4 +134,16 @@ class Goal extends Model
         return $this->title . " ($this->score)";
     }
 
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+        unset($array['routes']);
+        return $array;
+    }
+
 }

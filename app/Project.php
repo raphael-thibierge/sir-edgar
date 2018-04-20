@@ -70,4 +70,15 @@ class Project extends Model
         return $this->hasMany('App\Goal');
     }
 
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+        unset($array['routes']);
+        return $array;
+    }
 }

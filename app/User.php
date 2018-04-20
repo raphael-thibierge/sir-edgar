@@ -201,12 +201,7 @@ class User extends Authenticatable
      * @internal param string $projecName
      */
     public function searchUserProjectsByName(string $projectName){
-
-        $projectNameLowerCase = strtolower($projectName);
-        $projectNameFirstUpperCase = ucfirst($projectName);
-
-        return $this->projects()
-            ->whereIn('title', [$projectNameLowerCase, $projectNameFirstUpperCase]);
+        return Project::search($projectName)->where('user_id', $this->id)->get()->sortBy('title');
     }
 
     /**
@@ -218,12 +213,7 @@ class User extends Authenticatable
      * @internal param string $projecName
      */
     public function searchUserGoalsByName(string $goalName){
-
-        $projectNameLowerCase = strtolower($goalName);
-        $projectNameFirstUpperCase = ucfirst($goalName);
-
-        return $this->goals()
-            ->whereIn('title', [$projectNameLowerCase, $projectNameFirstUpperCase]);
+        return Goal::search($goalName)->where('user_id', $this->id)->get()->sortBy('title');
     }
 
 

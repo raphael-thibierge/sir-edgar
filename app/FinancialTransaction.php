@@ -101,14 +101,4 @@ class FinancialTransaction extends Model
     {
         return $this->toArray();
     }
-
-    /**
-     * Get the index name for the model.
-     *
-     * @return string
-     */
-    public function searchableAs()
-    {
-        return 'financial_transactions_index';
-    }
 }
