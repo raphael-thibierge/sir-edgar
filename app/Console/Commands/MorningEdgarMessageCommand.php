@@ -40,7 +40,7 @@ class MorningEdgarMessageCommand extends Command
     public function handle()
     {
 
-        $user = $this->argument('user') === 'first' ? User::first() : User::find($this->argument('user'));
+        $user = $this->argument('user') === 'first' ? User::where('admin', true)->first() : User::find($this->argument('user'));
         if ($user === null) return;
 
         $message = "Hey " . $user->name . ', it\'s morning report time !' . PHP_EOL
