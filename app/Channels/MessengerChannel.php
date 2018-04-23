@@ -41,9 +41,9 @@ class MessengerChannel
         // Define botman config
         $config = [
             'facebook' => [
-                'token' => config('services.botman.facebook_token'),
-                'app_secret' => config('services.botman.facebook_app_secret'),
-                'verification' => config('services.botman.facebook_verification'),
+                'token' => config('services.facebook.page_token'),
+                'app_secret' => config('services.facebook.app_secret'),
+                'verification' => config('services.facebook.app_verification'),
             ]
         ];
 
