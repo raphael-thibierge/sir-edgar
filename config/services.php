@@ -62,6 +62,13 @@ return [
     'coinbase' => [
         'key' => env('COINBASE_CLIENT_ID'),
         'secret' => env('COINBASE_CLIENT_SECRET'),
+    ],
+
+    'facebook' => [
+        'page_id' => env('FACEBOOK_PAGE_ID'),
+        'page_token' => env('FACEBOOK_TOKEN'),
+        'app_secret' => env('FACEBOOK_APP_SECRET'),
+        'app_verification' => env('FACEBOOK_VERIFICATION'),
     ]
 
 ];

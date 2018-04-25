@@ -8,6 +8,7 @@ use App\Events\GoalDeleted;
 use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsTo;
+use Laravel\Scout\Searchable;
 
 /**
  * @property Carbon completed_at
@@ -22,6 +23,8 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  */
 class Goal extends Model
 {
+    use Searchable;
+
     const TYPE_GOAL = 'goal';
     const TYPE_NOTE = 'note';
     const TYPE_REMINDER = 'reminder';
@@ -129,6 +132,19 @@ class Goal extends Model
 
     public function toString(){
         return $this->title . " ($this->score)";
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+        unset($array['routes']);
+        unset($array['notes']);
+        return $array;
     }
 
 }

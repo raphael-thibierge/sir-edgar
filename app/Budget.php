@@ -5,6 +5,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 /**
  * @property string currency
@@ -16,6 +17,7 @@ use Jenssegers\Mongodb\Eloquent\Model;
  */
 class Budget extends Model
 {
+    use Searchable;
 
     const PERIOD_WEEK = 'week';
     const PERIOD_MONTHS = 'month';

@@ -25,22 +25,20 @@ export default class ExpenseTable extends React.Component {
 
         return (
             <tr key={date.toISOString()} className="active" style={style}>
-                <td >
+                <td></td>
+                <td className={'text-left'}>
                     <h4>
                         {Tools.getDaysOfWeek()[date.getDay()]}
                         {',  the '}
                         {Tools.getDaySuffix(date)}
+                        {' of '}
+                        {Tools.getMonthsOfYear()[date.getMonth()]}
+                        {' '}
+                        {date.getFullYear()}
                     </h4></td>
                 <td><h4>{Math.round(total*100)/100}</h4></td>
                 <td><h4>CAD</h4></td>
                 <td></td>
-                <td colSpan={2}>
-                    <h4>
-                        {Tools.getMonthsOfYear()[date.getMonth()]}
-                        {' '}
-                        {date.getFullYear()}
-                    </h4>
-                </td>
             </tr>
         );
     }

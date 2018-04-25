@@ -33,6 +33,10 @@ var Network = React.createClass({
         }
     },
 
+    componentWillReceiveProps(nextProps){
+        this.setState(this.getInitialState(), this.componentDidMount.bind(this));
+    },
+
     request: function () {
         var request = $.ajax({
             url: this.props.route,
@@ -101,14 +105,11 @@ var Network = React.createClass({
             marginRight: 'auto'
         };
 
-
-        console.log('state ' + this.state.loaded);
-        console.log(this.state.data);
         return (
             <div className="row">
                 <div className="col-xs-12" id="network_div">
                    {this.state.loaded == false ?
-                       <p>Loading !</p>
+                       <p>Loading...</p>
                        : <Graph graph={this.state.data}/>
                    }
                 </div>

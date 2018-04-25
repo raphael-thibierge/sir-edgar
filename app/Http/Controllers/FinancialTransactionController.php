@@ -147,15 +147,28 @@ class FinancialTransactionController extends Controller
         return $this->successResponse();
     }
 
-    public function tagsAndLinkedTagsFromExpenses(){
+    public function tagsAndLinkedTagsFromExpenses(Request $request){
 
-        $tags = FinancialTransaction::raw(function ($collection) {
+
+        $match = [
+            'user_id' => Auth::user()->id,
+            'type' => 'expense',
+        ];
+
+        if ($request->has('tags') ){
+
+            $tags = explode(',', $request->get('tags'));
+
+            if (count($tags) > 0){
+                $match['tags'] =['$in' => $tags];
+            }
+
+        }
+
+        $tags = FinancialTransaction::raw(function ($collection) use ($match){
             return $collection->aggregate([
                 [
-                    '$match' => [
-                        'user_id' => Auth::user()->id,
-                        'type' => 'expense',
-                    ]
+                    '$match' => $match
                 ],
                 [
                     '$unwind' => '$tags'
@@ -171,7 +184,11 @@ class FinancialTransactionController extends Controller
                         'startWith' => '$_id',
                         'connectFromField' => '_id',
                         'connectToField' => 'tags',
-                        'as' => 'linked_tags'
+                        'as' => 'linked_tags',
+                        'restrictSearchWithMatch' => [
+                            'user_id' => Auth::user()->id,
+                            'type' => 'expense'
+                        ]
                     ]
                 ], [
                     '$project' => [
@@ -247,6 +264,7 @@ class FinancialTransactionController extends Controller
                     'type' => 'expense',
                     'user_id' => Auth::user()->id,
                 ]],
+
                 ['$group' => [
                     '_id' => ['week' => ['$isoWeek' => '$date'], 'year' => ['$isoWeekYear' => '$date']],
                     'occurrence' => ['$sum' => 1],

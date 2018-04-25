@@ -46,4 +46,7 @@
 <script>
     window.app = 'productivity'
 </script>
+
+@includeWhen(!Auth::guest() && Auth::user()->isAdmin(), 'facebook-messenger-plugin')
+
 @endsection

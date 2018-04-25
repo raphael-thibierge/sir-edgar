@@ -32,7 +32,7 @@ class BotActions
         // get project name to search
         $projectName = $message->getParameter('project');
         // find project
-        $projects = $message->user->searchUserProjectsByName($projectName)->get();
+        $projects = $message->user->searchUserProjectsByName($projectName);
         if ($projects->count() === 0){
             throw new ProjectNameNotFound($projectName);
         }
@@ -48,7 +48,7 @@ class BotActions
         // get project name to search
         $goalName = $message->getParameter('goal');
         // find project
-        $goals = $message->user->searchUserGoalsByName($goalName)->get();
+        $goals = $message->user->searchUserGoalsByName($goalName);
         if ($goals->count() === 0){
             throw new GoalNameNotFound($goalName);
         }

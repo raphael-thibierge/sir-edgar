@@ -5,6 +5,8 @@ namespace App;
 
 use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Relations\BelongsTo;
+use Laravel\Scout\Searchable;
 
 /**
  * @property string type
@@ -14,9 +16,12 @@ use Jenssegers\Mongodb\Eloquent\Model;
  * @property string title
  * @property Carbon created_at
  * @property string user_id
+ * @property string description
  */
 class FinancialTransaction extends Model
 {
+    use Searchable;
+
     const EXPENSE = "expense";
     const ENTRANCE = "entrance";
     const SAVING = "saving";
@@ -85,5 +90,15 @@ class FinancialTransaction extends Model
 
         $this->tags = $tags;
         $this->title = str_replace('#' , '', $this->title);
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return $this->toArray();
     }
 }

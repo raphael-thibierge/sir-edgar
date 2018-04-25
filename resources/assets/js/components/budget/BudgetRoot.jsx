@@ -82,7 +82,7 @@ export default class BudgetRoot extends React.Component {
 
                     <div className="row">
                         <div className="col-xs-12">
-                            <h1 className="page-header finance-page-header">Expenses</h1>
+                            <h1 className="page-header finance-page-header">Budgets</h1>
                         </div>
                     </div>
 

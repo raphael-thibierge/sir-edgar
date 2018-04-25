@@ -6,12 +6,15 @@ namespace App;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use Jenssegers\Mongodb\Relations\HasMany;
+use Laravel\Scout\Searchable;
 
 /**
  * @property string user_id
  */
 class Project extends Model
 {
+    use Searchable;
+
     protected $connection = 'mongodb';
 
     /**
@@ -67,4 +70,15 @@ class Project extends Model
         return $this->hasMany('App\Goal');
     }
 
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+        unset($array['routes']);
+        return $array;
+    }
 }
