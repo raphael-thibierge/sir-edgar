@@ -2,7 +2,7 @@ import React from 'react';
 import {ProgressBar, Panel} from 'react-bootstrap';
 import BudgetEditModal from './BudgetEditModal'
 import Tools from '../Tools';
-import TagFrequencyChart from '../expense/TagFrequencyChart';
+import TagFrequencyChartAjax from '../expense/TagFrequencyChartAjax';
 
 export default class Budget extends React.Component {
 
@@ -104,7 +104,7 @@ export default class Budget extends React.Component {
 
                 <div className="row">
                     <div className="col-xs-12">
-                        <TagFrequencyChart
+                        <TagFrequencyChartAjax
                             tags={Array.isArray(this.props.budget.tags) ?
                                 this.props.budget.tags.join(' ') : this.props.budget.tags }
                             height={'110px'}

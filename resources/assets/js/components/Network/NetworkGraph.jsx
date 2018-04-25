@@ -37,7 +37,7 @@ const options = {
             gravitationalConstant: -2500,
             springConstant: 0.01,
             springLength: 300,
-            centralGravit: 1.6
+            centralGravity: 1.6
         },
         solver: 'barnesHut',
         adaptiveTimestep: true,
