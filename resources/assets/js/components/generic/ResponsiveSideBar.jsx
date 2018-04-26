@@ -60,6 +60,7 @@ export default class ResponsiveSideBar extends React.Component{
                     </Nav>
                 )}
 
+                {this.props.projects.filter(project => !project.is_archive).length > 0 &&
                 <Nav id="projects">
                     <NavText>Projects</NavText>
                     <NavIcon><SvgIcon size={20} icon={ic_folder_special}/></NavIcon>
@@ -71,6 +72,8 @@ export default class ResponsiveSideBar extends React.Component{
                         </Nav> : null
                     )}
                 </Nav>
+                }
+
                 <br/>
                 <SeparatorTitle>
                     <div>Finance</div>

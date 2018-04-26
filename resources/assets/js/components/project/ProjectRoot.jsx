@@ -208,7 +208,7 @@ export default class ProjectRoot extends React.Component {
                     projects.push(project);
 
                     this.setState({
-                        view: project._id,
+                        view: 'projects/' + project._id,
                         projects: projects.sort((a, b) => {
                             if (a.title > b.title)
                                 return 1;
