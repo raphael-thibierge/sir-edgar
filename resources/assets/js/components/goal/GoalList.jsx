@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {ListGroup, ListGroupItem,Button,Badge,Glyphicon } from 'react-bootstrap';
+import Tools from '../Tools';
 
 import GoalInput from './GoalInput.jsx';
 /**
@@ -11,10 +12,6 @@ export default class GoalList extends React.Component{
     constructor(props){
         super(props);
     }
-
-
-
-
 
     /**
      * Component's HTML render method
@@ -62,30 +59,45 @@ export default class GoalList extends React.Component{
             return 0;
         }
 
-        todoGoals.sort((firstGoal, secondGoal) => {
+        function comparePriority(firstGoal, secondGoal){
 
-            // both as priority
             if (firstGoal.priority !== null && secondGoal.priority !== null){
-                // same priority
-                if (firstGoal.priority === secondGoal.priority){
 
-                    //return 0;
-                    return compareToday(firstGoal, secondGoal);
-
-                }
-                // simple priority comparate
-                else if (firstGoal.priority > secondGoal.priority) {
+                if (firstGoal.priority > secondGoal.priority){
                     return -1;
-                } else {
+                } else if (firstGoal.priority < secondGoal.priority){
                     return 1;
                 }
-            } else if (firstGoal.priority !== null && secondGoal.priority === null){
-                return -1;
-            } else if (firstGoal.priority === null && secondGoal.priority !== null){
-                return 1;
+                return 0;
             }
 
-            return compareToday(firstGoal, secondGoal);
+        }
+
+        function compareCreatedAt(firstGoal, secondGoal) {
+            const firstDate = Tools.dateFormater(firstGoal.created_at);
+            const secondDate = Tools.dateFormater(secondGoal.created_at);
+            // is older
+            if (firstGoal < secondGoal){
+                return -1;
+            } else if (firstGoal > secondGoal){
+                return 1;
+            }
+            return 0;
+        }
+
+        todoGoals.sort((firstGoal, secondGoal) => {
+
+            let compareValue = compareToday(firstGoal, secondGoal);
+
+            if (compareValue === 0){
+                compareValue = comparePriority(firstGoal, secondGoal);
+
+                if (compareValue === 0){
+                    compareValue = compareCreatedAt(firstGoal, secondGoal)
+                }
+            }
+
+            return compareValue;
         });
 
         if (typeof this.props.createGoal === 'function'){
