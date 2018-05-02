@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Budget;
+use App\Goal;
 use App\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,6 @@ class ProjectController extends Controller
         $this->middleware('auth');
     }
 
-
     /**
      * Display a listing of the resource.
      *
@@ -23,6 +23,7 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Auth::user()->projects()
+            ->whereIsArchive(false)
             ->orderBy('title', 'ASC')
             ->with('goals')
             ->get();
@@ -91,10 +92,18 @@ class ProjectController extends Controller
             'is_archived' => $request->get('is_archived') == 'true' ? true : false,
         ]);
 
+        /*
+         * TODO -- complete this
+        if ($project->is_archived){
+            $project->goals()->update([
+                'is_archive' => true
+            ]);
+        }
+        */
+
         return $this->successResponse([
             'project' => $project
         ]);
-
     }
 
     /**

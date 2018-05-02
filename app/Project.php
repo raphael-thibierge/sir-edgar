@@ -10,6 +10,7 @@ use Laravel\Scout\Searchable;
 
 /**
  * @property string user_id
+ * @property mixed is_archived
  */
 class Project extends Model
 {
