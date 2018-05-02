@@ -22,7 +22,7 @@ $ nano ./laradock-sir-edgar/.env # edit env
 $ docker-machine env sir-edgar
 $ eval $(docker-machine env sir-edgar)
 $ cd ./laradock-sir-edgar/
-$ docker-compose up -d php-fpm nginx php-worker workspace
+$ docker-compose up php-fpm nginx php-worker mongo postgres redis workspace
 ```
 
 ## Enter in workspace bash to execute commands such as `artisan`
