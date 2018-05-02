@@ -46,5 +46,23 @@ $ docker-machine stop sir-edgar
 ```
 
 ### Eventual problem
-You may have a problem with python in workspace container,
-check [this issue](https://github.com/pypa/pip/issues/5240)
+You may have a problem with python pip10 in workspace container,
+[check this issue](https://github.com/pypa/pip/issues/5240)
+
+Replace in `./laradock-sir-edgar/worskpace/Dockerfile` :
+```
+RUN if [ ${INSTALL_PYTHON} = true ]; then \
+  apt-get -y install python python-pip python-dev build-essential  \
+  && pip install --upgrade pip  \
+  && pip install --upgrade virtualenv \
+;fi
+```
+
+To :
+```
+RUN if [ ${INSTALL_PYTHON} = true ]; then \
+  apt-get -y install python python-pip python-dev build-essential  \
+  && pip install --upgrade pip==9.0.3  \
+  && pip install --upgrade virtualenv \
+;fi
+``` 
