@@ -86,3 +86,5 @@ Route::apiResources([
 
 Route::get('expenses-graph-data', 'FinancialTransactionController@tagsAndLinkedTagsFromExpenses')->middleware('auth');
 Route::get('tag-frequency', 'FinancialTransactionController@expensesFrequency')->middleware('auth');
+
+Route::get('/static-url/louis-berger/maison-repos-DTA2', 'HomeController@louis');
