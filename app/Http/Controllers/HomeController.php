@@ -43,4 +43,8 @@ class HomeController extends Controller
         return $linkedTagsWithWeigth;
 
     }
+
+    public function louis(){
+        return redirect()->away('https://drive.google.com/open?id=15CTXIe-s8fsJW9I4RmGqBOshy-0TTsHS');
+    }
 }

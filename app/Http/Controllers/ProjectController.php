@@ -23,7 +23,7 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Auth::user()->projects()
-            ->whereIsArchive(false)
+            ->whereIsArchived(false)
             ->orderBy('title', 'ASC')
             ->with('goals')
             ->get();

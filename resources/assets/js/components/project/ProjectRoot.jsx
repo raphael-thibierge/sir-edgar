@@ -74,7 +74,6 @@ export default class ProjectRoot extends React.Component {
                 })
             }
 
-
             for (let projectIterator=0; projectIterator < projects.length; projectIterator++ ){
 
                 this.projectMap[projects[projectIterator]._id] = projectIterator;
@@ -92,7 +91,6 @@ export default class ProjectRoot extends React.Component {
 
                 projects[projectIterator].goals = goals;
             }
-
 
             this.setState({
                 projects: projects
@@ -235,7 +233,6 @@ export default class ProjectRoot extends React.Component {
 
         let viewPathParts = view.split('/');
         if (viewPathParts.length === 2){
-
             switch (viewPathParts[0]){
                 case 'projects':
                     const project = this.state.projects[this.projectMap[viewPathParts[1]]];
