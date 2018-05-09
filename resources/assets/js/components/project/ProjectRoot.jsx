@@ -272,7 +272,7 @@ export default class ProjectRoot extends React.Component {
 
                 this.state.projects.map((project) => {
                     importantProject.goals = importantProject.goals.concat(project.goals.filter((goal) => {
-                        return goal.today === true && goal.is_completed === false;
+                        return goal.today === true;
                     }));
                 });
 
