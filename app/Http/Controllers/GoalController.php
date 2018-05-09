@@ -119,6 +119,12 @@ class GoalController extends Controller
             $updates ['due_date'] = null;
         }
 
+        if (($completed_at = $request->get('completed_at')) !== null){
+            $updates ['completed_at'] = new Carbon($completed_at);
+        } else {
+            $updates ['completed_at'] = null;
+        }
+
         if (($title = $request->get('title')) !== null){
             $updates ['title'] = $title;
         }
@@ -167,14 +173,15 @@ class GoalController extends Controller
     /**
      * Complete a goal
      *
-     * @param Request $request
      * @param Goal $goal
      * @return \Illuminate\Http\JsonResponse
      */
-    public function complete(Request $request, Goal $goal){
+    public function complete(Goal $goal){
         $this->authorize('update', $goal);
         $goal->setCompletedAndSave();
-        return $this->successResponse();
+        return $this->successResponse([
+            'goal' => $goal
+        ]);
     }
 
 
@@ -327,7 +334,5 @@ class GoalController extends Controller
             ]
         ]);
     }
-
-
 
 }
