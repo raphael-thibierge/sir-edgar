@@ -32,6 +32,7 @@ export default class GoalsDetailsModal extends React.Component{
             title: '',
             score: 1,
             is_completed: false,
+            today: false,
         };
     }
 

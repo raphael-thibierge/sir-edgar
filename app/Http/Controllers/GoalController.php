@@ -123,24 +123,24 @@ class GoalController extends Controller
             $updates ['title'] = $title;
         }
 
-        if (($due_date = $request->get('estimated_time')) !== null){
-            $updates ['estimated_time'] = (int)$due_date;
+        if (($estimated_time = $request->get('estimated_time')) !== null){
+            $updates ['estimated_time'] = (int)$estimated_time;
         }
 
-        if (($due_date = $request->get('time_spent')) !== null){
-            $updates ['time_spent'] = (int)$due_date;
+        if (($time_spent = $request->get('time_spent')) !== null){
+            $updates ['time_spent'] = (int)$time_spent;
         }
 
-        if (($due_date = $request->get('priority')) !== null){
-            $updates ['priority'] = (int)$due_date;
+        if (($priority = $request->get('priority')) !== null){
+            $updates ['priority'] = (int)$priority;
         }
 
-        if (($due_date = $request->get('notes')) !== null){
-            $updates ['notes'] = $due_date;
+        if (($notes = $request->get('notes')) !== null){
+            $updates ['notes'] = $notes;
         }
 
         if (($today = $request->get('today')) !== null){
-            $updates ['today'] = $due_date;
+            $updates ['today'] = (bool)$today;
         }
 
         $goal->update($updates);
