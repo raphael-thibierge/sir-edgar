@@ -200,7 +200,7 @@ class GoalController extends Controller
                     '$match' => [
                         'completed_at' => [
                             '$exists' => 'true',
-                            '$ne' => 'null'
+                            '$ne' => null
                         ],
                         'user_id' => $user->id
                     ]
