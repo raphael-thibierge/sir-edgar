@@ -41,7 +41,6 @@ export default class TransactionTableRowRender extends React.Component {
                     <Button bsSize={'xs'} bsStyle={'danger'} onClick={this.props.onDelete}>
                         <Glyphicon glyph={'trash'}/>
                     </Button>
-
                 </td>
             </tr>
         );

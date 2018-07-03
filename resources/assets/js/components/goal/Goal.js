@@ -17,6 +17,7 @@ export default class Goal {
         this.time_spent=null;
         this.priority=null;
         this.notes=null;
+        this.completed_at=null;
 
         if (goal !== null){
             this.fillData(goal);
@@ -58,6 +59,7 @@ export default class Goal {
                 // check status
                 if (response.status && response.status === 'success'){
                     this.is_completed = true;
+                    this.completed_at = Tools.dateFormatWithOffset(response.data.goal.completed_at);
                     this.updateView();
                 } else {
                     this.onError(response);
@@ -133,7 +135,7 @@ export default class Goal {
 
     }
 
-    updateDetails(title, score, due_date, estimated_time, time_spent, priority, notes, today){
+    updateDetails(title, score, due_date, estimated_time, time_spent, priority, notes, today, completed_at){
 
         const request = $.ajax({
             url: this.routes.update_details,
@@ -152,6 +154,7 @@ export default class Goal {
                 title: title,
                 score: score,
                 today: today,
+                completed_at: completed_at,
 
             },
             // when server return success
@@ -166,6 +169,8 @@ export default class Goal {
                     this.title = title;
                     this.score = score;
                     this.today = today;
+                    this.completed_at = completed_at;
+                    this.is_completed = completed_at !== null;
 
                     this.updateView();
                 } else {

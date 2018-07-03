@@ -119,28 +119,34 @@ class GoalController extends Controller
             $updates ['due_date'] = null;
         }
 
+        if (($completed_at = $request->get('completed_at')) !== null){
+            $updates ['completed_at'] = new Carbon($completed_at);
+        } else {
+            $updates ['completed_at'] = null;
+        }
+
         if (($title = $request->get('title')) !== null){
             $updates ['title'] = $title;
         }
 
-        if (($due_date = $request->get('estimated_time')) !== null){
-            $updates ['estimated_time'] = (int)$due_date;
+        if (($estimated_time = $request->get('estimated_time')) !== null){
+            $updates ['estimated_time'] = (int)$estimated_time;
         }
 
-        if (($due_date = $request->get('time_spent')) !== null){
-            $updates ['time_spent'] = (int)$due_date;
+        if (($time_spent = $request->get('time_spent')) !== null){
+            $updates ['time_spent'] = (int)$time_spent;
         }
 
-        if (($due_date = $request->get('priority')) !== null){
-            $updates ['priority'] = (int)$due_date;
+        if (($priority = $request->get('priority')) !== null){
+            $updates ['priority'] = (int)$priority;
         }
 
-        if (($due_date = $request->get('notes')) !== null){
-            $updates ['notes'] = $due_date;
+        if (($notes = $request->get('notes')) !== null){
+            $updates ['notes'] = $notes;
         }
 
         if (($today = $request->get('today')) !== null){
-            $updates ['today'] = $due_date;
+            $updates ['today'] = (bool)$today;
         }
 
         $goal->update($updates);
@@ -167,14 +173,15 @@ class GoalController extends Controller
     /**
      * Complete a goal
      *
-     * @param Request $request
      * @param Goal $goal
      * @return \Illuminate\Http\JsonResponse
      */
-    public function complete(Request $request, Goal $goal){
+    public function complete(Goal $goal){
         $this->authorize('update', $goal);
         $goal->setCompletedAndSave();
-        return $this->successResponse();
+        return $this->successResponse([
+            'goal' => $goal
+        ]);
     }
 
 
@@ -193,7 +200,7 @@ class GoalController extends Controller
                     '$match' => [
                         'completed_at' => [
                             '$exists' => 'true',
-                            '$ne' => 'null'
+                            '$ne' => null
                         ],
                         'user_id' => $user->id
                     ]
@@ -327,7 +334,5 @@ class GoalController extends Controller
             ]
         ]);
     }
-
-
 
 }

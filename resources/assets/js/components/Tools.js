@@ -92,6 +92,11 @@ const Tools = {
 
 
     dateFormater(dateAsString){
+
+        if (typeof dateAsString !== 'string'){
+            return new Date();
+        }
+
         return new Date(
             parseInt(dateAsString.slice(0,4)), // year
             parseInt(dateAsString.slice(5,7)) - 1, // month
