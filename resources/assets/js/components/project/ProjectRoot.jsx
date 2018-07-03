@@ -74,7 +74,6 @@ export default class ProjectRoot extends React.Component {
                 })
             }
 
-
             for (let projectIterator=0; projectIterator < projects.length; projectIterator++ ){
 
                 this.projectMap[projects[projectIterator]._id] = projectIterator;
@@ -92,7 +91,6 @@ export default class ProjectRoot extends React.Component {
 
                 projects[projectIterator].goals = goals;
             }
-
 
             this.setState({
                 projects: projects
@@ -208,7 +206,7 @@ export default class ProjectRoot extends React.Component {
                     projects.push(project);
 
                     this.setState({
-                        view: project._id,
+                        view: 'projects/' + project._id,
                         projects: projects.sort((a, b) => {
                             if (a.title > b.title)
                                 return 1;
@@ -235,7 +233,6 @@ export default class ProjectRoot extends React.Component {
 
         let viewPathParts = view.split('/');
         if (viewPathParts.length === 2){
-
             switch (viewPathParts[0]){
                 case 'projects':
                     const project = this.state.projects[this.projectMap[viewPathParts[1]]];
@@ -275,7 +272,7 @@ export default class ProjectRoot extends React.Component {
 
                 this.state.projects.map((project) => {
                     importantProject.goals = importantProject.goals.concat(project.goals.filter((goal) => {
-                        return goal.today === true && goal.is_completed === false;
+                        return goal.today === true;
                     }));
                 });
 

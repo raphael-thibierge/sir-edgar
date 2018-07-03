@@ -20,7 +20,7 @@ export default class TransactionTableRowRender extends React.Component {
                 <td  className={'text-left'}>
                     <div>{transaction.title}</div>
                     <div>
-                        {transaction.tags.map((tag) => (
+                        {Array.isArray(transaction.tags) && transaction.tags.map((tag) => (
                             <Label key={tag} bsStyle={'default'} style={{marginRight: 5}}>
                                 {tag}
                             </Label>
@@ -41,7 +41,6 @@ export default class TransactionTableRowRender extends React.Component {
                     <Button bsSize={'xs'} bsStyle={'danger'} onClick={this.props.onDelete}>
                         <Glyphicon glyph={'trash'}/>
                     </Button>
-
                 </td>
             </tr>
         );

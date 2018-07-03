@@ -32,6 +32,8 @@ export default class GoalsDetailsModal extends React.Component{
             title: '',
             score: 1,
             is_completed: false,
+            completed_at: null,
+            today: false,
         };
     }
 
@@ -51,6 +53,7 @@ export default class GoalsDetailsModal extends React.Component{
             display: diff < 3,
             score: goal.score,
             is_completed: goal.is_completed,
+            completed_at: goal.completed_at,
             today: goal.today,
             setToday: function () {
                 this.setState({
@@ -82,6 +85,7 @@ export default class GoalsDetailsModal extends React.Component{
             this.state.priority,
             this.state.notes,
             this.state.today,
+            this.state.completed_at,
         );
 
         this.setState({
@@ -206,7 +210,16 @@ export default class GoalsDetailsModal extends React.Component{
                             />
                         </FormGroup>
 
-
+                        <FormGroup>
+                            <ControlLabel>Completed at date</ControlLabel><br/>
+                            <Datetime
+                                onChange={(day) => {
+                                    const date =day && day !== '' ? day.toDate(): null;
+                                    this.setState({completed_at: date, is_completed: date !== null})
+                                }}
+                                value={this.state.completed_at}
+                            />
+                        </FormGroup>
 
                         <FormGroup>
                             <ControlLabel>Notes</ControlLabel>

@@ -24,7 +24,9 @@ export default class AjaxEditableValue extends React.Component {
 
     }
 
-    validate(){
+    validate(e){
+        e.preventDefault();
+
         if (this.props.ajaxURI ){
 
 

@@ -75,8 +75,8 @@ export default class CreateFinancialTransactionModal extends React.Component{
         return typeof this.props.expense !== 'undefined';
     }
 
-    onSave(){
-
+    onSave(e){
+        e.preventDefault();
 
         const tags = this.state.tags !== null && this.state.tags !== '' ?
             this.state.tags.split(' ').filter(tag => tag !== null && tag !== '' && tag !== ' ') : null;
@@ -175,7 +175,9 @@ export default class CreateFinancialTransactionModal extends React.Component{
                                 componentClass='input'
                                 value={this.state.tags}
                                 placeholder="tags"
-                                onChange={(e) => {this.setState({ tags: e.target.value })}}
+                                onChange={(e) => {this.setState({
+                                    tags: e.target.value.toLowerCase().replace('-', '').replace('#', '')
+                                })}}
                                 onKeyPress={this.handleKeyPress.bind(this)}
                             />
                         </FormGroup>
@@ -247,7 +249,7 @@ export default class CreateFinancialTransactionModal extends React.Component{
 
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={()=> {this.setState({display: false})}}>Cancel</Button>
+                        <Button onClick={(e)=> {e.preventDefault(); this.setState({display: false})}}>Cancel</Button>
                         <Button bsStyle="success" onClick={this.onSave.bind(this)}>Save</Button>
                     </Modal.Footer>
                 </Modal>
