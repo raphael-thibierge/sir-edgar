@@ -73,9 +73,13 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
         ]);
 
-        User::where('admin', true)->first()->notify(new MessengerNotification(
-            "I have good news for you ;) \r\n You have a new user : $userRegistered->name ($userRegistered->email)"
-        ));
+        if (($user = User::where('admin', true)->first()) !== null){
+            $user->notify(new MessengerNotification(
+                "I have good news for you ;) \r\n You have a new user : $userRegistered->name ($userRegistered->email)"
+            ));
+        }
+
+
 
         return $userRegistered;
     }
