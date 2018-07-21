@@ -1,6 +1,11 @@
 import React from 'react';
-import {FormControl, FormGroup, ControlLabel, Button, Modal, Glyphicon, Badge } from 'react-bootstrap';
-import Datetime from 'react-datetime';
+import {FormGroup, Button, Modal, Glyphicon } from 'react-bootstrap';
+import InputText from '../form/InputText'
+import InputNumber from '../form/InputNumber'
+import InputSelect from '../form/InputSelect'
+import InputDate from '../form/InputDate'
+import InputTextArea from '../form/InputTextArea'
+
 
 /**
  * React component managing goal input
@@ -33,6 +38,7 @@ export default class CreateFinancialTransactionModal extends React.Component{
             currency: 'CAD',
             price: 0.0,
             date: date,
+            errors: null
 
         };
     }
@@ -62,13 +68,18 @@ export default class CreateFinancialTransactionModal extends React.Component{
     handleKeyPress(target) {
         // when pressing enter key
         if(target.charCode===13){
-            this.onSave();
+            this.onSave(target);
         }
     }
 
     onError(err){
         console.error(err.responseJSON);
         alert('Saving transaction failed !')
+        if (err.responseJSON.errors){
+            this.setState({
+                errors: err.responseJSON.errors
+            })
+        }
     }
 
     expenseExists(){
@@ -80,6 +91,7 @@ export default class CreateFinancialTransactionModal extends React.Component{
 
         const tags = this.state.tags !== null && this.state.tags !== '' ?
             this.state.tags.split(' ').filter(tag => tag !== null && tag !== '' && tag !== ' ') : null;
+
         const data = {
             _method: this.expenseExists() ? 'PUT' : 'POST',
             _token: window._token,
@@ -89,7 +101,7 @@ export default class CreateFinancialTransactionModal extends React.Component{
             currency: this.state.currency,
             price: this.state.price,
             tags: tags,
-            date: this.state.date,
+            date: this.state.date.toISOString(),
         };
 
 
@@ -157,95 +169,97 @@ export default class CreateFinancialTransactionModal extends React.Component{
                     </Modal.Header>
                     <Modal.Body>
 
-                        <FormGroup>
-                            <ControlLabel>Title</ControlLabel>
-                            <FormControl
-                                componentClass='input'
-                                value={this.state.title}
-                                placeholder="Transaction title"
-                                onChange={(e) => {this.setState({ title: e.target.value })}}
-                                onKeyPress={this.handleKeyPress.bind(this)}
-                                autoFocus
-                            />
-                        </FormGroup>
+                        <InputText
+                            name={'title'}
+                            title={'Title'}
+                            placeholder="Transaction's title"
+                            value={this.state.title}
+                            onChange={(value) => {this.setState({ title: value })}}
+                            errors={this.state.errors}
+                            onKeyPress={this.handleKeyPress.bind(this)}
+                            autoFocus
+                        />
 
-                        <FormGroup>
-                            <ControlLabel>Tags</ControlLabel>
-                            <FormControl
-                                componentClass='input'
-                                value={this.state.tags}
-                                placeholder="tags"
-                                onChange={(e) => {this.setState({
-                                    tags: e.target.value.toLowerCase().replace('-', '').replace('#', '')
-                                })}}
-                                onKeyPress={this.handleKeyPress.bind(this)}
-                            />
-                        </FormGroup>
+                        <InputText
+                            name={'tags'}
+                            title={'Tags'}
+                            placeholder="Transaction's tags separated by spaces"
+                            value={this.state.tags}
+                            onChange={(e) => {this.setState({
+                                tags: e.target.value.toLowerCase().replace('-', '').replace('#', '')
+                            })}}
+                            errors={this.state.errors}
+                            onKeyPress={this.handleKeyPress.bind(this)}
+                        />
+
+
 
                         <FormGroup>
                             <div className="row">
                                 <div className="col-xs-6">
-                                    <ControlLabel>Amount</ControlLabel>
-                                    <FormControl
-                                        componentClass='input'
-                                        type="number"
-                                        min={0}
+                                    <InputNumber
+                                        name={'price'}
+                                        title={'Amount'}
+                                        onChange={(value) => {this.setState({ price: value })}}
                                         value={this.state.price}
-                                        onChange={(e) => {this.setState({ price: e.target.value })}}
+                                        min={0}
+                                        errors={this.state.errors}
                                         onKeyPress={this.handleKeyPress.bind(this)}
                                     />
                                 </div>
 
                                 <div className="col-xs-6">
-                                    <ControlLabel>Currency</ControlLabel>
-                                    <FormControl
-                                        componentClass='input'
-                                        type="text"
+                                    <InputText
+                                        name={'currency'}
+                                        title={'Currency'}
+                                        placeholder="Transaction's currency"
                                         value={this.state.currency}
-                                        placeholder="Currency"
-                                        onChange={(e) => {this.setState({ currency: e.target.value })}}
+                                        onChange={(value) => {this.setState({ currency: value })}}
+                                        errors={this.state.errors}
                                         onKeyPress={this.handleKeyPress.bind(this)}
                                     />
                                 </div>
                             </div>
                         </FormGroup>
+
                         <FormGroup>
                             <div className="row">
                                 <div className="col-xs-6">
-                                    <ControlLabel>Type</ControlLabel>
-                                    <FormControl
-                                        componentClass='select'
-                                        options={['expense', 'entrance']}
+                                    <InputSelect
+                                        title={'Type'}
+                                        name={'type'}
                                         value={this.state.type}
-                                        placeholder="Currency"
-                                        onChange={(e) => {this.setState({ type: e.target.value })}}
+                                        onChange={(value) => {this.setState({ type: value })}}
+                                        options={['expense', 'entrance']}
+                                        placeholder="Transaction's type"
+                                        errors={this.state.errors}
                                         onKeyPress={this.handleKeyPress.bind(this)}
-                                    >
-                                        <option value="expense" selected>expense</option>
-                                        <option value="entrance">entrance</option>
-                                    </FormControl>
+                                    />
+
                                 </div>
+
                                 <div className="col-xs-6">
-                                    <ControlLabel>Date</ControlLabel><br/>
-                                    <Datetime
-                                        onChange={(day) => {this.setState({date: day && day !== '' ? day.toDate(): null})}}
+                                    <InputDate
+                                        title={'Date'}
                                         value={this.state.date}
+                                        onChange={(day) => {this.setState({date: day})}}
+                                        name={'date'}
+                                        errors={this.state.errors}
                                     />
                                 </div>
 
                             </div>
                         </FormGroup>
 
-                        <FormGroup>
-                            <ControlLabel>Description</ControlLabel>
-                            <FormControl
-                                componentClass="textarea"
-                                placeholder="textarea"
-                                onChange={(e) => {this.setState({ description: e.target.value })}}
-                                value={this.state.description}
-                                rows={5}
-                            />
-                        </FormGroup>
+                        <InputTextArea
+                            title={'Description'}
+                            name={'description'}
+                            onChange={(value) => {this.setState({ description: value })}}
+                            value={this.state.description}
+                            errors={this.state.errors}
+                            rows={5}
+                            placeholder={"Transaction's description"}
+                        />
 
                     </Modal.Body>
                     <Modal.Footer>
