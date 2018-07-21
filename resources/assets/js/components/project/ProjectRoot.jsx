@@ -183,47 +183,29 @@ export default class ProjectRoot extends React.Component {
 
     }
 
+    onProjectSaved(project){
+        console.log(project);
 
-    onNewProjectClick(title) {
-        const url = 'projects';
-        $.ajax({
-            url: url,
-            cache: false,
-            method: 'POST',
-            datatype: 'json',
-            data: {
-                title: title,
-                _token: window.token
-            },
-            success: function (response) {
+        let projects = this.state.projects;
+        this.projectMap[project._id] = projects.length;
+        projects.push(project);
 
-                if (response.status === 'success') {
-
-                    let project = response.data.project;
-
-                    let projects = this.state.projects;
-                    this.projectMap[project._id] = projects.length;
-                    projects.push(project);
-
-                    this.setState({
-                        view: 'projects/' + project._id,
-                        projects: projects.sort((a, b) => {
-                            if (a.title > b.title)
-                                return 1;
-                            else if (a.title < b.title)
-                                return -1;
-                            return 0;
-                        }),
-                        newProjectCollapseOpen: false,
-                        newProjectTitle: '',
-                    });
-                }
-
-            }.bind(this),
-            error: (error)=> {alert('Creating project failed'); console.error(error)},
+        this.setState({
+            view: 'projects/' + project._id,
+            projects: projects.sort((a, b) => {
+                if (a.title > b.title)
+                    return 1;
+                else if (a.title < b.title)
+                    return -1;
+                return 0;
+            }),
+            newProjectCollapseOpen: false,
+            newProjectTitle: '',
         });
-
     }
+
+
+
 
     viewRender(){
         const view = this.state.view;
@@ -258,7 +240,7 @@ export default class ProjectRoot extends React.Component {
 
             case 'new_project':
                 return <NewProjectRoot
-                    onNewProjectClick={this.onNewProjectClick.bind(this)}
+                    onNewProjectClick={this.onProjectSaved.bind(this)}
                     projectCurrentNumber={this.state.projects.length}
                 />;
                 break;

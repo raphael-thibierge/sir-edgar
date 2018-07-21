@@ -3,6 +3,10 @@ import {
     FormControl, FormGroup, ControlLabel, Modal, Button, Glyphicon, Alert
 } from 'react-bootstrap';
 
+import InputText from '../form/InputText'
+import InputSelect from '../form/InputSelect'
+import InputNumber from "../form/InputNumber";
+
 export default class BudgetCreateModal extends React.Component {
 
     constructor(props) {
@@ -20,6 +24,7 @@ export default class BudgetCreateModal extends React.Component {
             period : 'week',
             tags: '',
             error: false,
+            errors: null,
         };
     }
 
@@ -39,7 +44,9 @@ export default class BudgetCreateModal extends React.Component {
             tags: this.state.tags,
             _token: window.token,
         }).catch(error => {
-            this.state({
+            console.log(error);
+            this.setState({
+                errors: error.responseJSON.errors,
                 error: true,
                 loading: false,
             });
@@ -97,72 +104,60 @@ export default class BudgetCreateModal extends React.Component {
                             <div className="row">
                                 <div className="col-xs-12">
 
-                                {this.state.error ? (
-                                    <Alert bsStyle="danger">
-                                        Creating budget failed...
-                                    </Alert>
-                                ): null}
+                                    {this.state.error ? (
+                                        <Alert bsStyle="danger">
+                                            Creating budget failed...
+                                        </Alert>
+                                    ): null}
 
-                                <FormGroup>
-                                    <ControlLabel>Name</ControlLabel>
-                                    <FormControl
-                                        componentClass='input'
-                                        type="text"
+                                    <InputText
+                                        title={'Name'}
+                                        name={'name'}
+                                        placeholder={'Budget\'s name'}
                                         value={this.state.name}
-                                        placeholder="Name"
-                                        onChange={(e) => {this.setState({ name: e.target.value })}}
+                                        onChange={(value) => {this.setState({ name: value })}}
+                                        errors={this.state.errors}
                                         autoFocus
                                     />
-                                </FormGroup>
 
-                                <FormGroup>
-                                    <ControlLabel>Tags to track</ControlLabel>
-                                    <FormControl
-                                        componentClass='input'
-                                        type="text"
+                                    <InputText
+                                        title={'Tags to track'}
+                                        name={'tags'}
+                                        placeholder={'Budget\'s tags separated by spaces and without #'}
                                         value={this.state.tags}
-                                        placeholder="tag1 tag2"
-                                        onChange={(e) => {this.setState({ tags: e.target.value.replace('#', '') })}}
+                                        onChange={(value) => {this.setState({ tags: value.replace('#', '') })}}
+                                        errors={this.state.errors}
                                     />
-                                </FormGroup>
 
-                                <FormGroup>
-                                    <ControlLabel>Amount intent</ControlLabel>
-                                    <FormControl
-                                        componentClass='input'
-                                        type="number"
+                                    <InputNumber
+                                        title={'Amount intent'}
+                                        name={'amount'}
                                         placeholder={100}
                                         min={0}
                                         value={this.state.amount}
-                                        onChange={(e) => {this.setState({ amount: e.target.value })}}
+                                        onChange={(value) => {this.setState({ amount: value })}}
+                                        errors={this.state.errors}
                                     />
-                                </FormGroup>
 
-                                 <FormGroup controlId="formControlsSelect">
-                                    <ControlLabel>Currency</ControlLabel>
-                                    <FormControl
-                                        componentClass="select"
-                                        placeholder="select"
+                                    <InputSelect
+                                        title={'Currency'}
+                                        name={'currency'}
+                                        onChange={(value) => {this.setState({ currency: value })}}
+                                        options={['CAD', 'EUR']}
                                         value={this.state.currency}
-                                        onChange={(e) => {this.setState({ currency: e.target.value })}}
-                                    >
-                                        <option value="CAD">Canadian dollar</option>
-                                        <option value="EUR">Euro</option>
-                                  </FormControl>
-                                </FormGroup>
+                                        errors={this.state.errors}
+                                    />
 
-                                <FormGroup controlId="formControlsSelect">
-                                    <ControlLabel>Period</ControlLabel>
-                                    <FormControl
-                                        componentClass="select"
-                                        placeholder="select"
+
+                                    <InputSelect
+                                        title={'Period'}
+                                        name={'period'}
+                                        onChange={(value) => {this.setState({ period: value })}}
+                                        options={['week', 'month']}
                                         value={this.state.period}
-                                        onChange={(e) => {this.setState({ period: e.target.value })}}
-                                    >
-                                        <option value="week">week</option>
-                                        <option value="month">month</option>
-                                  </FormControl>
-                                </FormGroup>
+                                        errors={this.state.errors}
+                                    />
+                                    
                                 </div>
                             </div>
                             )}

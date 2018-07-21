@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import InputText from '../form/InputText'
 import {FormGroup, FormControl, Button, Glyphicon } from 'react-bootstrap';
 
 
@@ -14,7 +14,8 @@ export default class NewProjectRoot extends React.Component{
     getInitialState(){
 
         return {
-            newProjectTitle: ''
+            newProjectTitle: '',
+            errors: null,
         };
     }
 
@@ -30,9 +31,42 @@ export default class NewProjectRoot extends React.Component{
         }
     }
 
+    onNewProjectClick(title) {
+        const url = 'projects';
+        $.ajax({
+            url: url,
+            cache: false,
+            method: 'POST',
+            datatype: 'json',
+            data: {
+                title: title,
+                _token: window.token
+            },
+            success: function (response) {
+
+                if (response.status === 'success') {
+
+                    let project = response.data.project;
+                    project.goals = [];
+
+                    this.props.onNewProjectClick(project);
+                }
+
+            }.bind(this),
+            error: (error)=> {
+                //alert('Creating project failed');
+                console.error(error.responseJSON);
+                this.setState({
+                    errors: error.responseJSON.errors
+                })
+            },
+        });
+
+    }
+
 
     onClick(){
-        this.props.onNewProjectClick(this.state.newProjectTitle);
+        this.onNewProjectClick(this.state.newProjectTitle);
     }
 
     render() {
@@ -79,13 +113,16 @@ export default class NewProjectRoot extends React.Component{
                                 controlId="formBasicText"
                             >
                                 <div className="col-xs-11">
-                                    <FormControl
-                                        type="text"
+
+                                    <InputText
+                                        name={'title'}
                                         value={this.state.newProjectTitle}
-                                        placeholder="Project title"
-                                        onChange={(e) => this.setState({newProjectTitle: e.target.value})}
+                                        onChange={(value) => this.setState({newProjectTitle: value})}
+                                        placeholder="Project's title"
+                                        errors={this.state.errors}
                                         onKeyPress={this.handleKeyPress.bind(this)}
                                     />
+
                                 </div>
                                 <div className="col-xs-1">
 
