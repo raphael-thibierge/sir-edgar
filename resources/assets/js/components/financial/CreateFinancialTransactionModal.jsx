@@ -185,8 +185,8 @@ export default class CreateFinancialTransactionModal extends React.Component{
                             title={'Tags'}
                             placeholder="Transaction's tags separated by spaces"
                             value={this.state.tags}
-                            onChange={(e) => {this.setState({
-                                tags: e.target.value.toLowerCase().replace('-', '').replace('#', '')
+                            onChange={(value) => {this.setState({
+                                tags: value.toLowerCase().replace('-', '').replace('#', '')
                             })}}
                             errors={this.state.errors}
                             onKeyPress={this.handleKeyPress.bind(this)}

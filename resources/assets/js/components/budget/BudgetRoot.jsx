@@ -1,7 +1,7 @@
 import React from 'react';
 import {PanelGroup, Glyphicon} from 'react-bootstrap';
 import Budget from './Budget';
-import BudgetCreateModal from './BudgetCreateModal';
+import BudgetModal from './BudgetModal';
 
 export default class BudgetRoot extends React.Component {
 
@@ -88,7 +88,7 @@ export default class BudgetRoot extends React.Component {
 
                     <div className="row">
                         <div className="col-xs-12">
-                            <BudgetCreateModal onCreate={this.onBudgetCreated.bind(this)}/>
+                            <BudgetModal onCreate={this.onBudgetCreated.bind(this)}/>
                         </div>
                     </div>
                     <br/>
