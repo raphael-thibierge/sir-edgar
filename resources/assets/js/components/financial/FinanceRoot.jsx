@@ -2,7 +2,6 @@ import React from 'react';
 import {Image, Tabs, Tab} from 'react-bootstrap';
 import ExpenseRoot from "../expense/ExpenseRoot";
 import BudgetRoot from "../budget/BudgetRoot";
-import TagFrequencyChart from  '../expense/TagFrequencyChart';
 
 export default class FinanceRoot extends React.Component {
 

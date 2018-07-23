@@ -24,7 +24,7 @@ Route::get('app/load', 'HomeController@initialAppRequest')->name('app.load');
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 
 Route::prefix('goals')->group(function (){
-    Route::post('{goal}/complete', 'GoalController@complete')->name('goals.complete');
+    Route::post('{goal}/set-completed', 'GoalController@complete')->name('goals.complete');
     Route::patch('{goal}/update-details', 'GoalController@updateDetails')->name('goals.details.update');
     Route::post('{goal}/set-today', 'GoalController@setToday')->name('goals.set_today');
     Route::post('{goal}/re-complete', 'GoalController@reComplete')->name('goals.re-complete');

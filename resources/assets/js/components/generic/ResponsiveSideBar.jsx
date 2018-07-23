@@ -1,7 +1,6 @@
 import React from 'react';
 import SvgIcon from 'react-icons-kit';
 import {
-    ic_business,
     ic_create_new_folder,
     ic_folder,
     ic_folder_special,

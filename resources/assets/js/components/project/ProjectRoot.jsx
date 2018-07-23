@@ -83,9 +83,7 @@ export default class ProjectRoot extends React.Component {
                 for (let goalIterator=0; goalIterator < goals.length; goalIterator++){
 
                     let goal = new Goal(goals[goalIterator]);
-                    goal.forceUpdate = this.forceUpdate.bind(this);
                     goal.project_id = projects[projectIterator]._id;
-                    goal.remove = this.deleteGoal.bind(this, goal);
                     goals[goalIterator] = goal;
                 }
 
@@ -98,93 +96,7 @@ export default class ProjectRoot extends React.Component {
         }
     }
 
-    deleteGoal(goalToDelete) {
-        $.ajax({
-            url: goalToDelete.routes.destroy,
-            cache: false,
-            method: 'POST',
-            datatype: 'json',
-            data: {
-                method: 'DELETE',
-                _method: 'DELETE',
-                _token: window.token,
-            },
-            success: function (goal) {
-
-                let projects = this.state.projects;
-
-                const project_id = goal.project_id;
-                let project = projects[this.projectMap[project_id]];
-                const oldGoals= project.goals;
-
-                let goals = [];
-                for (let goalIterator=0; goalIterator < project.goals.length; goalIterator++){
-                    if (project.goals[goalIterator]._id !== goal._id){
-                        goals.push(project.goals[goalIterator]);
-                    }
-                }
-
-                project.goals = goals;
-                projects[this.projectMap[project_id]] = project;
-
-                this.setState({
-                    projects: projects
-                });
-
-            }.bind(this, goalToDelete),
-            error: this.onError,
-        });
-
-    }
-
-    addGoal(title, score, project_id) {
-
-        const url = './goals';
-
-        $.ajax({
-            url: url,
-            cache: false,
-            method: 'POST',
-            datatype: 'json',
-            data: {
-                title: title,
-                score: score,
-                project_id: project_id,
-                _token: window.token,
-            },
-            success: function (response) {
-
-
-                if (response.status === 'success') {
-
-                    let goal = response.data.goal;
-
-                    let projects = this.state.projects;
-
-                    const project_id = goal.project_id;
-                    let project = projects[this.projectMap[project_id]];
-
-                    goal = new Goal(goal);
-                    goal.forceUpdate = this.forceUpdate.bind(this);
-                    goal.remove = this.deleteGoal.bind(this, goal);
-
-                    project.goals.push(goal);
-                    projects[this.projectMap[project_id]] = project;
-
-                    this.setState({
-                        projects: projects
-                    });
-                }
-
-            }.bind(this),
-            error: this.onError,
-        });
-
-
-    }
-
     onProjectSaved(project){
-        console.log(project);
 
         let projects = this.state.projects;
         this.projectMap[project._id] = projects.length;
@@ -220,8 +132,7 @@ export default class ProjectRoot extends React.Component {
                     const project = this.state.projects[this.projectMap[viewPathParts[1]]];
                     return <ProjectRender
                         project={project}
-                        createGoal={this.addGoal.bind(this)}
-                        editProject={this.editProject.bind(this)}
+                        onProjectUpdate={this.updateProject.bind(this)}
                     />;
                     break;
 
@@ -258,9 +169,12 @@ export default class ProjectRoot extends React.Component {
                     }));
                 });
 
-                return <ProjectRender
-                    project={importantProject}
-                    />;
+                return (
+                    <ProjectRender
+                        project={importantProject}
+                        onProjectUpdate={this.updateProject.bind(this)}
+                    />
+                );
                 break;
 
             case 'all_goals':
@@ -304,20 +218,34 @@ export default class ProjectRoot extends React.Component {
         }
     }
 
+    indexOfProject(projectId){
+        return this.state.projects.indexOf(this.state.projects.find(p => p._id === projectId));
+    }
 
-    editProject(projectEdited){
+    updateProject(project){
 
         let projects = this.state.projects;
+        //let self=this;
 
-        let project = projects[this.projectMap[projectEdited._id]];
-        project.title = projectEdited.title;
-        project.is_archived = projectEdited.is_archived;
-        projects[this.projectMap[project._id]] = project;
+        if (project._id === 'today'){
 
-        this.setState({
-            projects: projects,
-            view: project.is_archived ? 'stats' : 'projects/' + project._id
-        });
+            project.goals.forEach(goal => {
+
+                let index = this.indexOfProject(goal.project_id);
+
+                let goals = projects[index].goals;
+                let goalIndex = goals.indexOf(goals.indexOf(goals.find(g => g._id === goal._id)));
+                goals[goalIndex] = goal;
+
+                projects[index].goals = goals;
+
+            })
+
+        } else {
+            projects[this.indexOfProject(project._id)] = project;
+        }
+
+        this.setState({projects: projects});
     }
 
 

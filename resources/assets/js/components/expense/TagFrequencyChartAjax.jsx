@@ -1,6 +1,5 @@
 import React from 'react';
 import { Chart } from 'react-google-charts';
-import { FormGroup, FormControl, Label, Button} from 'react-bootstrap';
 
 export default class TagFrequencyChartAjax extends React.Component {
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import {FormControl, FormGroup, ControlLabel, Button, Modal, Glyphicon, Badge } from 'react-bootstrap';
+import {FormGroup, Button, Modal} from 'react-bootstrap';
+import InputText from '../form/InputText';
 
 /**
  * React component managing goal input
@@ -21,8 +22,9 @@ export default class ProjectDetailsModal extends React.Component{
     getInitialState() {
         return {
             display: false,
-            title: '',
-            is_archived: false,
+            title: this.props.project.title,
+            is_archived: this.props.project.is_archived,
+            errors: null,
         };
     }
 
@@ -74,7 +76,7 @@ export default class ProjectDetailsModal extends React.Component{
                 }
 
             },
-            error: (error) => {console.error(error); alert(error.statusText)},
+            error: (error) => {console.error(error); this.setState({errors: error.responseJSON.errors});},
         });
 
         console.log(request);
@@ -102,7 +104,7 @@ export default class ProjectDetailsModal extends React.Component{
                 <Modal
                     aria-labelledby="contained-modal-title-lg"
                     show={this.state.display}
-                    onHide={()=> {this.setState({display: false})}}
+                    onHide={()=> {this.setState(this.getInitialState())}}
                 >
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title-lg">
@@ -111,16 +113,15 @@ export default class ProjectDetailsModal extends React.Component{
                     </Modal.Header>
                     <Modal.Body>
 
-                        <FormGroup>
-                            <ControlLabel>Project</ControlLabel>
-                            <FormControl
-                                componentClass='input'
-                                value={this.state.title}
-                                placeholder="Your project title"
-                                onChange={(e) => {this.setState({ title: e.target.value })}}
-                                onKeyPress={this.handleKeyPress.bind(this)}
-                            />
-                        </FormGroup>
+                        <InputText
+                            title={'title'}
+                            name={'title'}
+                            onChange={value => {this.setState({ title: value })}}
+                            value={this.state.title}
+                            placeholder={'Project\'s title'}
+                            autoFocus
+                            errors={this.state.errors}
+                        />
 
                         <FormGroup>
                             <Button className="col-xs-12" bsStyle={this.state.is_archived? 'warning' : 'danger'} onClick={this.setState.bind(this, {is_archived: !this.state.is_archived})}>
@@ -131,7 +132,7 @@ export default class ProjectDetailsModal extends React.Component{
 
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={()=> {this.setState({display: false})}}>Cancel</Button>
+                        <Button onClick={()=> {this.setState(this.getInitialState())}}>Cancel</Button>
                         <Button bsStyle="success" onClick={this.onSave.bind(this)}>Save</Button>
                     </Modal.Footer>
                 </Modal>

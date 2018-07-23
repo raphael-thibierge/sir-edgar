@@ -1,16 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import GoalRender from './GoalRender';
+import InputText from '../form/InputText'
+import InputNumber from '../form/InputNumber'
 import {
     FormGroup,
-    FormControl,
     ListGroupItem,
     Button,
-    Badge,
     Glyphicon,
-    OverlayTrigger,
-    Popover
-
 } from 'react-bootstrap';
 
 
@@ -19,7 +15,7 @@ import {
  *
  * React component managing goal input
  */
-export default class GoalInput extends React.Component{
+export default class GoalCreateInput extends React.Component{
 
     constructor(props){
         super(props);
@@ -36,16 +32,9 @@ export default class GoalInput extends React.Component{
         return {
             title: '',
             score: 1,
-            editMode: false,
+            errors: null,
         };
     }
-
-    componentDidMount(){
-        if (this.props.goal._id === null){
-            this.setEditMode();
-        }
-    }
-
 
     /**
      * Return a object containing all form values
@@ -60,24 +49,6 @@ export default class GoalInput extends React.Component{
     }
 
     /**
-     * Update this.state.title value when user edit title score value
-     *
-     * @param e
-     */
-    onTitleChange(e) {
-        this.setState({ title: e.target.value });
-    }
-
-    /**
-     * Update this.state.score when user edit score input value
-     *
-     * @param e
-     */
-    onScoreChange(e){
-        this.setState({ score: e.target.value });
-    }
-
-    /**
      * Called when the user hit a keyboard key in input
      *
      * @param target
@@ -88,6 +59,49 @@ export default class GoalInput extends React.Component{
             this.onEnterPress();
         }
     }
+
+    setDisplayMode() {
+
+
+
+
+        const url = '/goals';
+
+        $.ajax({
+            url: url,
+            cache: false,
+            method: 'POST',
+            datatype: 'json',
+            data: {
+                title: this.state.title,
+                score: this.state.score,
+                project_id: this.props.projectId,
+                _token: window.token,
+            },
+            success: function (response) {
+
+
+                if (response.status === 'success') {
+
+                    let goal = response.data.goal;
+
+                    this.props.onCreate(goal);
+
+                    this.setState(this.getInitialState());
+                }
+
+            }.bind(this),
+            error: function (error) {
+                console.error(error);
+                this.setState({
+                    errors: error.responseJSON.errors,
+                });
+                alert('Goal creation failed');
+            }.bind(this),
+        });
+
+    }
+
 
     /**
      * Send form values to server when user hit enter key in input
@@ -122,34 +136,38 @@ export default class GoalInput extends React.Component{
 
 
 
-    editModeRender(){
+    render(){
         return (
-            <ListGroupItem key="input" style={{height: 57}}>
+            <ListGroupItem key="input" style={{height: this.state.errors === null ? 57 : this.state.errors['score'] ? 103 : 80}}>
                 <FormGroup
                     controlId="formBasicText"
                 >
                     <div className="col-xs-8">
-                        <FormControl
-                            type="text"
+                        <InputText
+                            name={'title'}
                             value={this.state.title}
-                            placeholder="New goal"
-                            onChange={this.onTitleChange.bind(this)}
+                            onChange={value => {this.setState({ title: value })}}
+                            errors={this.state.errors}
+                            placeholder="Goal or task you want to achieve"
                             onKeyPress={this.handleKeyPress.bind(this)}
+                            autoFocus
                         />
                     </div>
                     <div className="col-xs-3">
-
-                        <FormControl
-                            type="number"
+                        <InputNumber
                             value={this.state.score}
+                            placeholder={'Score'}
                             min={0}
                             max={5}
-                            onChange={this.onScoreChange.bind(this)}
+                            name={'score'}
+                            onChange={value => {this.setState({score: value})}}
                             onKeyPress={this.handleKeyPress.bind(this)}
+                            errors={this.state.errors}
+
                         />
+
                     </div>
                     <div className="col-xs-1">
-
                         <Button bsSize="sm" bsStyle="success" onClick={this.setDisplayMode.bind(this)}>
                             <Glyphicon glyph="ok"/>
                         </Button>
@@ -158,48 +176,16 @@ export default class GoalInput extends React.Component{
             </ListGroupItem>
         );
     }
-
-    setEditMode() {
-        this.setState({
-            editMode: true,
-            title: this.props.goal.title,
-            score: this.props.goal.score,
-        });
-    }
-
-    setDisplayMode() {
-
-        if (this.props.goal._id !== null){
-            // update goal
-            this.props.goal.update(this.state.title, this.state.score);
-            this.setState({
-                editMode: false,
-            });
-        } else {
-            // add goal
-            this.props.goal.create(this.state.title, this.state.score, this.props.goal.project_id);
-            this.setEditMode();
-        }
-
-    }
-
-
-    /**
-     * Render component's HTML code
-     *
-     * @returns {XML}
-     */
-    render() {
-        return this.state.editMode === true ? this.editModeRender() : <GoalRender goal={this.props.goal}/>;
-    }
 };
 
 /**
  * Define required component's properties
  */
-GoalInput.propTypes = {
-/**
- * Method to call when the new goal has been send to server successfully
- */
-   goal: PropTypes.object.isRequired,
+GoalCreateInput.propTypes = {
+    /**
+     * Method to call when the new goal has been send to server successfully
+     */
+    onCreate: PropTypes.func.isRequired,
+    projectId: PropTypes.string.isRequired
+
 };

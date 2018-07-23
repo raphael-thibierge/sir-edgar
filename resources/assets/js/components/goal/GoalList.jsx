@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {ListGroup, ListGroupItem,Button,Badge,Glyphicon } from 'react-bootstrap';
+import {ListGroup} from 'react-bootstrap';
 import Tools from '../Tools';
 
-import GoalInput from './GoalInput.jsx';
+import GoalCreateInput from './GoalCreateInput.jsx';
+import GoalRender from "./GoalRender";
 /**
  * React component managing goal lists
  */
@@ -25,8 +26,6 @@ export default class GoalList extends React.Component{
 
         let doneGoals = [];
 
-
-        const newGoal = {_id: null, title:'', score: 1, is_completed:false, create: this.props.createGoal, project_id: this.props.project_id};
         // new to-do goal
         let todoGoals = [];
 
@@ -100,19 +99,24 @@ export default class GoalList extends React.Component{
             return compareValue;
         });
 
-        if (typeof this.props.createGoal === 'function'){
-            todoGoals.unshift(newGoal);
-        }
-
 
         // render html foreach to-do goal
         const todoList = todoGoals.length > 0 ? todoGoals.map((goal) => (
-            <GoalInput goal={goal} key={goal._id}/>
+            <GoalRender
+                key={goal._id}
+                goal={goal}
+                onGoalUpdate={this.props.onGoalUpdate}
+
+            />
         )) : null; // can't be null because there is the new Goals todoGoals
 
         // render html foreach done goal
         const doneList = doneGoals.length > 0 ? doneGoals.map((goal) => (
-            <GoalInput goal={goal} key={goal._id}/>
+            <GoalRender
+                key={goal._id}
+                goal={goal}
+                onGoalUpdate={this.props.onGoalUpdate}
+            />
         )) : null;
 
 
@@ -122,6 +126,12 @@ export default class GoalList extends React.Component{
                 <div className="row">
                     <div className="col-xs-12">
                         <ListGroup>
+                            {typeof this.props.createGoal === 'function' &&
+                                <GoalCreateInput
+                                    onCreate={this.props.createGoal}
+                                    projectId={this.props.project_id}
+                                />
+                            }
                             {todoList}
                         </ListGroup>
                     </div>
@@ -144,4 +154,5 @@ GoalList.propTypes = {
     goals: PropTypes.array.isRequired,
     createGoal: PropTypes.func,
     project_id: PropTypes.string.isRequired,
+    onGoalUpdate:PropTypes.func.isRequired
 };

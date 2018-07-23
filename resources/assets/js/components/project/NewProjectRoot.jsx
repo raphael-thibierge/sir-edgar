@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import InputText from '../form/InputText'
-import {FormGroup, FormControl, Button, Glyphicon } from 'react-bootstrap';
+import {FormGroup, Button, Glyphicon } from 'react-bootstrap';
 
 
 export default class NewProjectRoot extends React.Component{
