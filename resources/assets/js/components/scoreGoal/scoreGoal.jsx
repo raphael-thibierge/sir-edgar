@@ -1,6 +1,7 @@
 import React from 'react';
 import {ProgressBar} from 'react-bootstrap';
 import AjaxEditableValue from '../generic/AjaxEditableValue.jsx';
+import axios from 'axios';
 
 export default class ScoreGoal extends React.Component{
 
@@ -34,11 +35,9 @@ export default class ScoreGoal extends React.Component{
      */
     request(){
 
-        const request = $.ajax({
-            url: './goals/current-score',
-            cache: false,
-            method: 'GET',
-            success: (response) => {
+        axios.get('/goals/current-score')
+            .then(response => response.data)
+            .then(response => {
 
                 if (response && response.status === 'success'){
                     this.setState({
@@ -64,9 +63,8 @@ export default class ScoreGoal extends React.Component{
                     });
                 }
 
-            },
-            error: (error) => {console.error(error); alert(error.statusText)},
-        });
+            })
+            .catch(error => {console.error(error); alert(error.statusText)});
     }
 
 

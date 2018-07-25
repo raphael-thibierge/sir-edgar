@@ -1,10 +1,10 @@
 'use strict';
-var React = require('react');
-var Alert = require('react-bootstrap').Alert;
+const React = require('react');
+const Alert = require('react-bootstrap').Alert;
+const axios = require('axios');
+const Graph = require('./NetworkGraph.jsx');
 
-var Graph = require('./NetworkGraph.jsx');
-
-var Network = React.createClass({
+const Network = React.createClass({
 
     propTypes: {
         route: React.PropTypes.string.isRequired,
@@ -38,15 +38,11 @@ var Network = React.createClass({
     },
 
     request: function () {
-        var request = $.ajax({
-            url: this.props.route,
-            dataType: 'json',
-            cache: false,
-            method: 'GET',
-            timeout: 60000, //60 sec
-            success: this.handleAjaxRequest,
-            error: this.ajaxRequestError,
-        });
+        // todo -- axios timeout -> 60s
+        axios.get(this.props.route)
+            .then(response => response.data)
+            .then(this.handleAjaxRequest)
+            .catch(this.ajaxRequestError);
     },
 
     handleAjaxRequest: function (ajaxResponse) {

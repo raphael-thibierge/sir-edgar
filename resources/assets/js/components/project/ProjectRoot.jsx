@@ -10,7 +10,7 @@ import ExpenseRoot from '../expense/ExpenseRoot';
 const Network = require('../Network/Network.jsx');
 import PriceRoot from '../coinbase/PriceRoot';
 import TagFrequencyChart from '../expense/TagFrequencyChart';
-
+import axios from 'axios';
 /**
  * Main component managing goals
  */
@@ -49,13 +49,13 @@ export default class ProjectRoot extends React.Component {
      * AJAX request to get goals from server
      */
     request(){
-        const request = $.ajax({
-            url: './projects',
-            cache: false,
-            method: 'GET',
-            success: this.onSuccess.bind(this),
-            error: (error) => {console.error(error); alert(error.statusText)},
-        });
+        axios.get('/projects')
+            .then(response => response.data)
+            .then(this.onSuccess.bind(this))
+            .catch(error => {
+                console.error(error.response);
+                alert('Projects loading failed')
+            });
     }
 
     /**
@@ -104,13 +104,7 @@ export default class ProjectRoot extends React.Component {
 
         this.setState({
             view: 'projects/' + project._id,
-            projects: projects.sort((a, b) => {
-                if (a.title > b.title)
-                    return 1;
-                else if (a.title < b.title)
-                    return -1;
-                return 0;
-            }),
+            projects: projects,
             newProjectCollapseOpen: false,
             newProjectTitle: '',
         });
@@ -231,11 +225,16 @@ export default class ProjectRoot extends React.Component {
 
             project.goals.forEach(goal => {
 
-                let index = this.indexOfProject(goal.project_id);
+                console.log(goal);
 
-                let goals = projects[index].goals;
-                let goalIndex = goals.indexOf(goals.indexOf(goals.find(g => g._id === goal._id)));
-                goals[goalIndex] = goal;
+                const index = this.indexOfProject(goal.project_id);
+                const goals = projects[index].goals;
+                const goalIndex = goals.indexOf(goals.find(g => g._id === goal._id));
+                if (goalIndex === -1){
+                    goals.push(goal);
+                } else {
+                    goals[goalIndex] = goal;
+                }
 
                 projects[index].goals = goals;
 

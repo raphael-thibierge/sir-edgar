@@ -50,13 +50,15 @@ class GoalController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'score' => 'required|integer|max:5',
-            'project_id' => 'required',
+            'project_id' => 'required|exists:mongodb.projects,_id',
+            'today' => 'required|bool',
         ]);
 
         $goal = Auth::user()->goals()->create([
             "project_id" => $request->get('project_id'),
             "title" => $request->get('title'),
             "score" => (int)$request->get('score'),
+            "today" => (bool)$request->get('today'),
         ]);
 
         return $this->successResponse([
@@ -263,11 +265,11 @@ class GoalController extends Controller
         $this->authorize('update', $goal);
 
         $this->validate($request, [
-            'today' => 'required|in:true,false'
+            'today' => 'required|bool'
         ]);
 
         // request's input today is a string
-        $today = $request->input('today') == "true" ? true : false;
+        $today = (bool)$request->input('today');
 
         $goal->update(['today' => $today]);
 

@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import InputText from '../form/InputText'
 import InputNumber from '../form/InputNumber'
+import ProjectSelectInput from '../project/ProjectSelectInput'
 import {
     FormGroup,
     ListGroupItem,
     Button,
     Glyphicon,
 } from 'react-bootstrap';
-
+import axios from 'axios';
 
 
 /**
@@ -30,22 +31,11 @@ export default class GoalCreateInput extends React.Component{
      */
     getInitialState() {
         return {
+            project_id: null,
             title: '',
             score: 1,
             errors: null,
         };
-    }
-
-    /**
-     * Return a object containing all form values
-     *
-     * @returns {{title, score: (number|*)}}
-     */
-    getFormValues(){
-        return {
-            title: this.state.title,
-            score: this.state.score,
-        }
     }
 
     /**
@@ -62,44 +52,39 @@ export default class GoalCreateInput extends React.Component{
 
     setDisplayMode() {
 
-
-
-
         const url = '/goals';
 
-        $.ajax({
-            url: url,
-            cache: false,
-            method: 'POST',
-            datatype: 'json',
-            data: {
+        axios.post(url, {
                 title: this.state.title,
                 score: this.state.score,
-                project_id: this.props.projectId,
-                _token: window.token,
-            },
-            success: function (response) {
-
+                project_id: this.props.projectId === 'today' ? this.state.project_id : this.props.projectId,
+                today: this.props.projectId === 'today'
+            })
+            .then(response => response.data)
+            .then(response => {
 
                 if (response.status === 'success') {
 
                     let goal = response.data.goal;
+
+                    console.log('ouais');
 
                     this.props.onCreate(goal);
 
                     this.setState(this.getInitialState());
                 }
 
-            }.bind(this),
-            error: function (error) {
-                console.error(error);
-                this.setState({
-                    errors: error.responseJSON.errors,
-                });
-                alert('Goal creation failed');
-            }.bind(this),
-        });
+            })
+            .catch(error =>  {
 
+                if (error.response.data.errors){
+                    this.setState({
+                        errors: error.response.data.errors,
+                    });
+                } else {
+                    alert(error.response.statusText);
+                }
+            })
     }
 
 
@@ -154,17 +139,26 @@ export default class GoalCreateInput extends React.Component{
                         />
                     </div>
                     <div className="col-xs-3">
-                        <InputNumber
-                            value={this.state.score}
-                            placeholder={'Score'}
-                            min={0}
-                            max={5}
-                            name={'score'}
-                            onChange={value => {this.setState({score: value})}}
-                            onKeyPress={this.handleKeyPress.bind(this)}
-                            errors={this.state.errors}
+                        {this.props.projectId !== 'today' ? (
+                            <InputNumber
+                                value={this.state.score}
+                                placeholder={'Score'}
+                                min={0}
+                                max={5}
+                                name={'score'}
+                                onChange={value => {this.setState({score: value})}}
+                                onKeyPress={this.handleKeyPress.bind(this)}
+                                errors={this.state.errors}
 
-                        />
+                            />
+                        ) : (
+                            <ProjectSelectInput
+                                value={this.state.project_id}
+                                onChange={value => {this.setState({project_id: value})}}
+                                errors={this.state.errors}
+                            />
+                        )}
+
 
                     </div>
                     <div className="col-xs-1">

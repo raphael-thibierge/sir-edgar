@@ -7,6 +7,8 @@ import ProjectRoot from './components/project/ProjectRoot.jsx';
 import FinanceRoot from './components/financial/FinanceRoot';
 import UserRoot from './components/user/UserRoot';
 
+import axios from 'axios';
+
 export default class AppRoot extends React.Component {
 
     constructor(props) {
@@ -19,11 +21,12 @@ export default class AppRoot extends React.Component {
 
     componentDidMount(){
 
-        $.get('/app/load')
+        axios.get('/app/load')
             .catch(error => {
                 alert('Failed to load app...');
                 console.error(error);
             })
+            .then(response => response.data)
             .then(responseJSON => {
                 if (responseJSON.status === 'success'){
                     // get response data

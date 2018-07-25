@@ -31,9 +31,7 @@ export default class ProjectRender extends React.Component{
     createGoal(goal){
         let project = this.props.project;
         project.goals.push(goal);
-        if (typeof this.props.onProjectUpdate(goal) === 'function'){
-            this.props.onProjectUpdate(goal);
-        }
+        this.props.onProjectUpdate(project);
     }
 
     updateGoal(goal){
@@ -78,6 +76,19 @@ export default class ProjectRender extends React.Component{
                         </div>
                     </div>
 
+                    {project.is_archived &&
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <div className="alert alert-danger">
+                                <p><strong>This project has been archived !</strong></p>
+                                <p>
+                                    You will not be able to see it again after selecting another project. It's the last time to unarchived it.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
                     <div className="row">
                         <div className="col-xs-12">
                             <GoalList
@@ -100,5 +111,5 @@ export default class ProjectRender extends React.Component{
 ProjectRender.propTypes = {
     project: PropTypes.object.isRequired,
     onTitleChange: PropTypes.func,
-    onProjectUpdate: PropTypes.func,
+    onProjectUpdate: PropTypes.func.isRequired,
 };

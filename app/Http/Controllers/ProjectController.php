@@ -33,6 +33,17 @@ class ProjectController extends Controller
         ]);
     }
 
+    public function indexIdName(){
+        $projects = Auth::user()->projects()
+            ->whereIsArchived(false)
+            ->orderBy('title', 'ASC')
+            ->pluck('title', '_id');
+
+        return $this->successResponse([
+            'projects' => $projects,
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -84,22 +95,13 @@ class ProjectController extends Controller
 
         $this->validate($request, [
             'title' => 'required|string',
-            'is_archived' => 'required|string|in:true,false'
+            'is_archived' => 'required|bool'
         ]);
 
         $project->update([
             'title' => $request->get('title'),
-            'is_archived' => $request->get('is_archived') == 'true' ? true : false,
+            'is_archived' => (bool)$request->get('is_archived'),
         ]);
-
-        /*
-         * TODO -- complete this
-        if ($project->is_archived){
-            $project->goals()->update([
-                'is_archive' => true
-            ]);
-        }
-        */
 
         return $this->successResponse([
             'project' => $project

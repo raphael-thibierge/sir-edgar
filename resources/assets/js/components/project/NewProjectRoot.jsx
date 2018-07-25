@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import InputText from '../form/InputText'
 import {FormGroup, Button, Glyphicon } from 'react-bootstrap';
-
+import axios from 'axios';
 
 export default class NewProjectRoot extends React.Component{
 
@@ -32,17 +32,12 @@ export default class NewProjectRoot extends React.Component{
     }
 
     onNewProjectClick(title) {
-        const url = 'projects';
-        $.ajax({
-            url: url,
-            cache: false,
-            method: 'POST',
-            datatype: 'json',
-            data: {
+        const url = '';
+        axios.post('/projects', {
                 title: title,
-                _token: window.token
-            },
-            success: function (response) {
+            })
+            .then(response => response.data)
+            .then(response => {
 
                 if (response.status === 'success') {
 
@@ -50,17 +45,21 @@ export default class NewProjectRoot extends React.Component{
                     project.goals = [];
 
                     this.props.onNewProjectClick(project);
+                } else {
+                    alert('Create project failed');
                 }
 
-            }.bind(this),
-            error: (error)=> {
-                //alert('Creating project failed');
-                console.error(error.responseJSON);
-                this.setState({
-                    errors: error.responseJSON.errors
-                })
-            },
-        });
+            })
+            .catch(error => {
+                if (error.response.data.errors) {
+                    this.setState({
+                        errors: error.response.data.errors
+                    });
+                } else {
+                    console.error(error.response);
+                    alert('Create project failed');
+                }
+            });
 
     }
 

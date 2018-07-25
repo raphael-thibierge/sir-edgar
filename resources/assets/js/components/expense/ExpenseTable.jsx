@@ -95,8 +95,9 @@ export default class ExpenseTable extends React.Component {
                                 {expensesRended.reverse()}
                                 <tr><td colSpan={6}></td></tr>
                                 <tr>
+                                    <td></td>
+                                    <td> Total</td>
                                     <td>{this.props.expenses.totalTransactions()}</td>
-                                    <td colSpan={5}> Total</td>
                                 </tr>
                             </tbody>
                         </table>

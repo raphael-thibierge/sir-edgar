@@ -5,6 +5,7 @@ import {Modal, Button, Glyphicon, Alert, FormGroup} from 'react-bootstrap';
 import InputText from '../form/InputText'
 import InputSelect from '../form/InputSelect'
 import InputNumber from "../form/InputNumber";
+import axios from 'axios';
 
 export default class BudgetModal extends React.Component {
 
@@ -52,22 +53,22 @@ export default class BudgetModal extends React.Component {
         });
 
 
-        $.post('./budgets', {
+        axios.post('./budgets', {
             name: this.state.name,
             amount: this.state.amount,
             currency: this.state.currency,
             period: this.state.period,
             tags: this.state.tags,
-            _token: window.token,
         }).catch(error => {
             console.log(error);
             this.setState({
-                errors: error.responseJSON.errors,
+                errors: error.response.data.errors,
                 error: true,
                 loading: false,
             });
-            console.error(error);
-        }).then(responseJSON => {
+            console.error(error.response);
+        }).then(response => response.data)
+        .then(responseJSON => {
 
             if (responseJSON.status === 'success') {
                 // get response data
@@ -81,10 +82,10 @@ export default class BudgetModal extends React.Component {
 
             } else {
                 this.setState({
-                    errors: error.responseJSON.errors,
                     error: true,
                     loading: false,
                 });
+                alert('Fail to create transaction');
                 console.error(responseJSON);
             }
         });
@@ -96,35 +97,35 @@ export default class BudgetModal extends React.Component {
             loading: true
         });
 
-        $.post('./budgets/'+this.state._id, {
-            _token: window.token,
-            _method: 'DELETE',
-        }).catch(error => {
-            this.state({
-                error: true,
-                loading: false,
-            });
-            console.error(error);
-        }).then(responseJSON => {
-
-            if (responseJSON.status === 'success') {
-                // get response data
-                if (typeof this.props.onDelete === 'function'){
-                    this.props.onDelete(this.state._id);
-                }
-                this.setState({
-                    error: false,
-                    loading: false,
-                    display: false,
-                });
-            } else {
-                this.setState({
+        axios.delete('./budgets/'+this.state._id)
+            .catch(error => {
+                this.state({
                     error: true,
                     loading: false,
-                },);
-                console.error(responseJSON);
-            }
-        });
+                });
+                console.error(error.response);
+            })
+            .then(response => response.data)
+            .then(responseJSON => {
+
+                if (responseJSON.status === 'success') {
+                    // get response data
+                    if (typeof this.props.onDelete === 'function'){
+                        this.props.onDelete(this.state._id);
+                    }
+                    this.setState({
+                        error: false,
+                        loading: false,
+                        display: false,
+                    });
+                } else {
+                    this.setState({
+                        error: true,
+                        loading: false,
+                    },);
+                    console.error(responseJSON);
+                }
+            });
     }
 
     onUpdate(){
@@ -133,43 +134,43 @@ export default class BudgetModal extends React.Component {
             loading: true
         });
 
-        $.post('./budgets/'+this.state._id, {
+        axios.put('./budgets/'+this.state._id, {
             name: this.state.name,
             amount: this.state.amount,
             currency: this.state.currency,
             period: this.state.period,
             tags: this.state.tags.trim().split(' '),
-            _token: window.token,
-            _method: 'PUT',
-        }).catch(error => {
-            this.setState({
-                error: true,
-                loading: false,
-                errors: error.responseJSON.errors,
-            });
-            console.error(error.responseJSON);
-        }).then(responseJSON => {
-
-            if (responseJSON.status === 'success') {
-                // get response data
-                if (typeof this.props.onUpdate === 'function'){
-                    this.props.onUpdate(responseJSON.data.budget);
-                }
-                this.setState({
-                    error: false,
-                    loading: false,
-                    display: false,
-                });
-            } else {
+        })
+            .catch(error => {
                 this.setState({
                     error: true,
                     loading: false,
-                    display: false,
-                    errors: error.responseJSON.errors,
+                    errors: error.response.data.errors,
                 });
-                console.error(responseJSON);
-            }
-        });
+                console.error(error.response);
+            })
+            .then(response => response.data)
+            .then(responseJSON => {
+
+                if (responseJSON.status === 'success') {
+                    // get response data
+                    if (typeof this.props.onUpdate === 'function'){
+                        this.props.onUpdate(responseJSON.data.budget);
+                    }
+                    this.setState({
+                        error: false,
+                        loading: false,
+                        display: false,
+                    });
+                } else {
+                    this.setState({
+                        error: true,
+                        loading: false,
+                        display: false,
+                    });
+                    console.error(responseJSON);
+                }
+            });
     }
 
     hide(){

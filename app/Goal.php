@@ -95,7 +95,7 @@ class Goal extends Model
     ];
 
     /**
-     * @return BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user() : \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo('App\User');

@@ -47,8 +47,6 @@ export default class GoalList extends React.Component{
             }
         }
 
-
-
         function compareToday(firstGoal, secondGoal){
             if (firstGoal.today === true && secondGoal.today === false){
                 return -1;
@@ -118,7 +116,6 @@ export default class GoalList extends React.Component{
                 onGoalUpdate={this.props.onGoalUpdate}
             />
         )) : null;
-
 
         // return component's html
         return (

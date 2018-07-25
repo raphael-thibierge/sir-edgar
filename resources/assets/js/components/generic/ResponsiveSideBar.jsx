@@ -39,6 +39,17 @@ const SeparatorTitle = props => {
 export default class ResponsiveSideBar extends React.Component{
 
     render(){
+
+        const projects = this.props.projects
+            .filter(project => !project.is_archived)
+            .sort((a, b) => {
+            if (a.title > b.title)
+                return 1;
+            else if (a.title < b.title)
+                return -1;
+            return 0;
+        });
+
         return (
             <SideNav
                 highlightBgColor="#eee"
@@ -59,18 +70,18 @@ export default class ResponsiveSideBar extends React.Component{
                     </Nav>
                 )}
 
-                {this.props.projects.filter(project => !project.is_archive).length > 0 &&
-                <Nav id="projects">
-                    <NavText>Projects</NavText>
-                    <NavIcon><SvgIcon size={20} icon={ic_folder_special}/></NavIcon>
+                {projects.length > 0 &&
+                    <Nav id="projects">
+                        <NavText>Projects</NavText>
+                        <NavIcon><SvgIcon size={20} icon={ic_folder_special}/></NavIcon>
 
-                    {this.props.projects.map(project => !project.is_archived ?
-                        <Nav key={project._id} id={project._id}>
-                            <NavIcon><SvgIcon size={20} icon={ic_folder}/></NavIcon>
-                            <NavText>{project.title}</NavText>
-                        </Nav> : null
-                    )}
-                </Nav>
+                        {projects.map(project =>
+                            <Nav key={project._id} id={project._id}>
+                                <NavIcon><SvgIcon size={20} icon={ic_folder}/></NavIcon>
+                                <NavText>{project.title}</NavText>
+                            </Nav>
+                        )}
+                    </Nav>
                 }
 
                 <br/>

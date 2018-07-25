@@ -4,6 +4,7 @@ import Tools from '../Tools'
 import CreateFinancialTransactionModal from "../financial/CreateFinancialTransactionModal";
 import {Glyphicon, FormGroup} from 'react-bootstrap';
 import Datetime from 'react-datetime';
+import axios from 'axios';
 
 export default class ExpenseRoot extends React.Component {
 
@@ -25,16 +26,9 @@ export default class ExpenseRoot extends React.Component {
 
     onDelete(deletedTransaction){
 
-        $.ajax({
-            url: '/financial-transactions/' + deletedTransaction._id,
-            cache: false,
-            method: 'POST',
-            datatype: 'json',
-            data: {
-                _method: 'DELETE',
-                _token: window.token,
-            },
-            success: function (response) {
+        axios.delete('/financial-transactions/' + deletedTransaction._id)
+            .then(response => response.data)
+            .then(response => {
                 if (response.status && response.status === 'success') {
                     this.setState({
                         transactions: this.state.transactions.filter(
@@ -43,13 +37,10 @@ export default class ExpenseRoot extends React.Component {
                     });
                 }
 
-            }.bind(this),
-            error: function () {
+            })
+            .catch(error => {
                 alert('Deleting expense failed ! Please retry later.')
-            },
-        });
-
-
+            });
     }
 
     onSave(transaction){
@@ -83,11 +74,8 @@ export default class ExpenseRoot extends React.Component {
     }
 
     componentDidMount(){
-        $.get('/financial-transactions')
-            .catch(error => {
-                alert(error.statusText);
-                console.error(error);
-            })
+        axios.get('/financial-transactions')
+            .then(response => response.data)
             .then(responseJSON => {
                 if (responseJSON.status === 'success'){
                     // get response data
@@ -114,6 +102,10 @@ export default class ExpenseRoot extends React.Component {
                         transactions: transactions.map(ExpenseRoot.formatTransactionDates),
                     });
                 }
+            })
+            .catch(error => {
+                alert(error.statusText);
+                console.error(error);
             });
     }
 

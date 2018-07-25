@@ -6,6 +6,7 @@ import InputText from '../form/InputText';
 import InputNumber from '../form/InputNumber';
 import InputTextArea from '../form/InputTextArea';
 import InputDate from '../form/InputDate';
+import axios from 'axios';
 
 /**
  * React component managing goal input
@@ -80,14 +81,7 @@ export default class GoalsDetailsModal extends React.Component{
 
     onSave(){
 
-
-        const request = $.ajax({
-            url: '/goals/' + this.props.goal._id,
-            cache: false,
-            method: 'POST',
-            data: {
-                _method: 'PATCH',
-                _token: window.token,
+        axios.patch('/goals/' + this.props.goal._id, {
                 due_date: this.state.due_date,
                 estimated_time: this.state.estimated_time,
                 time_spent: this.state.time_spent,
@@ -97,10 +91,9 @@ export default class GoalsDetailsModal extends React.Component{
                 score: this.state.score,
                 today: this.state.today,
                 completed_at: this.state.completed_at,
-
-            },
-            // when server return success
-            success: function (response) {
+            })
+            .then(response => response.data)
+            .then(response => {
                 // check status
                 if (response.status && response.status === 'success'){
 
@@ -112,20 +105,18 @@ export default class GoalsDetailsModal extends React.Component{
                         display: false
                     });
                 } else {
-                    this.onError(response);
+                    alert('Goal update failed');
                 }
-            }.bind(this), // bind is used to call method in this component
-            error: this.onError.bind(this),
-        });
-
-
-    }
-
-    onError(error){
-        console.error(error);
-        this.setState({
-            errors: error.responseJSON.errors
-        });
+            })
+            .catch(error => {
+                if (error.response.data.errors){
+                    this.setState({
+                        errors: error.response.data.errors
+                    });
+                } else {
+                    alert('Goal update failed');
+                }
+            });
     }
 
     onCancel(){

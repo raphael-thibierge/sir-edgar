@@ -38,9 +38,12 @@ export default class InputSelect extends React.Component {
                     autoFocus={this.props.autoFocus}
                     options={this.props.options}
                 >
-                    {this.props.options.map(option =>
-                        <option value={option} key={option}>{option}</option>
-                    )}
+                    {Array.isArray(this.props.options) ?
+                        this.props.options.map(option => <option value={option} key={option}>{option}</option>)
+                        : Object.keys(this.props.options).map(optionKey => (
+                            <option value={optionKey} key={optionKey}>{this.props.options[optionKey]}</option>
+                        ))
+                    }
                 </FormControl>
                 <FormControl.Feedback />
                 {this.getError() !== null && <HelpBlock>{this.getError()}</HelpBlock>}
@@ -64,5 +67,8 @@ InputSelect.propTypes = {
     onKeyPress: PropTypes.func,
     errors: PropTypes.object,
     autoFocus: PropTypes.bool,
-    options: PropTypes.array.isRequired,
+    options: PropTypes.oneOf([
+        PropTypes.object,
+        PropTypes.array,
+    ]).isRequired,
 };

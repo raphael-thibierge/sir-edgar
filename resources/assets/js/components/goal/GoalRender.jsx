@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import {
     ListGroupItem,
@@ -25,38 +26,28 @@ export default class GoalRender extends React.Component{
     }
 
     setCompleted(){
-        const request = $.ajax({
-            url: '/goals/' + this.props.goal._id + '/set-completed',
-            cache: false,
-            method: 'POST',
-            data: {
-                _token: window.token,
-            },
-            // when server return success
-            success: function (response) {
+        axios.post('/goals/' + this.props.goal._id + '/set-completed')
+            .then(response => response.data)
+            .then(response => {
                 // check status
-                if (response.status && response.status === 'success'){
+                if (response.status && response.status === 'success') {
                     const goal = response.data.goal;
                     this.props.onGoalUpdate(goal);
-                } else {
-                    this.onError(response);
                 }
-            }.bind(this), // bind is used to call method in this component
-            error: this.onError,
-        });
+            })
+            .catch(error => {
+
+                alert(error.response.statusText);
+
+            });
     }
 
     setToday(){
-        const request = $.ajax({
-            url: '/goals/' + this.props.goal._id +  '/set-today',
-            cache: false,
-            method: 'POST',
-            data: {
+        axios.post('/goals/' + this.props.goal._id +  '/set-today', {
                 today: !this.props.goal.today,
-                _token: window.token,
-            },
-            // when server return success
-            success: function (response) {
+            })
+            .then(response => response.data)
+            .then(response => {
                 // check status
                 if (response.status && response.status === 'success'){
                     const goal = response.data.goal;
@@ -64,31 +55,21 @@ export default class GoalRender extends React.Component{
                 } else {
                     alert('failed to set goal as important')
                 }
-            }.bind(this), // bind is used to call method in this component
-            error: ()=> {alert('failed to set goal as important')},
-        });
+            })
+            .catch(error => {console.error(error.response); alert('failed to set goal as important')});
     }
 
     deleteGoal() {
-        $.ajax({
-            url: '/goals/' + this.props.goal._id,
-            cache: false,
-            method: 'POST',
-            datatype: 'json',
-            data: {
-                method: 'DELETE',
-                _method: 'DELETE',
-                _token: window.token,
-            },
-            success: function (response) {
+        axios.delete('/goals/' + this.props.goal._id)
+            .then(response => response.data)
+            .then(response => {
                 let goal = this.props.goal;
                 goal.is_deleted = true;
                 this.props.onGoalUpdate(goal);
-
-            }.bind(this),
-            error: this.onError,
-        });
-
+            })
+            .catch(error => {
+                alert('Fail to delete goal');
+            });
     }
 
 

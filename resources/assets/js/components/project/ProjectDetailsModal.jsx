@@ -1,7 +1,7 @@
 import React from 'react';
 import {FormGroup, Button, Modal} from 'react-bootstrap';
 import InputText from '../form/InputText';
-
+import axios from 'axios';
 /**
  * React component managing goal input
  */
@@ -53,17 +53,12 @@ export default class ProjectDetailsModal extends React.Component{
 
     onSave(){
 
-        const request = $.ajax({
-            url: this.props.project.routes.update,
-            cache: false,
-            method: 'POST',
-            data: {
-                _token: window.token,
-                _method: 'PUT',
+        axios.put('/projects/' +  this.props.project._id, {
                 title: this.state.title,
                 is_archived: this.state.is_archived,
-            },
-            success: (response) => {
+            })
+            .then(response => response.data)
+            .then(response => {
                 if (response.status && response.status === 'success'){
 
                     this.setState({
@@ -73,14 +68,19 @@ export default class ProjectDetailsModal extends React.Component{
                         is_archived: this.state.is_archived,
                         _id: this.props.project._id
                     }));
+                } else {
+                    alert ('Update project failed');
                 }
 
-            },
-            error: (error) => {console.error(error); this.setState({errors: error.responseJSON.errors});},
-        });
-
-        console.log(request);
-
+            })
+            .catch(error => {
+                if (error.response.data.errors){
+                    this.setState({errors: error.response.data.errors});
+                } else {
+                    console.error(error);
+                    alert ('Update project failed');
+                }
+            });
     }
 
     componentWillReceiveProps(nextProps){

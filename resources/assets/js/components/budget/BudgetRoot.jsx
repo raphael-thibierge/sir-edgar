@@ -2,6 +2,7 @@ import React from 'react';
 import {PanelGroup, Glyphicon} from 'react-bootstrap';
 import Budget from './Budget';
 import BudgetModal from './BudgetModal';
+import axios from 'axios';
 
 export default class BudgetRoot extends React.Component {
 
@@ -15,11 +16,8 @@ export default class BudgetRoot extends React.Component {
     }
 
     componentDidMount(){
-        $.get('/budgets')
-            .catch(error => {
-                alert(error.statusText);
-                console.error('Fail to load financial data ');
-            })
+        axios.get('/budgets')
+            .then(response => response.data)
             .then(responseJSON => {
                 if (responseJSON.status === 'success'){
                     // get response data
@@ -30,6 +28,10 @@ export default class BudgetRoot extends React.Component {
                         budgets: data.budgets,
                     });
                 }
+            })
+            .catch(error => {
+                alert(error.statusText);
+                console.error('Fail to load financial data ');
             });
     }
 

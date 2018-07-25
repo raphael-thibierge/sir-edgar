@@ -5,7 +5,7 @@ import InputNumber from '../form/InputNumber'
 import InputSelect from '../form/InputSelect'
 import InputDate from '../form/InputDate'
 import InputTextArea from '../form/InputTextArea'
-
+import axios from 'axios';
 
 /**
  * React component managing goal input
@@ -75,7 +75,7 @@ export default class CreateFinancialTransactionModal extends React.Component{
     onError(err){
         console.error(err.responseJSON);
         alert('Saving transaction failed !')
-        if (err.responseJSON.errors){
+        if (err.data.errors){
             this.setState({
                 errors: err.responseJSON.errors
             })
@@ -107,13 +107,9 @@ export default class CreateFinancialTransactionModal extends React.Component{
 
         const uri = '/financial-transactions' + (this.expenseExists() ? ('/' + this.state._id) : '' );
 
-        const request = $.ajax({
-            url: uri,
-            cache: false,
-            method: 'POST',
-            data: data,
-            // when server return success
-            success: function (response) {
+        (this.expenseExists() ? axios.put(uri, data) : axios.post(uri, data))
+            .then(response => response.data)
+            .then(response => {
                 // check status
                 if (response.status && response.status === 'success'){
 
@@ -128,12 +124,19 @@ export default class CreateFinancialTransactionModal extends React.Component{
                     }
 
                 } else {
-                    this.onError(response);
+                    alert('Fail to create transaction')
                 }
-            }.bind(this), // bind is used to call method in this component
-            error: this.onError.bind(this),
-        });
-
+            })
+            .catch(error => {
+                if (error.response.data.errors){
+                    this.setState({
+                        errors: error.response.data.errors
+                    });
+                } else {
+                    console.error(error.response);
+                    alert('Fail to create transaction')
+                }
+            });
     }
 
 

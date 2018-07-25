@@ -1,5 +1,6 @@
 import React from 'react';
 import { Chart } from 'react-google-charts';
+import axios from 'axios';
 
 export default class TagFrequencyChartAjax extends React.Component {
 
@@ -35,11 +36,8 @@ export default class TagFrequencyChartAjax extends React.Component {
             loaded: false,
         });
 
-        $.get('/tag-frequency?tag=' + tag)
-            .catch(error => {
-                alert(error.statusText);
-                console.error(error);
-            })
+        axios.get('/tag-frequency?tag=' + tag)
+            .then(response => response.data)
             .then(responseJSON => {
                 if (responseJSON.status === 'success'){
 
@@ -103,7 +101,11 @@ export default class TagFrequencyChartAjax extends React.Component {
                         averageOccurrence: frequencies.length > 0 ? frequencies.sum(1)/frequencies.length : 0,
                     });
                 }
-            });
+            })
+            .catch(error => {
+                alert(error.statusText);
+                console.error(error);
+            })
     }
 
     render(){

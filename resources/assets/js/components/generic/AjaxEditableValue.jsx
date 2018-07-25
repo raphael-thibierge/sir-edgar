@@ -1,6 +1,7 @@
 import React from 'react';
 import {FormControl, Button, Glyphicon} from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 export default class AjaxEditableValue extends React.Component {
 
@@ -46,12 +47,9 @@ export default class AjaxEditableValue extends React.Component {
             }
 
 
-            const request = $.ajax({
-                url: this.props.ajaxURI,
-                cache: false,
-                method: 'POST',
-                data: data,
-                success: (response) => {
+            axios.post(this.props.ajaxURI, data)
+                .then(response => response.data)
+                .then(response => {
                     if (response.status && response.status === 'success'){
 
                         this.setState({
@@ -64,10 +62,8 @@ export default class AjaxEditableValue extends React.Component {
 
                     }
 
-                },
-                error: (error) => {console.error(error); alert(error.statusText)},
-            });
-
+                })
+                .catch(error => {console.error(error.response); alert(error.statusText)});
         }
     }
 
