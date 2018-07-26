@@ -60,14 +60,16 @@ export default class GoalRender extends React.Component{
     }
 
     deleteGoal() {
+        console.log(this.props.goal._id);
         axios.delete('/goals/' + this.props.goal._id)
-            .then(response => response.data)
+            //.then(response => response.data)
             .then(response => {
                 let goal = this.props.goal;
                 goal.is_deleted = true;
                 this.props.onGoalUpdate(goal);
             })
             .catch(error => {
+                console.log(error.response);
                 alert('Fail to delete goal');
             });
     }

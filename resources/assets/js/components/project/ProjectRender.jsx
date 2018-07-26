@@ -38,7 +38,7 @@ export default class ProjectRender extends React.Component{
         let project = this.props.project;
         const index = project.goals.indexOf(project.goals.find(g => g._id === goal._id));
 
-        if (goal.is_deleted){
+        if (goal.is_deleted && this.props.project._id !== 'today'){
             project.goals.splice(index, 1);
         } else {
             project.goals[index] = goal;

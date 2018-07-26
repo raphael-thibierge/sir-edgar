@@ -225,13 +225,18 @@ export default class ProjectRoot extends React.Component {
 
             project.goals.forEach(goal => {
 
-                console.log(goal);
-
                 const index = this.indexOfProject(goal.project_id);
                 const goals = projects[index].goals;
                 const goalIndex = goals.indexOf(goals.find(g => g._id === goal._id));
                 if (goalIndex === -1){
                     goals.push(goal);
+                } else if (goals[goalIndex].is_deleted){
+                    console.log('splice');
+                    console.log(goalIndex);
+                    console.log(goals.length);
+                    goals.splice(goalIndex, 1);
+                    console.log(goals.length);
+
                 } else {
                     goals[goalIndex] = goal;
                 }
