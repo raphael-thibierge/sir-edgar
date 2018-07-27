@@ -79,6 +79,9 @@ class GoalController extends Controller
         $this->authorize('update', $goal);
 
         $this->validate($request, [
+            'title' => 'required',
+            'score' => 'required|integer|max:5',
+            'today' => 'required|bool',
             'due_date' => 'present',
         ]);
 

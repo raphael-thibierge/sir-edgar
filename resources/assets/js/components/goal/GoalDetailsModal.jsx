@@ -102,7 +102,8 @@ export default class GoalsDetailsModal extends React.Component{
                     this.props.onGoalUpdate(goal);
 
                     this.setState({
-                        display: false
+                        display: false,
+                        errors: null,
                     });
                 } else {
                     alert('Goal update failed');

@@ -10,7 +10,7 @@ import {
     Glyphicon,
 } from 'react-bootstrap';
 import axios from 'axios';
-
+import Goal from './Goal.js';
 
 /**
  *
@@ -65,9 +65,7 @@ export default class GoalCreateInput extends React.Component{
 
                 if (response.status === 'success') {
 
-                    let goal = response.data.goal;
-
-                    console.log('ouais');
+                    let goal = new Goal(response.data.goal);
 
                     this.props.onCreate(goal);
 

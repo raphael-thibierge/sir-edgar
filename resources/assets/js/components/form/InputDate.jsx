@@ -11,6 +11,10 @@ export default class InputDate extends React.Component {
         ? this.props.errors[this.props.name][0] : null
     }
 
+    getIsValideDate(){
+        return this.getValidationState() !== 'error';
+    }
+
     getValidationState() {
 
         if (this.props.errors && this.props.errors !== null){
@@ -38,8 +42,8 @@ export default class InputDate extends React.Component {
                 <Datetime
                     onChange={this.onChange.bind(this)}
                     value={this.props.value}
-                    isValidDate={this.getValidationState.bind(this)}
-                    input={FormControl}
+                    isValidDate={this.getIsValideDate.bind(this)}
+
                 />
                 <FormControl.Feedback />
                 {this.getError() !== null && <HelpBlock>{this.getError()}</HelpBlock>}
