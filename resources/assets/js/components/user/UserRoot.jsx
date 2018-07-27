@@ -136,7 +136,7 @@ export default class UserRoot extends React.Component {
 
                     <div className="row">
                         <div className="col-xs-12">
-                            {user.messenger_sender_id !== null ? (
+                            {user.messenger_sender_id && user.messenger_sender_id !== null ? (
                                 <Alert bsStyle={'success'}>
                                     Your account is linked !
                                 </Alert>
