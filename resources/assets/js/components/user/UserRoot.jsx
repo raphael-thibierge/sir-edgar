@@ -153,13 +153,13 @@ export default class UserRoot extends React.Component {
                         </div>
                     </div>
 
-                    <div className="row">
+                    {/*<div className="row">
                         <div className="col-xs-12">
                             <h2>API accounts</h2>
                         </div>
                     </div>
 
-                    {/*<div className="row">
+                    <div className="row">
                         <div className="col-xs-12">
                             <ul>
                                 {user.o_auth_connections.map((connection) => (
