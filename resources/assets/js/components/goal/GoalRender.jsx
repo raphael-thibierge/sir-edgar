@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import Goal from '../goal/Goal.js';
 
 import {
     ListGroupItem,
@@ -31,7 +32,7 @@ export default class GoalRender extends React.Component{
             .then(response => {
                 // check status
                 if (response.status && response.status === 'success') {
-                    const goal = response.data.goal;
+                    const goal = new Goal(response.data.goal);
                     this.props.onGoalUpdate(goal);
                 }
             })
@@ -50,7 +51,7 @@ export default class GoalRender extends React.Component{
             .then(response => {
                 // check status
                 if (response.status && response.status === 'success'){
-                    const goal = response.data.goal;
+                    const goal = new Goal(response.data.goal);
                     this.props.onGoalUpdate(goal);
                 } else {
                     alert('failed to set goal as important')
@@ -60,11 +61,10 @@ export default class GoalRender extends React.Component{
     }
 
     deleteGoal() {
-        console.log(this.props.goal._id);
         axios.delete('/goals/' + this.props.goal._id)
             //.then(response => response.data)
             .then(response => {
-                let goal = this.props.goal;
+                let goal = new Goal(this.props.goal);
                 goal.is_deleted = true;
                 this.props.onGoalUpdate(goal);
             })

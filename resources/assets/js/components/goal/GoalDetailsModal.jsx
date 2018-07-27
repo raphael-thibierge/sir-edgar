@@ -7,7 +7,7 @@ import InputNumber from '../form/InputNumber';
 import InputTextArea from '../form/InputTextArea';
 import InputDate from '../form/InputDate';
 import axios from 'axios';
-
+import Goal from './Goal.js';
 /**
  * React component managing goal input
  */
@@ -97,7 +97,7 @@ export default class GoalsDetailsModal extends React.Component{
                 // check status
                 if (response.status && response.status === 'success'){
 
-                    const goal = response.data.goal;
+                    const goal = new Goal(response.data.goal);
 
                     this.props.onGoalUpdate(goal);
 

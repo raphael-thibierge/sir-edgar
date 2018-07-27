@@ -231,12 +231,7 @@ export default class ProjectRoot extends React.Component {
                 if (goalIndex === -1){
                     goals.push(goal);
                 } else if (goals[goalIndex].is_deleted){
-                    console.log('splice');
-                    console.log(goalIndex);
-                    console.log(goals.length);
                     goals.splice(goalIndex, 1);
-                    console.log(goals.length);
-
                 } else {
                     goals[goalIndex] = goal;
                 }

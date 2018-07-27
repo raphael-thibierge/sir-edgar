@@ -76,33 +76,6 @@ class GoalController extends Controller
      */
     public function update(Request $request, Goal $goal)
     {
-        $this->authorize($goal);
-
-        $this->validate($request, [
-            'title' => 'string',
-            'score' => 'integer|max:5',
-        ]);
-
-        $goal->update([
-            "title" => $request->get('title'),
-            "score" => (int)$request->get('score'),
-        ]);
-
-        return $this->successResponse([
-            'goal'  => $goal
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param Goal $goal
-     * @return \Illuminate\Http\Response
-     * @internal param int $id
-     */
-    public function updateDetails(Request $request, Goal $goal)
-    {
         $this->authorize('update', $goal);
 
         $this->validate($request, [
