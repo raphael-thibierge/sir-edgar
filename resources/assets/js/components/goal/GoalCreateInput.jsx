@@ -21,6 +21,7 @@ export default class GoalCreateInput extends React.Component{
     constructor(props){
         super(props);
         this.state = this.getInitialState();
+        this.state.projectId = 'null';
     }
 
     /**
@@ -31,7 +32,6 @@ export default class GoalCreateInput extends React.Component{
      */
     getInitialState() {
         return {
-            project_id: null,
             title: '',
             score: 1,
             errors: null,
@@ -57,7 +57,7 @@ export default class GoalCreateInput extends React.Component{
         axios.post(url, {
                 title: this.state.title,
                 score: this.state.score,
-                project_id: this.props.projectId === 'today' ? this.state.project_id : this.props.projectId,
+                project_id: this.props.projectId === 'today' || this.props.projectId === 'all_goals' ? this.state.project_id : this.props.projectId,
                 today: this.props.projectId === 'today'
             })
             .then(response => response.data)
@@ -137,7 +137,7 @@ export default class GoalCreateInput extends React.Component{
                         />
                     </div>
                     <div className="col-xs-3">
-                        {this.props.projectId !== 'today' ? (
+                        {this.props.projectId !== 'today' && this.props.projectId !== 'all_goals' ? (
                             <InputNumber
                                 value={this.state.score}
                                 placeholder={'Score'}

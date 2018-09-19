@@ -182,9 +182,7 @@ export default class ProjectRoot extends React.Component {
                     allGoalsProject.goals.push(goal);
                 })});
 
-                return <ProjectRender
-                    project={allGoalsProject}
-                    />;
+                return <ProjectRender project={allGoalsProject} onProjectUpdate={this.updateProject.bind(this)}/>;
                 break;
 
             case 'budgets':
@@ -221,7 +219,7 @@ export default class ProjectRoot extends React.Component {
         let projects = this.state.projects;
         //let self=this;
 
-        if (project._id === 'today'){
+        if (project._id === 'today' || project._id === 'all_goals'){
 
             project.goals.forEach(goal => {
 
@@ -230,7 +228,8 @@ export default class ProjectRoot extends React.Component {
                 const goalIndex = goals.indexOf(goals.find(g => g._id === goal._id));
                 if (goalIndex === -1){
                     goals.push(goal);
-                } else if (goals[goalIndex].is_deleted){
+                }
+                else if (goal.is_deleted){
                     goals.splice(goalIndex, 1);
                 } else {
                     goals[goalIndex] = goal;
@@ -238,7 +237,7 @@ export default class ProjectRoot extends React.Component {
 
                 projects[index].goals = goals;
 
-            })
+            });
 
         } else {
             projects[this.indexOfProject(project._id)] = project;
