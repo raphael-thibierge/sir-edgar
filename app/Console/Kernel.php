@@ -34,23 +34,21 @@ class Kernel extends ConsoleKernel
     {
 
         //$schedule->command('coinbase:price:update')->everyMinute();
-        $schedule->command('coinbase:api:status')->everyMinute();
+        //$schedule->command('coinbase:api:status')->everyMinute();
 
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
 
         foreach (timezone_identifiers_list() as $timezone){
-           // $schedule->command('report:goals:daily')
-            //    ->timezone($timezone)
-            //    ->dailyAt(0);
 
             $schedule->command('goals:check ' . $timezone)
                 ->timezone($timezone)
                 ->dailyAt(8);
 
-            $schedule->command('goals:due-date:important ' . $timezone)
-                ->timezone($timezone)
-                ->dailyAt(0);
         }
+
+        $schedule->command('goals:important ' . $timezone)
+            ->timezone($timezone)
+            ->dailyAt(0);
 
         $schedule->command('reminders:check')
             ->everyMinute();
@@ -58,13 +56,7 @@ class Kernel extends ConsoleKernel
         // raphael
         $schedule->command('user:morningMessage first')
             ->timezone('America/Toronto')
-            ->dailyAt('08:30');
-
-
-        // arthur
-        $schedule->command('user:morningMessage 59ca9b30b2530a3d1345003e')
-            ->timezone('America/Toronto')
-            ->dailyAt('08:30');
+            ->dailyAt('7:00');
 
 
         //$schedule->command('goals:important:messenger')->hourly();
