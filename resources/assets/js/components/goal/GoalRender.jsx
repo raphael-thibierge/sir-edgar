@@ -161,17 +161,15 @@ export default class GoalRender extends React.Component{
 
         if( typeof due_date !== 'undefined' && goal.due_date !== null ) {
 
-            let day = new Date();
-
-            if (due_date.getDate()  )
+            if (due_date.getDate())
 
             return (
                 <strong style={{marginLeft: 10}} className="text-right">
                     <em className={
-                        due_date.toISOString().slice(0, 10) === (new Date()).toISOString().slice(0, 10)
+                        due_date.toLocaleString().slice(0, 10) === (new Date()).toLocaleString().slice(0, 10)
                         || due_date < new Date()
                             ? "text-danger" : ""}>
-                        {due_date.toISOString().slice(0, 10)}
+                        {due_date.toLocaleString().slice(0, 10)}
                     </em>
                 </strong>
             );
