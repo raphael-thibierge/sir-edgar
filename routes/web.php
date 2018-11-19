@@ -17,7 +17,6 @@ Auth::routes();
 
 Route::view('home', 'home')->name('home')->middleware('auth');
 Route::view('privacy-policy', 'policy')->name('privacy.policy ');
-Route::view('about', 'about')->name('about');
 
 Route::get('app/load', 'HomeController@initialAppRequest')->name('app.load');
 

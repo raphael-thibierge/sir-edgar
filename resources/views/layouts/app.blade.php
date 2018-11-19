@@ -8,8 +8,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@section('title'){{ config('app.name', 'Laravel') }}, your productivity assistant @show</title>
-    <meta name="description" content="@section('description') Sir Edgard aims to help you make your goals done and track your productivity @show">
+    <title>@section('title'){{ config('app.name', 'Laravel') }}@show</title>
+    <meta name="description" content="@section('description') Sir Edgar is my own virtual assistant  @show">
 
 
     <!-- Styles -->
@@ -111,10 +111,7 @@
     <hr>
     <div class="container">
         <div class="row">
-            <div class="col-xs-2 col-xs-offset-8">
-                <a href="{{ route('about') }}" class="text-right">About page</a>
-            </div>
-            <div class="col-xs-2">
+            <div class="col-xs-2 col-xs-offset-10">
                 <a href="{{ route('privacy.policy ') }}" class="text-right">Privacy policy</a>
             </div>
         </div>
