@@ -16,8 +16,6 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('css/react-day-picker.css') }}" rel="stylesheet" type="text/css">
 
-    @include('google-analytics-script')
-
     <style>
         .react-calendar-heatmap .color-scale-0 { fill: #ebedf0;}
         .react-calendar-heatmap .color-scale-1 { fill: #d6e685;}
@@ -101,12 +99,6 @@
         window._token = "{{ csrf_token() }}";
     </script>
     <script src="{{ mix('js/app.js') }}" defer></script>
-
-    @if(config('app.env') === 'production')
-    <!-- CBRain integration --> 
-    <script type="application/javascript">var brain_client_id = 1000022;</script>
-    <script src="https://brain-website-data.s3.ca-central-1.amazonaws.com/js/brain-script.js"></script>
-    @endif
 
 </body>
 <footer>
