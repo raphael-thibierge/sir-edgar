@@ -233,7 +233,7 @@ export default class CreateFinancialTransactionModal extends React.Component{
                                         name={'type'}
                                         value={this.state.type}
                                         onChange={(value) => {this.setState({ type: value })}}
-                                        options={['expense', 'entrance']}
+                                        options={['expense', 'entrance', 'saving']}
                                         placeholder="Transaction's type"
                                         errors={this.state.errors}
                                         onKeyPress={this.handleKeyPress.bind(this)}

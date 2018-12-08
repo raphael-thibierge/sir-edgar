@@ -15,7 +15,7 @@ export default class TransactionTableRowRender extends React.Component {
 
         return (
             <tr key={transaction._id}
-                className={transaction.type === 'entrance' ? 'success' : transaction.updated_at > previousHour ? 'info' : null}>
+                className={transaction.type === 'entrance' ? 'success' : transaction.type === 'saving' ? 'info' : transaction.updated_at > previousHour ? 'warning' : null}>
                 <td style={verticalAlignStyle}>{transaction.date.toLocaleTimeString()}</td>
                 <td  className={'text-left'}>
                     <div>{transaction.title}</div>
