@@ -107,7 +107,7 @@
     <script src="{{ mix('js/app.js') }}" defer></script>
 
 </body>
-<footer>
+<!--<footer>
     <hr>
     <div class="container">
         <div class="row">
@@ -117,5 +117,5 @@
         </div>
     </div>
     <br>
-</footer>
+</footer> -->
 </html>
