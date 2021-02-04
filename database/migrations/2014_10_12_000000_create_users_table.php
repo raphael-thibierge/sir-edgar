@@ -13,7 +13,7 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::connection('pgsql')->create('users', function (Blueprint $table) {
+        Schema::connection(env('DB_CONNECTION', config('DB_CONNECTION')))->create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('email')->unique();

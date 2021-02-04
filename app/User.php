@@ -25,7 +25,7 @@ class User extends Authenticatable
 {
     use Notifiable, HybridRelations, HasApiTokens;
 
-    protected $connection = 'pgsql';
+    protected $connection = 'mysql';
 
     //protected $primaryKey = 'id';
 
