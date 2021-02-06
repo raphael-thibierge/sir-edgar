@@ -25,7 +25,7 @@ class User extends Authenticatable
 {
     use Notifiable, HybridRelations, HasApiTokens;
 
-    protected $connection = 'pgsql';
+    protected $connection = 'mysql';
 
     //protected $primaryKey = 'id';
 
@@ -243,13 +243,13 @@ class User extends Authenticatable
 
     public function getTotalCurrentMonthExpensesAttribute(){
         return $this->expenses()
-            ->where('created_at', '>=' , Carbon::now($this->timezone)->startOfMonth())
+            ->where('date', '>=' , Carbon::now($this->timezone)->startOfMonth())
             ->sum('price');
     }
 
     public function getTotalCurrentWeekExpensesAttribute(){
         return $this->expenses()
-            ->where('created_at', '>=' , Carbon::now($this->timezone)->startOfWeek())
+            ->where('date', '>=' , Carbon::now($this->timezone)->startOfWeek())
             ->sum('price');
     }
 

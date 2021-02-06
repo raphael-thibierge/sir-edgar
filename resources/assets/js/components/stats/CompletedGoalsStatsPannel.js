@@ -1,5 +1,6 @@
 import React from 'react'
 import {Panel, Alert} from 'react-bootstrap';
+import axios from 'axios';
 
 export default class CompletedGoalsStatsPannel extends React.Component{
 
@@ -37,13 +38,10 @@ export default class CompletedGoalsStatsPannel extends React.Component{
 
 
     loadData() {
-        const request = $.ajax({
-            url: 'goals/completed/stats',
-            cache: false,
-            method: 'GET',
-            success: this.success,
-            error: this.error,
-        });
+        axios.get('/goals/completed/stats')
+            .then(response => response.data)
+            .then(this.success.bind(this))
+            .catch(this.error.bind(this))
     }
 
     success(response){

@@ -39,26 +39,23 @@ class MorningEdgarMessageCommand extends Command
      */
     public function handle()
     {
-
         $user = $this->argument('user') === 'first' ? User::where('admin', true)->first() : User::find($this->argument('user'));
         if ($user === null) return;
 
-        $message = "Hey " . $user->name . ', it\'s morning report time !' . PHP_EOL
-            . 'Yesterday, your score was ' . $user->yesterday_goals()->sum('score')
-            . ', today the intent is ' . $user->daily_score_goal . PHP_EOL
-            . 'You spent ' . $user->getTotalCurrentWeekExpensesAttribute() . ' CAD this week '
-            . 'and ' . $user->getTotalCurrentMonthExpensesAttribute() . ' CAD this month !' . PHP_EOL;
-
+        $message = 'Good morning ' . $user->name . ' !' . PHP_EOL
+            . 'Score intent ' . $user->daily_score_goal . PHP_EOL
+            . 'Yesterday\'s score :' . $user->yesterday_goals()->sum('score') . PHP_EOL
+            . 'Week\'s spendings  : ' . $user->getTotalCurrentWeekExpensesAttribute() . ' CAD' . PHP_EOL
+            . 'Month\'s spendings : ' . $user->getTotalCurrentMonthExpensesAttribute() . ' CAD' . PHP_EOL;
 
         $goalsToday =  'You have to comlete this today : ' . PHP_EOL
             . $user->endingTodayGoalsToStringWithEOL();
 
-        $importantGoals =  'And here are important things : ' . PHP_EOL
+        $importantGoals =  'And here are the important things : ' . PHP_EOL
             . $user->importantGoalsToStringWithEOL();
 
         //$budgets = 'Oh, budgets :' . PHP_EOL
         //    . $user->allBudgetsToStringWithEOL();
-
 
         $user->notify(new MessengerNotification($message));
         $user->notify(new MessengerNotification($goalsToday));

@@ -1,6 +1,6 @@
 import React from 'react';
 import {ProgressBar, Panel} from 'react-bootstrap';
-import BudgetEditModal from './BudgetEditModal'
+import BudgetModal from './BudgetModal'
 import Tools from '../Tools';
 import TagFrequencyChartAjax from '../expense/TagFrequencyChartAjax';
 
@@ -82,10 +82,10 @@ export default class Budget extends React.Component {
                         </span>
                     </div>
                     <div className="col-xs-4 text-center">
-                        <BudgetEditModal
+                        <BudgetModal
                             budget={this.props.budget}
                             onDelete={this.props.onDelete}
-                            onEdit={this.props.onEdit}
+                            onUpdate={this.props.onEdit}
                         />
                         <small> /{this.props.budget.period}</small>
                     </div>

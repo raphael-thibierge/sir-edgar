@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import axios from 'axios';
+import Goal from '../goal/Goal.js';
 
 import {
-    FormGroup,
-    FormControl,
     ListGroupItem,
     Button,
     Badge,
@@ -21,15 +22,67 @@ import GoalDetailsModal from './GoalDetailsModal';
  */
 export default class GoalRender extends React.Component{
 
+    isUpdateAllowed(){
+        return typeof this.props.onGoalUpdate !== 'undefined';
+    }
+
+    setCompleted(){
+        axios.post('/goals/' + this.props.goal._id + '/set-completed')
+            .then(response => response.data)
+            .then(response => {
+                // check status
+                if (response.status && response.status === 'success') {
+                    const goal = new Goal(response.data.goal);
+                    this.props.onGoalUpdate(goal);
+                }
+            })
+            .catch(error => {
+
+                alert(error.response.statusText);
+
+            });
+    }
+
+    setToday(){
+        axios.post('/goals/' + this.props.goal._id +  '/set-today', {
+                today: !this.props.goal.today,
+            })
+            .then(response => response.data)
+            .then(response => {
+                // check status
+                if (response.status && response.status === 'success'){
+                    const goal = new Goal(response.data.goal);
+                    this.props.onGoalUpdate(goal);
+                } else {
+                    alert('failed to set goal as important')
+                }
+            })
+            .catch(error => {console.error(error.response); alert('failed to set goal as important')});
+    }
+
+    deleteGoal() {
+        axios.delete('/goals/' + this.props.goal._id)
+            //.then(response => response.data)
+            .then(response => {
+                let goal = new Goal(this.props.goal);
+                goal.is_deleted = true;
+                this.props.onGoalUpdate(goal);
+            })
+            .catch(error => {
+                console.log(error.response);
+                alert('Fail to delete goal');
+            });
+    }
+
 
     deleteButtonRender(){
         return (
             <span className="text-left">
                 <Button
-                    onClick={typeof this.props.goal.remove === 'function' ? this.props.goal.remove: null}
+                    onClick={this.isUpdateAllowed() ? this.deleteGoal.bind(this) : null}
                     bsSize="xs"
                     bsStyle="danger"
-                    disabled={typeof this.props.goal.remove !== 'function'}
+                    disabled={!this.isUpdateAllowed()}
                 ><Glyphicon glyph="trash"/></Button>
             </span>
         )
@@ -39,11 +92,10 @@ export default class GoalRender extends React.Component{
         return (
             <span className="text-left" style={{marginLeft : '5px'}}>
                 <Button
-                    onClick={typeof this.props.goal.setCompleted === 'function'
-                        ? this.props.goal.setCompleted.bind(this.props.goal): null}
+                    onClick={this.isUpdateAllowed() ? this.setCompleted.bind(this): null}
                     bsSize="xs"
                     bsStyle="success"
-                    disabled={typeof this.props.goal.setCompleted !== 'function'}
+                    disabled={!this.isUpdateAllowed()}
                 ><Glyphicon glyph="ok"/></Button>
             </span>
         )
@@ -53,10 +105,10 @@ export default class GoalRender extends React.Component{
         return (
             <span className="text-left" style={{marginLeft : '5px'}}>
                 <Button
-                    onClick={typeof this.props.goal.setToday === 'function' ?
-                        this.props.goal.setToday.bind(this.props.goal): null}
+                    onClick={this.isUpdateAllowed() ? this.setToday.bind(this) : null}
                     bsSize="xs"
                     bsStyle="warning"
+                    disabled={!this.isUpdateAllowed()}
                 ><Glyphicon glyph="warning-sign"/></Button>
             </span>
         );
@@ -64,10 +116,10 @@ export default class GoalRender extends React.Component{
 
 
     titleRender(){
-
-        return typeof this.props.goal.updateDetails === 'function' ?
+        const test = true
+        return this.isUpdateAllowed() ?
             (
-                <GoalDetailsModal goal={this.props.goal}/>
+                <GoalDetailsModal goal={this.props.goal} onGoalUpdate={this.props.onGoalUpdate}/>
             ) : (
                 <a style={{marginLeft: 5, cursor: 'not-allowed'}}>{this.props.goal.title}</a>
             );
@@ -76,16 +128,16 @@ export default class GoalRender extends React.Component{
     notesRender(){
 
         const goal = this.props.goal;
-        return goal.notes !== null && goal.notes !== "" ? (
+        return typeof goal.notes !== 'undefined' && goal.notes !== null && goal.notes !== "" ? (
             <span style={{marginLeft: 5}}>
-                        <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={(
-                            <Popover id="popover-trigger-hover-focus" title="Notes">
-                                {goal.notes}
-                            </Popover>
-                        )}>
-                            <Glyphicon glyph="file"/>
-                        </OverlayTrigger>
-                    </span>
+                <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={(
+                    <Popover id="popover-trigger-hover-focus" title="Notes">
+                        {goal.notes}
+                    </Popover>
+                )}>
+                    <Glyphicon glyph="file"/>
+                </OverlayTrigger>
+            </span>
         ): null;
     }
 
@@ -109,17 +161,15 @@ export default class GoalRender extends React.Component{
 
         if( typeof due_date !== 'undefined' && goal.due_date !== null ) {
 
-            let day = new Date();
-
-            if (due_date.getDate()  )
+            if (due_date.getDate())
 
             return (
                 <strong style={{marginLeft: 10}} className="text-right">
                     <em className={
-                        due_date.toISOString().slice(0, 10) === (new Date()).toISOString().slice(0, 10)
+                        due_date.toLocaleString().slice(0, 10) === (new Date()).toLocaleString().slice(0, 10)
                         || due_date < new Date()
                             ? "text-danger" : ""}>
-                        {due_date.toISOString().slice(0, 10)}
+                        {due_date.toLocaleString().slice(0, 10)}
                     </em>
                 </strong>
             );
@@ -179,7 +229,7 @@ export default class GoalRender extends React.Component{
             return null;
         }
 
-        const first = goal.created_at;
+        const first = new Date(goal.created_at);
 
         const second = new Date();
         let value = Math.round((second-first)/(1000*60*60*24));
@@ -237,4 +287,9 @@ export default class GoalRender extends React.Component{
             </ListGroupItem>
         );
     }
+};
+
+GoalRender.propTypes = {
+    onGoalUpdate: PropTypes.func,
+    goal: PropTypes.object.isRequired,
 };

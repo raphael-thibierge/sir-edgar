@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {FormGroup, Checkbox, Alert, Button} from 'react-bootstrap';
 import Tools from '../Tools';
+import axios from 'axios';
 
 export default class UserRoot extends React.Component {
 
@@ -24,31 +25,26 @@ export default class UserRoot extends React.Component {
             status: 'saving',
         });
 
-        const request = $.ajax({
-            url: '/account/update',
-            cache: false,
-            method: 'POST',
-            data: {
+        axios.post('/account/update', {
                 email_daily_report: this.state.email_daily_report,
                 email_weekly_report: this.state.email_weekly_report,
                 timezone: this.state.timezone,
-                token: window.token,
-
-            },
-            // when server return success
-            success: function (response) {
+            })
+            .then(response => response.data)
+            .then(response => {
                 if (response.status === 'success'){
 
-                    console.log(response);
                     // get response data
                     this.setState({
                         status: 'saved',
                         user: response.data.user,
                     });
                 }
-            }.bind(this), // bind is used to call method in this component
-            error: this.onError,
-        });
+            })
+            .catch(error => {
+                console.error(error.response);
+                alert('Update account failed !')
+            });
     }
 
 
@@ -140,7 +136,7 @@ export default class UserRoot extends React.Component {
 
                     <div className="row">
                         <div className="col-xs-12">
-                            {user.messenger_sender_id !== null ? (
+                            {user.messenger_sender_id && user.messenger_sender_id !== null ? (
                                 <Alert bsStyle={'success'}>
                                     Your account is linked !
                                 </Alert>
@@ -157,7 +153,7 @@ export default class UserRoot extends React.Component {
                         </div>
                     </div>
 
-                    <div className="row">
+                    {/*<div className="row">
                         <div className="col-xs-12">
                             <h2>API accounts</h2>
                         </div>
@@ -173,7 +169,7 @@ export default class UserRoot extends React.Component {
                                 ))}
                             </ul>
                         </div>
-                    </div>
+                    </div>*/}
 
                     <br/>
 

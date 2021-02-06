@@ -13,7 +13,7 @@ class ConvertGoalToImportantWhenDueDateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'goals:due-date:important {timezone}';
+    protected $signature = 'goals:important';
 
     /**
      * The console command description.
@@ -39,12 +39,10 @@ class ConvertGoalToImportantWhenDueDateCommand extends Command
      */
     public function handle()
     {
-        $timezone = $this->argument('timezone');
-
-        User::where('timezone', $timezone)->each(function (User $user, $key) use($timezone){
+        User::each(function (User $user){
             $user->goals()
-                ->where('due_date', '>=', Carbon::today($timezone))
-                ->where('due_date', '<', Carbon::tomorrow($timezone))
+                //->where('due_date', '>=', Carbon::today($timezone))
+                ->where('due_date', '<', Carbon::tomorrow($user->timezone)->startOfDay())
                 ->update(['today' => true]);
         });
     }

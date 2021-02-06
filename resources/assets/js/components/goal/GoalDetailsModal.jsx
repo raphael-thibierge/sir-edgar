@@ -1,10 +1,13 @@
 import React from 'react';
-import {FormControl, FormGroup, ControlLabel, Button, Modal, Glyphicon, Badge } from 'react-bootstrap';
-import DayPicker from 'react-day-picker';
-import Datetime from 'react-datetime';
+import {FormGroup, Button, Modal} from 'react-bootstrap';
 import GoalRender from './GoalRender';
 import PropTypes from 'prop-types';
-
+import InputText from '../form/InputText';
+import InputNumber from '../form/InputNumber';
+import InputTextArea from '../form/InputTextArea';
+import InputDate from '../form/InputDate';
+import axios from 'axios';
+import Goal from './Goal.js';
 /**
  * React component managing goal input
  */
@@ -34,6 +37,7 @@ export default class GoalsDetailsModal extends React.Component{
             is_completed: false,
             completed_at: null,
             today: false,
+            errors:null,
         };
     }
 
@@ -76,21 +80,44 @@ export default class GoalsDetailsModal extends React.Component{
     }
 
     onSave(){
-        this.props.goal.updateDetails(
-            this.state.title,
-            this.state.score,
-            this.state.due_date,
-            this.state.estimated_time,
-            this.state.time_spent,
-            this.state.priority,
-            this.state.notes,
-            this.state.today,
-            this.state.completed_at,
-        );
 
-        this.setState({
-            display: false
-        });
+        axios.patch('/goals/' + this.props.goal._id, {
+                due_date: this.state.due_date,
+                estimated_time: this.state.estimated_time,
+                time_spent: this.state.time_spent,
+                priority: this.state.priority,
+                notes: this.state.notes,
+                title: this.state.title,
+                score: this.state.score,
+                today: this.state.today,
+                completed_at: this.state.completed_at,
+            })
+            .then(response => response.data)
+            .then(response => {
+                // check status
+                if (response.status && response.status === 'success'){
+
+                    const goal = new Goal(response.data.goal);
+
+                    this.props.onGoalUpdate(goal);
+
+                    this.setState({
+                        display: false,
+                        errors: null,
+                    });
+                } else {
+                    alert('Goal update failed');
+                }
+            })
+            .catch(error => {
+                if (error.response.data.errors){
+                    this.setState({
+                        errors: error.response.data.errors
+                    });
+                } else {
+                    alert('Goal update failed');
+                }
+            });
     }
 
     onCancel(){
@@ -121,51 +148,52 @@ export default class GoalsDetailsModal extends React.Component{
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title-lg">
                             <strong>
-                                <GoalRender goal={this.state}/>
+                                <GoalRender goal={this.state} />
                             </strong>
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
 
                         <FormGroup>
-                            <ControlLabel>Goal</ControlLabel>
-                            <FormControl
-                                componentClass='input'
+                            <InputText
+                                title={'Title'}
+                                name={'title'}
+                                placeholder={'Goal or task you want to achieve'}
+                                onChange={(value) => {this.setState({ title: value })}}
+                                errors={this.state.errors}
                                 value={this.state.title}
-                                placeholder="Your goal title"
-                                onChange={(e) => {this.setState({ title: e.target.value })}}
                                 onKeyPress={this.handleKeyPress.bind(this)}
                                 autoFocus
-                            />
+                        />
                         </FormGroup>
 
                         <FormGroup>
                             <div className="row">
                                 <div className="col-xs-6">
-                                    <ControlLabel>Score</ControlLabel>
-                                    <FormControl
-                                        componentClass='input'
-                                        type="number"
-                                        min={0}
-                                        max={5}
+                                    <InputNumber
+                                        title={'Score'}
+                                        name={'score'}
+                                        placeholder={'1'}
+                                        onChange={(value) => {this.setState({ score: value })}}
+                                        errors={this.state.errors}
                                         value={this.state.score}
-                                        placeholder=""
-                                        onChange={(e) => {this.setState({ score: e.target.value })}}
                                         onKeyPress={this.handleKeyPress.bind(this)}
+                                        max={5}
+                                        min={0}
                                     />
                                 </div>
 
                                 <div className="col-xs-6">
-                                    <ControlLabel>Priority</ControlLabel>
-                                    <FormControl
-                                        componentClass='input'
-                                        type="number"
+                                    <InputNumber
+                                        title={'Priority'}
+                                        name={'priority'}
+                                        placeholder={'1'}
+                                        onChange={(value) => {this.setState({ priority: value })}}
+                                        errors={this.state.errors}
                                         value={this.state.priority}
-                                        min={0}
-                                        max={3}
-                                        placeholder=""
-                                        onChange={(e) => {this.setState({ priority: e.target.value })}}
                                         onKeyPress={this.handleKeyPress.bind(this)}
+                                        max={3}
+                                        min={0}
                                     />
                                 </div>
                             </div>
@@ -174,64 +202,68 @@ export default class GoalsDetailsModal extends React.Component{
                         <FormGroup>
                             <div className="row">
                                 <div className="col-xs-6">
-                                    <ControlLabel>Estimated time (min)</ControlLabel>
-                                    <FormControl
-                                        componentClass='input'
-                                        type="number"
-                                        min={0}
+                                    <InputNumber
+                                        title={'Estimated time (min)'}
+                                        name={'estimated_time'}
+                                        placeholder={'15'}
+                                        onChange={(value) => {this.setState({ estimated_time: value })}}
+                                        errors={this.state.errors}
                                         value={this.state.estimated_time}
-                                        placeholder=""
-                                        onChange={(e) => {this.setState({ estimated_time: e.target.value })}}
                                         onKeyPress={this.handleKeyPress.bind(this)}
+                                        min={0}
                                     />
                                 </div>
 
                                 <div className="col-xs-6">
-                                    <ControlLabel>Time spent (min)</ControlLabel>
-                                    <FormControl
-                                        componentClass='input'
-                                        type="number"
-                                        min={0}
+                                    <InputNumber
+                                        title={'Time spent (min)'}
+                                        name={'time_spent'}
+                                        placeholder={'15'}
+                                        onChange={(value) => {this.setState({ time_spent: value })}}
+                                        errors={this.state.errors}
                                         value={this.state.time_spent}
-                                        placeholder=""
-                                        onChange={(e) => {this.setState({ time_spent: e.target.value })}}
                                         onKeyPress={this.handleKeyPress.bind(this)}
+                                        min={0}
                                     />
                                 </div>
                             </div>
 
                         </FormGroup>
 
-                        <FormGroup>
-                            <ControlLabel>Due Date</ControlLabel><br/>
-                            <Datetime
-                                onChange={(day) => {this.setState({due_date: day && day !== '' ? day.toDate(): null})}}
-                                value={this.state.due_date}
-                            />
+                         <FormGroup>
+                            <div className="row">
+                                <div className="col-xs-6">
+                                    <InputDate
+                                        title={'Due date'}
+                                        name={'due_date'}
+                                        onChange={value => {this.setState({due_date: value})}}
+                                        value={this.state.due_date}
+                                        errors={this.state.errors}
+                                    />
+                                </div>
+                                <div className="col-xs-6">
+                                    <InputDate
+                                        title={'Completed at date'}
+                                        name={'completed_at'}
+                                        onChange={value => {this.setState({completed_at: value})}}
+                                        value={this.state.completed_at}
+                                        errors={this.state.errors}
+                                    />
+                                </div>
+                            </div>
                         </FormGroup>
 
                         <FormGroup>
-                            <ControlLabel>Completed at date</ControlLabel><br/>
-                            <Datetime
-                                onChange={(day) => {
-                                    const date =day && day !== '' ? day.toDate(): null;
-                                    this.setState({completed_at: date, is_completed: date !== null})
-                                }}
-                                value={this.state.completed_at}
-                            />
-                        </FormGroup>
-
-                        <FormGroup>
-                            <ControlLabel>Notes</ControlLabel>
-                            <FormControl
-                                componentClass="textarea"
-                                placeholder="textarea"
-                                onChange={(e) => {this.setState({ notes: e.target.value })}}
+                            <InputTextArea
+                                title={'Notes'}
+                                name={'notes'}
+                                placeholder={'Some notes about goal'}
+                                onChange={value => {this.setState({notes: value})}}
                                 value={this.state.notes}
                                 rows={5}
+                                errors={this.state.erros}
                             />
                         </FormGroup>
-
 
                     </Modal.Body>
                     <Modal.Footer>
@@ -252,4 +284,5 @@ GoalsDetailsModal.propTypes= {
      * Method to call when the new goal has been send to server successfully
      */
     goal: PropTypes.object.isRequired,
+    onGoalUpdate: PropTypes.func.isRequired,
 }

@@ -50,13 +50,15 @@ class GoalController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'score' => 'required|integer|max:5',
-            'project_id' => 'required',
+            'project_id' => 'required|exists:mongodb.projects,_id',
+            'today' => 'required|bool',
         ]);
 
         $goal = Auth::user()->goals()->create([
             "project_id" => $request->get('project_id'),
             "title" => $request->get('title'),
             "score" => (int)$request->get('score'),
+            "today" => (bool)$request->get('today'),
         ]);
 
         return $this->successResponse([
@@ -74,36 +76,12 @@ class GoalController extends Controller
      */
     public function update(Request $request, Goal $goal)
     {
-        $this->authorize($goal);
-
-        $this->validate($request, [
-            'title' => 'string',
-            'score' => 'integer|max:5',
-        ]);
-
-        $goal->update([
-            "title" => $request->get('title'),
-            "score" => (int)$request->get('score'),
-        ]);
-
-        return $this->successResponse([
-            'goal'  => $goal
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param Goal $goal
-     * @return \Illuminate\Http\Response
-     * @internal param int $id
-     */
-    public function updateDetails(Request $request, Goal $goal)
-    {
         $this->authorize('update', $goal);
 
         $this->validate($request, [
+            'title' => 'required',
+            'score' => 'required|integer|max:5',
+            'today' => 'required|bool',
             'due_date' => 'present',
         ]);
 
@@ -263,11 +241,11 @@ class GoalController extends Controller
         $this->authorize('update', $goal);
 
         $this->validate($request, [
-            'today' => 'required|in:true,false'
+            'today' => 'required|bool'
         ]);
 
         // request's input today is a string
-        $today = $request->input('today') == "true" ? true : false;
+        $today = (bool)$request->input('today');
 
         $goal->update(['today' => $today]);
 

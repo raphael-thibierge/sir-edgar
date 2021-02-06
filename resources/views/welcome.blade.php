@@ -1,87 +1,81 @@
-@extends('layouts.app')
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-@section('content')
+    <title>@section('title'){{ config('app.name', 'Laravel') }}@show</title>
+    <meta name="description" content="@section('description') Sir Edgar is my own virtual assistant @show">
 
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
+    
+    <!-- Styles -->
     <style>
         html, body {
             background-color: #fff;
             color: #636b6f;
-            font-family: 'Raleway', sans-serif;
-            font-weight: 100;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 200;
             height: 100vh;
             margin: 0;
         }
-
+        footer {
+            position: fixed;
+            height: 100px;
+            bottom: 0;
+            width: 100%;
+        }
         .full-height {
             height: 100vh;
         }
-
         .flex-center {
             align-items: center;
             display: flex;
             justify-content: center;
         }
-
         .position-ref {
             position: relative;
         }
-
         .top-right {
             position: absolute;
             right: 10px;
             top: 18px;
         }
-
         .content {
             text-align: center;
         }
-
         .title {
             font-size: 84px;
         }
-
         .links > a {
             color: #636b6f;
             padding: 0 25px;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
             letter-spacing: .1rem;
             text-decoration: none;
             text-transform: uppercase;
         }
-
         .m-b-md {
             margin-bottom: 30px;
         }
     </style>
+</head>
+<body>
+<div class="flex-center position-ref full-height">
 
-
-    <div class="container">
-        <div class="row">
-            <div class="content">
-                <div class="title m-b-md">
-                    {{ config('app.name') }}
-                </div>
-                <div class="col-md-8 col-md-offset-2">
-                <h3 class="text-center">
-                    Sir-Edgar aims to improve your personal productivity by adding all your goals with a score
-                    and helps you to complete your daily score goal !
-                </h3>
-                    <a href="{{ route('home') }}" class="btn btn-success">Get Started</a>
-                </div>
-
-
-            </div>
+    <div class="content">
+        <div class="title m-b-md">
+            {{ config('app.name') }}
         </div>
-                <br>
-                <br>
-        <div class="col-md-8 col-md-offset-2">
-            <div class="thumbnail">
-                <img src="{{ asset('images/screenshot-min.png') }}" alt="Sir Edgar dashboard screenshot" style="width: 100%">
-            </div>
 
+        <div class="links">
+            <a href="{{ route('home') }}" >Start</a>
         </div>
     </div>
+</div>
+</body>
+</html>
 
-@endsection
 

@@ -8,15 +8,13 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@section('title'){{ config('app.name', 'Laravel') }}, your productivity assistant @show</title>
-    <meta name="description" content="@section('description') Sir Edgard aims to help you make your goals done and track your productivity @show">
+    <title>@section('title'){{ config('app.name', 'Laravel') }}@show</title>
+    <meta name="description" content="@section('description') Sir Edgar is my own virtual assistant  @show">
 
 
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('css/react-day-picker.css') }}" rel="stylesheet" type="text/css">
-
-    @include('google-analytics-script')
 
     <style>
         .react-calendar-heatmap .color-scale-0 { fill: #ebedf0;}
@@ -29,6 +27,12 @@
         }
         .finance-page-header {
             margin-top: 0px;
+        }
+        footer {
+            position: fixed;
+            height: 100px;
+            bottom: 0;
+            width: 100%;
         }
 
     </style>
@@ -102,25 +106,16 @@
     </script>
     <script src="{{ mix('js/app.js') }}" defer></script>
 
-    @if(config('app.env') === 'production')
-    <!-- CBRain integration --> 
-    <script type="application/javascript">var brain_client_id = 1000022;</script>
-    <script src="https://brain-website-data.s3.ca-central-1.amazonaws.com/js/brain-script.js"></script>
-    @endif
-
 </body>
-<footer>
+<!--<footer>
     <hr>
     <div class="container">
         <div class="row">
-            <div class="col-xs-2 col-xs-offset-8">
-                <a href="{{ route('about') }}" class="text-right">About page</a>
-            </div>
-            <div class="col-xs-2">
+            <div class="col-xs-2 col-xs-offset-10">
                 <a href="{{ route('privacy.policy ') }}" class="text-right">Privacy policy</a>
             </div>
         </div>
     </div>
     <br>
-</footer>
+</footer> -->
 </html>

@@ -95,7 +95,7 @@ class Goal extends Model
     ];
 
     /**
-     * @return BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user() : \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo('App\User');
@@ -112,7 +112,6 @@ class Goal extends Model
             'destroy'    => route('goals.destroy', ['goal' => $this]),
             'complete'    => route('goals.complete', ['goal' => $this]),
             'set_today'    => route('goals.set_today', ['goal' => $this]),
-            'update_details'    => route('goals.details.update', ['goal' => $this]),
         ];
     }
 

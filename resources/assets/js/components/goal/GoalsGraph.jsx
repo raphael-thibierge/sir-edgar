@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {Glyphicon, Popover, OverlayTrigger, Panel, PanelGroup} from 'react-bootstrap';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import CompletedGoalsStatsPannel from '../stats/CompletedGoalsStatsPannel';
+import axios from 'axios';
 
 export default class GoalsGraph extends React.Component{
 
@@ -35,13 +36,10 @@ export default class GoalsGraph extends React.Component{
      * AJAX request to get goals from server
      */
     request(){
-        const request = $.ajax({
-            url: './goals/score?offset=' + new Date().getTimezoneOffset(),
-            cache: false,
-            method: 'GET',
-            success: this.onSuccess.bind(this),
-            error: this.onError.bind(this),
-        });
+        axios.get('/goals/score?offset=' + new Date().getTimezoneOffset())
+            .then(response => response.data)
+            .then(this.onSuccess.bind(this))
+            .catch(error => alert(error.response.statusText));
     }
 
 
@@ -157,15 +155,6 @@ export default class GoalsGraph extends React.Component{
                 columns: header,
             });
         }
-    }
-
-    /**
-     * alert user when an ajax request failed
-     * @param response
-     */
-    onError(error) {
-        alert(error.statusText);
-        console.error(error.statusText);
     }
 
 

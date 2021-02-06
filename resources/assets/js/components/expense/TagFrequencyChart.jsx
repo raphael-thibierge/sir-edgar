@@ -1,6 +1,6 @@
 import React from 'react';
 import { Chart } from 'react-google-charts';
-import { FormGroup, FormControl, Label, Button} from 'react-bootstrap';
+import { FormGroup, FormControl, Button} from 'react-bootstrap';
 import TagFrequencyChartAjax from './TagFrequencyChartAjax';
 import Network from '../Network/Network';
 

@@ -40,7 +40,7 @@ class BudgetController extends Controller
         $this->validate($request, [
             'name' => 'required|string',
             'amount' => 'required|numeric',
-            'currency' => 'required|in:€,CAD',
+            'currency' => 'required|in:EUR,CAD',
             'period' => 'required|in:week,month',
             'tags' => 'present',
         ]);
@@ -87,6 +87,13 @@ class BudgetController extends Controller
     public function update(Request $request, Budget $budget)
     {
         $this->authorize($budget);
+        $this->validate($request, [
+            'name' => 'required|string',
+            'amount' => 'required|numeric',
+            'currency' => 'required|in:EUR,CAD',
+            'period' => 'required|in:week,month',
+            'tags' => 'present',
+        ]);
         $budget->update($request->all());
         return $this->successResponse([
             'budget' => $budget

@@ -14,7 +14,7 @@ class AddSettingsInUsersCollection extends Migration
      */
     public function up()
     {
-        Schema::connection('pgsql')->table('users', function (Blueprint $table) {
+        Schema::connection(env('DB_CONNECTION', config('DB_CONNECTION')))->table('users', function (Blueprint $table) {
             $table->string('timezone')->default('UTC');
             $table->boolean('email_daily_report')->default(true);
             $table->boolean('email_weekly_report')->default(true);

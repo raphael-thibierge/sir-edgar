@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import {FormGroup, FormControl, Button, Glyphicon } from 'react-bootstrap';
-
+import InputText from '../form/InputText'
+import {FormGroup, Button, Glyphicon } from 'react-bootstrap';
+import axios from 'axios';
 
 export default class NewProjectRoot extends React.Component{
 
@@ -14,7 +14,8 @@ export default class NewProjectRoot extends React.Component{
     getInitialState(){
 
         return {
-            newProjectTitle: ''
+            newProjectTitle: '',
+            errors: null,
         };
     }
 
@@ -30,9 +31,41 @@ export default class NewProjectRoot extends React.Component{
         }
     }
 
+    onNewProjectClick(title) {
+        const url = '';
+        axios.post('/projects', {
+                title: title,
+            })
+            .then(response => response.data)
+            .then(response => {
+
+                if (response.status === 'success') {
+
+                    let project = response.data.project;
+                    project.goals = [];
+
+                    this.props.onNewProjectClick(project);
+                } else {
+                    alert('Create project failed');
+                }
+
+            })
+            .catch(error => {
+                if (error.response.data.errors) {
+                    this.setState({
+                        errors: error.response.data.errors
+                    });
+                } else {
+                    console.error(error.response);
+                    alert('Create project failed');
+                }
+            });
+
+    }
+
 
     onClick(){
-        this.props.onNewProjectClick(this.state.newProjectTitle);
+        this.onNewProjectClick(this.state.newProjectTitle);
     }
 
     render() {
@@ -79,13 +112,16 @@ export default class NewProjectRoot extends React.Component{
                                 controlId="formBasicText"
                             >
                                 <div className="col-xs-11">
-                                    <FormControl
-                                        type="text"
+
+                                    <InputText
+                                        name={'title'}
                                         value={this.state.newProjectTitle}
-                                        placeholder="Project title"
-                                        onChange={(e) => this.setState({newProjectTitle: e.target.value})}
+                                        onChange={(value) => this.setState({newProjectTitle: value})}
+                                        placeholder="Project's title"
+                                        errors={this.state.errors}
                                         onKeyPress={this.handleKeyPress.bind(this)}
                                     />
+
                                 </div>
                                 <div className="col-xs-1">
 

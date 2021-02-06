@@ -13,7 +13,7 @@ class AddAdminColumnToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::connection('pgsql')->table('users', function (Blueprint $table) {
+        Schema::connection(env('DB_CONNECTION', config('DB_CONNECTION')))->table('users', function (Blueprint $table) {
             $table->boolean('admin')->default(false);
         });
     }
