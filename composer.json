@@ -11,7 +11,7 @@
         "ext-pcntl": "*",
         "ext-tokenizer": "*",
         "ext-zip": "*",
-        "algolia/algoliasearch-client-php": "^1.25",
+        "algolia/algoliasearch-client-php": "^2.2",
         "botman/botman": "^2.3",
         "botman/driver-facebook": "^1.6",
         "doctrine/dbal": "^3.0",
