@@ -16,25 +16,28 @@
         "botman/driver-facebook": "^1.6",
         "coinbase/coinbase": "^2.5",
         "doctrine/dbal": "^2.9",
-        "fideloper/proxy": "~4.0",
-        "guzzlehttp/guzzle": "^6.3",
-        "jenssegers/mongodb": "^3.6",
-        "laravel/framework": "^6.0",
-        "laravel/horizon": "~3.0",
+        "fideloper/proxy": "^4.4",
+        "fruitcake/laravel-cors": "^2.0",
+        "guzzlehttp/guzzle": "^6.3.1|^7.0.1",
+        "jenssegers/mongodb": "^3.7",
+        "laravel/framework": "^7.29",
+        "laravel/horizon": "^4.0",
         "laravel/passport": "^9.3.2",
         "laravel/scout": "^8.6",
-        "laravel/tinker": "~1.0",
+        "laravel/tinker": "^2.6",
+        "laravel/ui": "^2.0",
         "maatwebsite/excel": "^3.0",
         "openclerk/coinbase-oauth2": "^0.1.0",
         "pusher/pusher-php-server": "~3.0"
     },
     "require-dev": {
         "codedungeon/phpunit-result-printer": "^0.6.1",
+        "facade/ignition": "^2.0",
         "filp/whoops": "~2.0",
-        "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "~1.0",
-        "nunomaduro/collision": "~2.0",
-        "phpunit/phpunit": "~7.0",
+        "fakerphp/faker": "^1.9.1",
+        "mockery/mockery": "^1.3.1",
+        "nunomaduro/collision": "^4.1",
+        "phpunit/phpunit": "^8.5",
         "symfony/thanks": "^1.0"
     },
     "autoload": {
@@ -66,7 +69,7 @@
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover"
+            "@php artisan package:discover --ansi"
         ]
     },
     "config": {
