@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\User;
+use App\Models\User;
 use App\Budget;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -13,7 +13,7 @@ class BudgetPolicy
     /**
      * Determine whether the user can view the budget.
      *
-     * @param  \App\User  $user
+     * @param  \'App\Models\User'  $user
      * @param  \App\Budget  $budget
      * @return mixed
      */
@@ -25,7 +25,7 @@ class BudgetPolicy
     /**
      * Determine whether the user can create budgets.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @return mixed
      */
     public function create(User $user)
@@ -36,7 +36,7 @@ class BudgetPolicy
     /**
      * Determine whether the user can update the budget.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @param  \App\Budget  $budget
      * @return mixed
      */
@@ -48,7 +48,7 @@ class BudgetPolicy
     /**
      * Determine whether the user can delete the budget.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @param  \App\Budget  $budget
      * @return mixed
      */

@@ -6,7 +6,7 @@ use App\Events\GoalCreated;
 use App\Events\GoalDeleted;
 use App\Events\PusherDebugEvent;
 use App\Goal;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;

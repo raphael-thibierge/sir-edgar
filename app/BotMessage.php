@@ -40,7 +40,7 @@ class BotMessage extends Model
      * @return BelongsTo
      */
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 
 

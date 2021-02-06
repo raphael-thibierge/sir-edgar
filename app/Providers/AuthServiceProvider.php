@@ -2,18 +2,8 @@
 
 namespace App\Providers;
 
-use App\Budget;
-use App\FinancialTransaction;
-use App\Goal;
-use App\Policies\BudgetPolicy;
-use App\Policies\FinancialTransactionPolicy;
-use App\Policies\GoalPolicy;
-use App\Policies\ProjectPolicy;
-use App\Project;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Laravel\Horizon\Horizon;
-use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -23,7 +13,6 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
         FinancialTransaction::class => FinancialTransactionPolicy::class,
         Budget::class => BudgetPolicy::class,
         Project::class => ProjectPolicy::class,
@@ -40,12 +29,13 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         // Setup horizon access
-        Horizon::auth(function ($request) {
-            return $request->user() !== null && $request->user()->isAdmin();
-        });
+        //Horizon::auth(function ($request) {
+        //    return $request->user() !== null && $request->user()->isAdmin();
+        //});
 
 
         // Passport
-        Passport::routes();
+        //Passport::routes();
+        //
     }
 }

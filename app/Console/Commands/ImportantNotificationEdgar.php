@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Notifications\MessengerNotification;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 

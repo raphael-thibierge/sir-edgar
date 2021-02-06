@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\FinancialTransaction;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;

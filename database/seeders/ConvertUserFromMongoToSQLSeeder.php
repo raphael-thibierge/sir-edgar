@@ -46,7 +46,7 @@ class ConvertUserFromMongoToSQLSeeder extends Seeder
             DB::connection('pgsql')->table('users')->insert($user);
 
             // get new user id (intà
-            $newUserId = \App\User::latest()->first()->id;
+            $newUserId = \'App\Models\User'::latest()->first()->id;
 
             // convert user_id in MongoDB collections
             \App\Project::where('user_id', $oldUserId)->update(['user_id' => $newUserId]);

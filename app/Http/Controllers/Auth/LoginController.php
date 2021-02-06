@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\User;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 
 class LoginController extends Controller
 {
@@ -22,32 +19,31 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers {
-        login as protected loginTrait;
-    }
+    use AuthenticatesUsers;
 
     /**
      * Where to redirect users after login.
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
      *
+     * @return void
      */
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
     }
 
-    /**
+    /*
      * Login method
      *
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
-     */
+     /
     public function login(Request $request)
     {
         // messenger account linking case
@@ -65,6 +61,5 @@ class LoginController extends Controller
         }
         return $this->loginTrait($request);
     }
-
-
+    */
 }

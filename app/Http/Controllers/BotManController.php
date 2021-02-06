@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use App\Events\PusherDebugEvent;
 use App\FinancialTransaction;
 use App\Goal;
-use App\User;
+use App\Models\User;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;

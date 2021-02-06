@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\User;
+use App\Models\User;
 use App\Goal;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -13,7 +13,7 @@ class GoalPolicy
     /**
      * Determine whether the user can view the goal.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @param  \App\Goal  $goal
      * @return mixed
      */
@@ -25,7 +25,7 @@ class GoalPolicy
     /**
      * Determine whether the user can create goals.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @return mixed
      */
     public function create(User $user)
@@ -36,7 +36,7 @@ class GoalPolicy
     /**
      * Determine whether the user can update the goal.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @param  \App\Goal  $goal
      * @return mixed
      */
@@ -48,7 +48,7 @@ class GoalPolicy
     /**
      * Determine whether the user can delete the goal.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @param  \App\Goal  $goal
      * @return mixed
      */

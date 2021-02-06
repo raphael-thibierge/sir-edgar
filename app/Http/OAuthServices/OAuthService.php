@@ -10,7 +10,7 @@ namespace App\Http\OAuthServices;
 
 
 use App\OAuthConnection;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 /**

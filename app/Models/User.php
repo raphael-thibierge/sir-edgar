@@ -1,14 +1,20 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use App\FinancialTransaction;
+use App\Goal;
+use App\OAuthConnection;
+use App\Project;
 use Carbon\Carbon;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\HybridRelations;
-use Laravel\Passport\HasApiTokens;
+
 
 /**
  * @property string name
@@ -23,11 +29,11 @@ use Laravel\Passport\HasApiTokens;
  */
 class User extends Authenticatable
 {
-    use Notifiable, HybridRelations, HasApiTokens;
+    use HasFactory, HybridRelations, Notifiable;
 
     protected $connection = 'mysql';
 
-    //protected $primaryKey = 'id';
+    protected $primaryKey = 'id';
 
     const DEFAULT_ATTRIBUTES = [
         'admin' => false,
@@ -62,14 +68,24 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
     ];
 
     /**
      * New user creator, initiating default values
      *
      * @param array $attributes
-     * @return User
+     * @return \'App\Models\User'
      */
     public static function newUser(array $attributes = []): User
     {
@@ -264,5 +280,4 @@ class User extends Authenticatable
 
         return self::firstOrCreate($demoUserAttributes);
     }
-
 }

@@ -9,7 +9,7 @@ use App\Exceptions\ProjectNameNotFound;
 use App\Goal;
 use App\Services\BotActions;
 use App\Services\BotResponse;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

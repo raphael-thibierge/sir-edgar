@@ -72,7 +72,7 @@ class MorningConversation extends Conversation
      */
     public function run()
     {
-        $this->user = \App\User::first();
+        $this->user = \'App\Models\User'::first();
         $this->askGoal();
     }
 }

@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-
+        //
     ];
 
     /**
@@ -28,7 +28,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
 
         foreach (timezone_identifiers_list() as $timezone){
@@ -50,20 +49,17 @@ class Kernel extends ConsoleKernel
         $schedule->command('user:morningMessage first')
             ->timezone('America/Toronto')
             ->dailyAt('7:00');
-
-
-        //$schedule->command('goals:important:messenger')->hourly();
-
     }
 
     /**
-     * Register the Closure based commands for the application.
+     * Register the commands for the application.
      *
      * @return void
      */
     protected function commands()
     {
-        require base_path('routes/console.php');
         $this->load(__DIR__.'/Commands');
+
+        require base_path('routes/console.php');
     }
 }

@@ -4,7 +4,7 @@ namespace Tests\Unit;
 
 use App\Budget;
 use App\FinancialTransaction;
-use App\User;
+use App\Models\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;

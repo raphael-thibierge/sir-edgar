@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\User;
+use App\Models\User;
 use App\FinancialTransaction;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -13,7 +13,7 @@ class FinancialTransactionPolicy
     /**
      * Determine whether the user can view the financialTransaction.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @param  \App\FinancialTransaction  $financialTransaction
      * @return mixed
      */
@@ -25,7 +25,7 @@ class FinancialTransactionPolicy
     /**
      * Determine whether the user can create financialTransactions.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @return mixed
      */
     public function create(User $user)
@@ -36,7 +36,7 @@ class FinancialTransactionPolicy
     /**
      * Determine whether the user can update the financialTransaction.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @param  \App\FinancialTransaction  $financialTransaction
      * @return mixed
      */
@@ -48,7 +48,7 @@ class FinancialTransactionPolicy
     /**
      * Determine whether the user can delete the financialTransaction.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @param  \App\FinancialTransaction  $financialTransaction
      * @return mixed
      */

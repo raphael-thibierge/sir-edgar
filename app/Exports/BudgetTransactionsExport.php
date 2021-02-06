@@ -11,7 +11,7 @@ namespace App\Exports;
 
 use App\Budget;
 use App\FinancialTransaction;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
