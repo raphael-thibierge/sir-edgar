@@ -1,0 +1,62 @@
+version: "3.9"
+
+services:
+
+  web:
+    container_name: edgar_php_server
+    build:
+      context: docker/php
+    volumes:
+      - .:/app
+      - vendor:/app/vendor
+    ports:
+      - 9000:9000
+    networks:
+      - backend
+
+  nginx:
+    image: nginx:1.17-alpine
+    container_name: edgar_nginx_server
+    ports:
+      - 8000:80
+    volumes:
+      - .:/app
+      - vendor:/app/vendor
+      - ./docker/nginx:/etc/nginx/conf.d
+    networks:
+      - backend
+
+  mysql:
+    container_name: edgar_mysql_server
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: edgar
+      MYSQL_USER: edgar
+      MYSQL_PASSWORD: edgar
+    networks:
+      - backend
+
+  mongo:
+    container_name: edgar_mongodb_server
+    image: mongo:3.6
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: sir-edgar
+      MONGO_INITDB_ROOT_PASSWORD: sir-edgar
+    networks:
+      - backend
+
+  redis:
+    container_name: edgar_redis_server
+    image: redis:5-alpine
+    networks:
+      - backend
+    ports:
+      - 6379:6379
+
+volumes:
+  vendor:
+
+networks:
+  backend:
