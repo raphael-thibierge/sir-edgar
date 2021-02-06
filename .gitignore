@@ -12,3 +12,5 @@ npm-debug.log
 .env
 
 \.DS_Store
+
+.phpunit.result.cache
