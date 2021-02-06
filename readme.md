@@ -1,68 +1,18 @@
-# Docker setup
+# Sir Edgar 
 
-## Create the docker machine
+Sir-Edgar is a wep app to manage tasks/goals and expenses.
+I develop this app during my freetime for my personnal usage.
+The main idea is to set a daily productivity score to achieve and track it over time.
+Each goal/task has a score value that increments your daily score when completed.
 
-```
-$ docker-machine create sir-edgar
-```
+The project is not maintain anymore.
 
-## Start docker machine
-```
-$ docker-machine start sir-edgar
-```
+![Home page screensot](public/images/screenshot-homepage.png)
+![Home page screensot](public/images/screenshot-projectview.png)
+![Home page add goal ](public/images/screenshot-addgoal.png)
 
-## Setup machine environment
-```
-$ cp example-doker.env ./laradock-sir-edgar/.env
-$ nano ./laradock-sir-edgar/.env # edit env
-```
-
-## Start docker machine
-```
-$ docker-machine env sir-edgar
-$ eval $(docker-machine env sir-edgar)
-$ cd ./laradock-sir-edgar/
-$ docker-compose up php-fpm nginx php-worker mongo postgres redis workspace
-```
-
-## Enter in workspace bash to execute commands such as `artisan`
-```
-$ docker-compose exec --user=laradock workspace bash
-```
-
-## Re-build a container after editing env
-```
-$ docker-compose build {container-name}
-```
-
-## Delete containers
-```
-$ docker-compose down
-```
-
-## Stop docker machine
-```
-$ docker-machine stop sir-edgar
-```
-
-### Eventual problem
-You may have a problem with python pip10 in workspace container,
-[check this issue](https://github.com/pypa/pip/issues/5240)
-
-Replace in `./laradock-sir-edgar/worskpace/Dockerfile` :
-```
-RUN if [ ${INSTALL_PYTHON} = true ]; then \
-  apt-get -y install python python-pip python-dev build-essential  \
-  && pip install --upgrade pip  \
-  && pip install --upgrade virtualenv \
-;fi
-```
-
-To :
-```
-RUN if [ ${INSTALL_PYTHON} = true ]; then \
-  apt-get -y install python python-pip python-dev build-essential  \
-  && pip install --upgrade pip==9.0.3  \
-  && pip install --upgrade virtualenv \
-;fi
-``` 
+--- 
+- laravel 5.3
+- reactJS 15.6
+- mongodb 3.6
+- mysql
