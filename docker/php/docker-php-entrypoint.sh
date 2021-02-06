@@ -1,10 +1,6 @@
 #!/bin/sh
 
-
-composer install --no-dev
-# php artisan migrate
-php artisan config:cache
-php artisan route:cache
+composer install
 
 set -e
 
