@@ -58,12 +58,6 @@ return [
         'wechat_app_key' => 'YOUR-WECHAT-APP-KEY',
     ],
 
-
-    'coinbase' => [
-        'key' => env('COINBASE_CLIENT_ID'),
-        'secret' => env('COINBASE_CLIENT_SECRET'),
-    ],
-
     'facebook' => [
         'page_id' => env('FACEBOOK_PAGE_ID'),
         'page_token' => env('FACEBOOK_TOKEN'),

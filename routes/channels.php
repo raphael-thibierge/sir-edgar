@@ -15,6 +15,7 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
     return $user->id == (int)$id;
 });
 
+// TODO : remove
 Broadcast::channel('coinbase', function ($user) {
     return true;
 });

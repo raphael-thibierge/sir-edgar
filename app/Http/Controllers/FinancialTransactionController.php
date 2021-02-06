@@ -6,7 +6,6 @@ use App\Exports\FinancialTransactionExport;
 use App\FinancialTransaction;
 use App\User;
 use Carbon\Carbon;
-use Coinbase\Wallet\Resource\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;

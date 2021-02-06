@@ -66,8 +66,6 @@ Route::prefix('oauth/{service}/')->group(function (){
     Route::get('callback', 'OAuthConnectionController@oAuthAuthorizeCallback')->name('oauth.callback');
 });
 
-Route::get('coinbase', 'CoinbaseController@basicStats');
-
 Route::view('account', 'user')->name('account');
 Route::post('account/update', 'UserController@accountSettingsUpdate')->name('account.update')->middleware('auth');
 

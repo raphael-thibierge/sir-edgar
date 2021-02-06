@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\OAuthServices\CoinbaseOAuthService;
 use App\Http\OAuthServices\OAuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,9 +13,11 @@ class OAuthConnectionController extends Controller
         $this->middleware('auth');
     }
 
+    /*
     private function getOAuthService(string $service): OAuthService{
         // TODO: manage service manager
-        return new CoinbaseOAuthService(Auth::user());
+        //return new OAuthService(Auth::user());
+        return null;
     }
 
     public function oAuthAuthorize(string $service){
@@ -37,4 +38,5 @@ class OAuthConnectionController extends Controller
         return $oAuthService->createOAuthConnection($request) ?
             view('oauth_connections.success') : view('oauth_connections.error');
     }
+    */
 }
