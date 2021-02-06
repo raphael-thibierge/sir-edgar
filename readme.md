@@ -12,7 +12,7 @@ The project is not maintain anymore.
 ![Home page add goal ](public/images/screenshot-addgoal.png)
 
 --- 
-- laravel 6.x
+- laravel 8.x
 - reactJS 15.6
 - mongodb 3.6
 - mysql
